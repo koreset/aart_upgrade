@@ -22,6 +22,8 @@ export const createMainWindow = async (mainWindow: BrowserWindow): Promise<Brows
 
   mainWindow.setMenu(null)
 
+  mainWindow.maximize()
+
   mainWindow.on('close', (event: Event): void => {
     event.preventDefault()
     exitApp(mainWindow)

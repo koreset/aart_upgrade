@@ -1,7 +1,20 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
 
 // Whitelist of valid channels used for IPC communication (Send message from Renderer to Main)
-const mainAvailChannels: string[] = ['msgRequestGetVersion', 'msgOpenExternalLink', 'msgOpenFile']
+const mainAvailChannels: string[] = [
+  'msgRequestGetVersion',
+  'msgOpenExternalLink',
+  'msgGetAppStatus',
+  'msgGetAuthenticatedUser',
+  'msgResizeWindow',
+  'msgStoreAuthenticatedUser',
+  'msgRestartApplication',
+  'msgGetBaseUrl',
+  'msgGetAccessToken',
+  'msgGetMachineFingerprint',
+  'msgSetUserLicense',
+  'msgSaveBaseUrl'
+]
 const rendererAvailChannels: string[] = []
 
 contextBridge.exposeInMainWorld('mainApi', {
@@ -14,6 +27,13 @@ contextBridge.exposeInMainWorld('mainApi', {
     } else {
       throw new Error(`Unknown ipc channel name: ${channel}`)
     }
+  },
+  sendSync: (channel: string, ...data: any[]): any => {
+    if (mainAvailChannels.includes(channel)) {
+      return ipcRenderer.sendSync.apply(null, [channel, ...data])
+    }
+
+    throw new Error(`Unknown ipc channel name: ${channel}`)
   },
   on: (channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => void): void => {
     if (rendererAvailChannels.includes(channel)) {
