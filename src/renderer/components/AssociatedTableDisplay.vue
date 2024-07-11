@@ -32,6 +32,9 @@
     <file-upload-dialog :yearLabel="yearLabel" :isDialogOpen="isDialogOpen" :showModelPoint="showModelPoint"
       :mpLabel="mpLabel" :uploadTitle="uploadTitle" :years="years" @upload="handleUpload"
       @update:isDialogOpen="updateDialog" />
+    <file-info :tableTitle="tableTitle" :rowData="rowData" :columnDefs="columnDefs"
+      :onUpdate:isInfoDialogOpen="closeInfoBox" :isDialogOpen="infoDialog" />
+    <confirmation-dialog ref="confirmAction" />
   </v-container>
 </template>
 
@@ -40,6 +43,10 @@
 import { ref, defineProps, watch } from 'vue'
 import FileUploadDialog from '../components/FileUploadDialog.vue'
 import ProductService from '../api/ProductService'
+import FileInfo from '../components/FileInfo.vue'
+import formatValues from '../utils/format_values.js'
+import ConfirmationDialog from './ConfirmDialog.vue'
+
 
 const props = defineProps({
   product: {
@@ -47,6 +54,12 @@ const props = defineProps({
     required: true
   }
 })
+
+const confirmAction: any = ref()
+const infoDialog = ref(false)
+const rowData: any = ref([])
+const columnDefs: any = ref([])
+const tableTitle = ref('Table Info')
 
 const selectedTableId: any = ref(0)
 // file upload dialog props
@@ -59,6 +72,7 @@ const years = ref<number[]>(Array.from({ length: 10 }, (v, k) => new Date().getF
 const updateDialog = (value: boolean) => {
   isDialogOpen.value = value;
 };
+
 const openDialog = (item: any) => {
   console.log('Open Dialog')
   console.log(item)
@@ -68,6 +82,22 @@ const openDialog = (item: any) => {
   isDialogOpen.value = true;
 };
 // end file upload dialog props
+
+
+const createColumnDefs = (data) => {
+  columnDefs.value = [];
+  Object.keys(data[0]).forEach((element) => {
+    const header: any = {};
+    header.headerName = element;
+    header.field = element;
+    header.valueFormatter = formatValues;
+    header.minWidth = 220;
+    header.filter = true;
+    header.resizable = true;
+    header.sortable = true;
+    columnDefs.value.push(header);
+  });
+}
 
 
 const checkItemTable = (item) => {
@@ -81,6 +111,10 @@ const checkItemTable = (item) => {
   }
   return true;
 }
+
+const closeInfoBox = (value: boolean) => {
+  infoDialog.value = value;
+};
 
 const handleUpload = (data: { file: File | null; fileName: string; productCode: string; year: number | null }) => {
   const formdata = new FormData();
@@ -100,17 +134,7 @@ const handleUpload = (data: { file: File | null; fileName: string; productCode: 
     });
 }
 
-
-// const handleUpload = (data: { file: File | null; fileName: string; productCode: string; year: number | null }) => {
-//   // Handle the uploaded data here
-//   console.log(data);
-//   console.log("File Name: ", data.file?.name)
-//   isDialogOpen.value = false;
-// };
-
-
 const associatedTables: any = ref({})
-
 
 // watch for changes in the props.product.product_tables
 watch(() => props.product.product_tables, (newValue) => {
@@ -141,12 +165,39 @@ associatedTables.value = associatedTables.value
   .sort((a, b) => a.readonly - b.readonly);
 
 
-const confirmDelete = (item: any) => {
-  console.log('Delete', item)
+const confirmDelete = async (item: any) => {
+  const result = await confirmAction.value.open('Deleting Data for ' + item.table + ' table', 'Are you sure you want to delete this data?');
+  if (result) {
+    console.log('Delete', result)
+    deleteTable(item)
+  }
+}
+
+const deleteTable = (item: any) => {
+  ProductService.deleteProductTable(
+    props.product.id,
+    item.id
+  ).then((response) => {
+    console.log('Table Deleted', response)
+  })
 }
 
 const viewTable = (item: any) => {
-  console.log('View', item)
+  tableTitle.value = item.table
+  loadData(item)
+}
+
+const loadData = (item) => {
+  ProductService.getProductTable({
+    product_code: props.product.product_code,
+    table_id: item.id
+  }).then((response) => {
+    rowData.value = response.data
+    createColumnDefs(response.data)
+    console.log('Row Data', rowData.value)
+    console.log('Column Defs', columnDefs.value)
+    infoDialog.value = true
+  })
 }
 </script>
 

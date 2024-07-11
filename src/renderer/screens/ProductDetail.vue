@@ -15,9 +15,9 @@
               item-title="product_name" item-value="product_code" label="Select a product category" return-object
               @update:model-value="getProduct" />
           </v-col>
-          <v-col v-if="selectedProduct" cols="3">
+          <!-- <v-col v-if="selectedProduct" cols="3">
             <v-btn class="btn-bg mt-2" rounded :size="buttonSize" @click="openDialog">Show Product</v-btn>
-          </v-col>
+          </v-col> -->
         </v-row>
       </template>
     </base-card>

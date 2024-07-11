@@ -17,21 +17,6 @@
       <v-list-item :to="{ name: 'products' }" :prepend-icon="'mdi-table-settings'">
         <v-list-item-title>Products</v-list-item-title>
       </v-list-item>
-
-      <v-list-group value="Products Menu">
-        <template #activator="{ props }">
-          <v-list-item v-bind="props" prepend-icon="mdi-account-circle" title="Products"></v-list-item>
-        </template>
-        <v-list-group v-for="item in products" :key="item">
-          <template #activator="{ props }">
-            <v-list-item v-if="item.products.length > 0" v-bind="props" :title="item.name"></v-list-item>
-          </template>
-          <v-list-item v-for="product in item.products" :key="product.id"
-            :to="{ name: 'product-detail', params: { id: product.id } }" :title="product.product_name">
-          </v-list-item>
-        </v-list-group>
-      </v-list-group>
-
       <v-list-item :to="{ name: 'global-tables' }" :prepend-icon="'mdi-table'">
         <v-list-item-title>Global Tables</v-list-item-title>
       </v-list-item>

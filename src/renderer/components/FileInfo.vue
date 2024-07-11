@@ -1,0 +1,51 @@
+<template>
+  <v-dialog v-model="isDialogOpen" width="70%">
+    <base-card>
+      <template #header>
+        <span class="headline">{{ tableTitle }}</span>
+      </template>
+      <template #default>
+        <data-grid :columnDefs="columnDefs" :rowData="rowData" />
+      </template>
+      <template #actions>
+        <v-btn size="small" @click="upload">Close</v-btn>
+      </template>
+    </base-card>
+  </v-dialog>
+</template>
+
+<script setup lang="ts">
+import BaseCard from './BaseCard.vue';
+import { ref, watch } from 'vue';
+import DataGrid from './tables/DataGrid.vue';
+
+interface Props {
+  isDialogOpen: boolean;
+  rowData: any;
+  columnDefs: any;
+  tableTitle: string;
+}
+
+const emit = defineEmits<{
+  (e: 'update:isInfoDialogOpen', value: boolean): void;
+}>();
+
+const props = defineProps<Props>()
+
+const isDialogOpen = ref(props.isDialogOpen)
+
+watch(() => props.isDialogOpen, (value) => {
+  isDialogOpen.value = value
+})
+
+watch(isDialogOpen, (newVal) => {
+  emit('update:isInfoDialogOpen', newVal);
+});
+
+const upload = () => {
+  isDialogOpen.value = false
+  console.log('upload')
+}
+</script>
+
+<style scoped></style>
