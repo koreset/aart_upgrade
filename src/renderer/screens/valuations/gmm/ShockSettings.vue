@@ -230,7 +230,7 @@ onMounted(() => {
       console.log(response.data);
       shockScenarios.value = [];
       shockScenarios.value = response.data;
-      // columnDefs.value = createColumnDefs(shockScenarios.value, "shockScenarios");
+      columnDefs.value = createColumnDefs(shockScenarios.value, "shockScenarios");
 
       // response.data.forEach((item) => {
       //   this.$store.commit("addToShockScenarios", item);
@@ -335,27 +335,27 @@ const deleteShockSetting = async (scenario: any) => {
 
 
 
-// const createColumnDefs = (data: any, tableName: string) => {
-//   console.log(tableName);
-//   const cDefs: any = [];
-//   if (typeof data !== "undefined") {
-//     Object.keys(data[0]).forEach((element) => {
-//       if (element !== "id" && element !== "year") {
-//         const column: any = {};
-//         column.headerName = element;
-//         column.field = element;
-//         column.minWidth = 200;
-//         cDefs.push(column);
-//         if (element === "name") {
-//           column.checkboxSelection = true;
-//           column.pinned = "left";
-//           column.minWidth = 250;
-//         }
-//       }
-//     });
-//   }
-//   return cDefs;
-// };
+const createColumnDefs = (data: any, tableName: string) => {
+  console.log(tableName);
+  const cDefs: any = [];
+  if (typeof data !== "undefined") {
+    Object.keys(data[0]).forEach((element) => {
+      if (element !== "id" && element !== "year") {
+        const column: any = {};
+        column.headerName = element;
+        column.field = element;
+        column.minWidth = 200;
+        cDefs.push(column);
+        if (element === "name") {
+          column.checkboxSelection = true;
+          column.pinned = "left";
+          column.minWidth = 250;
+        }
+      }
+    });
+  }
+  return cDefs;
+};
 
 // const deleteButtonRenderer = (params: any) => {
 //   console.log(params);
