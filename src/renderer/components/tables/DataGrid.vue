@@ -8,7 +8,7 @@
     </v-row>
     <v-row>
       <v-col cols="3">
-        <v-btn size="small" color="primary" rounded class="custom-btn primary white--text mt-4"
+        <v-btn v-if="showExport" size="small" color="primary" rounded class="custom-btn primary white--text mt-4"
           @click="exportDataCsv">Export to Csv</v-btn>
       </v-col>
     </v-row>
@@ -27,6 +27,7 @@
 import 'ag-grid-community/styles/ag-grid.css' // Core CSS
 import 'ag-grid-community/styles/ag-theme-quartz.css' // Theme
 import { AgGridVue } from 'ag-grid-vue3' // Vue Grid Logic
+import { ref, watch } from 'vue';
 
 const props = defineProps([
   'rowData',
@@ -42,6 +43,12 @@ const props = defineProps([
   'chartYAxisTitle',
   'showExport'
 ])
+
+const localShowExport = ref(true)
+
+watch(() => props.showExport, (value) => {
+  localShowExport.value = value
+})
 
 const enableRangeSelection = true
 const enableCharts = true

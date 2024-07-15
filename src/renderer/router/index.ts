@@ -65,6 +65,11 @@ export default createRouter({
         titleKey: 'title.globalTables'
       }
     },
+    {
+      path: '/valuations/gmm/shock-settings',
+      name: 'valuations-gmm-shock-settings',
+      component: () => import('../screens/valuations/gmm/ShockSettings.vue')
+    },
 
     {
       path: '/error',

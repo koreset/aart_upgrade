@@ -106,8 +106,8 @@
 
 <script setup lang="ts">
 import ProductService from '../api/ProductService'
-import { ref, watchEffect, onMounted, computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { ref, onMounted, computed } from 'vue'
+import {  useRouter } from 'vue-router'
 import ModelPointVariableDisplay from '../components/ModelPointVariableDisplay.vue'
 import AssociatedTableDisplay from '../components/AssociatedTableDisplay.vue'
 import BaseCard from '../components/BaseCard.vue'
@@ -118,7 +118,7 @@ import { formatValues } from '../utils/format_values.js'
 import ConfirmationDialog from '../components/ConfirmDialog.vue'
 
 
-const route = useRoute()
+// const route = useRoute()
 const router = useRouter()
 
 const allProducts: any = ref([])
@@ -131,7 +131,7 @@ const mpData: any = ref([])
 const columnDefs: any = ref([])
 const loadingData: any = ref(false)
 const product: any = ref({})
-const paramId: any = ref(0)
+// const paramId: any = ref(0)
 const modelPointVars: any = ref([])
 const transitionStates: any = ref([])
 const benefitStructures: any = ref([])
@@ -302,40 +302,40 @@ const createColumnDefs = (data) => {
 
 /// Watches for changes in the route params and fetches the product data
 
-watchEffect(async () => {
-  try {
-    console.log('Watch effect')
-    paramId.value = route.params.id
-    const response = await ProductService.getProductById(paramId.value)
-    product.value = response.data
-    modelPointVars.value = response.data.product.product_modelpoint_variables
+// watchEffect(async () => {
+//   try {
+//     console.log('Watch effect')
+//     paramId.value = route.params.id
+//     const response = await ProductService.getProductById(paramId.value)
+//     product.value = response.data
+//     modelPointVars.value = response.data.product.product_modelpoint_variables
 
-    sortedUniqueYears.value = [] // Clear the data
-    const resp = await ProductService.getModelPointCountForProduct(paramId.value)
-    modelPointCount.value = resp.data.results
-    mpData.value = [] // Clear the data
-    console.log(mpData.value)
-    uniqueYears.value = Array.from(new Set(modelPointCount.value.map((item: any) => item.year)))
-    if (uniqueYears.value.length > 0) {
-      sortedUniqueYears.value = uniqueYears.value.sort((a: any, b: any) => b - a)
-    }
-    transitionStates.value = response.data.product.product_transition_states
-      .map((item: { state: any }) => item.state)
-      .join(', ')
-    const trueKeys = Object.entries(response.data.product.product_features)
-      .filter(([key, value]) => value === true)
-      .map(([key]) => key)
+//     sortedUniqueYears.value = [] // Clear the data
+//     const resp = await ProductService.getModelPointCountForProduct(paramId.value)
+//     modelPointCount.value = resp.data.results
+//     mpData.value = [] // Clear the data
+//     console.log(mpData.value)
+//     uniqueYears.value = Array.from(new Set(modelPointCount.value.map((item: any) => item.year)))
+//     if (uniqueYears.value.length > 0) {
+//       sortedUniqueYears.value = uniqueYears.value.sort((a: any, b: any) => b - a)
+//     }
+//     transitionStates.value = response.data.product.product_transition_states
+//       .map((item: { state: any }) => item.state)
+//       .join(', ')
+//     const trueKeys = Object.entries(response.data.product.product_features)
+//       .filter(([key, value]) => value === true)
+//       .map(([key]) => key)
 
-    benefitStructures.value = trueKeys.map((key) =>
-      key
-        .split('_')
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' ')
-    )
-  } catch (error) {
-    console.log(error)
-  }
-})
+//     benefitStructures.value = trueKeys.map((key) =>
+//       key
+//         .split('_')
+//         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+//         .join(' ')
+//     )
+//   } catch (error) {
+//     console.log(error)
+//   }
+// })
 
 onMounted(async () => {
   console.log('Mounted')
@@ -348,18 +348,6 @@ onMounted(async () => {
     id: item.id,
     name: item.name
   }))
-
-  // paramId.value = route.params.id
-  // const response = await ProductService.getProductById(paramId.value)
-  // product.value = response.data
-  // const resp = await ProductService.getModelPointCountForProduct(paramId.value)
-  // modelPointCount.value = resp.data.results
-  // console.log(modelPointCount.value)
-  // uniqueYears.value = Array.from(new Set(modelPointCount.value.map((item: any) => item.year)))
-  // sortedUniqueYears.value = uniqueYears.value.sort((a: any, b: any) => b - a)
-  // mpData.value = [] // Clear the data
-
-
 
 })
 </script>

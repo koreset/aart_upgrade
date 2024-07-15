@@ -23,12 +23,43 @@
       <v-list-item :to="{ name: 'product-comparison' }" :prepend-icon="'mdi-table'">
         <v-list-item-title>Product Comparison</v-list-item-title>
       </v-list-item>
+      <v-list-group value="Valuations">
+        <template #activator="{ props }">
+          <v-list-item v-bind="props" prepend-icon="mdi-account-circle" title="Valuations"></v-list-item>
+        </template>
+        <v-list-group value="GMM">
+          <template #activator="{ props }">
+            <v-list-item v-bind="props" title="GMM"></v-list-item>
+          </template>
+          <v-list-item :to="{ name: 'valuations-gmm-shock-settings' }">
+            <v-list-item-title>Shock Settings</v-list-item-title>
+          </v-list-item>
+
+        </v-list-group>
+        <v-list-group value="PAA">
+          <template #activator="{ props }">
+            <v-list-item v-bind="props" title="PAA"></v-list-item>
+          </template>
+        </v-list-group>
+        <v-list-group value="IBNR">
+          <template #activator="{ props }">
+            <v-list-item v-bind="props" title="IBNR"></v-list-item>
+          </template>
+        </v-list-group>
+        <v-list-group value="LIC">
+          <template #activator="{ props }">
+            <v-list-item v-bind="props" title="LIC"></v-list-item>
+          </template>
+        </v-list-group>
+
+
+      </v-list-group>
     </v-list>
   </v-navigation-drawer>
 </template>
 <script setup lang="ts">
-import { watchEffect, defineProps, ref, onMounted } from 'vue'
-import ProductService from '@/renderer/api/ProductService' // Assuming the 'ProductService' module is located in the 'api' folder at the root of your project
+import { watchEffect, defineProps, ref } from 'vue'
+// import ProductService from '@/renderer/api/ProductService' // Assuming the 'ProductService' module is located in the 'api' folder at the root of your project
 const props = defineProps({
   drawer: {
     type: Boolean,
@@ -36,7 +67,7 @@ const props = defineProps({
   }
 })
 
-const products: any = ref([])
+// const products: any = ref([])
 
 const internalDrawer = ref(props.drawer)
 
@@ -44,11 +75,6 @@ watchEffect(() => {
   internalDrawer.value = props.drawer
 })
 
-onMounted(() => {
-  ProductService.getProducts().then((response: any) => {
-    products.value = response.data
-  })
-})
 </script>
 
 <style scoped>
