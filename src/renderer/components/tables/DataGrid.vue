@@ -10,12 +10,16 @@
       <v-col cols="3">
         <v-btn v-if="showExport" size="small" color="primary" rounded class="custom-btn primary white--text mt-4"
           @click="exportDataCsv">Export to Csv</v-btn>
+        <v-btn v-if="showDeleteButton" size="small" rounded color="primary"
+          class="custom-btn primary white--text ml-4 mt-4" @click="deleteRow">Delete Selected</v-btn>
+
       </v-col>
     </v-row>
     <v-row>
       <v-col>
         <ag-grid-vue :enableRangeSelection="enableRangeSelection" :enableCharts="enableCharts" :statusBar="statusBar"
-          style="height: 500px" class="ag-theme-quartz" :rowData="props.rowData" :columnDefs="props.columnDefs">
+          style="height: 500px" class="ag-theme-quartz" :rowData="props.rowData" :columnDefs="props.columnDefs"
+          @row-selected="onRowSelected">
         </ag-grid-vue>
       </v-col>
     </v-row>
@@ -44,11 +48,25 @@ const props = defineProps([
   'showExport'
 ])
 
+// const emit = defineEmits(['delete-row'])
+
+const emit = defineEmits<{
+  (e: 'update:row-deleted', value: any): void;
+}>();
+
+// Grid variables
+const showDeleteButton = ref(false)
+const selectedRow = ref(null)
+
+
 const localShowExport = ref(true)
 
-watch(() => props.showExport, (value) => {
-  localShowExport.value = value
-})
+
+watch(props.showExport, (newVal) => {
+  console.log('showExport', newVal);
+  localShowExport.value = newVal;
+  // emit('update:showExport', newVal);
+});
 
 const enableRangeSelection = true
 const enableCharts = true
@@ -71,6 +89,26 @@ const exportDataCsv = () => {
   //   allColumns: true,
   // });
 }
+
+const onRowSelected = (event) => {
+  console.log(event.api.getSelectedRows())
+  if (event.api.getSelectedRows().length > 0) {
+    showDeleteButton.value = true;
+    selectedRow.value = event.api.getSelectedRows()[0]
+  } else {
+    showDeleteButton.value = false;
+    selectedRow.value = null;
+  }
+}
+
+const deleteRow = () => {
+  if (selectedRow.value == null) return;
+  // this.gridApi.applyTransaction({ remove: [this.selectedRow] });
+  // emit event to parent component
+  emit("update:row-deleted", selectedRow.value);
+}
+
+
 </script>
 
 <style scoped></style>
