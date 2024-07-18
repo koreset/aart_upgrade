@@ -70,7 +70,11 @@ export default createRouter({
       name: 'valuations-gmm-shock-settings',
       component: () => import('../screens/valuations/gmm/ShockSettings.vue')
     },
-
+    {
+      path: '/valuations/gmm/run-settings',
+      name: 'valuations-gmm-run-settings',
+      component: () => import('../screens/valuations/gmm/RunSettings.vue')
+    },
     {
       path: '/error',
       component: ErrorScreen,

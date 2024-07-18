@@ -34,7 +34,9 @@
           <v-list-item :to="{ name: 'valuations-gmm-shock-settings' }">
             <v-list-item-title>Shock Settings</v-list-item-title>
           </v-list-item>
-
+          <v-list-item :to="{ name: 'valuations-gmm-run-settings' }">
+            <v-list-item-title>Run Settings</v-list-item-title>
+          </v-list-item>
         </v-list-group>
         <v-list-group value="PAA">
           <template #activator="{ props }">
