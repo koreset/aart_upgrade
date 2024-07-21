@@ -72,7 +72,94 @@
 
               </template>
             </base-card>
-            <base-card></base-card>
+            <base-card :showActions="false">
+              <template #header>
+                <span class="headline">Model Point Stats</span>
+              </template>
+              <template #default>
+                <v-table class="trans-tables">
+                  <thead>
+                    <tr>
+                      <th>Variable</th>
+                      <th>Min</th>
+                      <th>Max</th>
+                      <th>Sum</th>
+                      <th>Average</th>
+                      <th>Male</th>
+                      <th>Female</th>
+                      <th>Number of Zeroes</th>
+                      <th>Number of lives</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="item in modelpointStats" :key="item.variable">
+                      <td>{{ transformText(item.variable) }}</td>
+                      <td>{{ item.min }}</td>
+                      <td>{{ item.max }}</td>
+                      <td>{{ item.sum }}</td>
+                      <td>{{ reduceDecimal(item.average) }}</td>
+                      <td>{{ item.male }}</td>
+                      <td>{{ item.female }}</td>
+                      <td>{{ item.number_of_zeroes }}</td>
+                      <td>{{ item.number_of_lives }}</td>
+                    </tr>
+                  </tbody>
+                </v-table>
+              </template>
+            </base-card>
+            <base-card v-if="runSettings !== null" :showActions="false">
+              <template #header>
+                <span class="headline">Run Settings</span>
+              </template>
+              <template #default>
+                <v-table>
+                  <thead>
+                    <tr>
+                      <th class="text-left table-col">Run Name</th>
+                      <th class="text-left table-col">Run Date</th>
+                      <th class="text-left table-col">Model Points</th>
+                      <th class="text-left table-col">Model Point Version</th>
+                      <th class="text-left table-col">Yield Curve</th>
+                      <th class="text-left table-col">Parameters</th>
+                      <th class="text-left table-col">Transitions</th>
+                      <th class="text-left table-col">Morbidity</th>
+                      <th class="text-left table-col">Mortality</th>
+                      <th class="text-left table-col">Lapse</th>
+                      <th class="text-left table-col">Lapse Margin</th>
+                      <th class="text-left table-col">Retrenchment</th>
+                      <th class="text-left table-col">IFRS17</th>
+                      <th class="text-left table-col">Shock Setting</th>
+                      <th class="text-left table-col">Yield Curve Basis</th>
+                      <th class="text-left table-col">Run Basis</th>
+                      <th class="text-left table-col">Single Run</th>
+                      <th class="text-left table-col">Aggregation Period</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{{ runSettings.run_name }}</td>
+                      <td>{{ runSettings.run_date }}</td>
+                      <td>{{ runSettings.modelpoint_year }}</td>
+                      <td>{{ runSettings.mp_version }}</td>
+                      <td>{{ runSettings.yieldcurve_year }}</td>
+                      <td>{{ runSettings.parameter_year }}</td>
+                      <td>{{ runSettings.transition_year }}</td>
+                      <td>{{ runSettings.morbidity_year }}</td>
+                      <td>{{ runSettings.mortality_year }}</td>
+                      <td>{{ runSettings.lapse_year }}</td>
+                      <td>{{ runSettings.lapse_margin_year }}</td>
+                      <td>{{ runSettings.retrenchment_year }}</td>
+                      <td>{{ runSettings.ifrs17_indicator }}</td>
+                      <td>{{ runSettings.shock_setting_name }}</td>
+                      <td>{{ runSettings.yield_curve_basis }}</td>
+                      <td>{{ runSettings.run_basis }}</td>
+                      <td>{{ runSettings.run_single }}</td>
+                      <td>{{ runSettings.aggregation_period }}</td>
+                    </tr>
+                  </tbody>
+                </v-table>
+              </template>
+            </base-card>
           </template>
         </base-card>
       </v-col>
@@ -160,6 +247,17 @@ const chartOptions: any = ref({
   series: [],
 })
 
+const transformText = (text: string) => {
+  text = text.replace(/_/g, " ");
+  text = text.toLowerCase().split(' ').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  return text;
+}
+
+const reduceDecimal = (number) => {
+  return Math.round(number);
+}
+
+
 
 const displayAggDataForSpCode = () => {
   rowData.value = [];
@@ -228,13 +326,12 @@ const getModelPointStats = () => {
   ProductService.getProductModelPointStats(prodId.value, runId.value).then(
     (resp) => {
       modelpointStats.value = resp.data;
+      console.log("Model Point Stats", modelpointStats.value);
     }
   );
 }
 
 const getAggregatedVariableV2 = (variable, spcode) => {
-  console.log("getAggregatedVariableV2", variable, spcode);
-  console.log("aggData", aggData.value);
   chartSeries.value.data = [];
   if (aggData.value !== null) {
     aggData.value.forEach((elem: any) => {
@@ -285,7 +382,6 @@ onMounted(() => {
     aggData.value = resp.data.projections;
     spCodes.value = new Set(aggData.value.map((item) => item.sp_code));
     spCodes.value = Array.from(spCodes.value);
-    console.log("sp codes", spCodes.value);
 
 
     if (aggData.value.length > 5000) {
@@ -296,14 +392,12 @@ onMounted(() => {
       rowData.value = aggData.value
     }
 
-    console.log("row data count", rowData.value.length);
     if (rowData.value.length > 0) {
       cDefs.value = createColumnDefs(rowData.value);
     }
 
     // scoped data
     sapAggData.value = resp.data.scopedProjections;
-    console.log("row data count", sapAggData.value.length);
     ifrs17groups.value = new Set(sapAggData.value.map((item) => item.IFRS17Group));
     ifrs17groups.value = Array.from(ifrs17groups.value);
 
@@ -322,7 +416,6 @@ onMounted(() => {
 
     runSettings.value = resp.data.settings;
     spCodes.value = resp.data.spcodes;
-    console.log(resp.data);
     if (resp.data.errors) {
       runErrors.value = resp.data.errors;
     }
@@ -336,4 +429,10 @@ onMounted(() => {
 
 </script>
 
-<style scoped></style>
+<style scoped>
+.table-col {
+  min-width: 120px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+</style>
