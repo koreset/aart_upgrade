@@ -18,7 +18,7 @@
     <v-row>
       <v-col>
         <ag-grid-vue :enableRangeSelection="enableRangeSelection" :enableCharts="enableCharts" :statusBar="statusBar"
-          style="height: 500px" class="ag-theme-quartz" :rowData="props.rowData" :columnDefs="props.columnDefs"
+          style="height: 500px" class="ag-theme-quartz" :rowData="localRowData" :columnDefs="localColumnDefs"
           @row-selected="onRowSelected">
         </ag-grid-vue>
       </v-col>
@@ -58,9 +58,23 @@ const emit = defineEmits<{
 const showDeleteButton = ref(false)
 const selectedRow = ref(null)
 
+const localRowData = ref(props.rowData)
+const localColumnDefs = ref(props.columnDefs)
+
 
 const localShowExport = ref(true)
 
+watch(() => props.rowData, (newVal) => {
+  console.log('rowData', newVal);
+  localRowData.value = newVal;
+  // emit('update:rowData', newVal);
+});
+
+watch(() => props.columnDefs, (newVal) => {
+  console.log('columnDefs', newVal);
+  localColumnDefs.value = newVal;
+  // emit('update:columnDefs', newVal);
+});
 
 watch(props.showExport, (newVal) => {
   console.log('showExport', newVal);

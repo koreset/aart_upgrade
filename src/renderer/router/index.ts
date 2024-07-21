@@ -76,6 +76,17 @@ export default createRouter({
       component: () => import('../screens/valuations/gmm/RunSettings.vue')
     },
     {
+      path: '/valuations/gmm/run-results',
+      name: 'valuations-gmm-run-results',
+      component: () => import('../screens/valuations/gmm/RunResults.vue')
+    },
+    {
+      path: '/valuations/gmm/run-detail/:id/:prodId/:prod_name/:run_name',
+      name: 'valuation-gmm-run-results-detail',
+      component: () => import('../screens/valuations/gmm/RunDetail.vue'),
+      props: true
+    },
+    {
       path: '/error',
       component: ErrorScreen,
       meta: {
