@@ -87,6 +87,12 @@ export default createRouter({
       props: true
     },
     {
+      path: '/valuations/paa/run-settings',
+      name: 'valuations-paa-run-settings',
+      component: () => import('../screens/valuations/paa/RunSettings.vue')
+    },
+
+    {
       path: '/error',
       component: ErrorScreen,
       meta: {

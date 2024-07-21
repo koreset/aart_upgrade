@@ -45,6 +45,9 @@
           <template #activator="{ props }">
             <v-list-item v-bind="props" title="PAA"></v-list-item>
           </template>
+          <v-list-item :to="{ name: 'valuations-paa-run-settings' }">
+            <v-list-item-title>Run Settings</v-list-item-title>
+          </v-list-item>
         </v-list-group>
         <v-list-group value="IBNR">
           <template #activator="{ props }">

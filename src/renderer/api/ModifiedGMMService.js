@@ -124,7 +124,7 @@ export default {
     return Api.get('gmm-engine/available-mp-versions/' + portfolioName + '/year/' + year)
   },
   deleteModelPoints(portfolioId, mpYear, mpVersion) {
-    if (mpVersion == null || mpVersion == '') {
+    if (mpVersion == null || mpVersion === '') {
       mpVersion = 'null'
     }
     return Api.delete(
