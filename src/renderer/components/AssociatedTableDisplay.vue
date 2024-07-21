@@ -74,8 +74,6 @@ const updateDialog = (value: boolean) => {
 };
 
 const openDialog = (item: any) => {
-  console.log('Open Dialog')
-  console.log(item)
   selectedTableId.value = item.id
   yearLabel.value = 'Select a year'
   uploadTitle.value = 'Upload File Data for ' + item.table + ' Table (csv)'
@@ -123,15 +121,10 @@ const handleUpload = (data: { file: File | null; fileName: string; productCode: 
   formdata.append("table_id", selectedTableId.value);
   formdata.append("product_code", props.product.product_code);
 
-  console.log("Form Data", formdata);
-
   ProductService.uploadProductTable({
     formdata,
     productId: props.product.id,
-  })
-    .then(() => {
-      console.log("File uploaded successfully");
-    });
+  });
 }
 
 const associatedTables: any = ref({})
@@ -151,7 +144,6 @@ watch(() => props.product.product_tables, (newValue) => {
 });
 
 associatedTables.value = props.product.product_tables
-console.log('Associated Tables', associatedTables.value)
 
 associatedTables.value = associatedTables.value
   .map((table) => ({
@@ -168,7 +160,6 @@ associatedTables.value = associatedTables.value
 const confirmDelete = async (item: any) => {
   const result = await confirmAction.value.open('Deleting Data for ' + item.table + ' table', 'Are you sure you want to delete this data?');
   if (result) {
-    console.log('Delete', result)
     deleteTable(item)
   }
 }
@@ -178,7 +169,6 @@ const deleteTable = (item: any) => {
     props.product.id,
     item.id
   ).then((response) => {
-    console.log('Table Deleted', response)
   })
 }
 
@@ -194,8 +184,6 @@ const loadData = (item) => {
   }).then((response) => {
     rowData.value = response.data
     createColumnDefs(response.data)
-    console.log('Row Data', rowData.value)
-    console.log('Column Defs', columnDefs.value)
     infoDialog.value = true
   })
 }

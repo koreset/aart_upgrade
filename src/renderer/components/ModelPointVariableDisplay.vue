@@ -21,8 +21,6 @@ const props = defineProps({
   }
 })
 
-console.log('Model Point Vars', props.modelPointVars)
-
 const headers = [
   { text: 'Name', value: 'name' },
   { text: 'Code', value: 'code' },

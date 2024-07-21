@@ -192,12 +192,10 @@ const store = useProductStore()
 
 const transitions: any = computed(() => {
   const arr = toRaw(store.getProductTransitions)
-  console.log('Product Transitions: ', arr)
   return arr
 })
 
 onMounted(() => {
-  console.log('Product from rating factors')
   ProductService.getRatingFactors().then((result: { data: any }) => {
     factors.value = result.data
   })

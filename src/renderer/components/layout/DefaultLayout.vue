@@ -10,7 +10,6 @@ const titleKey: string = (route?.meta?.titleKey || 'title.main') as string
 
 const toggleDrawer = (): void => {
   drawer.value = !drawer.value
-  console.log(drawer.value)
 }
 </script>
 

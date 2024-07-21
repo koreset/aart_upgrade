@@ -120,7 +120,6 @@ const removeItem = (item: any) => {
   applicableTransitions.value = applicableTransitions.value.filter((i: any) => i !== item)
 
   store.removeFromTransitions(item)
-  console.log('stored transitions:', store.getProductTransitions)
 }
 
 const addToTransitions = async () => {
@@ -128,7 +127,6 @@ const addToTransitions = async () => {
   const result = await v$.value.$validate()
 
   if (!result) {
-    console.log('Errors:', v$.value.$errors)
     associatedTableErrors.value = []
     startStateErrors.value = []
     endStateErrors.value = []
@@ -160,8 +158,6 @@ const addToTransitions = async () => {
       snackbar.value = true
     } else {
       applicableTransitions.value.push(payload)
-      console.log('Payload:', payload)
-      console.log('Applicable transitions:', applicableTransitions.value)
       store.addToTransitions(payload)
       startState.value = null
       endState.value = null

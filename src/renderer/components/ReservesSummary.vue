@@ -137,7 +137,6 @@ const getReserveSummaryForProduct = () => {
       (response) => {
         reportData.value = response.data.items
         if (reportData.value.length > 0) {
-          console.log(reportData.value)
           bases.value = response.data.bases
           createColumnDefs(reportData.value)
         }
@@ -157,7 +156,6 @@ const getReserveSummaryForProductBasisAndSpCode = () => {
     selectedBasis.value,
     selectedSpCode.value
   ).then((response) => {
-    console.log('Response data:', response.data)
     reportData.value = response.data.items
     createColumnDefs(reportData.value)
     loadingData.value = false
@@ -171,7 +169,6 @@ const getReserveSummaryForProductAndBasis = () => {
     selectedProduct.value,
     selectedBasis.value
   ).then((response) => {
-    console.log(response.data)
     reportData.value = response.data.items
     spCodes.value = response.data.spcodes
     createColumnDefs(reportData.value)
@@ -191,117 +188,7 @@ const createColumnDefs = (data: any) => {
   })
 }
 
-// export default {
-//   data() {
-//     return {
-//       loadingData: false,
-//       selectedRun: null,
-//       selectedProduct: null,
-//       selectedSpCode: null,
-//       selectedBasis: null,
-//       bases: [],
-//       spCodes: [],
-//       runList: [],
-//       prodlist: [],
-//       reportData: [],
-//       columnDefs: [],
-//     };
-//   },
-//   mounted() {
-//     DashboardService.getReserveRuns().then((response) => {
-//       this.runList = response.data.runlist;
-//     });
-//   },
-//   methods: {
-//     validateReportData() {
-//       if (this.reportData.length === 0 && this.selectedProduct !== null && this.loadingData === false) {
-//         return true;
-//       }
-//       return false;
 
-//     },
-//     validateProductData() {
-//       if (this.selectedProduct != null && this.selectedProduct !== 'All Products' && this.validateReportData() === false) {
-//         return true;
-//       }
-//       return false;
-//     },
-
-//     getReserveSummary() {
-//       this.loadingData = true;
-//       DashboardService.getReserveSummaries(this.selectedRun).then(
-//         (response) => {
-//           this.reportData = response.data.items;
-//           this.prodlist = response.data.prodlist;
-//           this.prodlist.unshift("All Products");
-//           this.selectedProduct = "All Products";
-
-//           this.createColumnDefs(this.reportData);
-//           this.loadingData = false;
-//         }
-//       );
-//     },
-//     getReserveSummaryForProduct() {
-//       if (this.selectedProduct !== "All Products") {
-//         this.loadingData = true;
-//         DashboardService.getReserveSummariesForProduct(
-//           this.selectedRun,
-//           this.selectedProduct
-//         ).then((response) => {
-//           this.reportData = response.data.items;
-//           if (this.reportData.length > 0) {
-//             console.log(this.reportData)
-//             this.bases = response.data.bases;
-//             this.createColumnDefs(this.reportData);
-//           }
-//           this.loadingData = false;
-//         });
-//       } else {
-//         this.getReserveSummary();
-//       }
-//     },
-//     getReserveSummaryForProductBasisAndSpCode() {
-//       this.loadingData = true;
-//       DashboardService.getReserveSummariesForProductBasisAndSpCode(
-//         this.selectedRun,
-//         this.selectedProduct,
-//         this.selectedBasis,
-//         this.selectedSpCode
-//       ).then((response) => {
-//         console.log("Response data:", response.data)
-//         this.reportData = response.data.items;
-//         this.createColumnDefs(this.reportData);
-//         this.loadingData = false;
-//       });
-//     },
-//     getReserveSummaryForProductAndBasis() {
-//       this.loadingData = true;
-//       DashboardService.getReserveSummariesForProductAndBasis(
-//         this.selectedRun,
-//         this.selectedProduct,
-//         this.selectedBasis
-//       ).then((response) => {
-//         console.log(response.data)
-//         this.reportData = response.data.items;
-//         this.spCodes = response.data.spcodes;
-//         this.createColumnDefs(this.reportData);
-//         this.loadingData = false;
-//       });
-//     },
-
-//     createColumnDefs(data) {
-//       this.columnDefs = [];
-//       Object.keys(data[0]).forEach((element) => {
-//         const header = {};
-//         header.headerName = element;
-//         header.field = element;
-//         header.valueFormatter = formatValues;
-//         header.minWidth = 150;
-//         this.columnDefs.push(header);
-//       });
-//     },
-//   },
-// };
 </script>
 
 <style></style>

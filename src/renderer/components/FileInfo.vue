@@ -44,7 +44,6 @@ watch(isDialogOpen, (newVal) => {
 
 const upload = () => {
   isDialogOpen.value = false
-  console.log('upload')
 }
 </script>
 

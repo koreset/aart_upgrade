@@ -115,7 +115,6 @@ const validateReportData = () => {
 }
 
 const resetSelectedPortfolio = () => {
-  console.log('clearing portfolio selection')
   reportData.value = []
   prodlist.value = []
   groupList.value = []
@@ -149,7 +148,6 @@ const getReserveSummaryForPortfolio = () => {
       ).then((response) => {
         reportData.value = response.data.items
         if (reportData.value.length > 0) {
-          console.log(reportData.value)
           prodlist.value = response.data.products
           prodlist.value.unshift('All Products')
           selectedProduct.value = 'All Products'
@@ -174,7 +172,6 @@ const getReserveSummaryForPortfolioProduct = () => {
       ).then((response) => {
         reportData.value = response.data.items
         if (reportData.value.length > 0) {
-          console.log(reportData.value)
           groupList.value = response.data.groups
           groupList.value.unshift('All Groups')
           selectedGroup.value = 'All Groups'
@@ -200,7 +197,6 @@ const getReserveSummaryForPortfolioProductGroup = () => {
     ).then((response) => {
       reportData.value = response.data.items
       if (reportData.value.length > 0) {
-        console.log(reportData.value)
         createColumnDefs(reportData.value)
       }
       loadingData.value = false

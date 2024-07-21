@@ -152,11 +152,11 @@ const filesErrors: any = ref([])
 
 // methods
 const addToFileList = () => {
-  console.log('addToFileList')
+
 }
 
 const uploadToServer = () => {
-  console.log('uploadToServer')
+
 }
 
 // export default {

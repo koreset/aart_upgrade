@@ -25,7 +25,6 @@ const resolve = ref<null | ((value: unknown) => void)>(null)
 const reject = ref<null | ((reason?: any) => void)>(null)
 
 const open = (title: string, message: string) => {
-  console.log("open")
   dialog.value = true
   dialogTitle.value = title
   dialogMessage.value = message

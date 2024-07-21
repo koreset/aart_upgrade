@@ -54,7 +54,6 @@ const baseApi = ref('')
 
 const saveApiUrl = () => {
   apiUrlComplete.value = false
-  console.log('Saving API URL: ', baseApi.value)
   window.mainApi?.send('msgSaveBaseUrl', baseApi.value)
   apiUrlComplete.value = true
 }
@@ -70,10 +69,6 @@ const getFingerprint = () => {
 }
 
 const fingerPrint = getFingerprint()
-
-console.log('Fingerprint:', fingerPrint)
-console.log('License URL: ', licenseUrl)
-// console.log('Finger Print: ', fingerPrint)
 
 // data
 const keyErrors: any = ref([])
@@ -121,8 +116,6 @@ const activateLicense = async () => {
   })
 
   const rs = await validation.json()
-  console.log('Validation result: ', rs)
-  console.log('Validation meta result: ', rs.meta.constant)
   // We are doing machine activations to avoid catch 22, right?
   keyErrors.value = []
   switch (rs.meta.constant) {

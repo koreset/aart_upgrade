@@ -49,7 +49,6 @@ const product: any = ref(store.product)
 const headers: any = ref([])
 
 onMounted(async () => {
-  console.log('MOUNTED...')
   const resp = await ProductService.getModelPoints()
   selectVariables.value = resp.data
   selectVariables.value.forEach((item: any) => {
@@ -74,40 +73,6 @@ const validateForm = async () => {
   }
   return result
 }
-
-// const createCsv = () => {
-//   const columnDelimiter = ','
-//   let result = ''
-//   let ctr = 0
-//   const lineDelimiter = '\n'
-//   // build the object
-//   const csvObject = {}
-//   selectVariables.value.forEach((item) => {
-//     csvObject[item.code] = item.type
-//   })
-//   const keys = Object.keys(csvObject)
-
-//   result += keys.join(columnDelimiter)
-//   result += lineDelimiter
-//   keys.forEach((key) => {
-//     if (ctr > 0) result += columnDelimiter
-//     result += csvObject[key]
-//     ctr++
-//   })
-//   result += lineDelimiter
-//   const filename = 'export.csv'
-//   if (!result.match(/^data:text\/csv/i)) {
-//     result = 'data:text/csv;charset=utf-8,' + result
-//   }
-//   const data = encodeURI(result)
-
-//   const fileLink = document.createElement('a')
-
-//   fileLink.href = data
-//   fileLink.setAttribute('download', filename)
-//   document.body.appendChild(fileLink)
-//   fileLink.click()
-// }
 
 defineExpose({
   validateForm

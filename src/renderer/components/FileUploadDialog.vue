@@ -95,7 +95,6 @@ watch(localIsDialogOpen, (newVal) => {
 });
 
 watch(() => props.isDialogOpen, (newVal) => {
-  console.log('isDialogOpen', newVal);
   if (!newVal) {
     file.value = null;
     fileName.value = '';

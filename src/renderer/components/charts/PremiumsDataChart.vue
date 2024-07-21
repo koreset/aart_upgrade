@@ -42,7 +42,6 @@ onMounted(() => {
 })
 
 const changeGraph = () => {
-  console.log(selectedGraph)
   const premiumChartTitle = 'Business Metrics - Premium Income Per Month'
   const premiumIncomePerYearTitle = 'Business Metrics - Premium Income Per Year'
   const claimsChartTitle = 'Business Metrics - Claims Per Month'

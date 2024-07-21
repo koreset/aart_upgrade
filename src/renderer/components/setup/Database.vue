@@ -33,7 +33,6 @@ import { ref } from 'vue'
 const baseApi = ref('')
 
 const saveApiUrl = () => {
-  console.log('Saving API URL: ', baseApi.value)
   window.mainApi?.send('msgSaveBaseUrl', baseApi.value)
 }
 </script>

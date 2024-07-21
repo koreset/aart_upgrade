@@ -45,7 +45,6 @@ import { useProductStore } from '../../store/product_config'
 
 const store = useProductStore()
 const mutualExclusive = (value: any) => {
-  console.log('mutual exclusive:', value)
   const funeral = value.some(
     (item: any) => item !== null && item !== undefined && item.name === 'FUNERAL_COVER'
   )
@@ -76,7 +75,6 @@ const getDescription = (item: any) => item.description || ''
 onMounted(() => {
   ProductService.getFeatures().then((resp: any) => {
     features.value = resp.data
-    console.log(features.value)
   })
 })
 const clearErrors = () => {
@@ -87,16 +85,13 @@ const validateForm = async () => {
   const result = await v$.value.$validate()
   if (!result) {
     v$.value.$errors.forEach((error: any) => {
-      console.log(error.$propertyPath)
       if (error.$propertyPath === 'selectedFeatures') {
         selectedFeaturesErrors.value =
           'Funeral Cover and Credit Life features are mutually exclusive. Please select only one.'
       }
     })
-    console.log('found error:', selectedFeaturesErrors.value)
   } else {
     store.setProductFeatures(selectedFeatures.value)
-    console.log('no error')
   }
 
   return result

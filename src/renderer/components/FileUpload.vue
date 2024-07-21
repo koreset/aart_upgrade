@@ -36,7 +36,6 @@ const emit = defineEmits<{
 }>();
 
 watch(() => props.isDialogOpen, (newVal) => {
-  console.log('isDialogOpen', newVal);
   if (!newVal) {
     productCode.value = '';
   }

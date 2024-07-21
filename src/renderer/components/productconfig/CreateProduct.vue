@@ -57,7 +57,6 @@ const productNameErrorMessage: any = ref('')
 const productFamilyErrorMessage: any = ref('')
 
 const showData = () => {
-  console.log(selectedProductFamily.value)
 }
 // Define validation rules
 const rules = {
@@ -81,10 +80,8 @@ const validateForm = async () => {
 
   if (!result) {
     const errors: any = v$.value.$errors
-    console.log('Errors:', errors[0].$propertyPath)
 
     errors.forEach((error: any) => {
-      console.log(error.$propertyPath)
       if (error.$propertyPath === 'selectedProductFamily') {
         productFamilyErrorMessage.value = error.$message
       }
@@ -111,14 +108,11 @@ defineExpose({ validateForm })
 
 onMounted(async () => {
   const response = await ProductService.getProductFamilies()
-  console.log(response)
   if (response.status !== 200) {
     productFamilyErrorMessage.value = 'Error retrieving product families'
     return
   }
   productFamilies.value = response.data
-  console.log(productFamilies.value)
-  console.log('mounted')
 })
 </script>
 

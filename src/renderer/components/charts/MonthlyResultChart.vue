@@ -142,7 +142,6 @@ const updateGraph = () => {
 }
 
 const getReports = () => {
-  console.log('getReports from API')
   ProductService.getMonthlyResults()
     .then((res) => {
       monthlyData.value = res.data
@@ -164,7 +163,6 @@ const getReports = () => {
     })
   ProductService.getAnnualResults()
     .then((res) => {
-      console.log(res.data)
       annualData.value = res.data
     })
     .catch((err) => {
@@ -176,119 +174,7 @@ onMounted(() => {
   getReports()
 })
 
-// export default {
-//   data() {
-//     return {
-//       timeSpan: 'Month',
-//       monthActive: 'month-active',
-//       yearActive: '',
-//       periodItems: [{ period: 'Year' }, { period: 'Month' }],
-//       selectedComponent: { code: 'prem_', name: 'Premiums' },
-//       showFirstYear: false,
-//       incomeComponents: [
-//         { code: 'prem_', name: 'Premiums' },
-//         { code: 'exp_', name: 'Expenses' },
-//         { code: 'binder_', name: 'Binder' },
-//         { code: 'claim_', name: 'Claims' },
-//         { code: 'comm_', name: 'Commissions' },
-//       ],
 
-//       title: 'Monthly Income Statement Components (Actual vs Expected)',
-//       updateArgs: [true, true, { duration: 1000 }],
-//       chartOptions: {
-//         credits: {
-//           enabled: false,
-//         },
-//         chart: { type: 'column' },
-//         title: { text: '' },
-//         xAxis: { categories: [], title: { text: 'Month' } },
-//         yAxis: { title: { text: 'Amount' } },
-//         series: [],
-//       },
-//       monthlyData: [],
-//       annualData: [],
-//     }
-//   },
-//   mounted() {
-//     this.getReports()
-//   },
-//   methods: {
-//     setTimeSpan() {
-//       this.updateGraph()
-//     },
-//     updateGraph() {
-//       // Monthly
-//       if (this.timeSpan === 'Month') {
-//         this.chartOptions.xAxis.categories = []
-//         this.chartOptions.series = []
-//         const series1 = { name: 'Actual', color: '#edc356', data: [] }
-//         const series2 = { name: 'Budget', color: '#777eda', data: [] }
-//         if (this.showFirstYear) {
-//           this.monthlyData.forEach((item) => {
-//             if (series1.data.length < 12) {
-//               this.chartOptions.xAxis.categories.push(item.month)
-//               series1.data.push(item[this.selectedComponent.code + 'actual'])
-//               series2.data.push(item[this.selectedComponent.code + 'budget'])
-//             }
-//           })
-//         } else {
-//           this.monthlyData.forEach((item) => {
-//             this.chartOptions.xAxis.categories.push(item.month)
-//             series1.data.push(item[this.selectedComponent.code + 'actual'])
-//             series2.data.push(item[this.selectedComponent.code + 'budget'])
-//           })
-//         }
-//         this.chartOptions.xAxis.title.text = 'Month'
-//         this.chartOptions.series.push(series1, series2)
-//         this.monthActive = 'primary'
-//         this.yearActive = ''
-//       }
-
-//       // Annual
-//       if (this.timeSpan === 'Year') {
-//         this.chartOptions.xAxis.categories = []
-//         this.chartOptions.series = []
-//         const series1 = { name: 'Actual', color: '#edc356', data: [] }
-//         const series2 = { name: 'Budget', color: '#777eda', data: [] }
-//         this.annualData.forEach((item) => {
-//           this.chartOptions.xAxis.categories.push(item.year)
-//           series1.data.push(item.prem_actual)
-//           series2.data.push(item.prem_budget)
-//         })
-//         this.chartOptions.series.push(series1, series2)
-//         this.chartOptions.xAxis.title.text = 'Year'
-//         this.monthActive = ''
-//         this.yearActive = 'primary'
-//       }
-//     },
-//     getReports() {
-//       console.log('getReports from API')
-//       ProductService.getMonthlyResults().then((res) => {
-//         this.monthlyData = res.data
-//         this.chartOptions.xAxis.categories = []
-//         this.chartOptions.series = []
-//         const series1 = { name: 'Actual', color: '#edc356', data: [] }
-//         const series2 = { name: 'Budget', color: '#777eda', data: [] }
-//         this.monthlyData.forEach((item) => {
-//           this.chartOptions.xAxis.categories.push(item.month)
-//           series1.data.push(item.prem_actual)
-//           series2.data.push(item.prem_budget)
-//         })
-//         this.chartOptions.series.push(series1, series2)
-//         this.monthActive = 'primary'
-//         this.yearActive = ''
-//       }).catch((err) => {
-//         console.log(err)
-//       })
-//       ProductService.getAnnualResults().then((res) => {
-//         console.log(res.data)
-//         this.annualData = res.data
-//       }).catch((err) => {
-//         console.log(err)
-//       })
-//     },
-//   },
-// }
 </script>
 
 <style>
