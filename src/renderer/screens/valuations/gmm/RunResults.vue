@@ -106,10 +106,10 @@ import { computed, onMounted, ref } from 'vue'
 import ProductService from '../../../api/ProductService'
 import { DateTime } from 'luxon'
 
-const pageSize = 10;
-const currentPage = ref(1);
 const loading = ref(false)
 const runJobs = ref([])
+const pageSize = 10;
+const currentPage = ref(1);
 const totalPages = ref(3)
 let pollTimer: any = null;
 

@@ -91,6 +91,22 @@ export default createRouter({
       name: 'valuations-paa-run-settings',
       component: () => import('../screens/valuations/paa/RunSettings.vue')
     },
+    {
+      path: '/valuations/paa/run-results',
+      name: 'valuations-paa-run-results',
+      component: () => import('../screens/valuations/paa/RunResults.vue')
+    },
+    {
+      path: '/valuations/paa/run-detail/:id',
+      name: 'valuations-paa-run-detail',
+      component: () => import('../screens/valuations/paa/RunDetail.vue')
+    },
+
+    {
+      path: '/valuations/paa/portfolios',
+      name: 'valuations-paa-portfolios',
+      component: () => import('../screens/valuations/paa/PaaPortfolios.vue')
+    },
 
     {
       path: '/error',

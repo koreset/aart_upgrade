@@ -16,4 +16,12 @@ export const formatDateString = (dateString, getyear, getmonth, getday) => {
     return `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`
 }
 
+export const toMinutes = (number) => {
+  number = number * 60
+  const minutes = Math.floor(number / 60) // 7
+  let seconds = ((number % 60) / 100) * 60 // 30
+  seconds = Math.round(seconds)
+  return minutes + ' m, ' + seconds + ' s'
+}
+
 export default formatDateString
