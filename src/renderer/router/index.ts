@@ -107,6 +107,11 @@ export default createRouter({
       name: 'valuations-paa-portfolios',
       component: () => import('../screens/valuations/paa/PaaPortfolios.vue')
     },
+    {
+      path: '/valuations/paa/portfolio-summaries',
+      name: 'valuations-paa-portfolio-summaries',
+      component: () => import('../screens/valuations/paa/PortfolioSummaries.vue')
+    },
 
     {
       path: '/error',

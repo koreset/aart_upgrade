@@ -74,7 +74,7 @@ watch(() => props.columnDefs, (newVal) => {
   // emit('update:columnDefs', newVal);
 });
 
-watch(props.showExport, (newVal) => {
+watch(() => props.showExport, (newVal) => {
   localShowExport.value = newVal;
   // emit('update:showExport', newVal);
 });

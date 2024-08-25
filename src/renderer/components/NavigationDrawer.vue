@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/first-attribute-linebreak -->
 <template>
-  <v-navigation-drawer v-model="internalDrawer" class="custom-navbar" dark color="navbar" location="left">
+  <v-navigation-drawer v-model="internalDrawer" class="custom-navbar drawer-text" dark color="navbar" location="left">
     <v-container>
       <v-row>
         <v-col>
@@ -48,6 +48,10 @@
           <v-list-item :to="{ name: 'valuations-paa-portfolios' }">
             <v-list-item-title>Portfolios</v-list-item-title>
           </v-list-item>
+          <v-list-item :to="{ name: 'valuations-paa-portfolio-summaries' }">
+            <v-list-item-title>Portfolio Summaries</v-list-item-title>
+          </v-list-item>
+
           <v-list-item :to="{ name: 'valuations-paa-run-settings' }">
             <v-list-item-title>Run Settings</v-list-item-title>
           </v-list-item>
@@ -102,6 +106,6 @@ watchEffect(() => {
 }
 
 .nav-text {
-  font-size: 8px !important;
+  font-size: 10px !important;
 }
 </style>
