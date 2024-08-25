@@ -23,8 +23,41 @@
                   density="compact" :items="modelPointVersions" item-title="year" item-value="year"
                   @update:model-value="getModelPointStats"></v-select>
               </v-col>
-
             </v-row>
+            <v-row v-if="!loadingData && modelpointStats.length > 0">
+              <v-col>
+                <v-card>
+                  <v-card-title class="header-title accent white--text mb-3">Model Point Statistics</v-card-title>
+                  <v-card-text>
+                    <v-table class="model-stats trans-tables">
+                      <thead>
+                        <tr>
+                          <th>Variable</th>
+                          <th>Min</th>
+                          <th>Max</th>
+                          <th>Average</th>
+                          <th>Number of Zeroes</th>
+                          <th>Distinct Values</th>
+                          <th>Total Count</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-for="item in modelpointStats" :key="item.variable">
+                          <td>{{ transformText(item.variable) }}</td>
+                          <td>{{ item.min }}</td>
+                          <td>{{ item.max }}</td>
+                          <td>{{ reduceDecimal(item.average) }}</td>
+                          <td>{{ item.number_of_zeroes }}</td>
+                          <td>{{ item.distinct_values }}</td>
+                          <td>{{ item.total_count }}</td>
+                        </tr>
+                      </tbody>
+                    </v-table>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+
           </template>
         </base-card>
       </v-col>
@@ -36,7 +69,6 @@
 import { ref, onMounted } from 'vue';
 import ModifiedGMMService from "../../../api/ModifiedGMMService";
 import BaseCard from "../../../components/BaseCard.vue";
-
 
 const selectedPortfolio = ref(null);
 const selectedModelPointYear = ref(null);
@@ -73,15 +105,21 @@ onMounted(() => {
   });
 });
 
-// const transformText = (text) => {
-//   text = text.replace(/_/g, " ");
-//   text = text.toTitleCase();
-//   return text;
-// }
+const transformText = (text) => {
+  text = text.replace(/_/g, " ");
+  text = toTitleCase(text);
+  return text;
+}
 
-// const reduceDecimal = (number) => {
-//   return Math.round(number);
-// }
+const toTitleCase = (str) => {
+  return str.replace(/\w\S*/g, (txt) => {
+    return txt.charAt(0).toUpperCase() + txt.slice(1).toLowerCase();
+  });
+}
+
+const reduceDecimal = (number) => {
+  return Math.round(number);
+}
 
 const getModelPointVersions = () => {
   if (selectedModelPointYear.value) {
