@@ -112,7 +112,11 @@ export default createRouter({
       name: 'valuations-paa-portfolio-summaries',
       component: () => import('../screens/valuations/paa/PortfolioSummaries.vue')
     },
-
+    {
+      path: '/valuations/paa/tables',
+      name: 'valuations-paa-tables',
+      component: () => import('../screens/valuations/paa/Tables.vue')
+    },
     {
       path: '/error',
       component: ErrorScreen,

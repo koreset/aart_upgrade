@@ -51,7 +51,9 @@
           <v-list-item :to="{ name: 'valuations-paa-portfolio-summaries' }">
             <v-list-item-title>Portfolio Summaries</v-list-item-title>
           </v-list-item>
-
+          <v-list-item :to="{ name: 'valuations-paa-tables' }">
+            <v-list-item-title>Tables</v-list-item-title>
+          </v-list-item>
           <v-list-item :to="{ name: 'valuations-paa-run-settings' }">
             <v-list-item-title>Run Settings</v-list-item-title>
           </v-list-item>

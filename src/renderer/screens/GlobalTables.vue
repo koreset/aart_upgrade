@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col>
-        <base-card>
+        <base-card :showActions="false">
           <template #header> Upload Assumption Tables </template>
           <template #default>
             <v-container fluid>
@@ -19,7 +19,11 @@
                           </v-btn>
                         </td>
                         <td style="text-align: center">
-                          <bulk-file-updater :tableType="item.name"></bulk-file-updater>
+                          <bulk-file-updater
+                            :uploadComplete="uploadComplete"
+                            :tableType="item.name"
+                            @uploadFile="handleUploadFile"
+                          ></bulk-file-updater>
                         </td>
                         <td style="text-align: center">
                           <v-btn depressed rounded size="small" @click.stop="confirmDelete(item)">
@@ -164,23 +168,9 @@ const selectedYieldCurveMonth: any = ref(null)
 const yieldCurveMonths: any = ref([])
 const yieldCurveCodes: any = ref([])
 const yieldCurveYears: any = ref([])
-// const file: any = ref(null);
-// const selectedType: any = ref(null);
-// const uploadSuccess: any = ref(false);
-// const loading: any = ref(false);
 const loadingData: any = ref(false)
 const rowCount: any = ref(0)
-// const availableTypes: any = ref([
-//   { name: "Margins" },
-//   { name: "Parameters" },
-//   { name: "Yield Curve" },
-//   { name: "Shocks" },
-// ]);
 const timeout: any = ref(3000)
-// const shocksData: any = ref([]);
-// const yieldCurveData: any = ref([]);
-// const marginsData: any = ref([]);
-// const parametersData: any = ref([]);
 const globalTableData: any = ref([])
 const selectedTable: any = ref('')
 const globalTables: any = ref([
@@ -191,14 +181,30 @@ const globalTables: any = ref([
 ])
 const snackbar: any = ref(false)
 const text: any = ref('')
-// const tableDialog: any = ref(false);
 const yieldCurveDataDialog: any = ref(false)
-// const tableData: any = ref([]);
 const columnDefs: any = ref([])
-// const rowData: any = ref([]);
 const dialog: any = ref(false)
 
+const uploadComplete = ref(false)
 // methods
+const handleUploadFile = (payload: any) => {
+  console.log(payload)
+  uploadComplete.value = false
+  const formdata: any = new FormData()
+  formdata.append('file', payload.file)
+  formdata.append('assumption_type', payload.selectedType)
+  formdata.append('year', payload.selectedYear)
+  formdata.append('month', payload.selectedMonth)
+  formdata.append('yield_curve_code', payload.yieldCurveCode)
+  ProductService.uploadBulkAssumptions({ formdata })
+    .then((res: any) => {
+      if (res.status === 200) {
+        uploadComplete.value = true
+      }
+    })
+    .catch(() => {})
+}
+
 const deleteYieldCurveData = () => {
   ProductService.deleteYieldCurveData(
     selectedYieldCurveYear,
@@ -302,209 +308,4 @@ const createColumnDefs = (data: any) => {
     columnDefs.value.push(header)
   })
 }
-
-// const uploadFile = () => {
-//   if (selectedType.value !== null && file.value !== null) {
-//     loading.value = true;
-//     const formdata = new FormData();
-//     formdata.append("file", file.value);
-//     formdata.append("assumption_type", selectedType.value);
-//     ProductService.uploadBulkAssumptions({ formdata })
-//       .then((res) => {
-//         if (res.status === 200) {
-//           file.value = null;
-//           selectedType.value = null;
-//           text.value = "The data has been successfully updated";
-//           timeout.value = 3000;
-//           snackbar.value = true;
-//           loading.value = false;
-//         }
-//       })
-//       .catch(() => {
-//         loading.value = false;
-//       });
-//   }
-// };
-
-// export default {
-//   components: {
-//     TablesDataGridTable2,
-//     BulkFileUpdater,
-//   },
-//   data() {
-//     return {
-//       selectedYieldCurveYear: null,
-//       selectedYieldCurveCode: null,
-//       selectedYieldCurveMonth: null,
-//       yieldCurveMonths: [],
-//       yieldCurveCodes: [],
-//       yieldCurveYears: [],
-//       file: null,
-//       selectedType: null,
-//       uploadSuccess: false,
-//       loading: false,
-//       loadingData: false,
-//       rowCount: 0,
-//       availableTypes: [
-//         { name: "Margins" },
-//         { name: "Parameters" },
-//         { name: "Yield Curve" },
-//         { name: "Shocks" },
-//       ],
-//       timeout: 3000,
-//       shocksData: [],
-//       yieldCurveData: [],
-//       marginsData: [],
-//       parametersData: [],
-//       globalTableData: [],
-//       selectedTable: "",
-//       globalTables: [
-//         { name: "Parameters" },
-//         { name: "Yield Curve" },
-//         { name: "Margins" },
-//         { name: "Shocks" },
-//       ],
-//       snackbar: false,
-//       text: "",
-//       tableDialog: false,
-//       yieldCurveDataDialog: false,
-//       tableData: [],
-//       columnDefs: [],
-//       rowData: [],
-//       dialog: false,
-//     };
-//   },
-//   mounted() {
-//     // ProductService.getGlobalTables().then((response) => {
-//     //   this.globalTables = response.data;
-//     // });
-//     this.getYieldCurveYears();
-//   },
-//   methods: {
-//     deleteYieldCurveData() {
-//       ProductService.deleteYieldCurveData(
-//         this.selectedYieldCurveYear,
-//         this.selectedYieldCurveCode,
-//         this.selectedYieldCurveMonth
-//       ).then(() => {
-//         this.text = "yield curve data deleted successfully";
-//         this.snackbar = true;
-//         this.clearYieldDialog();
-//       });
-//     },
-//     clearYieldDialog() {
-//       this.selectedYieldCurveYear = null;
-//       this.selectedYieldCurveCode = null;
-//       this.selectedYieldCurveMonth = null;
-//       this.yieldCurveMonths = [];
-//       this.yieldCurveCodes = [];
-//       this.yieldCurveDataDialog = false;
-//     },
-//     getYieldCurveCodes() {
-//       ProductService.getYieldCurveCodes(this.selectedYieldCurveYear).then(
-//         (response) => {
-//           this.yieldCurveCodes = response.data;
-//         }
-//       );
-//     },
-//     getYieldCurveMonths() {
-//       ProductService.getYieldCurveMonths(
-//         this.selectedYieldCurveYear,
-//         this.selectedYieldCurveCode
-//       ).then((response) => {
-//         this.yieldCurveMonths = response.data;
-//       });
-//     },
-//     getYieldCurveYears() {
-//       ValuationService.getAvailableYieldYears().then((response) => {
-//         this.yieldCurveYears = response.data;
-//         if (this.yieldCurveYears === null) {
-//           this.yieldCurveYears = [];
-//         }
-//       });
-//     },
-//     confirmDelete(item) {
-//       if (item.name === "Yield Curve") {
-//         this.getYieldCurveYears();
-//         if (this.yieldCurveYears.length > 0) {
-//           this.yieldCurveDataDialog = true;
-//         }
-
-//       } else {
-//         this.selectedTable = item.name;
-//         this.dialog = true;
-//       }
-//     },
-//     deleteGlobalTableData(table) {
-//       ProductService.deleteGlobalTableData(table).then((response) => {
-//         this.text = response.data;
-//         this.snackbar = true;
-//         this.dialog = false;
-//         this.globalTableData = [];
-//         this.selectedTable = "";
-//       });
-//     },
-
-//     viewTable(item) {
-//       this.loadingData = true;
-//       this.globalTableData = [];
-//       ProductService.getGlobalTableData(item.name).then((response) => {
-//         console.log(response.data.data);
-//         if (response.data.data === null) {
-//           response.data.data = [];
-//         }
-
-//         if (response.data.data.length === 0) {
-//           this.text = "No data available for this table";
-//           this.snackbar = true;
-//         } else {
-//           this.globalTableData = response.data.data;
-//           this.rowCount = response.data.row_count;
-//           this.selectedTable = item.name;
-//           this.createColumnDefs(this.globalTableData);
-
-//         }
-
-//         this.loadingData = false;
-//       }).catch(() => {
-//         this.loadingData = false;
-//       });
-
-//     },
-//     createColumnDefs(data) {
-//       this.columnDefs = [];
-//       Object.keys(data[0]).forEach((element) => {
-//         const header = {};
-//         header.headerName = element;
-//         header.field = element;
-//         header.valueFormatter = formatValues;
-//         header.minWidth = 200;
-//         this.columnDefs.push(header);
-//       });
-//     },
-
-//     uploadFile() {
-//       if (this.selectedType !== null && this.file !== null) {
-//         this.loading = true;
-//         const formdata = new FormData();
-//         formdata.append("file", this.file);
-//         formdata.append("assumption_type", this.selectedType);
-//         ProductService.uploadBulkAssumptions({ formdata })
-//           .then((res) => {
-//             if (res.status === 200) {
-//               this.file = null;
-//               this.selectedType = null;
-//               this.text = "The data has been successfully updated";
-//               this.timeout = 3000;
-//               this.snackbar = true;
-//               this.loading = false;
-//             }
-//           })
-//           .catch(() => {
-//             this.loading = false;
-//           });
-//       }
-//     },
-//   },
-// };
 </script>

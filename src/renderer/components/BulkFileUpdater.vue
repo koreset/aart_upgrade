@@ -107,10 +107,24 @@
   </v-dialog>
 </template>
 <script setup lang="ts">
-import { computed, defineProps, ref } from 'vue'
-import ProductService from '../api/ProductService'
+import { computed, defineProps, ref, watch } from 'vue'
+// import ProductService from '../api/ProductService'
 // import { createTemplate } from "../utils/helpers";
-const newprops = defineProps(['tableType', 'assumptionType'])
+const newprops = defineProps(['tableType', 'assumptionType', 'uploadComplete'])
+
+// define interface for the data
+interface DataPayload {
+  file: any
+  selectedYear?: any
+  selectedMonth?: any
+  yieldCurveCode?: any
+  selectedType?: any
+  fileName?: any
+}
+
+const emit = defineEmits<{
+  (e: 'uploadFile', payload: DataPayload): void
+}>()
 
 // data
 const uploadInProgress: any = ref(false)
@@ -118,13 +132,8 @@ const uploadDisabled: any = ref(false)
 const snackbarText: any = ref(null)
 const timeout: any = ref(3000)
 const snackbar: any = ref(false)
-// const date: any = ref(null);
-// const menu: any = ref(false);
-// const loading: any = ref(false);
 const loaderSize: any = ref(0)
 const uploadSuccess: any = ref(false)
-// const error: any = ref(false);
-// const errorMessages: any = ref([]);
 const file: any = ref(null)
 const dialog: any = ref(false)
 const selectedYear: any = ref(null)
@@ -166,130 +175,37 @@ const closeDialog = () => {
 }
 
 const uploadFile = () => {
-  if (selectedType.value !== null && file.value !== null) {
-    const formdata: any = new FormData()
-    formdata.append('file', file.value)
-    formdata.append('assumption_type', newprops.tableType)
-    formdata.append('year', selectedYear.value)
-    formdata.append('month', selectedMonth.value)
-    formdata.append('yield_curve_code', yieldCurveCode.value)
+  console.log('uploading file')
+  console.log(selectedType.value)
+  console.log(newprops.tableType)
+  console.log(file.value)
+  if (file.value !== null) {
+    const payload: DataPayload = {
+      file: file.value,
+      selectedYear: selectedYear.value,
+      selectedMonth: selectedMonth.value,
+      yieldCurveCode: yieldCurveCode.value,
+      selectedType: newprops.tableType,
+      fileName: file.value.name
+    }
     uploadInProgress.value = true
     uploadDisabled.value = true
-    ProductService.uploadBulkAssumptions({ formdata })
-      .then((res: any) => {
-        if (res.status === 200) {
-          // closeDialog();
-          snackbarText.value = 'The data has been successfully updated'
-          timeout.value = 3000
-          snackbar.value = true
-          uploadInProgress.value = false
-          uploadDisabled.value = false
-        }
-      })
-      .catch(() => {})
+
+    emit('uploadFile', payload)
   }
 }
 
-// const resetErrorState = () => {
-//   error.value = false;
-//   errorMessages.value = [];
-// };
-
-// const checkFileName = (value: any) => {
-//   if (value !== null && value.name === fileName.value + ".csv") {
-//     return true;
-//   }
-//   return "The file name without the .csv extension must match the chosen table name";
-// };
-
-// export default {
-//   props: ["tableType", "assumptionType"],
-//   data: () => ({
-//     uploadInProgress: false,
-//     uploadDisabled: false,
-//     text: null,
-//     timeout: 3000,
-//     snackbar: false,
-//     date: null,
-//     menu: false,
-//     loading: false,
-//     loaderSize: 0,
-//     uploadSuccess: false,
-//     error: false,
-//     errorMessages: [],
-//     file: null,
-//     dialog: false,
-//     selectedYear: null,
-//     selectedMonth: null,
-//     yieldCurveCode: null,
-//   }),
-//   computed: {
-//     availableYears() {
-//       const years = [];
-//       const currentYear = new Date().getFullYear();
-
-//       for (let i = 0; i < 20; i++) {
-//         years.push(currentYear - i);
-//       }
-//       return years;
-//     },
-//     availableMonths() {
-//       const months = [];
-//       for (let i = 1; i < 13; i++) {
-//         months.push({ month: i });
-//       }
-//       return months;
-//     },
-//   },
-//   methods: {
-//     closeDialog() {
-//       this.snackbar = false;
-//       this.dialog = false;
-//       this.uploadSuccess = false;
-//       this.uploadInProgress = false;
-//       this.selectedYear = null;
-//       this.file = null;
-//       this.yieldCurveCode = null;
-//       this.selectedMonth = null;
-//       this.uploadDisabled = false;
-//     },
-
-//     uploadFile() {
-//       if (this.selectedType !== null && this.file !== null) {
-//         const formdata = new FormData();
-//         formdata.append("file", this.file);
-//         formdata.append("assumption_type", this.tableType);
-//         formdata.append("year", this.selectedYear);
-//         formdata.append("month", this.selectedMonth);
-//         formdata.append("yield_curve_code", this.yieldCurveCode);
-//         this.uploadInProgress = true;
-//         this.uploadDisabled = true;
-//         ProductService.uploadBulkAssumptions({ formdata })
-//           .then((res) => {
-//             if (res.status === 200) {
-//               // this.closeDialog();
-//               this.text = "The data has been successfully updated";
-//               this.timeout = 3000;
-//               this.snackbar = true;
-//               this.uploadInProgress = false;
-//               this.uploadDisabled = false;
-//             }
-//           })
-//           .catch(() => {
-//           });
-//       }
-//     },
-
-//     resetErrorState() {
-//       this.error = false;
-//       this.errorMessages = [];
-//     },
-//     checkFileName(value) {
-//       if (value !== null && value.name === this.fileName + ".csv") {
-//         return true;
-//       }
-//       return "The file name without the .csv extension must match the chosen table name";
-//     },
-//   },
-// };
+watch(
+  () => newprops.uploadComplete,
+  (value) => {
+    if (value) {
+      closeDialog()
+      snackbarText.value = 'The data has been successfully updated'
+      uploadInProgress.value = false
+      uploadDisabled.value = false
+      timeout.value = 3000
+      snackbar.value = true
+    }
+  }
+)
 </script>
