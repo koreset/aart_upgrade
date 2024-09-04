@@ -151,13 +151,9 @@ const fileErrors: any = ref([])
 const filesErrors: any = ref([])
 
 // methods
-const addToFileList = () => {
+const addToFileList = () => {}
 
-}
-
-const uploadToServer = () => {
-
-}
+const uploadToServer = () => {}
 
 // export default {
 //   props: ["editMode"],

@@ -173,8 +173,6 @@ const getReports = () => {
 onMounted(() => {
   getReports()
 })
-
-
 </script>
 
 <style>

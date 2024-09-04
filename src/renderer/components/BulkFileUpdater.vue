@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" persistent max-width="550px">
     <template #activator="{ props }">
-      <v-btn depressed rounded size="small" v-bind="props">
+      <v-btn variant="outlined" rounded size="small" v-bind="props">
         <v-icon color="accent">mdi-file-upload</v-icon>
         <span>Upload</span>
       </v-btn>
@@ -100,27 +100,12 @@
         <v-btn rounded variant="text" @click="closeDialog">Close</v-btn>
       </v-card-actions>
     </v-card>
-    <v-snackbar v-model="snackbar" centered :timeout="timeout" :multi-line="true">
-      {{ snackbarText }}
-      <v-btn rounded color="red" variant="text" @click="closeDialog">Close</v-btn>
-    </v-snackbar>
   </v-dialog>
 </template>
 <script setup lang="ts">
 import { computed, defineProps, ref, watch } from 'vue'
-// import ProductService from '../api/ProductService'
-// import { createTemplate } from "../utils/helpers";
+import { DataPayload } from './types'
 const newprops = defineProps(['tableType', 'assumptionType', 'uploadComplete'])
-
-// define interface for the data
-interface DataPayload {
-  file: any
-  selectedYear?: any
-  selectedMonth?: any
-  yieldCurveCode?: any
-  selectedType?: any
-  fileName?: any
-}
 
 const emit = defineEmits<{
   (e: 'uploadFile', payload: DataPayload): void
@@ -129,9 +114,6 @@ const emit = defineEmits<{
 // data
 const uploadInProgress: any = ref(false)
 const uploadDisabled: any = ref(false)
-const snackbarText: any = ref(null)
-const timeout: any = ref(3000)
-const snackbar: any = ref(false)
 const loaderSize: any = ref(0)
 const uploadSuccess: any = ref(false)
 const file: any = ref(null)
@@ -163,7 +145,6 @@ const availableMonths: any = computed(() => {
 
 // methods
 const closeDialog = () => {
-  snackbar.value = false
   dialog.value = false
   uploadSuccess.value = false
   uploadInProgress.value = false
@@ -174,6 +155,7 @@ const closeDialog = () => {
   uploadDisabled.value = false
 }
 
+// processing of the captured data will be delegated to the parent caller
 const uploadFile = () => {
   console.log('uploading file')
   console.log(selectedType.value)
@@ -200,11 +182,8 @@ watch(
   (value) => {
     if (value) {
       closeDialog()
-      snackbarText.value = 'The data has been successfully updated'
       uploadInProgress.value = false
       uploadDisabled.value = false
-      timeout.value = 3000
-      snackbar.value = true
     }
   }
 )

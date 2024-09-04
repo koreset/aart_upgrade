@@ -3,17 +3,22 @@
     <v-row>
       <v-col>
         <base-card :showActions="false">
-          <template #header> Upload Assumption Tables </template>
+          <template #header> Global Assumption Tables </template>
           <template #default>
             <v-container fluid>
               <v-row>
                 <v-col>
                   <v-table>
                     <tbody>
-                      <tr v-for="item in globalTables" :key="item.name">
+                      <tr v-for="item in tables" :key="item.name">
                         <td style="width: 70%">{{ item.name }}</td>
                         <td style="text-align: center">
-                          <v-btn depressed rounded size="small" @click.stop="viewTable(item)">
+                          <v-btn
+                            variant="outlined"
+                            rounded
+                            size="small"
+                            @click.stop="viewTable(item)"
+                          >
                             <v-icon left color="primary">mdi-information</v-icon>
                             <span>Info</span>
                           </v-btn>
@@ -22,11 +27,16 @@
                           <bulk-file-updater
                             :uploadComplete="uploadComplete"
                             :tableType="item.name"
-                            @uploadFile="handleUploadFile"
+                            @uploadFile="handleUpload"
                           ></bulk-file-updater>
                         </td>
                         <td style="text-align: center">
-                          <v-btn depressed rounded size="small" @click.stop="confirmDelete(item)">
+                          <v-btn
+                            variant="outlined"
+                            rounded
+                            size="small"
+                            @click.stop="confirmDelete(item)"
+                          >
                             <v-icon color="error">mdi-delete</v-icon>
                             <span>Delete</span>
                           </v-btn>
@@ -36,11 +46,11 @@
                   </v-table>
                 </v-col>
               </v-row>
-              <v-row v-if="globalTableData.length > 0 && !loadingData">
+              <v-row v-if="tableData.length > 0 && !loadingData">
                 <v-col>
                   <data-grid
                     :columnDefs="columnDefs"
-                    :rowData="globalTableData"
+                    :rowData="tableData"
                     :table-title="selectedTable"
                     :pagination="true"
                     :rowCount="rowCount"
@@ -78,10 +88,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="primary darken-1" variant="text" @click="dialog = false">No</v-btn>
-          <v-btn
-            color="primary darken-1"
-            variant="text"
-            @click="deleteGlobalTableData(selectedTable)"
+          <v-btn color="primary darken-1" variant="text" @click="deleteTableData(selectedTable)"
             >Yes</v-btn
           >
         </v-card-actions>
@@ -89,14 +96,16 @@
     </v-dialog>
     <v-dialog v-model="yieldCurveDataDialog" persistent max-width="600">
       <v-card>
-        <v-card-title class="header-title accent white--text">Select Yield Curve data</v-card-title>
+        <v-card-title class="header-title accent white--text"
+          >Select Yield Curve data to delete</v-card-title
+        >
         <v-card-text
           ><v-row v-if="yieldCurveYears.length > 0" class="mt-5">
             <v-col>
               <v-select
                 v-model="selectedYieldCurveYear"
-                outlined
-                dense
+                variant="outlined"
+                density="compact"
                 label="Yield Curve Year"
                 :items="yieldCurveYears"
                 item-title="Year"
@@ -109,8 +118,8 @@
             <v-col>
               <v-select
                 v-model="selectedYieldCurveCode"
-                outlined
-                dense
+                variant="outlined"
+                density="compact"
                 placeholder="Select an existing Yield Curve Code"
                 label="Yield Curve Code"
                 :items="yieldCurveCodes"
@@ -149,6 +158,10 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-snackbar v-model="snackbar" centered :timeout="timeout" :multi-line="true">
+      {{ snackbarText }}
+      <v-btn rounded color="red" variant="text" @click="snackbar = false">Close</v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -160,6 +173,7 @@ import DataGrid from '../components/tables/DataGrid.vue'
 import BulkFileUpdater from '../components/BulkFileUpdater.vue'
 import BaseCard from '../components/BaseCard.vue'
 import { ref } from 'vue'
+import { DataPayload } from '../components/types'
 
 // data
 const selectedYieldCurveYear: any = ref(null)
@@ -170,24 +184,27 @@ const yieldCurveCodes: any = ref([])
 const yieldCurveYears: any = ref([])
 const loadingData: any = ref(false)
 const rowCount: any = ref(0)
-const timeout: any = ref(3000)
-const globalTableData: any = ref([])
+const tableData: any = ref([])
 const selectedTable: any = ref('')
-const globalTables: any = ref([
+const tables: any = ref([
   { name: 'Parameters' },
   { name: 'Yield Curve' },
   { name: 'Margins' },
   { name: 'Shocks' }
 ])
-const snackbar: any = ref(false)
+
 const text: any = ref('')
 const yieldCurveDataDialog: any = ref(false)
 const columnDefs: any = ref([])
 const dialog: any = ref(false)
 
 const uploadComplete = ref(false)
+const snackbarText: any = ref(null)
+const timeout: any = ref(3000)
+const snackbar: any = ref(false)
+
 // methods
-const handleUploadFile = (payload: any) => {
+const handleUpload = (payload: DataPayload) => {
   console.log(payload)
   uploadComplete.value = false
   const formdata: any = new FormData()
@@ -199,11 +216,57 @@ const handleUploadFile = (payload: any) => {
   ProductService.uploadBulkAssumptions({ formdata })
     .then((res: any) => {
       if (res.status === 200) {
+        snackbarText.value = 'File uploaded successfully'
+        snackbar.value = true
+        timeout.value = 3000
         uploadComplete.value = true
       }
     })
-    .catch(() => {})
+    .catch(() => {
+      snackbarText.value = 'An error occurred while uploading the file'
+      snackbar.value = true
+      timeout.value = 3000
+      uploadComplete.value = true
+    })
 }
+
+const deleteTableData = (table: any) => {
+  ProductService.deleteGlobalTableData(table).then((response) => {
+    text.value = response.data
+    snackbar.value = true
+    dialog.value = false
+    tableData.value = []
+    selectedTable.value = ''
+  })
+}
+
+const viewTable = (item: any) => {
+  loadingData.value = true
+  tableData.value = []
+  ProductService.getGlobalTableData(item.name)
+    .then((response) => {
+      console.log(response.data.data)
+      if (response.data.data === null) {
+        response.data.data = []
+      }
+
+      if (response.data.data.length === 0) {
+        text.value = 'No data available for this table'
+        snackbar.value = true
+      } else {
+        tableData.value = response.data.data
+        rowCount.value = response.data.row_count
+        selectedTable.value = item.name
+        createColumnDefs(tableData.value)
+      }
+      loadingData.value = false
+    })
+    .catch(() => {
+      loadingData.value = false
+    })
+}
+
+// Yield curve specfic methods
 
 const deleteYieldCurveData = () => {
   ProductService.deleteYieldCurveData(
@@ -259,42 +322,6 @@ const confirmDelete = (item: any) => {
     selectedTable.value = item.name
     dialog.value = true
   }
-}
-
-const deleteGlobalTableData = (table: any) => {
-  ProductService.deleteGlobalTableData(table).then((response) => {
-    text.value = response.data
-    snackbar.value = true
-    dialog.value = false
-    globalTableData.value = []
-    selectedTable.value = ''
-  })
-}
-
-const viewTable = (item: any) => {
-  loadingData.value = true
-  globalTableData.value = []
-  ProductService.getGlobalTableData(item.name)
-    .then((response) => {
-      console.log(response.data.data)
-      if (response.data.data === null) {
-        response.data.data = []
-      }
-
-      if (response.data.data.length === 0) {
-        text.value = 'No data available for this table'
-        snackbar.value = true
-      } else {
-        globalTableData.value = response.data.data
-        rowCount.value = response.data.row_count
-        selectedTable.value = item.name
-        createColumnDefs(globalTableData.value)
-      }
-      loadingData.value = false
-    })
-    .catch(() => {
-      loadingData.value = false
-    })
 }
 
 const createColumnDefs = (data: any) => {

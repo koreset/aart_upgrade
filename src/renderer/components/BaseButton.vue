@@ -10,24 +10,24 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue';
+import { defineProps, defineEmits } from 'vue'
 
 // eslint-disable-next-line no-unused-vars
 const props = defineProps<{
-  label: string;
-  color?: string;
-  icon?: string;
-  disabled?: boolean;
-  size?: string;
-}>();
+  label: string
+  color?: string
+  icon?: string
+  disabled?: boolean
+  size?: string
+}>()
 
 const emit = defineEmits<{
-  (e: 'click'): void;
-}>();
+  (e: 'click'): void
+}>()
 
 const handleClick = () => {
-  emit('click');
-};
+  emit('click')
+}
 </script>
 
 <style scoped>

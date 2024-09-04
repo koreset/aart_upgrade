@@ -187,8 +187,6 @@ const createColumnDefs = (data: any) => {
     columnDefs.value.push(header)
   })
 }
-
-
 </script>
 
 <style></style>

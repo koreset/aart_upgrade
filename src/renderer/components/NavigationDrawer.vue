@@ -1,6 +1,12 @@
 <!-- eslint-disable vue/first-attribute-linebreak -->
 <template>
-  <v-navigation-drawer v-model="internalDrawer" class="custom-navbar drawer-text" dark color="navbar" location="left">
+  <v-navigation-drawer
+    v-model="internalDrawer"
+    class="custom-navbar nav-bg drawer-text"
+    dark
+    color="navbar"
+    location="left"
+  >
     <v-container>
       <v-row>
         <v-col>
@@ -9,8 +15,12 @@
       </v-row>
     </v-container>
     <v-list class="nav-text">
-      <v-list-item class="list-item-text" :to="{ name: 'dashboard' }" :title="'Dashboard'"
-        :prepend-icon="'mdi-monitor-dashboard'"></v-list-item>
+      <v-list-item
+        class="list-item-text"
+        :to="{ name: 'dashboard' }"
+        :title="'Dashboard'"
+        :prepend-icon="'mdi-monitor-dashboard'"
+      ></v-list-item>
       <v-list-item :to="{ name: 'product-setup' }" :prepend-icon="'mdi-table-settings'">
         <v-list-item-title>Product Configuration</v-list-item-title>
       </v-list-item>
@@ -25,7 +35,11 @@
       </v-list-item>
       <v-list-group value="Valuations">
         <template #activator="{ props }">
-          <v-list-item v-bind="props" prepend-icon="mdi-account-circle" title="Valuations"></v-list-item>
+          <v-list-item
+            v-bind="props"
+            prepend-icon="mdi-account-circle"
+            title="Valuations"
+          ></v-list-item>
         </template>
         <v-list-group value="GMM">
           <template #activator="{ props }">
@@ -60,7 +74,6 @@
           <v-list-item :to="{ name: 'valuations-paa-run-results' }">
             <v-list-item-title>Run Results</v-list-item-title>
           </v-list-item>
-
         </v-list-group>
         <v-list-group value="IBNR">
           <template #activator="{ props }">
@@ -72,8 +85,6 @@
             <v-list-item v-bind="props" title="LIC"></v-list-item>
           </template>
         </v-list-group>
-
-
       </v-list-group>
     </v-list>
   </v-navigation-drawer>
@@ -95,7 +106,6 @@ const internalDrawer = ref(props.drawer)
 watchEffect(() => {
   internalDrawer.value = props.drawer
 })
-
 </script>
 
 <style scoped>
@@ -109,5 +119,9 @@ watchEffect(() => {
 
 .nav-text {
   font-size: 10px !important;
+}
+
+.nav-bg {
+  background-color: lightgrey !important;
 }
 </style>

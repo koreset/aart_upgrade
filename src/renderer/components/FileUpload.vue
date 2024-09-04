@@ -16,31 +16,33 @@
 </template>
 
 <script setup lang="ts">
-import BaseCard from './BaseCard.vue';
-import { defineProps, watch, ref, defineEmits } from 'vue';
+import BaseCard from './BaseCard.vue'
+import { defineProps, watch, ref, defineEmits } from 'vue'
 
 const props = defineProps<{
-  isDialogOpen: boolean;
-}>();
+  isDialogOpen: boolean
+}>()
 
-const fileName = ref('');
-const productCode = ref('');
+const fileName = ref('')
+const productCode = ref('')
 
 const upload = () => {
-  emit('upload', { fileName: fileName.value });
-};
+  emit('upload', { fileName: fileName.value })
+}
 
 const emit = defineEmits<{
-  (e: 'upload', payload: { fileName: string; }): void;
-  (e: 'update:isDialogOpen', value: boolean): void;
-}>();
+  (e: 'upload', payload: { fileName: string }): void
+  (e: 'update:isDialogOpen', value: boolean): void
+}>()
 
-watch(() => props.isDialogOpen, (newVal) => {
-  if (!newVal) {
-    productCode.value = '';
+watch(
+  () => props.isDialogOpen,
+  (newVal) => {
+    if (!newVal) {
+      productCode.value = ''
+    }
   }
-});
-
+)
 </script>
 
 <style scoped></style>

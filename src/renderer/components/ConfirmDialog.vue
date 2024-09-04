@@ -1,20 +1,25 @@
 <template>
   <v-dialog v-model="dialog" persistent max-width="500" @keydown.esc="cancel">
     <v-card>
-      <v-card-title class="headline"><v-icon class="mr-3" color="red" size="25">mdi-alert-circle</v-icon>{{ dialogTitle
-        }}</v-card-title>
+      <v-card-title class="headline"
+        ><v-icon class="mr-3" color="red" size="25">mdi-alert-circle</v-icon
+        >{{ dialogTitle }}</v-card-title
+      >
       <v-card-text>{{ dialogMessage }}</v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn variant="outlined" class="mb-3" size="small" rounded color="red" @click="cancel">No</v-btn>
-        <v-btn variant="outlined" class="mb-3" size="small" rounded color="red" @click="agree">Yes</v-btn>
+        <v-btn variant="outlined" class="mb-3" size="small" rounded color="red" @click="cancel"
+          >No</v-btn
+        >
+        <v-btn variant="outlined" class="mb-3" size="small" rounded color="red" @click="agree"
+          >Yes</v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script setup lang="ts">
-
 import { ref } from 'vue'
 
 const dialog = ref(false)
@@ -51,5 +56,4 @@ const agree = () => {
 defineExpose({
   open
 })
-
 </script>

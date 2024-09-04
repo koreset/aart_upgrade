@@ -2,9 +2,18 @@
   <v-container>
     <v-row>
       <v-col cols="6">
-        <v-select v-model:model-value="selectedTransitions" clearable multiple chips variant="outlined"
-          density="compact" :items="transitions" item-title="state" item-value="state"
-          placeholder="Select transition states"></v-select>
+        <v-select
+          v-model:model-value="selectedTransitions"
+          clearable
+          multiple
+          chips
+          variant="outlined"
+          density="compact"
+          :items="transitions"
+          item-title="state"
+          item-value="state"
+          placeholder="Select transition states"
+        ></v-select>
       </v-col>
     </v-row>
   </v-container>

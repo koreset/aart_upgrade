@@ -15,32 +15,35 @@
 </template>
 
 <script setup lang="ts">
-import BaseCard from './BaseCard.vue';
-import { ref, watch } from 'vue';
-import DataGrid from './tables/DataGrid.vue';
+import BaseCard from './BaseCard.vue'
+import { ref, watch } from 'vue'
+import DataGrid from './tables/DataGrid.vue'
 
 interface Props {
-  isDialogOpen: boolean;
-  rowData: any;
-  columnDefs: any;
-  tableTitle: string;
+  isDialogOpen: boolean
+  rowData: any
+  columnDefs: any
+  tableTitle: string
 }
 
 const emit = defineEmits<{
-  (e: 'update:isInfoDialogOpen', value: boolean): void;
-}>();
+  (e: 'update:isInfoDialogOpen', value: boolean): void
+}>()
 
 const props = defineProps<Props>()
 
 const isDialogOpen = ref(props.isDialogOpen)
 
-watch(() => props.isDialogOpen, (value) => {
-  isDialogOpen.value = value
-})
+watch(
+  () => props.isDialogOpen,
+  (value) => {
+    isDialogOpen.value = value
+  }
+)
 
 watch(isDialogOpen, (newVal) => {
-  emit('update:isInfoDialogOpen', newVal);
-});
+  emit('update:isInfoDialogOpen', newVal)
+})
 
 const upload = () => {
   isDialogOpen.value = false

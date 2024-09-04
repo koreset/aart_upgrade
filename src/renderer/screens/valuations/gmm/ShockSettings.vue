@@ -3,28 +3,33 @@
     <v-row>
       <v-col>
         <base-card>
-          <template #header>
-            Shock Settings
-          </template>
+          <template #header> Shock Settings </template>
           <template #default>
             <v-container>
               <h4 class="mb-2">Create Shock Setting</h4>
               <v-row>
                 <v-col cols="3">
-                  <v-text-field v-model="settingName" variant="outlined" density="compact"
-                    placeholder="Enter a name for this scenario"></v-text-field>
+                  <v-text-field
+                    v-model="settingName"
+                    variant="outlined"
+                    density="compact"
+                    placeholder="Enter a name for this scenario"
+                  ></v-text-field>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col>
-                  <v-textarea v-model="settingDescription" variant="outlined" rows="3"
-                    label="Provide a description for this scenario"></v-textarea>
+                  <v-textarea
+                    v-model="settingDescription"
+                    variant="outlined"
+                    rows="3"
+                    label="Provide a description for this scenario"
+                  ></v-textarea>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col>
-                  <p>Select the desired combination for this setting from the
-                    options below</p>
+                  <p>Select the desired combination for this setting from the options below</p>
                 </v-col>
               </v-row>
               <v-row>
@@ -47,7 +52,10 @@
                   <v-checkbox v-model="realYieldCurve" :label="`Real Yield Curve`"></v-checkbox>
                 </v-col>
                 <v-col cols="3">
-                  <v-checkbox v-model="nominalYieldCurve" :label="`Nominal Yield Curve`"></v-checkbox>
+                  <v-checkbox
+                    v-model="nominalYieldCurve"
+                    :label="`Nominal Yield Curve`"
+                  ></v-checkbox>
                 </v-col>
                 <v-col cols="3">
                   <v-checkbox v-model="expense" :label="`Expense`"></v-checkbox>
@@ -56,24 +64,38 @@
                   <v-checkbox v-model="inflation" :label="`Inflation`"></v-checkbox>
                 </v-col>
                 <v-col cols="3">
-                  <v-checkbox v-model="mortalityCatastrophe" :label="`Mortality Catastrophe`"></v-checkbox>
+                  <v-checkbox
+                    v-model="mortalityCatastrophe"
+                    :label="`Mortality Catastrophe`"
+                  ></v-checkbox>
                 </v-col>
                 <v-col cols="3">
-                  <v-checkbox v-model="morbidityCatastrophe" :label="`Morbidity Catastrophe`"></v-checkbox>
+                  <v-checkbox
+                    v-model="morbidityCatastrophe"
+                    :label="`Morbidity Catastrophe`"
+                  ></v-checkbox>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col cols="3">
-                  <v-select v-model="selectedShockBasis" variant="outlined" density="compact"
-                    placeholder="Select a Shock Basis" label="Shock Basis" :items="shockBases" item-title="Basis"
-                    item-value="Basis">
+                  <v-select
+                    v-model="selectedShockBasis"
+                    variant="outlined"
+                    density="compact"
+                    placeholder="Select a Shock Basis"
+                    label="Shock Basis"
+                    :items="shockBases"
+                    item-title="Basis"
+                    item-value="Basis"
+                  >
                   </v-select>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col>
-                  <v-btn rounded width="250" size="small" color="primary" @click="addToScenarios">Add to Shock
-                    Settings</v-btn>
+                  <v-btn rounded width="250" size="small" color="primary" @click="addToScenarios"
+                    >Add to Shock Settings</v-btn
+                  >
                 </v-col>
               </v-row>
               <v-row>
@@ -84,8 +106,15 @@
               <h4 class="mt-4">Available Scenarios</h4>
               <v-row v-if="shockScenarios.length > 0">
                 <v-col>
-                  <data-grid ref="table" :pagination="true" :rowSelection="rowSelection" :columnDefs="columnDefs"
-                    :showExport="showExport" :rowData="shockScenarios" @update:row-deleted="deleteShockSetting" />
+                  <data-grid
+                    ref="table"
+                    :pagination="true"
+                    :rowSelection="rowSelection"
+                    :columnDefs="columnDefs"
+                    :showExport="showExport"
+                    :rowData="shockScenarios"
+                    @update:row-deleted="deleteShockSetting"
+                  />
                 </v-col>
               </v-row>
             </v-container>
@@ -203,87 +232,88 @@
 </template>
 
 <script setup lang="ts">
-import ValuationService from "../../../api/ValuationService";
+import ValuationService from '../../../api/ValuationService'
 // import { useVuelidate } from "vuelidate";
-import { onMounted, ref } from "vue";
-import BaseCard from "@/renderer/components/BaseCard.vue";
-import DataGrid from "@/renderer/components/tables/DataGrid.vue";
-import ConfirmationDialog from "@/renderer/components/ConfirmDialog.vue";
+import { onMounted, ref } from 'vue'
+import BaseCard from '@/renderer/components/BaseCard.vue'
+import DataGrid from '@/renderer/components/tables/DataGrid.vue'
+import ConfirmationDialog from '@/renderer/components/ConfirmDialog.vue'
 // const mustNotBeNull = (value) => value !== null;
 
 // const $v = useVuelidate();
 
-
-const confirmAction = ref();
-const columnDefs = ref([]);
+const confirmAction = ref()
+const columnDefs = ref([])
 // const selectedYear = ref(null);
-const selectedShockBasis = ref(null);
-const shockBases: any = ref([]);
-const settingName = ref("");
-const settingDescription = ref("");
-const mortality = ref(false);
-const disability = ref(false);
-const lapse = ref(false);
-const criticalIllness = ref(false);
+const selectedShockBasis = ref(null)
+const shockBases: any = ref([])
+const settingName = ref('')
+const settingDescription = ref('')
+const mortality = ref(false)
+const disability = ref(false)
+const lapse = ref(false)
+const criticalIllness = ref(false)
 // const yieldCurve = ref(false);
-const nominalYieldCurve = ref(false);
-const realYieldCurve = ref(false);
-const expense = ref(false);
-const inflation = ref(false);
-const mortalityCatastrophe = ref(false);
-const morbidityCatastrophe = ref(false);
-const retrenchment = ref(false);
+const nominalYieldCurve = ref(false)
+const realYieldCurve = ref(false)
+const expense = ref(false)
+const inflation = ref(false)
+const mortalityCatastrophe = ref(false)
+const morbidityCatastrophe = ref(false)
+const retrenchment = ref(false)
 // const selectedItem = ref(null);
-const rowSelection = ref(null);
-const shockScenarios: any = ref([]);
-const showExport = ref(false);
+const rowSelection = ref(null)
+const shockScenarios: any = ref([])
+const showExport = ref(false)
 
 onMounted(() => {
   ValuationService.getShockSettings().then((response) => {
     if (response.data !== null && response.data.length > 0) {
-      console.log(response.data);
-      shockScenarios.value = [];
-      shockScenarios.value = response.data;
-      columnDefs.value = createColumnDefs(shockScenarios.value, "shockScenarios");
+      console.log(response.data)
+      shockScenarios.value = []
+      shockScenarios.value = response.data
+      columnDefs.value = createColumnDefs(shockScenarios.value, 'shockScenarios')
 
       // response.data.forEach((item) => {
       //   this.$store.commit("addToShockScenarios", item);
       // });
     }
-  });
-  getAvailableShockBases();
-});
+  })
+  getAvailableShockBases()
+})
 
 const getAvailableShockBases = () => {
   ValuationService.getAvailableShockBases().then((response) => {
     if (response.data !== null && response.data.length > 0) {
       response.data.forEach((item: any) => {
-        shockBases.value.push(item);
-      });
+        shockBases.value.push(item)
+      })
     }
-  });
-};
+  })
+}
 
 const deleteShockSetting = async (scenario: any) => {
-  console.log("delete", scenario);
+  console.log('delete', scenario)
   try {
-    const res = await confirmAction.value.open(`Deleting ${scenario.name} `,
-      "Are you sure you want to delete this shock scenario? This action is not undoable.");
+    const res = await confirmAction.value.open(
+      `Deleting ${scenario.name} `,
+      'Are you sure you want to delete this shock scenario? This action is not undoable.'
+    )
 
     if (res) {
-      console.log("confirming delete", scenario);
+      console.log('confirming delete', scenario)
       ValuationService.deleteShockSetting(scenario.id).then((res) => {
-        console.log(res);
+        console.log(res)
         if (res.status === 204) {
-          console.log("deleted");
+          console.log('deleted')
           shockScenarios.value = shockScenarios.value.filter((item) => {
-            return item.id !== scenario.id;
-          });
+            return item.id !== scenario.id
+          })
         }
-      });
+      })
     }
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
 
   // const res = await $refs.confirm.open(`Deleting ${scenario.name} `,
@@ -302,7 +332,7 @@ const deleteShockSetting = async (scenario: any) => {
   //     $refs.table.updateRowData(shockScenarios.value);
   //   }
   // });
-};
+}
 
 // const removeFromScenarios = () => {
 //   $store.commit("removeShockScenario", selectedItem.value.name);
@@ -322,71 +352,67 @@ const addToScenarios = () => {
   //   console.log("invalid");
   //   return;
   // }
-  console.log("valid");
+  console.log('valid')
 
-  const setting: any = {};
-  setting.name = settingName.value;
-  setting.description = settingDescription.value;
-  setting.mortality = mortality.value;
-  setting.disability = disability.value;
-  setting.lapse = lapse.value;
-  setting.critical_illness = criticalIllness.value;
-  setting.nominal_yield_curve = nominalYieldCurve.value;
-  setting.real_yield_curve = realYieldCurve.value;
-  setting.expense = expense.value;
-  setting.retrenchment = retrenchment.value;
-  setting.shock_basis = selectedShockBasis.value;
-  setting.inflation = inflation.value;
-  setting.morbidity_catastrophe = morbidityCatastrophe.value;
-  setting.mortality_catastrophe = mortalityCatastrophe.value;
+  const setting: any = {}
+  setting.name = settingName.value
+  setting.description = settingDescription.value
+  setting.mortality = mortality.value
+  setting.disability = disability.value
+  setting.lapse = lapse.value
+  setting.critical_illness = criticalIllness.value
+  setting.nominal_yield_curve = nominalYieldCurve.value
+  setting.real_yield_curve = realYieldCurve.value
+  setting.expense = expense.value
+  setting.retrenchment = retrenchment.value
+  setting.shock_basis = selectedShockBasis.value
+  setting.inflation = inflation.value
+  setting.morbidity_catastrophe = morbidityCatastrophe.value
+  setting.mortality_catastrophe = mortalityCatastrophe.value
 
   //   this.shockScenarios.push(setting);
   ValuationService.saveShockSetting(setting).then((res) => {
     if (res.status === 201) {
-      shockScenarios.value.push(res.data);
-      settingName.value = "";
-      settingDescription.value = "";
-      mortality.value = false;
-      disability.value = false;
-      lapse.value = false;
-      criticalIllness.value = false;
-      nominalYieldCurve.value = false;
-      realYieldCurve.value = false;
-      expense.value = false;
-      inflation.value = false;
-      morbidityCatastrophe.value = false;
-      mortalityCatastrophe.value = false;
-      retrenchment.value = false;
-      selectedShockBasis.value = null;
+      shockScenarios.value.push(res.data)
+      settingName.value = ''
+      settingDescription.value = ''
+      mortality.value = false
+      disability.value = false
+      lapse.value = false
+      criticalIllness.value = false
+      nominalYieldCurve.value = false
+      realYieldCurve.value = false
+      expense.value = false
+      inflation.value = false
+      morbidityCatastrophe.value = false
+      mortalityCatastrophe.value = false
+      retrenchment.value = false
+      selectedShockBasis.value = null
     }
-  });
-
-
-};
-
-
+  })
+}
 
 const createColumnDefs = (data: any, tableName: string) => {
-  console.log(tableName);
-  const cDefs: any = [];
-  if (typeof data !== "undefined") {
+  console.log(tableName)
+  const cDefs: any = []
+  if (typeof data !== 'undefined') {
     Object.keys(data[0]).forEach((element) => {
-      if (element !== "id" && element !== "year") {
-        const column: any = {};
-        column.headerName = element;
-        column.field = element;
-        column.minWidth = 200;
-        cDefs.push(column);
-        if (element === "name") {
-          column.checkboxSelection = true;
-          column.pinned = "left";
-          column.minWidth = 250;
+      if (element !== 'id' && element !== 'year') {
+        const column: any = {}
+        column.headerName = element
+        column.field = element
+        column.minWidth = 200
+        cDefs.push(column)
+        if (element === 'name') {
+          column.checkboxSelection = true
+          column.pinned = 'left'
+          column.minWidth = 250
         }
       }
-    });
+    })
   }
-  return cDefs;
-};
+  return cDefs
+}
 
 // const deleteButtonRenderer = (params: any) => {
 //   console.log(params);
@@ -548,7 +574,6 @@ const createColumnDefs = (data: any, tableName: string) => {
 //         setting.inflation = this.inflation;
 //         setting.morbidity_catastrophe = this.morbidityCatastrophe;
 //         setting.mortality_catastrophe = this.mortalityCatastrophe;
-
 
 //         //   this.shockScenarios.push(setting);
 //         ValuationService.saveShockSetting(setting).then((res) => {

@@ -56,8 +56,7 @@ const productCodeErrorMessage: any = ref('')
 const productNameErrorMessage: any = ref('')
 const productFamilyErrorMessage: any = ref('')
 
-const showData = () => {
-}
+const showData = () => {}
 // Define validation rules
 const rules = {
   selectedProductFamily: { required },

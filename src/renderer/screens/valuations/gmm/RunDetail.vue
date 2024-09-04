@@ -10,7 +10,8 @@
             <v-row class="mb-3">
               <v-col>
                 <v-btn variant="plain" :to="'/valuations/gmm/run-results'">
-                  {{ backButtonTitle }} </v-btn>
+                  {{ backButtonTitle }}
+                </v-btn>
               </v-col>
             </v-row>
             <base-card>
@@ -20,9 +21,15 @@
               <template #default>
                 <v-row v-if="showSpCodeSelect">
                   <v-col cols="3">
-                    <v-select v-model="selectedSpCode" variant="outlined" density="compact"
-                      placeholder="Select an SP Code" label="SP Code" :items="spCodes"
-                      @update:modelValue="displayAggDataForSpCode"></v-select>
+                    <v-select
+                      v-model="selectedSpCode"
+                      variant="outlined"
+                      density="compact"
+                      placeholder="Select an SP Code"
+                      label="SP Code"
+                      :items="spCodes"
+                      @update:modelValue="displayAggDataForSpCode"
+                    ></v-select>
                   </v-col>
                 </v-row>
                 <data-grid :showExport="true" :rowData="rowData" :columnDefs="cDefs"></data-grid>
@@ -35,13 +42,23 @@
               <template #default>
                 <v-row v-if="showSapSpCodeSelect">
                   <v-col cols="3">
-                    <v-select v-model="selectedIfrs17Group" variant="outlined" density="compact"
-                      placeholder="Select a group" label="IFRS17 Group" :items="ifrs17groups"
-                      @update:modelValue="displaySapAggDataForIFRS17Group"></v-select>
+                    <v-select
+                      v-model="selectedIfrs17Group"
+                      variant="outlined"
+                      density="compact"
+                      placeholder="Select a group"
+                      label="IFRS17 Group"
+                      :items="ifrs17groups"
+                      @update:modelValue="displaySapAggDataForIFRS17Group"
+                    ></v-select>
                   </v-col>
                 </v-row>
 
-                <data-grid :showExport="showExport" :rowData="sapRowData" :columnDefs="spCDefs"></data-grid>
+                <data-grid
+                  :showExport="showExport"
+                  :rowData="sapRowData"
+                  :columnDefs="spCDefs"
+                ></data-grid>
               </template>
             </base-card>
             <base-card>
@@ -51,12 +68,23 @@
               <template #default>
                 <v-row class="mt-5">
                   <v-col cols="4">
-                    <v-select v-model="selectedSpCode" variant="outlined" density="compact"
-                      placeholder="Select a SP Code" label="SP Code" :items="spCodes"></v-select>
+                    <v-select
+                      v-model="selectedSpCode"
+                      variant="outlined"
+                      density="compact"
+                      placeholder="Select a SP Code"
+                      label="SP Code"
+                      :items="spCodes"
+                    ></v-select>
                   </v-col>
                   <v-col v-if="selectedSpCode !== null" cols="4">
-                    <v-select v-model="selectedVariable" variant="outlined" density="compact" :items="variableItems"
-                      label="Select a Variable"></v-select>
+                    <v-select
+                      v-model="selectedVariable"
+                      variant="outlined"
+                      density="compact"
+                      :items="variableItems"
+                      label="Select a Variable"
+                    ></v-select>
                   </v-col>
                   <v-col v-if="selectedSpCode !== null" cols="4">
                     <v-btn variant="plain" rounded color="primary" @click="generateGraph">Go</v-btn>
@@ -69,7 +97,6 @@
                     <Chart class="chart" :options="chartOptions" :update-args="updateArgs"></Chart>
                   </v-col>
                 </v-row>
-
               </template>
             </base-card>
             <base-card :showActions="false">
@@ -170,11 +197,10 @@
 <script setup lang="ts">
 import BaseCard from '@/renderer/components/BaseCard.vue'
 import DataGrid from '@/renderer/components/tables/DataGrid.vue'
-import { onMounted, ref, onBeforeMount } from 'vue';
+import { onMounted, ref, onBeforeMount } from 'vue'
 import { useRoute } from 'vue-router'
 import ProductService from '@/renderer/api/ProductService'
 import { Chart } from 'highcharts-vue'
-
 
 const route = useRoute()
 
@@ -193,7 +219,7 @@ const prodName: any = ref(null)
 const modelpointStats: any = ref(null)
 const cDefs = ref([])
 const spCDefs = ref([])
-const selectedVariable: any = ref("reserves")
+const selectedVariable: any = ref('reserves')
 const selectedSpCode = ref(null)
 const aggData: any = ref([])
 const sapAggData: any = ref([])
@@ -202,19 +228,19 @@ const showSapSpCodeSelect = ref(false)
 const selectedIfrs17Group = ref(null)
 const ifrs17groups: any = ref([])
 const variableItems = [
-  "reserves",
-  "death_outgo",
-  "premium_income",
-  "profit",
-  "initial_policy",
-  "commission",
-  "premium_not_received_lapse",
-  "clawback",
-  "accidental_death_outgo",
-  "cash_back_on_survival",
-  "cash_back_on_death",
-  "rider",
-  "expenses",
+  'reserves',
+  'death_outgo',
+  'premium_income',
+  'profit',
+  'initial_policy',
+  'commission',
+  'premium_not_received_lapse',
+  'clawback',
+  'accidental_death_outgo',
+  'cash_back_on_survival',
+  'cash_back_on_death',
+  'rider',
+  'expenses'
 ]
 
 const updateArgs: any = ref([true, true, { duration: 1000 }])
@@ -222,74 +248,76 @@ const updateArgs: any = ref([true, true, { duration: 1000 }])
 const chartSeries: any = ref({
   data: [],
   name: null,
-  color: null,
+  color: null
 })
 
 const chartOptions: any = ref({
   credits: {
-    enabled: false,
+    enabled: false
   },
   chart: {
-    type: "spline",
+    type: 'spline'
   },
   title: {
-    text: "",
+    text: ''
   },
   xAxis: {
     categories: [],
-    title: { text: "Projection Month" },
+    title: { text: 'Projection Month' }
   },
   yAxis: {
     title: {
-      text: "Reserves",
-    },
+      text: 'Reserves'
+    }
   },
-  series: [],
+  series: []
 })
 
 const transformText = (text: string) => {
-  text = text.replace(/_/g, " ");
-  text = text.toLowerCase().split(' ').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-  return text;
+  text = text.replace(/_/g, ' ')
+  text = text
+    .toLowerCase()
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+  return text
 }
 
 const reduceDecimal = (number) => {
-  return Math.round(number);
+  return Math.round(number)
 }
 
-
-
 const displayAggDataForSpCode = () => {
-  rowData.value = [];
-  rowData.value = aggData.value.filter((item: any) => item.sp_code === spCodes.value[0]);
-  cDefs.value = createColumnDefs(rowData.value);
+  rowData.value = []
+  rowData.value = aggData.value.filter((item: any) => item.sp_code === spCodes.value[0])
+  cDefs.value = createColumnDefs(rowData.value)
 }
 
 const displaySapAggDataForIFRS17Group = () => {
-  sapRowData.value = [];
-  sapRowData.value = sapAggData.value.filter((item: any) => item.IFRS17Group === selectedIfrs17Group.value);
-  spCDefs.value = createSapColumnDefs(sapRowData.value);
+  sapRowData.value = []
+  sapRowData.value = sapAggData.value.filter(
+    (item: any) => item.IFRS17Group === selectedIfrs17Group.value
+  )
+  spCDefs.value = createSapColumnDefs(sapRowData.value)
 }
 
 // const camelToSnakeCase = (str: String) => str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
 
 const generateGraph = () => {
-
   // let variable = camelToSnakeCase(selectedVariable.value);
   // if (variable[0] === "_") {
   //   variable = variable.substring(1);
   // }
-  getAggregatedVariableV2(selectedVariable.value, selectedSpCode.value);
+  getAggregatedVariableV2(selectedVariable.value, selectedSpCode.value)
 }
-
 
 const createColumnDefs = (rowData: any) => {
   if (rowData === null || rowData.length === 0) {
-    return [];
+    return []
   }
   if (rowData !== null && rowData.length > 0) {
-    const columnDefs: any = [];
-    const keys = Object.keys(rowData[0]);
+    const columnDefs: any = []
+    const keys = Object.keys(rowData[0])
     keys.forEach((key) => {
       columnDefs.push({
         headerName: key,
@@ -297,17 +325,17 @@ const createColumnDefs = (rowData: any) => {
         sortable: true,
         filter: true,
         resizable: true,
-        width: 150,
-      });
-    });
-    gridOptions.value.columnDefs = columnDefs;
-    return columnDefs;
+        width: 150
+      })
+    })
+    gridOptions.value.columnDefs = columnDefs
+    return columnDefs
   }
-};
+}
 
 const createSapColumnDefs = (rowData: any) => {
-  const columnDefs: any = [];
-  const keys = Object.keys(rowData[0]);
+  const columnDefs: any = []
+  const keys = Object.keys(rowData[0])
   keys.forEach((key) => {
     columnDefs.push({
       headerName: key,
@@ -315,60 +343,57 @@ const createSapColumnDefs = (rowData: any) => {
       sortable: true,
       filter: true,
       resizable: true,
-      width: 150,
-    });
-  });
-  gridOptions.value.sapColumnDefs = columnDefs;
-  return columnDefs;
-};
+      width: 150
+    })
+  })
+  gridOptions.value.sapColumnDefs = columnDefs
+  return columnDefs
+}
 
 const getModelPointStats = () => {
-  ProductService.getProductModelPointStats(prodId.value, runId.value).then(
-    (resp) => {
-      modelpointStats.value = resp.data;
-      console.log("Model Point Stats", modelpointStats.value);
-    }
-  );
+  ProductService.getProductModelPointStats(prodId.value, runId.value).then((resp) => {
+    modelpointStats.value = resp.data
+    console.log('Model Point Stats', modelpointStats.value)
+  })
 }
 
 const getAggregatedVariableV2 = (variable, spcode) => {
-  chartSeries.value.data = [];
+  chartSeries.value.data = []
   if (aggData.value !== null) {
     aggData.value.forEach((elem: any) => {
       if (
-        chartOptions.value.xAxis.categories.indexOf(elem.ProjectionMonth) ===
-        -1 &&
+        chartOptions.value.xAxis.categories.indexOf(elem.ProjectionMonth) === -1 &&
         elem.sp_code === spcode
       ) {
-        chartOptions.value.xAxis.categories.push(elem.ProjectionMonth);
+        chartOptions.value.xAxis.categories.push(elem.ProjectionMonth)
       }
       if (elem.sp_code === spcode) {
-        chartSeries.value.data.push(elem[variable]);
+        chartSeries.value.data.push(elem[variable])
       }
-    });
-    chartSeries.value.name = prodName.value;
-    chartSeries.value.color = generateHexColorExcludingWhite();
-    chartOptions.value.series = [];
-    chartOptions.value.series.push(chartSeries.value);
-    chartOptions.value.yAxis.title.text = selectedVariable.value;
+    })
+    chartSeries.value.name = prodName.value
+    chartSeries.value.color = generateHexColorExcludingWhite()
+    chartOptions.value.series = []
+    chartOptions.value.series.push(chartSeries.value)
+    chartOptions.value.yAxis.title.text = selectedVariable.value
   }
 }
 
 const generateHexColorExcludingWhite = () => {
-  const hexChars = '0123456789ABCDEF';
-  let color;
+  const hexChars = '0123456789ABCDEF'
+  let color
   do {
-    color = '#';
+    color = '#'
     for (let i = 0; i < 6; i++) {
-      const randomIndex = Math.floor(Math.random() * hexChars.length);
-      color += hexChars[randomIndex];
+      const randomIndex = Math.floor(Math.random() * hexChars.length)
+      color += hexChars[randomIndex]
     }
-  } while (color === '#FFFFFF');
-  return color;
+  } while (color === '#FFFFFF')
+  return color
 }
 
 onBeforeMount(() => {
-  getAggregatedVariableV2("reserves", null);
+  getAggregatedVariableV2('reserves', null)
 })
 
 onMounted(() => {
@@ -376,57 +401,55 @@ onMounted(() => {
   prodId.value = route.params.prodId
   prodName.value = route.params.prod_name
 
-  loadingData.value = true;
-  gridOptions.value = {};
+  loadingData.value = true
+  gridOptions.value = {}
   ProductService.getValuationJob(runId.value).then((resp) => {
-    aggData.value = resp.data.projections;
-    spCodes.value = new Set(aggData.value.map((item) => item.sp_code));
-    spCodes.value = Array.from(spCodes.value);
-
+    aggData.value = resp.data.projections
+    spCodes.value = new Set(aggData.value.map((item) => item.sp_code))
+    spCodes.value = Array.from(spCodes.value)
 
     if (aggData.value.length > 5000) {
-      showSpCodeSelect.value = true;
-      rowData.value = aggData.value.filter((item: any) => item.sp_code === spCodes.value[0]);
+      showSpCodeSelect.value = true
+      rowData.value = aggData.value.filter((item: any) => item.sp_code === spCodes.value[0])
     } else {
-      showSpCodeSelect.value = false;
+      showSpCodeSelect.value = false
       rowData.value = aggData.value
     }
 
     if (rowData.value.length > 0) {
-      cDefs.value = createColumnDefs(rowData.value);
+      cDefs.value = createColumnDefs(rowData.value)
     }
 
     // scoped data
-    sapAggData.value = resp.data.scopedProjections;
-    ifrs17groups.value = new Set(sapAggData.value.map((item) => item.IFRS17Group));
-    ifrs17groups.value = Array.from(ifrs17groups.value);
-
+    sapAggData.value = resp.data.scopedProjections
+    ifrs17groups.value = new Set(sapAggData.value.map((item) => item.IFRS17Group))
+    ifrs17groups.value = Array.from(ifrs17groups.value)
 
     if (sapAggData.value.length > 5000) {
-      showSapSpCodeSelect.value = true;
-      sapRowData.value = sapAggData.value.filter((item: any) => item.IFRS17Group === ifrs17groups.value[0]);
+      showSapSpCodeSelect.value = true
+      sapRowData.value = sapAggData.value.filter(
+        (item: any) => item.IFRS17Group === ifrs17groups.value[0]
+      )
     } else {
-      showSapSpCodeSelect.value = false;
-      sapRowData.value = sapAggData.value;
+      showSapSpCodeSelect.value = false
+      sapRowData.value = sapAggData.value
     }
 
     if (sapRowData.value.length > 0) {
-      spCDefs.value = createSapColumnDefs(sapRowData.value);
+      spCDefs.value = createSapColumnDefs(sapRowData.value)
     }
 
-    runSettings.value = resp.data.settings;
-    spCodes.value = resp.data.spcodes;
+    runSettings.value = resp.data.settings
+    spCodes.value = resp.data.spcodes
     if (resp.data.errors) {
-      runErrors.value = resp.data.errors;
+      runErrors.value = resp.data.errors
     }
-    loadingData.value = false;
-  });
+    loadingData.value = false
+  })
 
-  getModelPointStats();
-  getAggregatedVariableV2("reserves", null);
-
+  getModelPointStats()
+  getAggregatedVariableV2('reserves', null)
 })
-
 </script>
 
 <style scoped>
