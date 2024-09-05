@@ -35,7 +35,7 @@
                             variant="outlined"
                             rounded
                             size="small"
-                            @click.stop="confirmDelete(item)"
+                            @click.stop="deleteTableData(item)"
                           >
                             <v-icon color="error">mdi-delete</v-icon>
                             <span>Delete</span>
@@ -78,22 +78,6 @@
       {{ text }}
       <v-btn rounded color="red" variant="text" @click="snackbar = false">Close</v-btn>
     </v-snackbar>
-    <v-dialog v-model="dialog" persistent max-width="500">
-      <v-card>
-        <v-card-title class="headline"
-          ><v-icon class="mr-3" color="red" size="25">mdi-alert-circle</v-icon>Delete
-          Confirmation</v-card-title
-        >
-        <v-card-text>Are you sure you want to delete data from {{ selectedTable }} </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="primary darken-1" variant="text" @click="dialog = false">No</v-btn>
-          <v-btn color="primary darken-1" variant="text" @click="deleteTableData(selectedTable)"
-            >Yes</v-btn
-          >
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
     <v-dialog v-model="yieldCurveDataDialog" persistent max-width="600">
       <v-card>
         <v-card-title class="header-title accent white--text"
@@ -131,8 +115,8 @@
             <v-col>
               <v-select
                 v-model="selectedYieldCurveMonth"
-                outlined
-                dense
+                variant="outlined"
+                density="compact"
                 placeholder="Select an existing Yield Curve Month"
                 label="Yield Curve Month"
                 :items="yieldCurveMonths"
@@ -153,7 +137,6 @@
           <v-btn color="primary darken-1" variant="text" @click="deleteYieldCurveData()"
             >Proceed</v-btn
           >
-
           <v-btn color="primary darken-1" variant="text" @click="clearYieldDialog()">Cancel</v-btn>
         </v-card-actions>
       </v-card>
@@ -162,6 +145,7 @@
       {{ snackbarText }}
       <v-btn rounded color="red" variant="text" @click="snackbar = false">Close</v-btn>
     </v-snackbar>
+    <confirmation-dialog ref="confirmDeleteDialog" />
   </v-container>
 </template>
 
@@ -174,8 +158,10 @@ import BulkFileUpdater from '../components/BulkFileUpdater.vue'
 import BaseCard from '../components/BaseCard.vue'
 import { ref } from 'vue'
 import { DataPayload } from '../components/types'
+import ConfirmationDialog from '../components/ConfirmDialog.vue'
 
 // data
+const confirmDeleteDialog: any = ref()
 const selectedYieldCurveYear: any = ref(null)
 const selectedYieldCurveCode: any = ref(null)
 const selectedYieldCurveMonth: any = ref(null)
@@ -230,14 +216,38 @@ const handleUpload = (payload: DataPayload) => {
     })
 }
 
-const deleteTableData = (table: any) => {
-  ProductService.deleteGlobalTableData(table).then((response) => {
-    text.value = response.data
-    snackbar.value = true
-    dialog.value = false
-    tableData.value = []
-    selectedTable.value = ''
-  })
+const deleteTableData = async (table: any) => {
+  try {
+    const result = await confirmDeleteDialog.value.open(
+      'Deleting Data for ' + table.name + ' table',
+      'Are you sure you want to delete this data?'
+    )
+    console.log(result)
+    if (result) {
+      console.log('Deleting data')
+      if (table.name === 'Yield Curve') {
+        ValuationService.getAvailableYieldYears().then((response) => {
+          yieldCurveYears.value = response.data
+          if (yieldCurveYears.value === null) {
+            yieldCurveYears.value = []
+          }
+          if (yieldCurveYears.value.length > 0) {
+            yieldCurveDataDialog.value = true
+          }
+        })
+      } else {
+        ProductService.deleteGlobalTableData(table.name).then((response) => {
+          text.value = response.data
+          snackbar.value = true
+          dialog.value = false
+          tableData.value = []
+          selectedTable.value = ''
+        })
+      }
+    }
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 const viewTable = (item: any) => {
@@ -270,9 +280,9 @@ const viewTable = (item: any) => {
 
 const deleteYieldCurveData = () => {
   ProductService.deleteYieldCurveData(
-    selectedYieldCurveYear,
-    selectedYieldCurveCode,
-    selectedYieldCurveMonth
+    selectedYieldCurveYear.value,
+    selectedYieldCurveCode.value,
+    selectedYieldCurveMonth.value
   ).then(() => {
     text.value = 'yield curve data deleted successfully'
     snackbar.value = true
@@ -290,38 +300,19 @@ const clearYieldDialog = () => {
 }
 
 const getYieldCurveCodes = () => {
-  ProductService.getYieldCurveCodes(selectedYieldCurveYear).then((response) => {
+  console.log(selectedYieldCurveYear)
+  ProductService.getYieldCurveCodes(selectedYieldCurveYear.value).then((response) => {
     yieldCurveCodes.value = response.data
   })
 }
 
 const getYieldCurveMonths = () => {
-  ProductService.getYieldCurveMonths(selectedYieldCurveYear, selectedYieldCurveCode).then(
-    (response) => {
-      yieldCurveMonths.value = response.data
-    }
-  )
-}
-
-const getYieldCurveYears = () => {
-  ValuationService.getAvailableYieldYears().then((response) => {
-    yieldCurveYears.value = response.data
-    if (yieldCurveYears.value === null) {
-      yieldCurveYears.value = []
-    }
+  ProductService.getYieldCurveMonths(
+    selectedYieldCurveYear.value,
+    selectedYieldCurveCode.value
+  ).then((response) => {
+    yieldCurveMonths.value = response.data
   })
-}
-
-const confirmDelete = (item: any) => {
-  if (item.name === 'Yield Curve') {
-    getYieldCurveYears()
-    if (yieldCurveYears.value.length > 0) {
-      yieldCurveDataDialog.value = true
-    }
-  } else {
-    selectedTable.value = item.name
-    dialog.value = true
-  }
 }
 
 const createColumnDefs = (data: any) => {
