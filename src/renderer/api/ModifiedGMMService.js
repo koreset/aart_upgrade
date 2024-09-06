@@ -117,6 +117,11 @@ export default {
   deleteTable(tableType) {
     return Api.delete('gmm-engine/tables/' + tableType)
   },
+  deletePAAYieldTable(tableType, yieldCurveCode, yieldYear, yieldMonth) {
+    return Api.delete(
+      'gmm-engine/tables/' + tableType + '/' + yieldCurveCode + '/' + yieldYear + '/' + yieldMonth
+    )
+  },
   checkPaaFinanceYear(portfolio, financeYear) {
     return Api.get('gmm-engine/portfolios/' + portfolio + '/financeyear/' + financeYear)
   },
@@ -144,5 +149,14 @@ export default {
   },
   checkPortfolioName(portfolioName) {
     return Api.get('gmm-engine/portfolio-name-check/' + portfolioName)
+  },
+  getYieldCurveYears() {
+    return Api.get('gmm-engine/yield-curve-years')
+  },
+  getYieldCurveCodes(year) {
+    return Api.get('gmm-engine/yield-curve-codes/' + year)
+  },
+  getYieldCurveMonths(year, code) {
+    return Api.get('gmm-engine/yield-curve-months/' + year + '/' + code)
   }
 }

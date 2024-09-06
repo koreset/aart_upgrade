@@ -3,7 +3,7 @@
     <v-row>
       <v-col>
         <base-card :showActions="false">
-          <template #header> Global Assumption Tables </template>
+          <template #header> {{ viewHeader }} </template>
           <template #default>
             <v-container fluid>
               <v-row>
@@ -150,17 +150,19 @@
 </template>
 
 <script setup lang="ts">
-import ProductService from '../api/ProductService'
-import ValuationService from '../api/ValuationService'
-import formatValues from '../utils/format_values'
-import DataGrid from '../components/tables/DataGrid.vue'
-import BulkFileUpdater from '../components/BulkFileUpdater.vue'
-import BaseCard from '../components/BaseCard.vue'
+import ConfirmationDialog from '@/renderer/components/ConfirmDialog.vue'
+import DataGrid from '@/renderer/components/tables/DataGrid.vue'
+import BulkFileUpdater from '@/renderer/components/BulkFileUpdater.vue'
+import BaseCard from '@/renderer/components/BaseCard.vue'
+
+import ProductService from '@/renderer/api/ProductService'
+import ValuationService from '@/renderer/api/ValuationService'
+import formatValues from '@/renderer/utils/format_values'
 import { ref } from 'vue'
-import { DataPayload } from '../components/types'
-import ConfirmationDialog from '../components/ConfirmDialog.vue'
+import { DataPayload } from '@/renderer/components/types'
 
 // data
+const viewHeader: string = 'Global Assumption Tables'
 const confirmDeleteDialog: any = ref()
 const selectedYieldCurveYear: any = ref(null)
 const selectedYieldCurveCode: any = ref(null)
