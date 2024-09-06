@@ -118,6 +118,12 @@ export default createRouter({
       component: () => import('../screens/valuations/paa/Tables.vue')
     },
     {
+      path: '/valuations/paa/shock-settings',
+      name: 'valuations-paa-shock-settings',
+      component: () => import('../screens/valuations/paa/ShockSettings.vue')
+    },
+
+    {
       path: '/error',
       component: ErrorScreen,
       meta: {
