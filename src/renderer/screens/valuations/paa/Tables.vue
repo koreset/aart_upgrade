@@ -126,7 +126,7 @@
           <v-row v-if="selectedYieldCurveMonth !== null">
             <v-col>
               <p
-                >Clicking on Proceed will delete any available Yield curve data for the selected
+                >Clicking on Delete will delete any available Yield curve data for the selected
                 criteria</p
               >
             </v-col>
@@ -135,7 +135,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="primary darken-1" variant="text" @click="deleteYieldCurveData()"
-            >Proceed</v-btn
+            >Delete</v-btn
           >
           <v-btn color="primary darken-1" variant="text" @click="clearYieldDialog()">Cancel</v-btn>
         </v-card-actions>
@@ -228,26 +228,27 @@ const handleUpload = (payload: DataPayload) => {
 }
 
 const deleteTableData = async (table: any) => {
-  try {
-    const result = await confirmDeleteDialog.value.open(
-      'Deleting Data for ' + table.table_type + ' table',
-      'Are you sure you want to delete this data?'
-    )
-    console.log(result)
-    if (result) {
-      console.log('Deleting data')
-      if (table.table_type === 'Yield Curve') {
-        ModifiedGMMService.getYieldCurveYears().then((response) => {
-          yieldCurveYears.value = response.data
-          selectedTable.value = table.table_type
-          if (yieldCurveYears.value === null) {
-            yieldCurveYears.value = []
-          }
-          if (yieldCurveYears.value.length > 0) {
-            yieldCurveDataDialog.value = true
-          }
-        })
-      } else {
+  if (table.table_type === 'Yield Curve') {
+    ModifiedGMMService.getYieldCurveYears().then((response) => {
+      yieldCurveYears.value = response.data
+      selectedTable.value = table.table_type
+      if (yieldCurveYears.value === null) {
+        yieldCurveYears.value = []
+      }
+      if (yieldCurveYears.value.length > 0) {
+        yieldCurveDataDialog.value = true
+      }
+    })
+  } else {
+    try {
+      const result = await confirmDeleteDialog.value.open(
+        'Deleting Data for ' + table.table_type + ' table',
+        'Are you sure you want to delete this data?'
+      )
+      console.log(result)
+      if (result) {
+        console.log('Deleting data')
+
         ModifiedGMMService.deleteTable(table.table_type).then((response) => {
           text.value = response.data
           snackbar.value = true
@@ -256,9 +257,9 @@ const deleteTableData = async (table: any) => {
           selectedTable.value = ''
         })
       }
+    } catch (error) {
+      console.log(error)
     }
-  } catch (error) {
-    console.log(error)
   }
 }
 
