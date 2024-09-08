@@ -57,41 +57,35 @@
             </v-container>
             <v-row>
               <v-col>
-                <v-btn rounded width="250" small class="primary" @click="addToScenarios"
+                <v-btn
+                  rounded
+                  width="250"
+                  size="small"
+                  variant="outlined"
+                  class="primary"
+                  @click="addToScenarios"
                   >Add to Shock Settings</v-btn
                 >
               </v-col>
             </v-row>
+            <v-row>
+              <v-col>
+                <v-divider></v-divider>
+              </v-col>
+            </v-row>
+            <h4 class="mt-4">Available Scenarios</h4>
+
             <v-row v-if="shockScenarios.length > 0">
               <v-col>
-                <v-table>
-                  <thead>
-                    <tr>
-                      <th class="text-left">Name</th>
-                      <th class="text-left">Description</th>
-                      <th class="text-left">Discount Curve</th>
-                      <th class="text-left">Claims</th>
-                      <th class="text-left">Expenses</th>
-                      <th class="text-left">Shock Basis</th>
-                      <th class="text-left">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="item in shockScenarios" :key="item.name">
-                      <td>{{ item.name }}</td>
-                      <td>{{ item.description }}</td>
-                      <td>{{ item.discount_curve }}</td>
-                      <td>{{ item.claims }}</td>
-                      <td>{{ item.expenses }}</td>
-                      <td>{{ item.shock_basis }}</td>
-                      <td>
-                        <v-btn variant="plain" icon @click="removeFromScenarios(item)">
-                          <v-icon color="red">mdi-delete</v-icon>
-                        </v-btn>
-                      </td>
-                    </tr>
-                  </tbody>
-                </v-table>
+                <data-grid
+                  ref="table"
+                  :pagination="true"
+                  :rowSelection="rowSelection"
+                  :columnDefs="columnDefs"
+                  :showExport="showExport"
+                  :rowData="shockScenarios"
+                  @update:row-deleted="deleteShockSetting"
+                />
               </v-col>
             </v-row>
           </template>
@@ -106,6 +100,7 @@
 import ModifiedGMMService from '../../../api/ModifiedGMMService'
 import ConfirmationDialog from '../../../components/ConfirmDialog.vue'
 import BaseCard from '../../../components/BaseCard.vue'
+import DataGrid from '@/renderer/components/tables/DataGrid.vue'
 
 import { ref, onMounted } from 'vue'
 const name = ref('')
@@ -118,6 +113,9 @@ const expenses = ref(false)
 const year = ref(null)
 const shockScenarios: any = ref([])
 const confirmDialog: any = ref(null)
+const rowSelection = ref(null)
+const showExport = ref(false)
+const columnDefs = ref([])
 
 onMounted(() => {
   ModifiedGMMService.getShockBases().then((res) => {
@@ -126,20 +124,54 @@ onMounted(() => {
   ModifiedGMMService.getShockSettings().then((response) => {
     if (response.data !== null && response.data.length > 0) {
       shockScenarios.value = response.data
+      columnDefs.value = createColumnDefs(shockScenarios.value, 'shockScenarios')
     }
   })
 })
 
-const removeFromScenarios = (selectedItem) => {
-  const result = confirmDialog.value.open(
-    'Delete Confirmation',
-    'Are you sure you want to delete this configuration?'
-  )
-  if (!result) {
-    return
+const deleteShockSetting = async (scenario: any) => {
+  console.log('delete', scenario)
+  try {
+    const result = await confirmDialog.value.open(
+      `Deleting ${scenario.name} `,
+      'Are you sure you want to delete this shock scenario? This action is not undoable.'
+    )
+
+    if (result) {
+      console.log('confirming delete', scenario)
+      const response = ModifiedGMMService.deleteShockSetting(scenario.id)
+      if (response.status === 204) {
+        console.log('deleted')
+        shockScenarios.value = shockScenarios.value.filter((item) => {
+          return item.id !== scenario.id
+        })
+      }
+    }
+  } catch (error) {
+    console.log(error)
   }
-  shockScenarios.value = shockScenarios.value.filter((item: any) => item.name !== selectedItem.name)
-  ModifiedGMMService.deleteShockSetting(selectedItem.id)
+}
+
+const createColumnDefs = (data: any, tableName: string) => {
+  console.log(tableName)
+  const cDefs: any = []
+  if (typeof data !== 'undefined') {
+    Object.keys(data[0]).forEach((element) => {
+      if (element !== 'id' && element !== 'year') {
+        const column: any = {}
+        column.headerName = element
+        column.field = element
+        column.minWidth = 200
+        cDefs.push(column)
+        if (element === 'name') {
+          column.checkboxSelection = true
+          column.pinned = 'left'
+          column.minWidth = 250
+        }
+      }
+    })
+  }
+  return cDefs
 }
 
 const addToScenarios = () => {
