@@ -122,6 +122,17 @@ export default createRouter({
       name: 'valuations-paa-shock-settings',
       component: () => import('../screens/valuations/paa/ShockSettings.vue')
     },
+    {
+      path: '/valuations/ibnr/portfolios',
+      name: 'valuations-ibnr-portfolios',
+      component: () => import('../screens/valuations/ibnr/IbnrPortfolios.vue')
+    },
+    {
+      path: '/valuations/ibnr/shock-settings',
+      name: 'valuations-ibnr-shock-settings',
+      component: () => import('../screens/valuations/ibnr/ShockSettings.vue')
+    },
+
 
     {
       path: '/error',

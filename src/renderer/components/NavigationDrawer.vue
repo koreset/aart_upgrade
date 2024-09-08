@@ -82,6 +82,12 @@
           <template #activator="{ props }">
             <v-list-item v-bind="props" title="IBNR"></v-list-item>
           </template>
+          <v-list-item :to="{ name: 'valuations-ibnr-portfolios' }">
+            <v-list-item-title>Portfolios</v-list-item-title>
+          </v-list-item>
+          <v-list-item :to="{ name: 'valuations-ibnr-shock-settings' }">
+            <v-list-item-title>Shock Settings</v-list-item-title>
+          </v-list-item>
         </v-list-group>
         <v-list-group value="LIC">
           <template #activator="{ props }">
