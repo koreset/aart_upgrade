@@ -97,28 +97,10 @@ const selectedPortfolio = ref(null)
 const selectedModelPointYear = ref(null)
 const selectedModelPointVersion = ref(null)
 const portfolios = ref([])
-// const portfolioList = ref([]);
 const modelPointYears = ref([])
 const modelpointStats = ref([])
 const modelPointVersions = ref([])
 const loadingData = ref(false)
-// const variableItems = ref([
-//   "sub_product_code",
-//   "term_months",
-//   "locked_in_year",
-//   "locked_in_month",
-//   "ifrs17_group",
-//   "ifrs17_group_treaty1",
-//   "ifrs17_group_treaty2",
-//   "ifrs17_group_treaty3",
-//   "annual_premium",
-//   "frequency",
-//   "duration_in_force_months",
-//   "original_loan",
-//   "annual_interest_rate",
-//   "monthly_instalment",
-//   "outstanding_loan_term_months",
-// ]);
 
 onMounted(() => {
   loadingData.value = true
@@ -146,6 +128,9 @@ const reduceDecimal = (number) => {
 
 const getModelPointVersions = () => {
   if (selectedModelPointYear.value) {
+    selectedModelPointVersion.value = null
+    modelPointVersions.value = []
+    modelpointStats.value = []
     ModifiedGMMService.getAvailableMpVersions(
       selectedPortfolio.value.name,
       selectedModelPointYear.value
