@@ -132,8 +132,11 @@ export default createRouter({
       name: 'valuations-ibnr-shock-settings',
       component: () => import('../screens/valuations/ibnr/ShockSettings.vue')
     },
-
-
+    {
+      path: '/valuations/ibnr/tables',
+      name: 'valuations-ibnr-tables',
+      component: () => import('../screens/valuations/ibnr/Tables.vue')
+    },
     {
       path: '/error',
       component: ErrorScreen,

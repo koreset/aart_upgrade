@@ -26,7 +26,7 @@
                         <td style="text-align: center">
                           <bulk-file-updater
                             :uploadComplete="uploadComplete"
-                            :tableType="item.name"
+                            :tableType="item.table_type"
                             @uploadFile="handleUpload"
                           ></bulk-file-updater>
                         </td>
@@ -155,7 +155,6 @@ import DataGrid from '@/renderer/components/tables/DataGrid.vue'
 import BulkFileUpdater from '@/renderer/components/BulkFileUpdater.vue'
 import BaseCard from '@/renderer/components/BaseCard.vue'
 
-import ProductService from '@/renderer/api/ProductService'
 import ModifiedGMMService from '@/renderer/api/ModifiedGMMService'
 import formatValues from '@/renderer/utils/format_values'
 import { ref, onMounted } from 'vue'
@@ -206,11 +205,11 @@ const handleUpload = (payload: DataPayload) => {
   uploadComplete.value = false
   const formdata: any = new FormData()
   formdata.append('file', payload.file)
-  formdata.append('assumption_type', payload.selectedType)
+  formdata.append('table_type', payload.selectedType)
   formdata.append('year', payload.selectedYear)
   formdata.append('month', payload.selectedMonth)
   formdata.append('yield_curve_code', payload.yieldCurveCode)
-  ProductService.uploadBulkAssumptions({ formdata })
+  ModifiedGMMService.uploadTables(formdata)
     .then((res: any) => {
       if (res.status === 200) {
         snackbarText.value = 'File uploaded successfully'

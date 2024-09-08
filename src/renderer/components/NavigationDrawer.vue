@@ -88,6 +88,9 @@
           <v-list-item :to="{ name: 'valuations-ibnr-shock-settings' }">
             <v-list-item-title>Shock Settings</v-list-item-title>
           </v-list-item>
+          <v-list-item :to="{ name: 'valuations-ibnr-tables' }">
+            <v-list-item-title>Tables</v-list-item-title>
+          </v-list-item>
         </v-list-group>
         <v-list-group value="LIC">
           <template #activator="{ props }">
