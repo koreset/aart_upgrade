@@ -141,7 +141,7 @@
                   prepend-inner-icon="$calendar"
                   variant="outlined"
                   density="compact"
-                  label="Run Date"
+                  label="Claims Input Start Date"
                 ></v-date-input>
               </v-col>
               <v-col cols="3">
@@ -153,7 +153,7 @@
                   prepend-inner-icon="$calendar"
                   variant="outlined"
                   density="compact"
-                  label="Run Date"
+                  label="Claims Input End Date"
                 ></v-date-input>
               </v-col>
               <v-col v-if="inflationIndicator" cols="3">
@@ -165,7 +165,7 @@
                   prepend-inner-icon="$calendar"
                   variant="outlined"
                   density="compact"
-                  label="Run Date"
+                  label="Inflation Date"
                 ></v-date-input>
               </v-col>
 
