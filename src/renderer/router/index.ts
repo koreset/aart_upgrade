@@ -138,6 +138,18 @@ export default createRouter({
       component: () => import('../screens/valuations/ibnr/Tables.vue')
     },
     {
+      path: '/valuations/ibnr/run-settings',
+      name: 'valuations-ibnr-run-settings',
+      component: () => import('../screens/valuations/ibnr/RunSettings.vue')
+    },
+    {
+      path: '/valuations/ibnr/run-results',
+      name: 'valuations-ibnr-run-results',
+      component: () => import('../screens/valuations/ibnr/RunResults.vue')
+    },
+
+
+    {
       path: '/error',
       component: ErrorScreen,
       meta: {

@@ -157,8 +157,6 @@ import BaseCard from '../../../components/BaseCard.vue'
 
 import IbnrService from '../../../api/IbnrService'
 // import ModifiedGMMService from '../../../api/ModifiedGMMService'
-import ProductService from '../../../api/ProductService'
-import ValuationService from '../../../api/ValuationService'
 import formatValues from '../../../utils/format_values'
 import { ref, onMounted } from 'vue'
 import { DataPayload } from '../../../components/types'
@@ -231,7 +229,7 @@ const handleUpload = (payload: DataPayload) => {
 
 const deleteTableData = async (table: any) => {
   if (table.table_type === 'Yield Curve') {
-    ValuationService.getAvailableYieldYears().then((response) => {
+    IbnrService.getAvailableIbnrYieldYears().then((response) => {
       yieldCurveYears.value = response.data
       selectedTable.value = table.table_type
       if (yieldCurveYears.value === null) {
@@ -294,7 +292,7 @@ const viewTable = (item: any) => {
 
 const deleteYieldCurveData = () => {
   console.log(selectedYieldCurveMonth.value)
-  ProductService.deleteYieldCurveData(
+  IbnrService.deleteYieldCurveData(
     selectedYieldCurveYear.value,
     selectedYieldCurveCode.value,
     selectedYieldCurveMonth.value
@@ -316,18 +314,17 @@ const clearYieldDialog = () => {
 
 const getYieldCurveCodes = () => {
   console.log(selectedYieldCurveYear)
-  ProductService.getYieldCurveCodes(selectedYieldCurveYear.value).then((response) => {
+  IbnrService.getYieldCurveCodes(selectedYieldCurveYear.value).then((response) => {
     yieldCurveCodes.value = response.data
   })
 }
 
 const getYieldCurveMonths = () => {
-  ProductService.getYieldCurveMonths(
-    selectedYieldCurveYear.value,
-    selectedYieldCurveCode.value
-  ).then((response) => {
-    yieldCurveMonths.value = response.data
-  })
+  IbnrService.getYieldCurveMonths(selectedYieldCurveYear.value, selectedYieldCurveCode.value).then(
+    (response) => {
+      yieldCurveMonths.value = response.data
+    }
+  )
 }
 
 const createColumnDefs = (data: any) => {

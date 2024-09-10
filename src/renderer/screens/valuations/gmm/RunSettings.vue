@@ -628,11 +628,11 @@ const saveTemplate = () => {
   payload.name = settingRunName.value // Template name
   payload.description = settingDescription.value
   console.log('Payload', payload)
-  // ValuationService.saveJobTemplate(payload).then((resp) => {
-  //   timeout.value = 3000;
-  //   snackbar.value = true;
-  //   snackbarText.value = resp.data.message;
-  // });
+  ValuationService.saveJobTemplate(payload).then((resp) => {
+    timeout.value = 3000
+    snackbar.value = true
+    snackbarText.value = resp.data.message
+  })
 }
 
 const loadTemplate = async () => {

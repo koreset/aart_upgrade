@@ -70,8 +70,17 @@ export default {
   getYieldCurveYears() {
     return Api.get('ibnr/yield-curve-years')
   },
-  getYieldCurveMonths(year) {
-    return Api.get('ibnr/yield-curve-months/' + year)
+  getYieldCurveMonths(year, parameterBasis, parameterYear, portfolioId) {
+    return Api.get(
+      'ibnr/yield-curve-months/year/' +
+        year +
+        '/basis/' +
+        parameterBasis +
+        '/parameter-year/' +
+        parameterYear +
+        '/portfolio/' +
+        portfolioId
+    )
   },
   runJobs(jobs) {
     return Api.post('ibnr/run-jobs', jobs)
@@ -175,5 +184,14 @@ export default {
   },
   getAvailableInputVersions(portfolioName, year) {
     return Api.get('lic/available-input-versions/' + portfolioName + '/year/' + year)
+  },
+  getAvailableIbnrYieldYears() {
+    return Api.get('ibnr/yield-curve-years')
+  },
+  getYieldCurveCodes(year) {
+    return Api.get('ibnr/yield-curve-codes/' + year)
+  },
+  deleteYieldCurveData(year, code, month) {
+    return Api.delete('ibnr/yield-curve/' + year + '/' + code + '/' + month)
   }
 }
