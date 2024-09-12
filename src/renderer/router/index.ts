@@ -147,7 +147,11 @@ export default createRouter({
       name: 'valuations-ibnr-run-results',
       component: () => import('../screens/valuations/ibnr/RunResults.vue')
     },
-
+    {
+      path: '/valuations/ibnr/run-details/:id',
+      name: 'valuations-ibnr-run-details',
+      component: () => import('../screens/valuations/ibnr/RunDetail.vue')
+    },
 
     {
       path: '/error',

@@ -94,6 +94,9 @@
           <v-list-item :to="{ name: 'valuations-ibnr-run-settings' }">
             <v-list-item-title>Run Settings</v-list-item-title>
           </v-list-item>
+          <v-list-item :to="{ name: 'valuations-ibnr-run-results' }">
+            <v-list-item-title>Run Results</v-list-item-title>
+          </v-list-item>
         </v-list-group>
         <v-list-group value="LIC">
           <template #activator="{ props }">
