@@ -22,4 +22,19 @@ body {
 .v-btn {
   text-transform: unset !important;
 }
+
+.table-col {
+  min-width: 120px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.table-row {
+  background-color: grey;
+  color: white;
+}
+
+.v-table {
+  border: 1px solid grey;
+}
 </style>

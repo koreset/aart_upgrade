@@ -152,6 +152,31 @@ export default createRouter({
       name: 'valuations-ibnr-run-details',
       component: () => import('../screens/valuations/ibnr/RunDetail.vue')
     },
+    {
+      path: '/valuations/lic/tables',
+      name: 'valuations-lic-tables',
+      component: () => import('../screens/valuations/lic/Tables.vue')
+    },
+    {
+      path: '/valuations/lic/configuration',
+      name: 'valuations-lic-configuration',
+      component: () => import('../screens/valuations/lic/Configuration.vue')
+    },
+    {
+      path: '/valuations/lic/run-settings',
+      name: 'valuations-lic-run-settings',
+      component: () => import('../screens/valuations/lic/RunSettings.vue')
+    },
+    {
+      path: '/valuations/lic/run-results',
+      name: 'valuations-lic-run-results',
+      component: () => import('../screens/valuations/lic/RunResults.vue')
+    },
+    {
+      path: '/valuations/lic/run-details/:id',
+      name: 'valuations-lic-run-details',
+      component: () => import('../screens/valuations/lic/RunDetail.vue')
+    },
 
     {
       path: '/error',

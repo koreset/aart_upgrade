@@ -102,6 +102,18 @@
           <template #activator="{ props }">
             <v-list-item v-bind="props" title="LIC"></v-list-item>
           </template>
+          <v-list-item :to="{ name: 'valuations-lic-tables' }">
+            <v-list-item-title>Tables</v-list-item-title>
+          </v-list-item>
+          <v-list-item :to="{ name: 'valuations-lic-configuration' }">
+            <v-list-item-title>Configuration</v-list-item-title>
+          </v-list-item>
+          <v-list-item :to="{ name: 'valuations-lic-run-settings' }">
+            <v-list-item-title>Run Settings</v-list-item-title>
+          </v-list-item>
+          <v-list-item :to="{ name: 'valuations-lic-run-results' }">
+            <v-list-item-title>Run Results</v-list-item-title>
+          </v-list-item>
         </v-list-group>
       </v-list-group>
     </v-list>
