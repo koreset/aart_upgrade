@@ -140,38 +140,36 @@
               </v-row>
               <v-row v-if="filteredRuns.length > 0">
                 <v-col>
-                  <v-simple-table class="trans-tables">
-                    <template>
-                      <thead>
-                        <tr>
-                          <th>Run Name</th>
-                          <th>Description</th>
-                          <th>MPF</th>
-                          <th>Mortality</th>
-                          <th>Morbidity</th>
-                          <th>Lapse</th>
-                          <th>Retrenchment</th>
-                          <th>Parameter</th>
-                          <th>Yield Curve</th>
-                          <th>Discount Rate</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr v-for="item in filteredRuns" :key="item.run_name">
-                          <td>{{ item.run_name }}</td>
-                          <td>{{ item.run_description }}</td>
-                          <td>{{ item.run_parameters.modelpoint_year }}</td>
-                          <td>{{ item.run_parameters.mortality_year }}</td>
-                          <td>{{ item.run_parameters.morbidity_year }}</td>
-                          <td>{{ item.run_parameters.lapse_year }}</td>
-                          <td>{{ item.run_parameters.retrenchment_year }}</td>
-                          <td>{{ item.run_parameters.parameter_year }}</td>
-                          <td>{{ item.run_parameters.yieldcurve_year }}</td>
-                          <td>{{ item.yield_curve_basis }}</td>
-                        </tr>
-                      </tbody>
-                    </template>
-                  </v-simple-table>
+                  <v-table class="trans-tables">
+                    <thead>
+                      <tr class="table-row">
+                        <th class="table-col">Run Name</th>
+                        <th class="table-col">Description</th>
+                        <th class="table-col">MPF</th>
+                        <th class="table-col">Mortality</th>
+                        <th class="table-col">Morbidity</th>
+                        <th class="table-col">Lapse</th>
+                        <th class="table-col">Retrenchment</th>
+                        <th class="table-col">Parameter</th>
+                        <th class="table-col">Yield Curve</th>
+                        <th class="table-col">Discount Rate</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="item in filteredRuns" :key="item.run_name">
+                        <td>{{ item.run_name }}</td>
+                        <td>{{ item.run_description }}</td>
+                        <td>{{ item.run_parameters.modelpoint_year }}</td>
+                        <td>{{ item.run_parameters.mortality_year }}</td>
+                        <td>{{ item.run_parameters.morbidity_year }}</td>
+                        <td>{{ item.run_parameters.lapse_year }}</td>
+                        <td>{{ item.run_parameters.retrenchment_year }}</td>
+                        <td>{{ item.run_parameters.parameter_year }}</td>
+                        <td>{{ item.run_parameters.yieldcurve_year }}</td>
+                        <td>{{ item.yield_curve_basis }}</td>
+                      </tr>
+                    </tbody>
+                  </v-table>
                 </v-col>
               </v-row>
               <v-row v-if="showConfigurationForm">
