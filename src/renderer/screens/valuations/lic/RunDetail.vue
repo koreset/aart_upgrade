@@ -109,11 +109,11 @@ import BaseCard from '@/renderer/components/BaseCard.vue'
 
 const router = useRouter()
 const loading = ref(false)
-const runSettings = ref(null)
+const runSettings: any = ref(null)
 const dataAvailable = ref(false)
-const runId = ref(null)
+const runId: any = ref(null)
 const runList = ref([])
-const portfolioList = ref([])
+const portfolioList: any = ref([])
 const productList: any = ref([])
 const rowData: any = ref([])
 const selectedRunDate = ref('')
@@ -180,7 +180,7 @@ const getResultsForProduct = () => {
 const createColumnDefs = (data) => {
   columnDefs.value = []
   Object.keys(data).forEach((element) => {
-    const header = {}
+    const header: any = {}
     header.headerName = element
     header.field = element
     header.valueFormatter = formatValues
@@ -188,90 +188,6 @@ const createColumnDefs = (data) => {
     columnDefs.value.push(header)
   })
 }
-
-// export default {
-//   props: ['id'],
-//   data() {
-//     return {
-//       loading: false,
-//       runSettings: null,
-//       dataAvailable: false,
-//       runId: null,
-//       runList: [],
-//       portfolioList: [],
-//       productList: [],
-//       rowData: [],
-//       selectedRunDate: '',
-//       selectedPortfolio: '',
-//       selectedProduct: ''
-//     }
-//   },
-//   mounted() {
-//     this.runId = this.$route.params.id
-//     // LicService.getLicBuildUps(this.runId, null, null).then(response => {
-//     //   this.runList = response.data.list;
-//     // });
-//     this.loading = true
-//     this.getPortfolios()
-//   },
-//   methods: {
-//     getPortfolios() {
-//       LicService.getLicBuildUps(this.runId, null, null).then((response) => {
-//         this.portfolioList = response.data.list
-//         this.runSettings = response.data.audit_trail
-//         console.log(response)
-
-//         if (this.portfolioList.length > 0) {
-//           this.dataAvailable = true
-//           this.portfolioList.unshift('All Portfolios')
-//           this.selectedPortfolio = 'All Portfolios'
-//           this.rowData = response.data.data
-//           this.createColumnDefs(this.rowData[0])
-//         }
-//         this.loading = false
-//       })
-//     },
-//     getProducts() {
-//       if (this.selectedPortfolio !== 'All Portfolios') {
-//         LicService.getLicBuildUps(this.runId, this.selectedPortfolio, null).then((response) => {
-//           console.log(response)
-//           this.rowData = response.data.data
-//           this.productList = response.data.list
-//           this.runSettings = response.data.audit_trail
-//           this.productList.unshift('All Products')
-//           this.selectedProduct = 'All Products'
-//           this.createColumnDefs(this.rowData[0])
-//         })
-//       } else {
-//         this.productList = []
-//         this.getPortfolios()
-//       }
-//     },
-//     getResultsForProduct() {
-//       if (this.selectedProduct !== 'All Products') {
-//         LicService.getLicBuildUps(this.runId, this.selectedPortfolio, this.selectedProduct).then(
-//           (response) => {
-//             this.rowData = response.data.data
-//             this.createColumnDefs(this.rowData[0])
-//           }
-//         )
-//       } else {
-//         this.getProducts()
-//       }
-//     },
-//     createColumnDefs(data) {
-//       this.columnDefs = []
-//       Object.keys(data).forEach((element) => {
-//         const header = {}
-//         header.headerName = element
-//         header.field = element
-//         header.valueFormatter = formatValues
-//         header.minWidth = 150
-//         this.columnDefs.push(header)
-//       })
-//     }
-//   }
-// }
 </script>
 
 <style></style>
