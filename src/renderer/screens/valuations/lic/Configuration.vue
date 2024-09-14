@@ -60,22 +60,16 @@
               <v-divider class="mb-9 mt-9"></v-divider>
               <v-row>
                 <v-col>
-                  <v-btn rounded small class="primary" @click="showConfigurationForm = true"
+                  <v-btn
+                    rounded
+                    size="small"
+                    variant="outlined"
+                    class="primary"
+                    @click="showConfigurationForm = true"
                     >Create Lic Configuration</v-btn
                   >
                 </v-col>
               </v-row>
-              <!-- <v-row>
-                <v-col>
-                  <gmm-file-info
-                    :tableDialog="tableDialog"
-                    :selectedRowData="rowData"
-                    :selectedColumnDefs="columnDefs"
-                    :tableType="'aos'"
-                    @resetTableDialog="dismissTableDialog"
-                  />
-                </v-col>
-              </v-row> -->
               <v-row v-if="showConfigurationForm">
                 <v-col>
                   <v-text-field
@@ -105,12 +99,12 @@
                 <v-col>
                   <v-table class="trans-tables">
                     <thead>
-                      <tr>
-                        <th>Variable</th>
-                        <th>Description</th>
-                        <th>Run Name</th>
-                        <th>Notes</th>
-                        <th>Assumption Basis</th>
+                      <tr class="table-row">
+                        <th class="table-col">Variable</th>
+                        <th class="table-col">Description</th>
+                        <th class="table-col">Run Name</th>
+                        <th class="table-col">Notes</th>
+                        <th class="table-col">Assumption Basis</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -174,10 +168,22 @@
               </v-row>
               <v-row v-if="showConfigurationForm">
                 <v-col>
-                  <v-btn rounded small class="primary" @click="saveConfiguration">
+                  <v-btn
+                    rounded
+                    size="small"
+                    variant="outlined"
+                    class="primary"
+                    @click="saveConfiguration"
+                  >
                     Save Configuration
                   </v-btn>
-                  <v-btn rounded small class="ml-9 primary" @click="cancelConfiguration">
+                  <v-btn
+                    rounded
+                    size="small"
+                    variant="outlined"
+                    class="ml-9 primary"
+                    @click="cancelConfiguration"
+                  >
                     Cancel
                   </v-btn>
                 </v-col>
