@@ -3,14 +3,14 @@
     <template #activator="{ props }">
       <v-btn variant="outlined" rounded size="small" v-bind="props">
         <v-icon color="accent">mdi-upload</v-icon>
-        <span>Upload</span>
+        <span>{{ actionName }}</span>
       </v-btn>
     </template>
-    <v-card v-if="!uploadSuccess" class="rounded-lg">
-      <v-card-title class="header-title accent white--text mb-4"
-        >Upload data for {{ tableType }} (csv)</v-card-title
-      >
-      <v-card-text>
+    <base-card v-if="!uploadSuccess">
+      <template #header>
+        <span class="headline">Upload data for {{ tableType }} (csv)</span>
+      </template>
+      <template #default>
         <v-row>
           <v-col>
             <v-file-input
@@ -26,7 +26,7 @@
             </v-file-input>
           </v-col>
         </v-row>
-        <v-row v-if="tableType === 'Yield Curve'">
+        <v-row v-if="showYieldCurveCode">
           <v-col>
             <v-text-field
               v-model="yieldCurveCode"
@@ -37,7 +37,7 @@
             ></v-text-field>
           </v-col>
         </v-row>
-        <v-row v-if="tableType === 'Yield Curve'">
+        <v-row v-if="showYear">
           <v-col>
             <v-select
               v-model="selectedYear"
@@ -50,8 +50,19 @@
             ></v-select>
           </v-col>
         </v-row>
+        <v-row v-if="showVersion">
+          <v-col>
+            <v-text-field
+              v-model="dataVersion"
+              variant="outlined"
+              density="compact"
+              placeholder="Enter a version name"
+              label="Version Name"
+            ></v-text-field>
+          </v-col>
+        </v-row>
         <v-row>
-          <v-col v-if="tableType === 'Yield Curve'">
+          <v-col v-if="showMonth">
             <v-select
               v-model="selectedMonth"
               variant="outlined"
@@ -60,6 +71,19 @@
               :items="availableMonths"
               item-title="month"
               item-value="month"
+            ></v-select>
+          </v-col>
+        </v-row>
+        <v-row v-if="showExpTableTypes">
+          <v-col>
+            <v-select
+              v-model="selectedTableType"
+              variant="outlined"
+              density="compact"
+              label="Select a table type"
+              :items="expTableTypes"
+              item-title="name"
+              item-value="value"
             ></v-select>
           </v-col>
         </v-row>
@@ -84,34 +108,57 @@
             ></v-progress-circular>
           </v-col>
         </v-row>
-      </v-card-text>
-      <v-card-actions>
+      </template>
+      <template #actions>
         <v-spacer></v-spacer>
         <v-btn rounded variant="text" @click="closeDialog">Close</v-btn>
-      </v-card-actions>
-    </v-card>
-    <v-card v-else>
-      <v-card-title>Upload Status for {{ fileName }}</v-card-title>
-      <v-card-text>
+      </template>
+    </base-card>
+    <base-card v-else>
+      <template #header>
+        <span class="headline">Upload Status for {{ fileName }}</span>
+      </template>
+      <template #default>
         <h4>Table was successfully uploaded</h4>
-      </v-card-text>
-      <v-card-actions>
+      </template>
+      <template #actions>
         <v-spacer></v-spacer>
         <v-btn rounded variant="text" @click="closeDialog">Close</v-btn>
-      </v-card-actions>
-    </v-card>
+      </template>
+    </base-card>
   </v-dialog>
 </template>
 <script setup lang="ts">
 import { computed, defineProps, ref, watch } from 'vue'
 import { DataPayload } from './types'
-const newprops = defineProps(['tableType','showVersionField', 'assumptionType', 'uploadComplete'])
+import BaseCard from './BaseCard.vue'
+// const newprops = defineProps([
+//   'tableType',
+//   'showYieldCurve',
+//   'showVersionField',
+//   'showYieldCurveCode',
+//   'assumptionType',
+//   'uploadComplete'
+// ])
+
+const props = defineProps({
+  tableType: { type: String, default: '' },
+  actionName: { type: String, default: 'Upload' },
+  showYear: { type: Boolean, default: false },
+  showMonth: { type: Boolean, default: false },
+  showVersion: { type: Boolean, default: false },
+  showExpTableTypes: { type: Boolean, default: false },
+  showYieldCurveCode: { type: Boolean, default: false },
+  assumptionType: { type: String, default: '' },
+  uploadComplete: { type: Boolean, default: false }
+})
 
 const emit = defineEmits<{
   (e: 'uploadFile', payload: DataPayload): void
 }>()
 
 // data
+const dataVersion: any = ref(null)
 const uploadInProgress: any = ref(false)
 const uploadDisabled: any = ref(false)
 const loaderSize: any = ref(0)
@@ -121,8 +168,12 @@ const dialog: any = ref(false)
 const selectedYear: any = ref(null)
 const selectedMonth: any = ref(null)
 const yieldCurveCode: any = ref(null)
-const selectedType: any = ref(null)
+const selectedTableType: any = ref(null)
 const fileName: any = ref(null)
+const expTableTypes = [
+  { name: 'Actual Data', value: 'actual_data' },
+  { name: 'Exposure Data', value: 'exposure_data' }
+]
 
 // computed
 const availableYears: any = computed(() => {
@@ -153,13 +204,15 @@ const closeDialog = () => {
   yieldCurveCode.value = null
   selectedMonth.value = null
   uploadDisabled.value = false
+  selectedTableType.value = null
+  dataVersion.value = null
 }
 
 // processing of the captured data will be delegated to the parent caller
 const uploadFile = () => {
   console.log('uploading file')
-  console.log(selectedType.value)
-  console.log(newprops.tableType)
+  console.log(selectedTableType.value)
+  console.log(props.tableType)
   console.log(file.value)
   if (file.value !== null) {
     const payload: DataPayload = {
@@ -167,8 +220,10 @@ const uploadFile = () => {
       selectedYear: selectedYear.value,
       selectedMonth: selectedMonth.value,
       yieldCurveCode: yieldCurveCode.value,
-      selectedType: newprops.tableType,
-      fileName: file.value.name
+      selectedType: props.tableType,
+      fileName: file.value.name,
+      version: dataVersion.value,
+      dataTableType: selectedTableType.value
     }
     uploadInProgress.value = true
     uploadDisabled.value = true
@@ -178,8 +233,9 @@ const uploadFile = () => {
 }
 
 watch(
-  () => newprops.uploadComplete,
+  () => props.uploadComplete,
   (value) => {
+    console.log('value', value)
     if (value) {
       closeDialog()
       uploadInProgress.value = false

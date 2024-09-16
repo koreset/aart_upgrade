@@ -56,7 +56,12 @@
                 ></v-select>
               </v-col>
               <v-col class="d-flex align-baseline" cols="3">
-                <v-btn rounded class="primary mt-1" size="small" variant="outlined" @click="createPortfolio"
+                <v-btn
+                  rounded
+                  class="primary mt-1"
+                  size="small"
+                  variant="outlined"
+                  @click="createPortfolio"
                   >Add Portfolio</v-btn
                 >
               </v-col>
@@ -195,33 +200,6 @@
                               <v-row v-if="rowData.length > 0 && loadDataComplete">
                                 <data-grid :rowData="rowData" :columnDefs="columnDefs"></data-grid>
                               </v-row>
-                              <!-- <v-row v-for="elem in item.year_versions" :key="elem.year">
-                                <v-col class="mt-2" cols="2">Year: {{ elem.year }}</v-col>
-                                <v-col class="mt-2" cols="5">Version: {{ elem.mp_version }}</v-col>
-                                <v-col class="mt-2" cols="2">Count: {{ elem.count }}</v-col>
-                                <v-col cols="1">
-                                  <v-btn
-                                    variant="plain"
-                                    icon
-                                    small
-                                    @click="
-                                      showData(item.id, item.name, elem.year, elem.mp_version)
-                                    "
-                                  >
-                                    <v-icon color="accent">mdi-information</v-icon></v-btn
-                                  >
-                                </v-col>
-                                <v-col cols="1">
-                                  <v-btn
-                                    variant="plain"
-                                    icon
-                                    small
-                                    @click="deleteData(item.id, elem.year, elem.mp_version)"
-                                  >
-                                    <v-icon color="red">mdi-delete</v-icon></v-btn
-                                  >
-                                </v-col>
-                              </v-row> -->
                             </v-col>
                           </v-row>
                         </v-expansion-panel-text>
@@ -299,6 +277,9 @@ const createPortfolio = () => {
 
 const getMpVersions = (id: number, year: number) => {
   console.log('Getting MP Versions', id, year)
+  rowData.value = []
+  columnDefs.value = []
+  loadDataComplete.value = false
   yearVersions.value = []
   selectedYearVersion.value = null
   // get the portfolio with the id from portfolios
@@ -316,6 +297,9 @@ const getMpVersions = (id: number, year: number) => {
 }
 
 const showCountData = (version: any) => {
+  rowData.value = []
+  columnDefs.value = []
+  loadDataComplete.value = false
   console.log('Showing Count Data', version)
 }
 

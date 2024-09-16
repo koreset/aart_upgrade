@@ -116,6 +116,30 @@
           </v-list-item>
         </v-list-group>
       </v-list-group>
+      <v-list-group value="Pricing">
+        <template #activator="{ props }">
+          <v-list-item
+            v-bind="props"
+            prepend-icon="mdi-account-circle"
+            title="Pricing"
+          ></v-list-item>
+        </template>
+        <v-list-item :to="{ name: 'pricing-tables' }">
+          <v-list-item-title>Tables</v-list-item-title>
+        </v-list-item>
+      </v-list-group>
+      <v-list-group value="Exp Analysis">
+        <template #activator="{ props }">
+          <v-list-item
+            v-bind="props"
+            prepend-icon="mdi-account-circle"
+            title="Exp Analysis"
+          ></v-list-item>
+        </template>
+        <v-list-item :to="{ name: 'exp-analysis-configuration' }">
+          <v-list-item-title>Configuration</v-list-item-title>
+        </v-list-item>
+      </v-list-group>
     </v-list>
   </v-navigation-drawer>
 </template>

@@ -5,4 +5,6 @@ export interface DataPayload {
   yieldCurveCode?: any
   selectedType?: any
   fileName?: any
+  version?: any
+  dataTableType?: any
 }

@@ -177,6 +177,17 @@ export default createRouter({
       name: 'valuations-lic-run-details',
       component: () => import('../screens/valuations/lic/RunDetail.vue')
     },
+    {
+      path: '/pricing/tables',
+      name: 'pricing-tables',
+      component: () => import('../screens/pricing/Tables.vue')
+    },
+
+    {
+      path: '/exp-analysis/configuration',
+      name: 'exp-analysis-configuration',
+      component: () => import('../screens/exp_analysis/Configuration.vue')
+    },
 
     {
       path: '/error',
