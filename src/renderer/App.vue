@@ -30,11 +30,11 @@ body {
 }
 
 .table-row {
-  background-color: grey;
+  background-color: rgb(169, 169, 169);
   color: white;
 }
 
 .v-table {
-  border: 1px solid grey;
+  border: 1px solid rgb(208, 207, 207);
 }
 </style>

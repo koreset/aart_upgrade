@@ -139,6 +139,15 @@
         <v-list-item :to="{ name: 'exp-analysis-configuration' }">
           <v-list-item-title>Configuration</v-list-item-title>
         </v-list-item>
+        <v-list-item :to="{ name: 'exp-analysis-tables' }">
+          <v-list-item-title>Tables</v-list-item-title>
+        </v-list-item>
+        <v-list-item :to="{ name: 'exp-analysis-run-settings' }">
+          <v-list-item-title>Run Settings</v-list-item-title>
+        </v-list-item>
+        <v-list-item :to="{ name: 'exp-analysis-run-results' }">
+          <v-list-item-title>Run Results</v-list-item-title>
+        </v-list-item>
       </v-list-group>
     </v-list>
   </v-navigation-drawer>

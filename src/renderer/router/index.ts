@@ -188,6 +188,26 @@ export default createRouter({
       name: 'exp-analysis-configuration',
       component: () => import('../screens/exp_analysis/Configuration.vue')
     },
+    {
+      path: '/exp-analysis/tables',
+      name: 'exp-analysis-tables',
+      component: () => import('../screens/exp_analysis/Tables.vue')
+    },
+    {
+      path: '/exp-analysis/run-settings',
+      name: 'exp-analysis-run-settings',
+      component: () => import('../screens/exp_analysis/RunSettings.vue')
+    },
+    {
+      path: '/exp-analysis/run-results',
+      name: 'exp-analysis-run-results',
+      component: () => import('../screens/exp_analysis/RunResults.vue')
+    },
+    {
+      path: '/exp-analysis/run-detail/:id',
+      name: 'exp-analysis-run-detail',
+      component: () => import('../screens/exp_analysis/RunDetail.vue')
+    },
 
     {
       path: '/error',
