@@ -1,4 +1,4 @@
-import Api from '@/api/Api'
+import Api from '@/renderer/api/Api'
 
 export default {
   getAllProducts() {

@@ -208,6 +208,11 @@ export default createRouter({
       name: 'exp-analysis-run-detail',
       component: () => import('../screens/exp_analysis/RunDetail.vue')
     },
+    {
+      path: '/ifrs17/tables',
+      name: 'ifrs17-tables',
+      component: () => import('../screens/ifrs17/Tables.vue')
+    },
 
     {
       path: '/error',

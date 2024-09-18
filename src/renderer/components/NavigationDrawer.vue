@@ -149,6 +149,18 @@
           <v-list-item-title>Run Results</v-list-item-title>
         </v-list-item>
       </v-list-group>
+      <v-list-group value="IFRS17">
+        <template #activator="{ props }">
+          <v-list-item
+            v-bind="props"
+            prepend-icon="mdi-account-circle"
+            title="IFRS17"
+          ></v-list-item>
+        </template>
+        <v-list-item :to="{ name: 'ifrs17-tables' }">
+          <v-list-item-title>Tables</v-list-item-title>
+        </v-list-item>
+      </v-list-group>
     </v-list>
   </v-navigation-drawer>
 </template>

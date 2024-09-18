@@ -78,69 +78,6 @@
       {{ text }}
       <v-btn rounded color="red" variant="text" @click="snackbar = false">Close</v-btn>
     </v-snackbar>
-    <v-dialog v-model="yieldCurveDataDialog" persistent max-width="600">
-      <v-card>
-        <v-card-title class="header-title accent white--text"
-          >Select Yield Curve data to delete</v-card-title
-        >
-        <v-card-text
-          ><v-row v-if="yieldCurveYears.length > 0" class="mt-5">
-            <v-col>
-              <v-select
-                v-model="selectedYieldCurveYear"
-                variant="outlined"
-                density="compact"
-                label="Yield Curve Year"
-                :items="yieldCurveYears"
-                item-title="Year"
-                item-value="Year"
-                @update:model-value="getYieldCurveCodes"
-              ></v-select>
-            </v-col>
-          </v-row>
-          <v-row v-if="yieldCurveCodes.length > 0">
-            <v-col>
-              <v-select
-                v-model="selectedYieldCurveCode"
-                variant="outlined"
-                density="compact"
-                placeholder="Select an existing Yield Curve Code"
-                label="Yield Curve Code"
-                :items="yieldCurveCodes"
-                @update:model-value="getYieldCurveMonths"
-              ></v-select>
-            </v-col>
-          </v-row>
-          <v-row v-if="yieldCurveMonths.length > 0">
-            <v-col>
-              <v-select
-                v-model="selectedYieldCurveMonth"
-                variant="outlined"
-                density="compact"
-                placeholder="Select an existing Yield Curve Month"
-                label="Yield Curve Month"
-                :items="yieldCurveMonths"
-              ></v-select>
-            </v-col>
-          </v-row>
-          <v-row v-if="selectedYieldCurveMonth !== null">
-            <v-col>
-              <p
-                >Clicking on Delete will delete any available Yield curve data for the selected
-                criteria</p
-              >
-            </v-col>
-          </v-row>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="primary darken-1" variant="text" @click="deleteYieldCurveData()"
-            >Delete</v-btn
-          >
-          <v-btn color="primary darken-1" variant="text" @click="clearYieldDialog()">Cancel</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
     <v-snackbar v-model="snackbar" centered :timeout="timeout" :multi-line="true">
       {{ snackbarText }}
       <v-btn rounded color="red" variant="text" @click="snackbar = false">Close</v-btn>
@@ -155,20 +92,13 @@ import DataGrid from '@/renderer/components/tables/DataGrid.vue'
 import BulkFileUpdater from '@/renderer/components/BulkFileUpdater.vue'
 import BaseCard from '@/renderer/components/BaseCard.vue'
 import ExpService from '@/renderer/api/ExpAnalysisService'
-import ModifiedGMMService from '@/renderer/api/ModifiedGMMService'
 import formatValues from '@/renderer/utils/format_values'
 import { ref, onMounted } from 'vue'
 import { DataPayload } from '@/renderer/components/types'
-
+import IbnrService from '@/renderer/api/IbnrService'
 // data
 const viewHeader: string = 'PAA Assumption Tables'
 const confirmDeleteDialog: any = ref()
-const selectedYieldCurveYear: any = ref(null)
-const selectedYieldCurveCode: any = ref(null)
-const selectedYieldCurveMonth: any = ref(null)
-const yieldCurveMonths: any = ref([])
-const yieldCurveCodes: any = ref([])
-const yieldCurveYears: any = ref([])
 const loadingData: any = ref(false)
 const rowCount: any = ref(0)
 const tableData: any = ref([])
@@ -181,9 +111,9 @@ const tables: any = ref([
 ])
 
 const text: any = ref('')
-const yieldCurveDataDialog: any = ref(false)
+// const yieldCurveDataDialog: any = ref(false)
 const columnDefs: any = ref([])
-const dialog: any = ref(false)
+// const dialog: any = ref(false)
 
 const uploadComplete = ref(false)
 const snackbarText: any = ref(null)
@@ -206,7 +136,7 @@ const handleUpload = (payload: DataPayload) => {
   formdata.append('year', payload.selectedYear)
   formdata.append('month', payload.selectedMonth)
   formdata.append('yield_curve_code', payload.yieldCurveCode)
-  ModifiedGMMService.uploadTables(formdata)
+  ExpService.uploadTables(formdata)
     .then((res: any) => {
       if (res.status === 200) {
         snackbarText.value = 'File uploaded successfully'
@@ -224,38 +154,16 @@ const handleUpload = (payload: DataPayload) => {
 }
 
 const deleteTableData = async (table: any) => {
-  if (table.table_type === 'Yield Curve') {
-    ModifiedGMMService.getYieldCurveYears().then((response) => {
-      yieldCurveYears.value = response.data
-      selectedTable.value = table.table_type
-      if (yieldCurveYears.value === null) {
-        yieldCurveYears.value = []
-      }
-      if (yieldCurveYears.value.length > 0) {
-        yieldCurveDataDialog.value = true
-      }
+  if (table.table_type !== '' && table.table_type !== null) {
+    ExpService.deleteTableData(table.table_type).then(() => {
+      // this.text = res.data.message;
+      text.value = 'Table was successfully deleted'
+      snackbar.value = true
+      // this.gmmTables = res.data.associated_tables;
     })
   } else {
-    try {
-      const result = await confirmDeleteDialog.value.open(
-        'Deleting Data for ' + table.table_type + ' table',
-        'Are you sure you want to delete this data?'
-      )
-      console.log(result)
-      if (result) {
-        console.log('Deleting data')
-
-        ModifiedGMMService.deleteTable(table.table_type).then((response) => {
-          text.value = response.data
-          snackbar.value = true
-          dialog.value = false
-          tableData.value = []
-          selectedTable.value = ''
-        })
-      }
-    } catch (error) {
-      console.log(error)
-    }
+    text.value = 'Table was not deleted'
+    snackbar.value = true
   }
 }
 
@@ -264,7 +172,7 @@ const viewTable = (item: any) => {
   tableData.value = []
 
   const tableType = item.table_type.replace(/ /g, '').toLowerCase()
-  ModifiedGMMService.getDataForTable(tableType).then((res) => {
+  IbnrService.getDataForTable(tableType).then((res) => {
     if (res.data === null) {
       res.data = []
     }
@@ -286,44 +194,44 @@ const viewTable = (item: any) => {
 
 // Yield curve specfic methods
 
-const deleteYieldCurveData = () => {
-  console.log(selectedYieldCurveMonth.value)
-  ModifiedGMMService.deletePAAYieldTable(
-    selectedTable.value,
-    selectedYieldCurveYear.value,
-    selectedYieldCurveCode.value,
-    selectedYieldCurveMonth.value
-  ).then(() => {
-    text.value = 'yield curve data deleted successfully'
-    snackbar.value = true
-    clearYieldDialog()
-  })
-}
+// const deleteYieldCurveData = () => {
+//   console.log(selectedYieldCurveMonth.value)
+//   ModifiedGMMService.deletePAAYieldTable(
+//     selectedTable.value,
+//     selectedYieldCurveYear.value,
+//     selectedYieldCurveCode.value,
+//     selectedYieldCurveMonth.value
+//   ).then(() => {
+//     text.value = 'yield curve data deleted successfully'
+//     snackbar.value = true
+//     clearYieldDialog()
+//   })
+// }
 
-const clearYieldDialog = () => {
-  selectedYieldCurveYear.value = null
-  selectedYieldCurveCode.value = null
-  selectedYieldCurveMonth.value = null
-  yieldCurveMonths.value = []
-  yieldCurveCodes.value = []
-  yieldCurveDataDialog.value = false
-}
+// const clearYieldDialog = () => {
+//   selectedYieldCurveYear.value = null
+//   selectedYieldCurveCode.value = null
+//   selectedYieldCurveMonth.value = null
+//   yieldCurveMonths.value = []
+//   yieldCurveCodes.value = []
+//   yieldCurveDataDialog.value = false
+// }
 
-const getYieldCurveCodes = () => {
-  console.log(selectedYieldCurveYear)
-  ModifiedGMMService.getYieldCurveCodes(selectedYieldCurveYear.value).then((response) => {
-    yieldCurveCodes.value = response.data
-  })
-}
+// const getYieldCurveCodes = () => {
+//   console.log(selectedYieldCurveYear)
+//   ModifiedGMMService.getYieldCurveCodes(selectedYieldCurveYear.value).then((response) => {
+//     yieldCurveCodes.value = response.data
+//   })
+// }
 
-const getYieldCurveMonths = () => {
-  ModifiedGMMService.getYieldCurveMonths(
-    selectedYieldCurveYear.value,
-    selectedYieldCurveCode.value
-  ).then((response) => {
-    yieldCurveMonths.value = response.data
-  })
-}
+// const getYieldCurveMonths = () => {
+//   ModifiedGMMService.getYieldCurveMonths(
+//     selectedYieldCurveYear.value,
+//     selectedYieldCurveCode.value
+//   ).then((response) => {
+//     yieldCurveMonths.value = response.data
+//   })
+// }
 
 const createColumnDefs = (data: any) => {
   columnDefs.value = []

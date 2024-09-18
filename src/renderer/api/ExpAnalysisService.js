@@ -49,6 +49,9 @@ export default {
     }
     return Api.post('exp-analysis/get-table-data', payload)
   },
+  deleteTableData(tableName) {
+    return Api.delete('exp-analysis/tables/' + tableName)
+  },
   getExposureAndActualYears(configurationId) {
     return Api.get(`exp-analysis/get-exposure-actual-years/${configurationId}`)
   },
