@@ -322,12 +322,12 @@ const removeFromRunJobs = (jobName) => {
   })
 }
 const executeJobs = () => {
-  ExpService.runAnalysis(runJobs).then((res) => {
+  ExpService.runAnalysis(runJobs.value).then((res) => {
     timeout.value = 3000
     snackbar.value = true
     text.value = res.data.message
     setTimeout(() => {
-      $router.push({ path: '/exp-run-results' })
+      $router.push({ path: '/exp-analysis/run-results' })
     }, 2000)
   })
 }

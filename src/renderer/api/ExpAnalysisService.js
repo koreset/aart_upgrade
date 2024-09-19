@@ -65,6 +65,7 @@ export default {
     return Api.post(`exp-analysis/check-run-name/${runName}`)
   },
   runAnalysis(runData) {
+    console.log('runData', runData)
     return Api.post('exp-analysis/run-exp-analysis', runData)
   },
   getRunResults() {
@@ -104,5 +105,17 @@ export default {
   },
   deleteConfiguration(configurationId) {
     return Api.delete(`exp-analysis/delete-configuration/${configurationId}`)
+  },
+  deleteConfigData(tableDataName, portfolioName, year, version) {
+    return Api.delete(
+      'exp-analysis/config-data/' +
+        tableDataName +
+        '/portfolio/' +
+        portfolioName +
+        '/year/' +
+        year +
+        '/version/' +
+        version
+    )
   }
 }

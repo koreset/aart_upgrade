@@ -97,7 +97,7 @@ import { ref, onMounted } from 'vue'
 import { DataPayload } from '@/renderer/components/types'
 import IbnrService from '@/renderer/api/IbnrService'
 // data
-const viewHeader: string = 'PAA Assumption Tables'
+const viewHeader: string = 'Experience Analysis Tables'
 const confirmDeleteDialog: any = ref()
 const loadingData: any = ref(false)
 const rowCount: any = ref(0)
@@ -111,9 +111,7 @@ const tables: any = ref([
 ])
 
 const text: any = ref('')
-// const yieldCurveDataDialog: any = ref(false)
 const columnDefs: any = ref([])
-// const dialog: any = ref(false)
 
 const uploadComplete = ref(false)
 const snackbarText: any = ref(null)
@@ -191,47 +189,6 @@ const viewTable = (item: any) => {
     loadingData.value = false
   })
 }
-
-// Yield curve specfic methods
-
-// const deleteYieldCurveData = () => {
-//   console.log(selectedYieldCurveMonth.value)
-//   ModifiedGMMService.deletePAAYieldTable(
-//     selectedTable.value,
-//     selectedYieldCurveYear.value,
-//     selectedYieldCurveCode.value,
-//     selectedYieldCurveMonth.value
-//   ).then(() => {
-//     text.value = 'yield curve data deleted successfully'
-//     snackbar.value = true
-//     clearYieldDialog()
-//   })
-// }
-
-// const clearYieldDialog = () => {
-//   selectedYieldCurveYear.value = null
-//   selectedYieldCurveCode.value = null
-//   selectedYieldCurveMonth.value = null
-//   yieldCurveMonths.value = []
-//   yieldCurveCodes.value = []
-//   yieldCurveDataDialog.value = false
-// }
-
-// const getYieldCurveCodes = () => {
-//   console.log(selectedYieldCurveYear)
-//   ModifiedGMMService.getYieldCurveCodes(selectedYieldCurveYear.value).then((response) => {
-//     yieldCurveCodes.value = response.data
-//   })
-// }
-
-// const getYieldCurveMonths = () => {
-//   ModifiedGMMService.getYieldCurveMonths(
-//     selectedYieldCurveYear.value,
-//     selectedYieldCurveCode.value
-//   ).then((response) => {
-//     yieldCurveMonths.value = response.data
-//   })
-// }
 
 const createColumnDefs = (data: any) => {
   columnDefs.value = []

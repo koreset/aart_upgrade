@@ -2,42 +2,60 @@
   <v-container>
     <v-row>
       <v-col>
-        <base-card>
+        <base-card :show-actions="false">
           <template #header><span class="headline">IFRS17 Engine Tables</span> </template>
           <template #default>
             <v-container fluid>
-              <v-row
-                v-for="item in ifrs17EngineTables"
-                :key="item.table_type"
-                class="blue-grey lighten-5 mb-2"
-              >
-                <v-col cols="8">
-                  <p>{{ item.table_type }}</p>
-                </v-col>
-                <v-col class="d-flex justify-space-around" cols="4">
-                  <v-btn
-                    size="small"
-                    variant="outlined"
-                    rounded
-                    @click.stop="showTableData(item.table_type)"
-                    ><v-icon color="accent">mdi-information</v-icon><span>Info</span></v-btn
-                  >
-                  <ifrs17-engine-file-updater :tableType="item.table_type" />
-                  <v-btn small rounded depressed @click.stop="confirmTableDelete(item.table_type)"
-                    ><v-icon color="red">mdi-delete</v-icon>
-                    <span>DELETE</span>
-                  </v-btn>
-                </v-col>
-              </v-row>
+              <v-table>
+                <tbody>
+                  <tr v-for="item in ifrs17EngineTables" :key="item.table_type">
+                    <td style="width: 70%">{{ item.table_type }}</td>
+                    <td style="text-align: center">
+                      <v-btn
+                        size="small"
+                        variant="outlined"
+                        rounded
+                        @click.stop="showTableData(item.table_type)"
+                        ><v-icon color="accent">mdi-information</v-icon><span>Info</span></v-btn
+                      >
+                    </td>
+                    <td style="text-align: center">
+                      <file-updater
+                        :uploadComplete="uploadComplete"
+                        :tableType="item.table_type"
+                        @uploadFile="handleUpload"
+                      ></file-updater>
+                    </td>
+                    <td style="text-align: center">
+                      <v-btn
+                        variant="outlined"
+                        size="small"
+                        rounded
+                        @click.stop="confirmTableDelete(item.table_type)"
+                        ><v-icon color="red">mdi-delete</v-icon>
+                        <span>Delete</span>
+                      </v-btn>
+                    </td>
+                  </tr>
+                </tbody>
+              </v-table>
               <v-row>
                 <v-col>
-                  <gmm-file-info
+                  <file-info
+                    :tableTitle="selectedTable"
+                    :rowData="rowData"
+                    :columnDefs="columnDefs"
+                    :onUpdate:isInfoDialogOpen="closeInfoBox"
+                    :isDialogOpen="infoDialog"
+                  />
+
+                  <!-- <gmm-file-info
                     :tableDialog="tableDialog"
                     :tableType="selectedTable"
                     :selectedRowData="rowData"
                     :selectedColumnDefs="columnDefs"
                     @resetTableDialog="dismissTableDialog"
-                  />
+                  /> -->
                 </v-col>
               </v-row>
             </v-container>
@@ -185,9 +203,12 @@ import CsmEngine from '@/renderer/api/CsmEngine'
 import formatValues from '@/renderer/utils/format_values'
 import { computed, onMounted, ref } from 'vue'
 import BaseCard from '@/renderer/components/BaseCard.vue'
+import FileUpdater from '@/renderer/components/FileUpdater.vue'
 // import createColumnDefs from "../../utils/format_values";
 
 // data
+const infoDialog = ref(false)
+const uploadComplete = ref(false)
 const searchQuery = ref('')
 const tableDialog = ref(false)
 const loaderSize = ref(0)
@@ -228,6 +249,29 @@ onMounted(() => {
     }
   })
 })
+
+const closeInfoBox = (value: boolean) => {
+  infoDialog.value = value
+}
+
+const handleUpload = (payload: any) => {
+  console.log(payload)
+  // uploadComplete.value = false
+  // const formdata = new FormData()
+  // formdata.append('file', payload.file)
+  // formdata.append('table_type', payload.selectedType)
+  // CsmEngine.uploadIfrs17EngineTables(formdata)
+  //   .then((res) => {
+  //     if (res.status === 200) {
+  //       file.value = null
+  //       // selectedType.value = null
+  //       text.value = 'The data has been successfully updated'
+  //       timeout.value = 3000
+  //       snackbar.value = true
+  //     }
+  //   })
+  //   .catch(() => {})
+}
 
 const removeTimePortion = (value: string) => {
   if (value) {
@@ -281,9 +325,9 @@ const deleteTable = (value: boolean) => {
   }
 }
 
-const dismissTableDialog = (value: boolean) => {
-  tableDialog.value = value
-}
+// const dismissTableDialog = (value: boolean) => {
+//   tableDialog.value = value
+// }
 
 const createColumnDefs = (data: any) => {
   columnDefs.value = []
@@ -320,8 +364,10 @@ const loadData = (tableName: string) => {
         rowData.value.push(transformed)
       })
     }
+    infoDialog.value = true
     tableDialog.value = true
   })
+  infoDialog.value = true
   tableDialog.value = true
 }
 
@@ -356,6 +402,7 @@ const loadSapData = (runName: string) => {
 const showTableData = (tableType: string) => {
   selectedTable.value = tableType
   tableType = tableType.replace(/ /g, '')
+  console.log('table type: ', tableType)
   loadData(tableType.toLowerCase())
 }
 

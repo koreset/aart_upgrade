@@ -145,7 +145,8 @@
                                     variant="outlined"
                                     @click="
                                       deleteData(
-                                        item.id,
+                                        'exposure_data',
+                                        item.name,
                                         selectedYearVersion.year,
                                         selectedYearVersion.version
                                       )
@@ -224,7 +225,8 @@
                                     variant="outlined"
                                     @click="
                                       deleteData(
-                                        item.id,
+                                        'actual_data',
+                                        item.name,
                                         selectedYearVersion.year,
                                         selectedYearVersion.version
                                       )
@@ -393,7 +395,12 @@ const showData = (id: number, name: string, year: number, version: number) => {
   loadDataComplete.value = true
 }
 
-const deleteData = async (id: number, year: number, version: number) => {
+const deleteData = async (
+  tableType: string,
+  portfolioName: string,
+  year: number,
+  version: number
+) => {
   const res = await confirmDeleteDialog.value.open(
     'Delete Data',
     'Are you sure you want to delete this data?'
@@ -401,9 +408,9 @@ const deleteData = async (id: number, year: number, version: number) => {
 
   if (!res) return
 
-  console.log('Deleting Data', id, year, version)
+  console.log('Deleting Data', tableType, portfolioName, year, version)
   loadingData.value = true
-  ExpService.deleteData(id, year, version).then((res) => {
+  ExpService.deleteConfigData(tableType, portfolioName, year, version).then((res) => {
     console.log('Data', res.data)
     rowData.value = res.data
     columnDefs.value = Object.keys(res.data[0]).map((item) => {
