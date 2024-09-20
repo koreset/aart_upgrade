@@ -72,19 +72,23 @@
               <v-col class="d-flex" cols="6">
                 <v-file-input
                   v-model="file"
-                  outlined
-                  dense
+                  variant="outlined"
+                  density="compact"
                   show-size
                   accept=".csv"
                   placeholder="Click to choose a SAP resultsfile"
                   label="SAP Results File"
                   prepend-icon="mdi-paperclip"
                 >
-                  <template #selection="{ text }">
-                    <v-chip small label color="primary">{{ text }}</v-chip>
-                  </template>
                 </v-file-input>
-                <v-btn rounded small class="primary ml-7" @click="uploadSAPFile">Upload</v-btn>
+                <v-btn
+                  rounded
+                  variant="outlined"
+                  size="small"
+                  class="primary ml-7"
+                  @click="uploadSAPFile"
+                  >Upload</v-btn
+                >
               </v-col>
             </v-row>
 
@@ -92,9 +96,10 @@
               <v-col cols="3">
                 <v-text-field
                   v-model="searchQuery"
+                  prepend-inner-icon="mdi-magnify"
                   label="Search Run Name"
-                  outlined
-                  dense
+                  variant="outlined"
+                  density="compact"
                   clearable
                 ></v-text-field>
               </v-col>
@@ -120,20 +125,20 @@
                       <td class="d-flex justify-center">
                         <v-btn
                           class="mr-4 mt-2"
-                          small
+                          size="small"
                           rounded
-                          depressed
+                          variant="outlined"
                           @click.stop="showSapData(item.run_name)"
-                          ><v-icon color="accent">mdi-information</v-icon><span>INFO</span></v-btn
+                          ><v-icon color="accent">mdi-information</v-icon><span>Info</span></v-btn
                         >
                         <v-btn
                           class="mt-2"
-                          small
+                          size="small"
                           rounded
-                          depressed
+                          variant="outlined"
                           @click.stop="confirmSapDelete(item.run_name)"
                           ><v-icon color="red">mdi-delete</v-icon>
-                          <span>DELETE</span>
+                          <span>Delete</span>
                         </v-btn>
                       </td>
                     </tr>
@@ -145,30 +150,8 @@
         </base-card>
       </v-col>
     </v-row>
-    <v-dialog v-model="deleteTableDialog" persistent max-width="500">
-      <v-card>
-        <v-card-title class="headline">
-          <v-icon color="red" size="50">mdi-alert-circle</v-icon> Delete Confirmation</v-card-title
-        >
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col>
-                Are you sure you want to delete {{ selectedTable }}? This will delete all data and
-                is no undoable.
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn rounded color="primary darken-1" text @click="deleteTable(false)">No</v-btn>
-          <v-btn rounded color="primary darken-1" text @click="deleteTable(true)">Yes</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
 
-    <v-dialog v-model="deleteSapDialog" persistent max-width="500">
+    <!-- <v-dialog v-model="deleteSapDialog" persistent max-width="500">
       <v-card>
         <v-card-title class="headline">
           <v-icon color="red" size="50">mdi-alert-circle</v-icon> Delete Confirmation</v-card-title
@@ -189,12 +172,13 @@
           <v-btn rounded color="primary darken-1" text @click="deleteSapData(true)">Yes</v-btn>
         </v-card-actions>
       </v-card>
-    </v-dialog>
+    </v-dialog> -->
 
     <v-snackbar v-model="snackbar" centered :timeout="timeout" :multi-line="true">
       {{ text }}
       <v-btn rounded color="red" text @click="snackbar = false">Close</v-btn>
     </v-snackbar>
+    <confirmation-dialog ref="confirmDelete" />
   </v-container>
 </template>
 
@@ -204,17 +188,19 @@ import formatValues from '@/renderer/utils/format_values'
 import { computed, onMounted, ref } from 'vue'
 import BaseCard from '@/renderer/components/BaseCard.vue'
 import FileUpdater from '@/renderer/components/FileUpdater.vue'
+import FileInfo from '@/renderer/components/FileInfo.vue'
+import ConfirmationDialog from '@/renderer/components/ConfirmDialog.vue'
 // import createColumnDefs from "../../utils/format_values";
 
 // data
+const confirmDelete = ref()
 const infoDialog = ref(false)
 const uploadComplete = ref(false)
 const searchQuery = ref('')
 const tableDialog = ref(false)
 const loaderSize = ref(0)
-const deleteTableDialog = ref(false)
 const deleteSapDialog = ref(false)
-const selectedSap = ref(null)
+// const selectedSap = ref(null)
 const tableData = ref([])
 const columnDefs: any = ref([])
 const rowData: any = ref([])
@@ -282,48 +268,75 @@ const removeTimePortion = (value: string) => {
   }
 }
 
-const confirmTableDelete = (tableType: string) => {
-  // selectedTable.value = tableType
-  deleteTableDialog.value = true
+const confirmTableDelete = async (tableType: string) => {
+  try {
+    const result = await confirmDelete.value.open(
+      'Delete Confirmationsssss',
+      `Are you sure you want to delete ${tableType}? This will delete all data and is no undoable.`
+    )
+
+    if (result) {
+      const tableType = selectedTable.value.replace(/ /g, '')
+      CsmEngine.deleteTable(tableType.toLowerCase()).then(() => {
+        text.value = 'Table was successfully deleted'
+        snackbar.value = true
+        // deleteTableDialog.value = false
+      })
+    } else {
+      text.value = 'Table was not deleted'
+      snackbar.value = true
+      // deleteTableDialog.value = false
+    }
+
+    // selectedTable.value = tableType
+    // deleteTableDialog.value = true
+  } catch (e) {
+    console.log(e)
+  }
 }
 
-const confirmSapDelete = (runName: string) => {
-  // selectedRun.value = runName
-  deleteSapDialog.value = true
-}
+const confirmSapDelete = async (runName: string) => {
+  try {
+    const value = await confirmDelete.value.open(
+      'Delete Confirmation',
+      `Are you sure you want to delete ${runName}? This will delete all data and is no undoable.`
+    )
 
-const deleteSapData = (value: boolean) => {
-  if (value) {
-    CsmEngine.deleteSapData(selectedRun.value).then(() => {
-      text.value = 'SAP Data was successfully deleted'
-      sapFileList.value = sapFileList.value.filter(
-        (item: any) => item.run_name !== selectedRun.value
-      )
+    if (value) {
+      CsmEngine.deleteSapData(selectedRun.value).then(() => {
+        text.value = 'SAP Data was successfully deleted'
+        sapFileList.value = sapFileList.value.filter(
+          (item: any) => item.run_name !== selectedRun.value
+        )
+        snackbar.value = true
+        deleteSapDialog.value = false
+      })
+    } else {
+      text.value = 'SAP Data was not deleted'
       snackbar.value = true
       deleteSapDialog.value = false
-    })
-  } else {
-    text.value = 'SAP Data was not deleted'
-    snackbar.value = true
-    deleteSapDialog.value = false
+    }
+  } catch (e) {
+    console.log(e)
   }
 }
 
-const deleteTable = (value: boolean) => {
-  if (value) {
-    const tableType = selectedTable.value.replace(/ /g, '')
-
-    CsmEngine.deleteTable(tableType.toLowerCase()).then(() => {
-      text.value = 'Table was successfully deleted'
-      snackbar.value = true
-      deleteTableDialog.value = false
-    })
-  } else {
-    text.value = 'Table was not deleted'
-    snackbar.value = true
-    deleteTableDialog.value = false
-  }
-}
+// const deleteSapData = (value: boolean) => {
+//   if (value) {
+//     CsmEngine.deleteSapData(selectedRun.value).then(() => {
+//       text.value = 'SAP Data was successfully deleted'
+//       sapFileList.value = sapFileList.value.filter(
+//         (item: any) => item.run_name !== selectedRun.value
+//       )
+//       snackbar.value = true
+//       deleteSapDialog.value = false
+//     })
+//   } else {
+//     text.value = 'SAP Data was not deleted'
+//     snackbar.value = true
+//     deleteSapDialog.value = false
+//   }
+// }
 
 // const dismissTableDialog = (value: boolean) => {
 //   tableDialog.value = value
@@ -347,6 +360,7 @@ const createColumnDefs = (data: any) => {
 const loadData = (tableName: string) => {
   CsmEngine.getDataForTable(tableName).then((res) => {
     tableData.value = res.data.table_data
+    console.log('table data: ', tableData.value)
     if (tableData.value !== null) {
       rowData.value = []
       createColumnDefs(tableData.value)
@@ -373,8 +387,11 @@ const loadData = (tableName: string) => {
 
 const loadSapData = (runName: string) => {
   rowData.value = []
+  selectedTable.value = runName
   CsmEngine.getSapResultsForRun(runName).then((res) => {
     tableData.value = res.data
+    console.log('table data: ', tableData.value)
+
     if (tableData.value !== null) {
       rowData.value = []
       createColumnDefs(tableData.value)
@@ -392,9 +409,10 @@ const loadSapData = (runName: string) => {
         rowData.value.push(transformed)
       })
     }
+    infoDialog.value = true
     tableDialog.value = true
   })
-  tableDialog.value = true
+  infoDialog.value = true
 }
 
 // const getModelPoints = () => {}

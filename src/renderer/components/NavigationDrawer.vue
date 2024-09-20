@@ -160,6 +160,12 @@
         <v-list-item :to="{ name: 'ifrs17-tables' }">
           <v-list-item-title>Tables</v-list-item-title>
         </v-list-item>
+        <v-list-item :to="{ name: 'ifrs17-run-settings' }">
+          <v-list-item-title>Run Settings</v-list-item-title>
+        </v-list-item>
+        <v-list-item :to="{ name: 'ifrs17-run-results' }">
+          <v-list-item-title>Run Results</v-list-item-title>
+        </v-list-item>
       </v-list-group>
     </v-list>
   </v-navigation-drawer>

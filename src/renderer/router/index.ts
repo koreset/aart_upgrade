@@ -213,6 +213,26 @@ export default createRouter({
       name: 'ifrs17-tables',
       component: () => import('../screens/ifrs17/Tables.vue')
     },
+    {
+      path: '/ifrs17/run-settings',
+      name: 'ifrs17-run-settings',
+      component: () => import('../screens/ifrs17/RunSettings.vue')
+    },
+    {
+      path: '/ifrs17/run-results',
+      name: 'ifrs17-run-results',
+      component: () => import('../screens/ifrs17/RunResults.vue')
+    },
+    {
+      path: '/ifrs17/aos-run-detail/:id/:run_date',
+      name: 'ifrs17-aos-run-detail',
+      component: () => import('../screens/ifrs17/AosRunResultDetail.vue')
+    },
+    {
+      path: '/ifrs17/paa-run-detail/:id/:run_date',
+      name: 'ifrs17-paa-run-detail',
+      component: () => import('../screens/ifrs17/PaaRunResultDetail.vue')
+    },
 
     {
       path: '/error',
