@@ -157,20 +157,20 @@
             title="IFRS17"
           ></v-list-item>
         </template>
+        <v-list-item :to="{ name: 'ifrs17-ra-drivers' }">
+          <v-list-item-title>RA Drivers</v-list-item-title>
+        </v-list-item>
         <v-list-item :to="{ name: 'ifrs17-tables' }">
           <v-list-item-title>Tables</v-list-item-title>
+        </v-list-item>
+        <v-list-item :to="{ name: 'ifrs17-aos-config' }">
+          <v-list-item-title>AoS Configuration</v-list-item-title>
         </v-list-item>
         <v-list-item :to="{ name: 'ifrs17-run-settings' }">
           <v-list-item-title>Run Settings</v-list-item-title>
         </v-list-item>
         <v-list-item :to="{ name: 'ifrs17-run-results' }">
           <v-list-item-title>Run Results</v-list-item-title>
-        </v-list-item>
-        <v-list-item :to="{ name: 'ifrs17-aos-config' }">
-          <v-list-item-title>AoS Configuration</v-list-item-title>
-        </v-list-item>
-        <v-list-item :to="{ name: 'ifrs17-ra-drivers' }">
-          <v-list-item-title>RA Drivers</v-list-item-title>
         </v-list-item>
       </v-list-group>
       <v-list-group value="IFRS17 Reports">
@@ -207,6 +207,12 @@
         </v-list-item>
         <v-list-item :to="{ name: 'ifrs17-reports-balance-sheet-summary' }">
           <v-list-item-title>Balance Sheet Summary</v-list-item-title>
+        </v-list-item>
+        <v-list-item :to="{ name: 'ifrs17-reports-financials' }">
+          <v-list-item-title>Financial Reports</v-list-item-title>
+        </v-list-item>
+        <v-list-item :to="{ name: 'ifrs17-reports-liability-movements' }">
+          <v-list-item-title>Liability Movements</v-list-item-title>
         </v-list-item>
       </v-list-group>
     </v-list>

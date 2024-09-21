@@ -209,10 +209,22 @@ export default createRouter({
       component: () => import('../screens/exp_analysis/RunDetail.vue')
     },
     {
+      path: '/ifrs17/ra-drivers',
+      name: 'ifrs17-ra-drivers',
+      component: () => import('../screens/ifrs17/RiskAdjustmentDrivers.vue')
+    },
+
+    {
       path: '/ifrs17/tables',
       name: 'ifrs17-tables',
       component: () => import('../screens/ifrs17/Tables.vue')
     },
+    {
+      path: '/ifrs17/aos-config',
+      name: 'ifrs17-aos-config',
+      component: () => import('../screens/ifrs17/AosConfiguration.vue')
+    },
+
     {
       path: '/ifrs17/run-settings',
       name: 'ifrs17-run-settings',
@@ -232,16 +244,6 @@ export default createRouter({
       path: '/ifrs17/paa-run-detail/:id/:run_date',
       name: 'ifrs17-paa-run-detail',
       component: () => import('../screens/ifrs17/PaaRunResultDetail.vue')
-    },
-    {
-      path: '/ifrs17/aos-config',
-      name: 'ifrs17-aos-config',
-      component: () => import('../screens/ifrs17/AosConfiguration.vue')
-    },
-    {
-      path: '/ifrs17/ra-drivers',
-      name: 'ifrs17-ra-drivers',
-      component: () => import('../screens/ifrs17/RiskAdjustmentDrivers.vue')
     },
     {
       path: '/ifrs17/reports/aos',
@@ -292,6 +294,16 @@ export default createRouter({
       path: '/ifrs17/reports/balance-sheet-summary',
       name: 'ifrs17-reports-balance-sheet-summary',
       component: () => import('../screens/ifrs17/reports/BalanceSheetSummaries.vue')
+    },
+    {
+      path: '/ifrs17/reports/financials',
+      name: 'ifrs17-reports-financials',
+      component: () => import('../screens/ifrs17/reports/FinancialReports.vue')
+    },
+    {
+      path: '/ifrs17/reports/liability-movements',
+      name: 'ifrs17-reports-liability-movements',
+      component: () => import('../screens/ifrs17/reports/LiabilityMovementReports.vue')
     },
 
     {
