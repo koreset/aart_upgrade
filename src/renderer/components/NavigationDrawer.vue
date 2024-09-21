@@ -166,6 +166,12 @@
         <v-list-item :to="{ name: 'ifrs17-run-results' }">
           <v-list-item-title>Run Results</v-list-item-title>
         </v-list-item>
+        <v-list-item :to="{ name: 'ifrs17-aos-config' }">
+          <v-list-item-title>AoS Configuration</v-list-item-title>
+        </v-list-item>
+        <v-list-item :to="{ name: 'ifrs17-ra-drivers' }">
+          <v-list-item-title>RA Drivers</v-list-item-title>
+        </v-list-item>
       </v-list-group>
     </v-list>
   </v-navigation-drawer>

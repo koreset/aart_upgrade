@@ -160,16 +160,26 @@ const roundPercent = (number) => {
   return number.toFixed(2)
 }
 
-const deleteJob = (id, type, runDate) => {
-  CsmEngine.deleteIfrs17Job(id, type, runDate)
-    .then(() => {
-      csmRuns.value = csmRuns.value.filter(function (elem) {
-        return elem.id !== id
-      })
+const deleteJob = async (id, type, runDate) => {
+  try {
+    const res = await confirmDeleteDialog.value.open(
+      'Delete Confirmation',
+      'Are you sure you want to delete?'
+    )
+    if (res) {
+      CsmEngine.deleteIfrs17Job(id, type, runDate)
+        .then(() => {
+          csmRuns.value = csmRuns.value.filter(function (elem) {
+            return elem.id !== id
+          })
 
-      dialog.value = false
-    })
-    .catch(() => {})
+          dialog.value = false
+        })
+        .catch(() => {})
+    }
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 const checkNumberValid = (number) => {
@@ -203,89 +213,6 @@ onMounted(async () => {
     }, 2000)
   }
 })
-
-// export default {
-//   data() {
-//     return {
-//       backSign: '<',
-//       dialog: false,
-//       selectedJobId: null,
-//       csmRuns: [],
-//       loadingComlete: false
-//     }
-//   },
-//   filters: {
-//     moment: function (date) {
-//       return moment(date).format('MMM Do YYYY, h:mm:ss a')
-//     },
-//     toMinutes: function (number) {
-//       let minutes, seconds
-//       if (number < 60) {
-//         minutes = 0
-//         seconds = Math.floor(number)
-//       } else {
-//         // TODO
-//         minutes = Math.floor(number / 60)
-//         seconds = number % 60
-//         seconds = Math.round(seconds)
-//       }
-//       return minutes + 'm, ' + seconds + 's'
-//     },
-//     roundPercent: function (number) {
-//       return number.toFixed(2)
-//     },
-//     checkNumberValid(number) {
-//       if (isNaN(number)) {
-//         return 0
-//       }
-//       return number
-//     }
-//   },
-//   methods: {
-//     confirmDelete(id, type, run_date) {
-//       this.selectedJobId = id
-//       this.selectedMeasurementType = type
-//       this.selectedRunDate = run_date
-//       this.dialog = true
-//     },
-//     deleteJob(id) {
-//       CsmEngine.deleteIfrs17Job(id, this.selectedMeasurementType, this.selectedRunDate)
-//         .then(() => {
-//           this.csmRuns = this.csmRuns.filter(function (elem) {
-//             return elem.id !== id
-//           })
-
-//           this.dialog = false
-//         })
-//         .catch(() => {})
-//     }
-//   },
-
-//   async mounted() {
-//     const res = await CsmEngine.getCsmRuns()
-//     this.csmRuns = res.data
-//     if (
-//       this.csmRuns.length > 0 &&
-//       this.csmRuns.some(
-//         (job) => job.processing_status === 'queued' || job.processing_status === 'running'
-//       )
-//     ) {
-//       pollTimer = setInterval(() => {
-//         if (
-//           this.csmRuns.some(
-//             (job) => job.processing_status === 'queued' || job.processing_status === 'running'
-//           )
-//         ) {
-//           CsmEngine.getCsmRuns().then((res) => {
-//             this.csmRuns = res.data
-//           })
-//         } else {
-//           clearInterval(pollTimer)
-//         }
-//       }, 2000)
-//     }
-//   }
-// }
 </script>
 
 <style></style>

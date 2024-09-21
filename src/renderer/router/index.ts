@@ -233,6 +233,16 @@ export default createRouter({
       name: 'ifrs17-paa-run-detail',
       component: () => import('../screens/ifrs17/PaaRunResultDetail.vue')
     },
+    {
+      path: '/ifrs17/aos-config',
+      name: 'ifrs17-aos-config',
+      component: () => import('../screens/ifrs17/AosConfiguration.vue')
+    },
+    {
+      path: '/ifrs17/ra-drivers',
+      name: 'ifrs17-ra-drivers',
+      component: () => import('../screens/ifrs17/RiskAdjustmentDrivers.vue')
+    },
 
     {
       path: '/error',
