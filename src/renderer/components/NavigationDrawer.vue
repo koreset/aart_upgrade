@@ -199,6 +199,9 @@
         <v-list-item :to="{ name: 'ifrs17-reports-sub-ledger' }">
           <v-list-item-title>Sub Ledger</v-list-item-title>
         </v-list-item>
+        <v-list-item :to="{ name: 'ifrs17-reports-trial-balance' }">
+          <v-list-item-title>Trial Balance</v-list-item-title>
+        </v-list-item>
       </v-list-group>
     </v-list>
   </v-navigation-drawer>

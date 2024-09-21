@@ -271,7 +271,12 @@ export default createRouter({
     {
       path: '/ifrs17/reports/sub-ledger',
       name: 'ifrs17-reports-sub-ledger',
-      component: () => import('../screens/ifrs17/reports/SubLedger.vue')
+      component: () => import('../screens/ifrs17/reports/SubLedgerReports.vue')
+    },
+    {
+      path: '/ifrs17/reports/trial-balance',
+      name: 'ifrs17-reports-trial-balance',
+      component: () => import('../screens/ifrs17/reports/TrialBalanceReports.vue')
     },
 
     {
