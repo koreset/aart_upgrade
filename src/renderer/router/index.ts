@@ -258,6 +258,11 @@ export default createRouter({
       name: 'ifrs17-reports-paa-buildup',
       component: () => import('../screens/ifrs17/reports/PaaBuildupReports.vue')
     },
+    {
+      path: '/ifrs17/reports/bel-buildup',
+      name: 'ifrs17-reports-bel-buildup',
+      component: () => import('../screens/ifrs17/reports/BelBuildupReports.vue')
+    },
 
     {
       path: '/error',
