@@ -268,6 +268,11 @@ export default createRouter({
       name: 'ifrs17-reports-journal-entries',
       component: () => import('../screens/ifrs17/reports/JournalEntriesReport.vue')
     },
+    {
+      path: '/ifrs17/reports/sub-ledger',
+      name: 'ifrs17-reports-sub-ledger',
+      component: () => import('../screens/ifrs17/reports/SubLedger.vue')
+    },
 
     {
       path: '/error',

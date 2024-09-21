@@ -196,6 +196,9 @@
         <v-list-item :to="{ name: 'ifrs17-reports-journal-entries' }">
           <v-list-item-title>Journal Entries</v-list-item-title>
         </v-list-item>
+        <v-list-item :to="{ name: 'ifrs17-reports-sub-ledger' }">
+          <v-list-item-title>Sub Ledger</v-list-item-title>
+        </v-list-item>
       </v-list-group>
     </v-list>
   </v-navigation-drawer>
