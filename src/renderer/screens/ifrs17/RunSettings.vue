@@ -491,7 +491,7 @@ const addToJobs = async () => {
     body.risk_adjustment_year = selectedRiskAdjustmentYear.value
   }
   if (openingBalDate.value !== null) {
-    body.opening_bal_date = formatDateString(openingBalDate.value)
+    body.opening_bal_date = formatDateString(openingBalDate.value, true, true, false)
   }
   body.finance_version = financeVersion.value
 

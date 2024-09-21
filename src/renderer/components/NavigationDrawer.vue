@@ -193,6 +193,9 @@
         <v-list-item :to="{ name: 'ifrs17-reports-bel-buildup' }">
           <v-list-item-title>BEL Build Up</v-list-item-title>
         </v-list-item>
+        <v-list-item :to="{ name: 'ifrs17-reports-journal-entries' }">
+          <v-list-item-title>Journal Entries</v-list-item-title>
+        </v-list-item>
       </v-list-group>
     </v-list>
   </v-navigation-drawer>
