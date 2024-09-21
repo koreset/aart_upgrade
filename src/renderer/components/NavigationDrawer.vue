@@ -173,6 +173,24 @@
           <v-list-item-title>RA Drivers</v-list-item-title>
         </v-list-item>
       </v-list-group>
+      <v-list-group value="IFRS17 Reports">
+        <template #activator="{ props }">
+          <v-list-item
+            v-bind="props"
+            prepend-icon="mdi-account-circle"
+            title="IFRS17 Reports"
+          ></v-list-item>
+        </template>
+        <v-list-item :to="{ name: 'ifrs17-reports-aos' }">
+          <v-list-item-title>AoS</v-list-item-title>
+        </v-list-item>
+        <v-list-item :to="{ name: 'ifrs17-reports-paa' }">
+          <v-list-item-title>PAA</v-list-item-title>
+        </v-list-item>
+        <v-list-item :to="{ name: 'ifrs17-reports-paa-buildup' }">
+          <v-list-item-title>PAA Build Up</v-list-item-title>
+        </v-list-item>
+      </v-list-group>
     </v-list>
   </v-navigation-drawer>
 </template>

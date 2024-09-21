@@ -243,6 +243,21 @@ export default createRouter({
       name: 'ifrs17-ra-drivers',
       component: () => import('../screens/ifrs17/RiskAdjustmentDrivers.vue')
     },
+    {
+      path: '/ifrs17/reports/aos',
+      name: 'ifrs17-reports-aos',
+      component: () => import('../screens/ifrs17/reports/AosRunReports.vue')
+    },
+    {
+      path: '/ifrs17/reports/paa',
+      name: 'ifrs17-reports-paa',
+      component: () => import('../screens/ifrs17/reports/PaaRunReports.vue')
+    },
+    {
+      path: '/ifrs17/reports/paa-buildup',
+      name: 'ifrs17-reports-paa-buildup',
+      component: () => import('../screens/ifrs17/reports/PaaBuildupReports.vue')
+    },
 
     {
       path: '/error',
