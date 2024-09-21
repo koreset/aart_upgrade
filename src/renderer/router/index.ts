@@ -305,6 +305,21 @@ export default createRouter({
       name: 'ifrs17-reports-liability-movements',
       component: () => import('../screens/ifrs17/reports/LiabilityMovementReports.vue')
     },
+    {
+      path: '/ifrs17/reports/insurance-revenue-analysis',
+      name: 'ifrs17-reports-insurance-revenue-analysis',
+      component: () => import('../screens/ifrs17/reports/InsuranceRevenueAnalysisReports.vue')
+    },
+    {
+      path: '/ifrs17/reports/initial-recognition',
+      name: 'ifrs17-reports-initial-recognition',
+      component: () => import('../screens/ifrs17/reports/InitialRecognitionReports.vue')
+    },
+    {
+      path: '/ifrs17/reports/csm-projection',
+      name: 'ifrs17-reports-csm-projection',
+      component: () => import('../screens/ifrs17/reports/CsmProjectionReports.vue')
+    },
 
     {
       path: '/error',

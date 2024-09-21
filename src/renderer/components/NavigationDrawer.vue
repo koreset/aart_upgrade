@@ -214,6 +214,15 @@
         <v-list-item :to="{ name: 'ifrs17-reports-liability-movements' }">
           <v-list-item-title>Liability Movements</v-list-item-title>
         </v-list-item>
+        <v-list-item :to="{ name: 'ifrs17-reports-insurance-revenue-analysis' }">
+          <v-list-item-title>Insurance Revenue Analysis</v-list-item-title>
+        </v-list-item>
+        <v-list-item :to="{ name: 'ifrs17-reports-initial-recognition' }">
+          <v-list-item-title>Initial Recognition</v-list-item-title>
+        </v-list-item>
+        <v-list-item :to="{ name: 'ifrs17-reports-csm-projection' }">
+          <v-list-item-title>CSM Projection</v-list-item-title>
+        </v-list-item>
       </v-list-group>
     </v-list>
   </v-navigation-drawer>
