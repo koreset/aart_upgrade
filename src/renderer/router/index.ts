@@ -278,6 +278,21 @@ export default createRouter({
       name: 'ifrs17-reports-trial-balance',
       component: () => import('../screens/ifrs17/reports/TrialBalanceReports.vue')
     },
+    {
+      path: '/ifrs17/reports/closing-balance-details',
+      name: 'ifrs17-reports-closing-balance-details',
+      component: () => import('../screens/ifrs17/reports/ClosingBalanceDetailsReports.vue')
+    },
+    {
+      path: '/ifrs17/reports/closing-balance-details',
+      name: 'ifrs17-reports-closing-balance-details',
+      component: () => import('../screens/ifrs17/reports/ClosingBalanceDetailsReports.vue')
+    },
+    {
+      path: '/ifrs17/reports/balance-sheet-summary',
+      name: 'ifrs17-reports-balance-sheet-summary',
+      component: () => import('../screens/ifrs17/reports/BalanceSheetSummaries.vue')
+    },
 
     {
       path: '/error',

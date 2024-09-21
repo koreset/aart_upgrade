@@ -234,6 +234,18 @@ export default {
   getJournalEntryProducts(runDate) {
     return Api.get('csm-engine/journal-entries/products/' + runDate)
   },
+  getBalanceSheetSummaries(runDate) {
+    return Api.get('csm-engine/balance-sheet-summaries/' + runDate)
+  },
+  getBalanceSheetSummaryByProduct(runDate, prodCode) {
+    return Api.get('csm-engine/balance-sheet-summaries/' + runDate + '/product/' + prodCode)
+  },
+  getBalanceSheetSummaryByProductGroup(runDate, prodCode, group) {
+    return Api.get(
+      'csm-engine/balance-sheet-summaries/' + runDate + '/product/' + prodCode + '/group/' + group
+    )
+  },
+
   getBalanceSheetProducts(runDate) {
     return Api.get('csm-engine/balance-sheet-reports/' + runDate)
   },

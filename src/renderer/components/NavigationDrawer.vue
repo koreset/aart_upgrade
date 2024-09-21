@@ -202,6 +202,12 @@
         <v-list-item :to="{ name: 'ifrs17-reports-trial-balance' }">
           <v-list-item-title>Trial Balance</v-list-item-title>
         </v-list-item>
+        <v-list-item :to="{ name: 'ifrs17-reports-closing-balance-details' }">
+          <v-list-item-title>Closing Balance</v-list-item-title>
+        </v-list-item>
+        <v-list-item :to="{ name: 'ifrs17-reports-balance-sheet-summary' }">
+          <v-list-item-title>Balance Sheet Summary</v-list-item-title>
+        </v-list-item>
       </v-list-group>
     </v-list>
   </v-navigation-drawer>
