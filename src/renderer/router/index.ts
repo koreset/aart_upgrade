@@ -66,6 +66,11 @@ export default createRouter({
       }
     },
     {
+      path: '/reporting',
+      name: 'reporting',
+      component: () => import('../screens/Reporting.vue')
+    },
+    {
       path: '/valuations/gmm/shock-settings',
       name: 'valuations-gmm-shock-settings',
       component: () => import('../screens/valuations/gmm/ShockSettings.vue')

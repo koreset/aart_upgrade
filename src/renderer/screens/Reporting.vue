@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <base-card class="rounded-lg">
+    <base-card :show-actions="false">
       <template #header>
         <span class="headline">Reporting</span>
       </template>
@@ -13,7 +13,7 @@
               density="compact"
               variant="outlined"
               label="Select a Product"
-              :items="productsList"
+              :items="allProducts"
               item-title="product_name"
               item-value="id"
               @update:modelValue="getDisclosureForProduct"
@@ -61,116 +61,114 @@
             <loading-indicator :loadingData="loadingMps" />
             <v-row v-if="modelPointSummary.length > 0">
               <v-col>
-                <v-simple-table class="model-stats trans-tables">
-                  <template #default>
-                    <thead>
-                      <tr>
-                        <th>Variable</th>
-                        <th>Min</th>
-                        <th>Max</th>
-                        <th>Sum</th>
-                        <th>Average</th>
-                        <th>Male</th>
-                        <th>Female</th>
-                        <th>Number of Zeroes</th>
-                        <th>Number of lives</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="item in modelPointSummary" :key="item.variable">
-                        <td>{{ transformText(item.variable) }}</td>
-                        <td>{{ item.min }}</td>
-                        <td>{{ item.max }}</td>
-                        <td>{{ item.sum }}</td>
-                        <td>{{ reduceDecimal(item.average) }}</td>
-                        <td>{{ item.male }}</td>
-                        <td>{{ item.female }}</td>
-                        <td>{{ item.number_of_zeroes }}</td>
-                        <td>{{ item.number_of_lives }}</td>
-                      </tr>
-                    </tbody>
-                  </template>
-                </v-simple-table>
+                <v-table>
+                  <thead>
+                    <tr class="table-row">
+                      <th class="table-col">Variable</th>
+                      <th class="table-col">Min</th>
+                      <th class="table-col">Max</th>
+                      <th class="table-col">Sum</th>
+                      <th class="table-col">Average</th>
+                      <th class="table-col">Male</th>
+                      <th class="table-col">Female</th>
+                      <th class="table-col">Number of Zeroes</th>
+                      <th class="table-col">Number of lives</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="item in modelPointSummary" :key="item.variable">
+                      <td>{{ transformText(item.variable) }}</td>
+                      <td>{{ item.min }}</td>
+                      <td>{{ item.max }}</td>
+                      <td>{{ item.sum }}</td>
+                      <td>{{ reduceDecimal(item.average) }}</td>
+                      <td>{{ item.male }}</td>
+                      <td>{{ item.female }}</td>
+                      <td>{{ item.number_of_zeroes }}</td>
+                      <td>{{ item.number_of_lives }}</td>
+                    </tr>
+                  </tbody>
+                </v-table>
               </v-col>
             </v-row>
           </v-col>
         </v-row>
         <v-row v-if="reports">
           <v-col>
-            <v-row>
+            <v-row v-if="reports.lapse">
               <v-col>
                 <h3>Lapse Rates</h3>
               </v-col>
             </v-row>
-            <v-row>
+            <v-row v-if="reports.lapse && reports.lapse.length > 0">
               <v-col>
-                <v-data-table class="elevation-1" :headers="lapseHeaders" :items="reports.lapse">
-                </v-data-table>
+                <data-grid :columnDefs="lapseHeaders" :rowData="reports.lapse"></data-grid>
               </v-col>
             </v-row>
           </v-col>
         </v-row>
         <v-row v-if="reports">
           <v-col>
-            <v-row>
+            <v-row v-if="reports.parameters && reports.parameters.length > 0">
               <v-col>
                 <h3>Parameters</h3>
               </v-col>
             </v-row>
             <v-row>
               <v-col>
-                <v-data-table
+                <data-grid :columnDefs="parameterHeaders" :rowData="reports.parameters"></data-grid>
+                <!-- <v-data-table
                   class="elevation-1"
                   :headers="parameterHeaders"
                   :items="reports.parameters"
                 >
-                </v-data-table>
+                </v-data-table> -->
               </v-col>
             </v-row>
           </v-col>
         </v-row>
         <v-row v-if="reports">
           <v-col>
-            <v-card class="rounded-lg">
-              <v-card-title class="header-title accent white--text mb-2">
-                Mortality Rates (Female)
-              </v-card-title>
-              <v-card-text>
+            <base-card>
+              <template #header>
+                <span class="headline"> Mortality Rates (Female) </span>
+              </template>
+              <template #default>
                 <Chart
                   class="chart"
                   :options="mortalityFemaleOptions"
-                  :update-args="updateArgs"
+                  :updateArgs="updateArgs"
                 ></Chart>
-              </v-card-text>
-            </v-card>
+              </template>
+            </base-card>
           </v-col>
         </v-row>
         <v-row v-if="reports">
           <v-col>
-            <v-card class="rounded-lg">
-              <v-card-title class="header-title accent white--text mb-2">
-                Mortality Rates (Male)
-              </v-card-title>
-              <v-card-text>
+            <base-card>
+              <template #header>
+                <span class="headline"> Mortality Rates (Male) </span>
+              </template>
+              <template #default>
                 <Chart
                   class="chart"
                   :options="mortalityMaleOptions"
-                  :update-args="updateArgs"
+                  :updateArgs="updateArgs"
                 ></Chart>
-              </v-card-text>
-            </v-card>
+              </template>
+            </base-card>
           </v-col>
         </v-row>
         <v-row v-if="reports">
           <v-col>
-            <v-card class="rounded-lg">
-              <v-card-title class="header-title accent white--text mb-2">
-                Yield Curve
-              </v-card-title>
-              <v-card-text>
-                <Chart class="chart" :options="yieldOptions" :update-args="updateArgs"></Chart>
-              </v-card-text>
-            </v-card>
+            <base-card>
+              <template #header>
+                <span class="headline"> Yield Curve</span>
+              </template>
+              <template #default>
+                <Chart class="chart" :options="yieldOptions" :updateArgs="updateArgs"></Chart>
+              </template>
+            </base-card>
           </v-col>
         </v-row>
       </template>
@@ -178,14 +176,12 @@
   </v-container>
 </template>
 <script setup lang="ts">
+import { computed, onMounted, ref } from 'vue'
 import ProductService from '../api/ProductService'
+import { Chart } from 'highcharts-vue'
 import LoadingIndicator from '../components/LoadingIndicator.vue'
 import BaseCard from '../components/BaseCard.vue'
-import { Chart } from 'highcharts-vue'
-
-// import formatValues from '../utils/format_values'
-
-import { computed, ref } from 'vue'
+import DataGrid from '../components/tables/DataGrid.vue'
 // require('@gouch/to-title-case')
 
 // data
@@ -196,31 +192,31 @@ const availableModelPointVersions = ref([])
 const selectedProduct = ref(null)
 const selectedYear = ref(null)
 const selectedVersion = ref(null)
-const reports: any = ref([])
+const reports: any = ref(null)
 const updateArgs = ref([true, true, { duration: 1000 }])
 const modelPointSummary: any = ref([])
-const productsList = ref([])
+const allProducts: any = ref([])
+
+// lifecycle
+onMounted(async () => {
+  console.log('Mounted')
+  const prodResponse = await ProductService.getProducts()
+
+  console.log('Response', prodResponse.data)
+
+  prodResponse.data.forEach((family) => {
+    family.products.forEach((product) => {
+      allProducts.value.push(product)
+    })
+  })
+
+  console.log('All Products', allProducts.value)
+})
 
 // methods
-const transformText = (text) => {
-  text = text.replace(/_/g, ' ')
-  text = text.toTitleCase()
-  return text
-}
-
-const reduceDecimal = (number) => {
-  return Math.round(number)
-}
-
-const getProducts = () => {
-  ProductService.getProducts().then((res) => {
-    productsList.value = res.data
-  })
-}
-
 const getModelPointVersions = () => {
-  console.log('selected year:', selectedYear)
-  ProductService.getModelPointVersions(selectedProduct, selectedYear)
+  console.log('selected year:', selectedYear.value)
+  ProductService.getModelPointVersions(selectedProduct.value, selectedYear.value)
     .then((res) => {
       console.log(res.data)
       availableModelPointVersions.value = res.data
@@ -230,8 +226,9 @@ const getModelPointVersions = () => {
       availableModelPointVersions.value = []
     })
 }
+
 const getModelPointSumaryForYear = () => {
-  console.log('selected year:', selectedYear)
+  console.log('selected year:', selectedYear.value)
   modelPointSummary.value = []
   loadingMps.value = true
   if (selectedVersion.value === '' || selectedVersion.value == null) {
@@ -239,7 +236,11 @@ const getModelPointSumaryForYear = () => {
     return
   }
 
-  ProductService.getModelPointSummary(selectedProduct, selectedYear, selectedVersion)
+  ProductService.getModelPointSummary(
+    selectedProduct.value,
+    selectedYear.value,
+    selectedVersion.value
+  )
     .then((res) => {
       console.log(res.data)
       modelPointSummary.value = res.data
@@ -255,12 +256,26 @@ const getModelPointSumaryForYear = () => {
 const getDisclosureForProduct = () => {
   reports.value = null
   loadingAll.value = true
-  ProductService.getDisclosures(selectedProduct).then((res) => {
+  ProductService.getDisclosures(selectedProduct.value).then((res) => {
     reports.value = res.data
-    console.log(reports)
+    console.log(reports.value)
     availableModelPointYears.value = reports.value.model_point_years
     loadingAll.value = false
   })
+}
+
+const transformText = (text: string) => {
+  text = text.replace(/_/g, ' ')
+  text = text
+    .toLowerCase()
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+  return text
+}
+
+const reduceDecimal = (number: number) => {
+  return Math.round(number)
 }
 
 // computed
@@ -270,13 +285,15 @@ const mortalityFemaleOptions = computed(() => {
   const cats: any = []
   const series1: any = { name: currentYear, color: '#edc356', data: [] }
   const series2: any = { name: previousYear, color: '#777eda', data: [] }
-  reports.value.mortality.forEach((item) => {
-    if (item.gender === 'F') {
-      cats.push(item.anb)
-      series1.data.push(item.current_year)
-      series2.data.push(item.past_year)
-    }
-  })
+  if (reports.value !== null) {
+    reports.value.mortality.forEach((item: any) => {
+      if (item.gender === 'F') {
+        cats.push(item.anb)
+        series1.data.push(item.current_year)
+        series2.data.push(item.past_year)
+      }
+    })
+  }
 
   return {
     credits: {
@@ -296,13 +313,15 @@ const mortalityMaleOptions = computed(() => {
   const cats: any = []
   const series1: any = { name: currentYear, color: '#edc356', data: [] }
   const series2: any = { name: previousYear, color: '#777eda', data: [] }
-  reports.value.mortality.forEach((item) => {
-    if (item.gender === 'M') {
-      cats.push(item.anb)
-      series1.data.push(item.current_year)
-      series2.data.push(item.past_year)
-    }
-  })
+  if (reports.value !== null) {
+    reports.value.mortality.forEach((item: any) => {
+      if (item.gender === 'M') {
+        cats.push(item.anb)
+        series1.data.push(item.current_year)
+        series2.data.push(item.past_year)
+      }
+    })
+  }
 
   return {
     credits: {
@@ -348,22 +367,22 @@ const yieldOptions = computed(() => {
 const lapseHeaders = computed(() => {
   const currentYear = new Date().getFullYear()
   return [
-    { text: 'Duration In Force Months', value: 'duration_in_force_months' },
-    { text: currentYear, value: 'current_year' },
-    { text: currentYear - 1, value: 'past_year' },
-    { text: 'Variance', value: 'variance' },
-    { text: '% Change', value: 'change' }
+    { headerName: 'Duration In Force Months', field: 'duration_in_force_months' },
+    { headerName: currentYear, field: 'current_year' },
+    { headerName: currentYear - 1, field: 'past_year' },
+    { headerName: 'Variance', field: 'variance' },
+    { headerName: '% Change', field: 'change' }
   ]
 })
 
 const parameterHeaders = computed(() => {
   const currentYear = new Date().getFullYear()
   return [
-    { text: 'Variable', value: 'variable' },
-    { text: currentYear, value: 'current_year' },
-    { text: currentYear - 1, value: 'previous_year' },
-    { text: 'Variance', value: 'variance' },
-    { text: '% Change', value: 'change' }
+    { headerName: 'Variable', field: 'variable' },
+    { headerName: currentYear, field: 'current_year' },
+    { headerName: currentYear - 1, field: 'previous_year' },
+    { headerName: 'Variance', field: 'variance' },
+    { headerName: '% Change', field: 'change' }
   ]
 })
 
@@ -400,14 +419,13 @@ const parameterHeaders = computed(() => {
 //       const cats = []
 //       const series1 = { name: currentYear, color: '#edc356', data: [] }
 //       const series2 = { name: previousYear, color: '#777eda', data: [] }
-//       reports.value.mortality.forEach((item) => {
+//       this.reports.mortality.forEach((item) => {
 //         if (item.gender === 'F') {
 //           cats.push(item.anb)
 //           series1.data.push(item.current_year)
 //           series2.data.push(item.past_year)
 //         }
 //       })
-
 //       return {
 //         credits: {
 //           enabled: false
@@ -505,7 +523,6 @@ const parameterHeaders = computed(() => {
 //       return productList
 //     }
 //   },
-//   created() {},
 //   methods: {
 //     getModelPointVersions() {
 //       console.log('selected year:', this.selectedYear)

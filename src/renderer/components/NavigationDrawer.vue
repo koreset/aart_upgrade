@@ -33,6 +33,9 @@
       <v-list-item :to="{ name: 'product-comparison' }" :prepend-icon="'mdi-table'">
         <v-list-item-title>Product Comparison</v-list-item-title>
       </v-list-item>
+      <v-list-item :to="{ name: 'reporting' }" :prepend-icon="'mdi-table'">
+        <v-list-item-title>Reports</v-list-item-title>
+      </v-list-item>
       <v-list-group value="Valuations">
         <template #activator="{ props }">
           <v-list-item
