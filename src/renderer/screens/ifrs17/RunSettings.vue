@@ -493,6 +493,7 @@ const runNameDuplicate = async (value) => {
 
 const getAvailableFinanceVersions = () => {
   availableVersions.value = []
+  financeVersion.value.value = null
   if (selectedMeasure.value.value === 'PAA') {
     CsmEngine.getAvailableFinanceVersions(selectedFinanceYear.value.value).then((res) => {
       availableVersions.value = res.data
@@ -549,7 +550,9 @@ const showPAAFinanceBlock = () => {
 }
 
 const showFinanceFile = () => {
-  if (selectedMeasure.value !== null) {
+  if (selectedMeasure.value.value !== null) {
+    console.log('clearing fields')
+
     if (selectedMeasure.value.value === 'GMM' || selectedMeasure.value.value === 'VFA') {
       showGMMBlocks.value = true
       showPAARuns.value = false
@@ -565,6 +568,9 @@ const showFinanceFile = () => {
       }
     }
   } else {
+    console.log('clearing fields 2')
+    handleReset()
+
     showGMMBlocks.value = false
     showPAARuns.value = false
     showPAAFinance.value = false
