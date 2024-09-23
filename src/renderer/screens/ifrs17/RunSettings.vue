@@ -329,7 +329,14 @@ import { useField, useForm } from 'vee-validate'
 import * as yup from 'yup'
 
 const schema = yup.object({
-  runName: yup.string().required('A valid run name is required'),
+  runName: yup
+    .string()
+    .required('A valid run name is required')
+    .test('unique-name', 'The run name is already taken', async (value) => {
+      if (!value) return false
+      const isDuplicate = await runNameDuplicate(value)
+      return !isDuplicate // Valid if it's NOT a duplicate
+    }),
   runDate: yup.date().required('A valid run date is required'),
   selectedMeasure: yup.string().required('A valid measurement model is required'),
   selectedConfig: yup
@@ -459,6 +466,18 @@ onMounted(() => {
 // methods
 const removeFromJobs = (item: any) => {
   csmRuns.value.splice(csmRuns.value.indexOf(item), 1)
+}
+
+const runNameDuplicate = async (value) => {
+  if (value) {
+    // const obj = csmRuns.value.find((x) => x.name === value)
+    // if (obj) {
+    //   return true
+    // }
+    const result = await CsmEngine.checkRunName(value)
+    console.log('result', result.data.result)
+    return result.data.result
+  }
 }
 
 const getAvailableFinanceVersions = () => {
