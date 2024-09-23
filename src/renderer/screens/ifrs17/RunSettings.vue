@@ -2,154 +2,159 @@
   <v-container fluid>
     <v-row>
       <v-col>
-        <v-card class="rounded-lg">
-          <v-card-title class="mb-4 header-title accent white--text"
-            >Run IFRS17 Engine</v-card-title
-          >
-          <v-card-text>
-            <v-row class="mx-6">
-              <v-col cols="6">
-                <v-text-field
-                  v-model="runName"
-                  variant="outlined"
-                  density="compact"
-                  label="Enter a name for this run"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="6">
-                <v-date-input
-                  v-model="runDate"
-                  readonly
-                  view-mode="month"
-                  prepend-icon=""
-                  prepend-inner-icon="$calendar"
-                  variant="outlined"
-                  density="compact"
-                  label="Run Date"
-                ></v-date-input>
-              </v-col>
-            </v-row>
-            <v-row class="mx-6">
-              <v-col cols="4">
-                <v-select
-                  v-model="selectedMeasure"
-                  variant="outlined"
-                  density="compact"
-                  label="Measurement Model"
-                  placeholder="Select a Measurement Model"
-                  :items="measures"
-                  clearable
-                  @update:modelValue="showFinanceFile"
-                ></v-select>
-              </v-col>
-              <v-col v-if="showPAARuns" cols="4">
-                <v-select
-                  v-model="selectedPAARun"
-                  variant="outlined"
-                  density="compact"
-                  placeholder="Select a PAA Run"
-                  label="PAA Run"
-                  :items="paaRuns"
-                  item-title="name"
-                  item-value="id"
-                  clearable
-                  return-object
-                  @update:modelValue="showPAAFinanceBlock"
-                ></v-select>
-              </v-col>
-              <v-col v-if="showPAARuns" cols="4">
-                <v-checkbox
-                  v-model="paaEligibilityTest"
-                  class="mt-1"
-                  :label="`Run PAA Eligibility Test`"
-                ></v-checkbox>
-              </v-col>
-              <v-col v-if="showGMMBlocks" cols="4">
-                <v-select
-                  v-model="selectedConfig"
-                  variant="outlined"
-                  density="compact"
-                  placeholder="Select an AoS Configuration"
-                  :items="aosConfigs"
-                  item-title="configuration_name"
-                  item-value="configuration_name"
-                  clearable
-                  return-object
-                  @update:modelValue="checkManualSap"
-                ></v-select>
-              </v-col>
-              <v-col v-if="showGMMBlocks" cols="4">
-                <v-select
-                  v-model="selectedTransitionType"
-                  variant="outlined"
-                  density="compact"
-                  placeholder="Select a Transition Type"
-                  :items="transitionTypes"
-                  item-title="trans_type"
-                  item-value="trans_type"
-                  clearable
-                ></v-select>
-              </v-col>
-            </v-row>
-            <v-row class="mx-6">
-              <v-col v-if="showGMMBlocks || showPAAFinance" cols="4">
-                <v-select
-                  v-model="selectedFinanceYear"
-                  variant="outlined"
-                  density="compact"
-                  placeholder="Select Finance Year"
-                  label="Finance Year"
-                  :items="availableFinanceYears"
-                  clearable
-                  @update:modelValue="getAvailableFinanceVersions"
-                ></v-select>
-              </v-col>
-              <v-col v-if="selectedFinanceYear && showFinanceVersion">
-                <v-select
-                  v-model="financeVersion"
-                  variant="outlined"
-                  density="compact"
-                  placeholder="Select a finance version"
-                  label="Finance File Version"
-                  :items="availableVersions"
-                ></v-select>
-              </v-col>
-              <v-col v-if="showGMMBlocks && !externalSAP" cols="4">
-                <v-select
-                  v-model="selectedRiskAdjustmentYear"
-                  variant="outlined"
-                  density="compact"
-                  placeholder="Select Risk Adjustment Year"
-                  label="Risk Adjustment Year"
-                  :items="availableRiskAdjustmentYears"
-                  clearable
-                ></v-select>
-              </v-col>
-              <v-col v-if="showGMMBlocks || showPAARuns" cols="4">
-                <v-date-input
-                  v-model="openingBalDate"
-                  readonly
-                  view-mode="month"
-                  prepend-icon=""
-                  prepend-inner-icon="$calendar"
-                  variant="outlined"
-                  density="compact"
-                  label="Opening Balance Date"
-                ></v-date-input>
-              </v-col>
-            </v-row>
-            <v-row class="mx-6">
-              <v-col>
-                <v-btn
-                  :disabled="runName === null && selectedMeasure === null"
-                  rounded
-                  size="small"
-                  variant="outlined"
-                  @click="addToJobs"
-                  >Add to Run Jobs</v-btn
-                >
-              </v-col>
-            </v-row>
+        <base-card :show-actions="false">
+          <template #header>
+            <span class="headline">Run IFRS17 Engine</span>
+          </template>
+          <template #default>
+            <form @submit.prevent="addToJobs">
+              <v-row class="mx-6">
+                <v-col cols="6">
+                  <v-text-field
+                    v-model="runName.value.value"
+                    variant="outlined"
+                    density="compact"
+                    label="Enter a name for this run"
+                    :error-messages="runName.errorMessage.value"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="6">
+                  <v-date-input
+                    v-model="runDate.value.value"
+                    readonly
+                    view-mode="month"
+                    prepend-icon=""
+                    prepend-inner-icon="$calendar"
+                    variant="outlined"
+                    density="compact"
+                    label="Run Date"
+                    :error-messages="runDate.errorMessage.value"
+                  ></v-date-input>
+                </v-col>
+              </v-row>
+              <v-row class="mx-6">
+                <v-col cols="4">
+                  <v-select
+                    v-model="selectedMeasure.value.value"
+                    variant="outlined"
+                    density="compact"
+                    label="Measurement Model"
+                    placeholder="Select a Measurement Model"
+                    :items="measures"
+                    clearable
+                    :error-messages="selectedMeasure.errorMessage.value"
+                    @update:modelValue="showFinanceFile"
+                  ></v-select>
+                </v-col>
+                <v-col v-if="showPAARuns" cols="4">
+                  <v-select
+                    v-model="selectedPAARun"
+                    variant="outlined"
+                    density="compact"
+                    placeholder="Select a PAA Run"
+                    label="PAA Run"
+                    :items="paaRuns"
+                    item-title="name"
+                    item-value="id"
+                    clearable
+                    return-object
+                    @update:modelValue="showPAAFinanceBlock"
+                  ></v-select>
+                </v-col>
+                <v-col v-if="showPAARuns" cols="4">
+                  <v-checkbox
+                    v-model="paaEligibilityTest"
+                    class="mt-1"
+                    :label="`Run PAA Eligibility Test`"
+                  ></v-checkbox>
+                </v-col>
+                <v-col v-if="showGMMBlocks" cols="4">
+                  <v-select
+                    v-model="selectedConfig.value.value"
+                    variant="outlined"
+                    density="compact"
+                    placeholder="Select an AoS Configuration"
+                    :items="aosConfigs"
+                    item-title="configuration_name"
+                    item-value="configuration_name"
+                    clearable
+                    return-object
+                    :error-messages="selectedConfig.errorMessage.value"
+                    @update:modelValue="checkManualSap"
+                  ></v-select>
+                </v-col>
+                <v-col v-if="showGMMBlocks" cols="4">
+                  <v-select
+                    v-model="selectedTransitionType.value.value"
+                    variant="outlined"
+                    density="compact"
+                    placeholder="Select a Transition Type"
+                    :items="transitionTypes"
+                    item-title="trans_type"
+                    item-value="trans_type"
+                    :error-messages="selectedTransitionType.errorMessage.value"
+                    clearable
+                  ></v-select>
+                </v-col>
+              </v-row>
+              <v-row class="mx-6">
+                <v-col v-if="showGMMBlocks || showPAAFinance" cols="4">
+                  <v-select
+                    v-model="selectedFinanceYear.value.value"
+                    variant="outlined"
+                    density="compact"
+                    placeholder="Select Finance Year"
+                    label="Finance Year"
+                    :items="availableFinanceYears"
+                    clearable
+                    :error-messages="selectedFinanceYear.errorMessage.value"
+                    @update:modelValue="getAvailableFinanceVersions"
+                  ></v-select>
+                </v-col>
+                <v-col v-if="selectedFinanceYear.value.value && showFinanceVersion">
+                  <v-select
+                    v-model="financeVersion.value.value"
+                    variant="outlined"
+                    density="compact"
+                    placeholder="Select a finance version"
+                    label="Finance File Version"
+                    :items="availableVersions"
+                  ></v-select>
+                </v-col>
+                <v-col v-if="showGMMBlocks && !externalSAP" cols="4">
+                  <v-select
+                    v-model="selectedRiskAdjustmentYear"
+                    variant="outlined"
+                    density="compact"
+                    placeholder="Select Risk Adjustment Year"
+                    label="Risk Adjustment Year"
+                    :items="availableRiskAdjustmentYears"
+                    clearable
+                  ></v-select>
+                </v-col>
+                <v-col v-if="showGMMBlocks || showPAARuns" cols="4">
+                  <v-date-input
+                    v-model="openingBalDate.value.value"
+                    readonly
+                    view-mode="month"
+                    prepend-icon=""
+                    prepend-inner-icon="$calendar"
+                    variant="outlined"
+                    density="compact"
+                    label="Opening Balance Date"
+                    :error-messages="openingBalDate.errorMessage.value"
+                  ></v-date-input>
+                </v-col>
+              </v-row>
+              <v-row class="mx-6">
+                <v-col>
+                  <v-btn type="submit" rounded size="small" variant="outlined"
+                    >Add to Run Jobs</v-btn
+                  >
+                </v-col>
+              </v-row>
+            </form>
+
             <v-row v-if="csmRuns.length > 0" class="mx-6">
               <v-col>
                 <v-table class="trans-tables">
@@ -205,11 +210,11 @@
               </v-col>
             </v-row>
             <v-row v-if="returnText !== ''" class="mx-6">
-              <v-col v-if="noError && selectedMeasure === 'GMM'">
+              <v-col v-if="noError && selectedMeasure.value.value === 'GMM'">
                 {{ returnText }}
                 <v-btn :to="'/csm-aos-run-reports/' + completedRunId" text>Here</v-btn>
               </v-col>
-              <v-col v-if="noError && selectedMeasure === 'PAA'">
+              <v-col v-if="noError && selectedMeasure.value.value === 'PAA'">
                 {{ returnText }}
                 <v-btn :to="'/csm-paa-run-reports/' + completedRunId" text>Here</v-btn>
               </v-col>
@@ -286,8 +291,8 @@
                 </v-table>
               </v-col>
             </v-row>
-          </v-card-text>
-        </v-card>
+          </template>
+        </base-card>
       </v-col>
     </v-row>
     <v-dialog v-model="dialog" persistent max-width="400">
@@ -319,9 +324,81 @@ import { onMounted, ref } from 'vue'
 import { VDateInput } from 'vuetify/lib/labs/components.mjs'
 import { useRouter } from 'vue-router'
 import formatDateString from '@/renderer/utils/helpers'
+import BaseCard from '@/renderer/components/BaseCard.vue'
+import { useField, useForm } from 'vee-validate'
+import * as yup from 'yup'
+
+const schema = yup.object({
+  runName: yup.string().required('A valid run name is required'),
+  runDate: yup.date().required('A valid run date is required'),
+  selectedMeasure: yup.string().required('A valid measurement model is required'),
+  selectedConfig: yup
+    .object()
+    .nullable()
+    .when('selectedMeasure', ([selectedMeasure], schema) => {
+      if (selectedMeasure === 'GMM' || selectedMeasure === 'VFA') {
+        return schema.required('An Aos configuration is required')
+      }
+      return schema
+    }),
+  selectedTransitionType: yup
+    .string()
+    .nullable()
+    .when('selectedMeasure', ([selectedMeasure], schema) => {
+      if (selectedMeasure === 'GMM' || selectedMeasure === 'VFA') {
+        return schema.required('A valid transition type is required')
+      }
+      return schema
+    }),
+  selectedPAARun: yup.object().nullable(),
+  paaEligibilityTest: yup.boolean().nullable(),
+  selectedFinanceYear: yup
+    .number()
+    .nullable()
+    .when('selectedMeasure', ([selectedMeasure], schema) => {
+      if (selectedMeasure === 'GMM' || selectedMeasure === 'VFA') {
+        return schema.required('A valid finance year is required')
+      }
+      return schema
+    }),
+  selectedRiskAdjustmentYear: yup.number().nullable(),
+  financeVersion: yup
+    .string()
+    .nullable()
+    .when('selectedMeasure', ([selectedMeasure], schema) => {
+      if (selectedMeasure === 'GMM' || selectedMeasure === 'VFA') {
+        return schema.required('A valid finance version is required')
+      }
+      return schema
+    }),
+  openingBalDate: yup
+    .date()
+    .nullable()
+    .when('selectedMeasure', ([selectedMeasure], schema) => {
+      if (selectedMeasure === 'GMM' || selectedMeasure === 'VFA') {
+        return schema.required('A valid opening balance date is required')
+      }
+      return schema
+    })
+})
+
+// Initialize the form with schema
+const { handleSubmit, handleReset } = useForm({
+  validationSchema: schema
+})
+
 // data
+const runName = useField('runName')
+const runDate = useField('runDate')
+const selectedMeasure = useField('selectedMeasure')
+const openingBalDate = useField('openingBalDate')
+const selectedConfig = useField('selectedConfig')
+const selectedTransitionType = useField('selectedTransitionType')
+const selectedFinanceYear = useField('selectedFinanceYear')
+const financeVersion = useField('financeVersion')
+
 const $router = useRouter()
-const openingBalDate = ref(null)
+// const openingBalDate = ref(null)
 const externalSAP = ref(false)
 const snackbar = ref(false)
 const text = ref('')
@@ -334,31 +411,31 @@ const showGMMBlocks = ref(false)
 const showFinanceVersion = ref(false)
 const showPAARuns = ref(false)
 const showPAAFinance = ref(false)
-const runDate = ref(null)
-const runName = ref(null)
+// const runDate = ref(null)
+// const runName = ref(null)
 const productList = ref([])
-const selectedMeasure = ref(null)
+// const selectedMeasure = ref(null)
 const measures = ref(['GMM', 'PAA', 'VFA'])
 const groups: any = ref([])
 const stepResults: any = ref([])
 const selectedProduct = ref(null)
 const selectedGroup = ref(null)
 const financeVariables = ref([])
-const financeVersion = ref(null)
+// const financeVersion = ref(null)
 const returnText = ref('')
 const isRunning = ref(false)
 const noError = ref(true)
 const paaRuns = ref([])
 const csmRuns: any = ref([])
 const selectedPAARun: any = ref(null)
-const selectedFinanceYear = ref(null)
+// const selectedFinanceYear = ref(null)
 const selectedRiskAdjustmentYear = ref(null)
 const availableFinanceYears = ref([])
 const availableRiskAdjustmentYears = ref([])
 const availableVersions = ref([])
 const aosConfigs = ref([])
-const selectedConfig: any = ref(null)
-const selectedTransitionType = ref(null)
+// const selectedConfig: any = ref(null)
+// const selectedTransitionType = ref(null)
 const completedRunId = ref(null)
 const transitionTypes = ref([
   { trans_type: 'PostTransition' },
@@ -386,14 +463,14 @@ const removeFromJobs = (item: any) => {
 
 const getAvailableFinanceVersions = () => {
   availableVersions.value = []
-  if (selectedMeasure.value === 'PAA') {
-    CsmEngine.getAvailableFinanceVersions(selectedFinanceYear.value).then((res) => {
+  if (selectedMeasure.value.value === 'PAA') {
+    CsmEngine.getAvailableFinanceVersions(selectedFinanceYear.value.value).then((res) => {
       availableVersions.value = res.data
       showFinanceVersion.value = true
     })
   }
-  if (selectedMeasure.value === 'GMM' || selectedMeasure.value === 'VFA') {
-    CsmEngine.getAvailableGMMFinanceVersions(selectedFinanceYear.value).then((res) => {
+  if (selectedMeasure.value.value === 'GMM' || selectedMeasure.value.value === 'VFA') {
+    CsmEngine.getAvailableGMMFinanceVersions(selectedFinanceYear.value.value).then((res) => {
       availableVersions.value = res.data
       showFinanceVersion.value = true
     })
@@ -401,7 +478,8 @@ const getAvailableFinanceVersions = () => {
 }
 
 const checkManualSap = () => {
-  if (selectedConfig.value.external_sap) {
+  const selectedConfigValue: any = selectedConfig.value.value
+  if (selectedConfigValue.external_sap) {
     externalSAP.value = true
   } else {
     externalSAP.value = false
@@ -415,7 +493,7 @@ const getAvailableFinanceAndRaYears = () => {
   if (selectedPAARun.value !== null) {
     paaRunId = selectedPAARun.value.id
   }
-  CsmEngine.getAvailableFinanceAndRaYears(selectedMeasure.value, paaRunId).then((res) => {
+  CsmEngine.getAvailableFinanceAndRaYears(selectedMeasure.value.value, paaRunId).then((res) => {
     if (res.data.finance !== null) {
       availableFinanceYears.value = res.data.finance
     } else {
@@ -431,7 +509,7 @@ const getAvailableFinanceAndRaYears = () => {
 }
 
 const showPAAFinanceBlock = () => {
-  if (selectedMeasure.value === 'PAA' && selectedPAARun.value !== null) {
+  if (selectedMeasure.value.value === 'PAA' && selectedPAARun.value !== null) {
     getAvailableFinanceAndRaYears()
     showPAAFinance.value = true
   } else {
@@ -441,7 +519,7 @@ const showPAAFinanceBlock = () => {
 
 const showFinanceFile = () => {
   if (selectedMeasure.value !== null) {
-    if (selectedMeasure.value === 'GMM' || selectedMeasure.value === 'VFA') {
+    if (selectedMeasure.value.value === 'GMM' || selectedMeasure.value.value === 'VFA') {
       showGMMBlocks.value = true
       showPAARuns.value = false
       showPAAFinance.value = false
@@ -460,46 +538,50 @@ const showFinanceFile = () => {
     showPAARuns.value = false
     showPAAFinance.value = false
     showFinanceVersion.value = false
-    selectedFinanceYear.value = null
+    selectedFinanceYear.value.value = null
     selectedRiskAdjustmentYear.value = null
     selectedPAARun.value = null
-    selectedTransitionType.value = null
-    selectedConfig.value = null
+    selectedTransitionType.value.value = null
+    selectedConfig.value.value = null
   }
 }
 
-const addToJobs = async () => {
+const addToJobs = handleSubmit(async (values) => {
+  // console.log('values', values)
+  // console.log('selectedConfig', selectedConfig.value.value)
   const body: any = {}
-  body.run_date = formatDateString(runDate.value, true, true, false)
-  body.name = runName.value
-  body.measurement_type = selectedMeasure.value
+  body.run_date = formatDateString(runDate.value.value, true, true, false)
+  body.name = runName.value.value
+  body.measurement_type = selectedMeasure.value.value
   if (selectedConfig.value) {
-    body.configuration_name = selectedConfig.value.configuration_name
+    body.configuration_name = (
+      selectedConfig.value.value as { configuration_name: string }
+    ).configuration_name
   }
 
-  body.transition_type = selectedTransitionType.value
+  body.transition_type = selectedTransitionType.value.value
   if (selectedPAARun.value !== null) {
     body.paa_run_id = selectedPAARun.value.id
     body.paa_run_name = selectedPAARun.value.name
   }
 
   body.paa_eligibility_test = paaEligibilityTest.value
-  body.finance_year = selectedFinanceYear.value
+  body.finance_year = selectedFinanceYear.value.value
   if (externalSAP.value) {
     body.risk_adjustment_year = 0
   } else {
     body.risk_adjustment_year = selectedRiskAdjustmentYear.value
   }
-  if (openingBalDate.value !== null) {
-    body.opening_bal_date = formatDateString(openingBalDate.value, true, true, false)
+  if (openingBalDate.value.value !== null) {
+    body.opening_bal_date = formatDateString(openingBalDate.value.value, true, true, false)
   }
-  body.finance_version = financeVersion.value
+  body.finance_version = financeVersion.value.value
 
   // Check for finance and RA years
   if (
-    selectedMeasure.value === 'GMM' ||
-    selectedMeasure.value === 'PAA' ||
-    selectedMeasure.value === 'VFA'
+    selectedMeasure.value.value === 'GMM' ||
+    selectedMeasure.value.value === 'PAA' ||
+    selectedMeasure.value.value === 'VFA'
   ) {
     if (selectedFinanceYear.value === null) {
       text.value =
@@ -511,7 +593,7 @@ const addToJobs = async () => {
     }
   }
 
-  if (selectedMeasure.value === 'GMM' || selectedMeasure.value === 'VFA') {
+  if (selectedMeasure.value.value === 'GMM' || selectedMeasure.value.value === 'VFA') {
     if (selectedRiskAdjustmentYear.value == null && !externalSAP.value) {
       text.value =
         'This job cannot be run without a valid risk adjustment year. Please select a risk adjustment year'
@@ -532,25 +614,24 @@ const addToJobs = async () => {
     csmRuns.value.push(body)
     resetForm()
   }
-}
+})
 
 const resetForm = () => {
-  runDate.value = null
-  runName.value = null
-  selectedMeasure.value = null
+  handleReset()
   externalSAP.value = false
-  selectedConfig.value = null
-  selectedTransitionType.value = null
+  selectedConfig.value.value = null
+  selectedTransitionType.value.value = null
   selectedPAARun.value = null
-  openingBalDate.value = null
+  openingBalDate.value.value = null
   showPAARuns.value = false
   showPAAFinance.value = false
+  showFinanceVersion.value = false
+  financeVersion.value.value = null
   showGMMBlocks.value = false
-  selectedFinanceYear.value = null
+  selectedFinanceYear.value.value = null
   selectedRiskAdjustmentYear.value = null
   selectedPAARun.value = null
-  selectedTransitionType.value = null
-  selectedConfig.value = null
+  selectedTransitionType.value.value = null
 }
 
 const getGroupSteps = () => {
@@ -596,381 +677,6 @@ const runCsm = () => {
     }, 2000)
   })
 }
-
-// export default {
-//   data() {
-//     return {
-//       externalSAP: false,
-//       snackbar: false,
-//       text: '',
-//       timeout: 2000,
-//       multiLine: true,
-//       dialog: false,
-//       existingBody: null,
-//       paa_eligibility_test: false,
-//       overrideRun: false,
-//       showGMMBlocks: false,
-//       showFinanceVersion: false,
-//       loading: false,
-//       showFinanceBlock: false,
-//       showPAARuns: false,
-//       showPAAFinance: false,
-//       fromDateMenu: false,
-//       valDate: null,
-//       runName: null,
-//       runDateError: null,
-//       csmFile: null,
-//       productList: [],
-//       selectedMeasure: null,
-//       measures: ['GMM', 'PAA', 'VFA'],
-//       groupList: [],
-//       groups: [],
-//       stepResults: [],
-//       selectedProduct: null,
-//       selectedGroup: null,
-//       financeVariables: [],
-//       financeVersion: null,
-//       returnText: '',
-//       showFinanceVariables: false,
-//       isRunning: false,
-//       noError: true,
-//       paaRuns: [],
-//       csmRuns: [],
-//       selectedPAARun: null,
-//       selectedFinanceYear: null,
-//       selectedRiskAdjustmentYear: null,
-//       availableFinanceYears: [],
-//       availableRiskAdjustmentYears: [],
-//       availableVersions: [],
-//       aosConfigs: [],
-//       selectedConfig: null,
-//       selectedTransitionType: null,
-//       completedRunId: null,
-//       transitionTypes: [
-//         { trans_type: 'PostTransition' },
-//         { trans_type: 'FullyRetrospective' },
-//         { trans_type: 'ModifiedRetrospective' },
-//         { trans_type: 'FairValue' }
-//       ]
-//     }
-//   },
-//   mounted() {
-//     CsmEngine.getFinanceFile().then((res) => {
-//       this.financeVariables = res.data
-//     })
-//     CsmEngine.getExistingConfigs().then((res) => {
-//       this.aosConfigs = res.data
-//     })
-//     CsmEngine.getPAARuns().then((res) => {
-//       this.paaRuns = res.data
-//     })
-//   },
-//   computed: {
-//     runNameErrors() {
-//       const errors = []
-//       if (!this.$v.runName.$dirty) return errors
-//       !this.$v.runName.required && errors.push('run name is required.')
-//       !this.$v.runName.runNameDuplicate &&
-//         errors.push('The run name already exists or is part of the current run list.')
-//       return errors
-//     },
-//     valDateErrors() {
-//       const errors = []
-//       if (!this.$v.valDate.$dirty) return errors
-//       !this.$v.valDate.required && errors.push('run date is required.')
-//       return errors
-//     },
-
-//     valuationDate: function () {
-//       return this.valDate
-//       // format date, apply validations, etc. Example below.
-//       // return this.valDate ? this.formatDate(this.valDate) : "";
-//     }
-//   },
-//   validations: {
-//     valDate: {
-//       required
-//     },
-//     runName: {
-//       required,
-//       runNameDuplicate: async function (value) {
-//         if (value) {
-//           const obj = this.csmRuns.find((x) => x.name == value)
-//           if (obj) {
-//             return false
-//           }
-
-//           let result
-//           result = await CsmEngine.checkRunName(value)
-//           return !result.data.result
-//         }
-//       }
-//     }
-//   },
-
-//   methods: {
-//     clearErrorState() {
-//       this.$v.$reset()
-//     },
-//     removeFromJobs(item) {
-//       this.csmRuns.splice(this.csmRuns.indexOf(item), 1)
-//     },
-//     getAvailableFinanceVersions() {
-//       this.availableVersions = []
-//       if (this.selectedMeasure == 'PAA') {
-//         CsmEngine.getAvailableFinanceVersions(this.selectedFinanceYear).then((res) => {
-//           this.availableVersions = res.data
-//           this.showFinanceVersion = true
-//         })
-//       }
-//       if (this.selectedMeasure == 'GMM' || this.selectedMeasure == 'VFA') {
-//         CsmEngine.getAvailableGMMFinanceVersions(this.selectedFinanceYear).then((res) => {
-//           this.availableVersions = res.data
-//           this.showFinanceVersion = true
-//         })
-//       }
-//     },
-//     checkManualSap() {
-//       if (this.selectedConfig.external_sap) {
-//         this.externalSAP = true
-//       } else {
-//         this.externalSAP = false
-//       }
-//     },
-//     async addToJobs() {
-//       this.$v.$touch()
-
-//       if (this.$v.$invalid) {
-//         return
-//       }
-
-//       const body = {}
-//       body.run_date = this.valDate
-//       body.name = this.runName
-//       body.measurement_type = this.selectedMeasure
-//       if (this.selectedConfig) {
-//         body.configuration_name = this.selectedConfig.configuration_name
-//       }
-
-//       body.transition_type = this.selectedTransitionType
-//       if (this.selectedPAARun !== null) {
-//         body.paa_run_id = this.selectedPAARun.id
-//         body.paa_run_name = this.selectedPAARun.name
-//       }
-
-//       body.paa_eligibility_test = this.paa_eligibility_test
-//       body.finance_year = this.selectedFinanceYear
-//       if (this.externalSAP) {
-//         body.risk_adjustment_year = 0
-//       } else {
-//         body.risk_adjustment_year = this.selectedRiskAdjustmentYear
-//       }
-//       if (this.$refs.openingBalDate.valDate !== null) {
-//         body.opening_bal_date = this.$refs.openingBalDate.valDate
-//       }
-//       body.finance_version = this.financeVersion
-
-//       // Check for finance and RA years
-//       if (
-//         this.selectedMeasure == 'GMM' ||
-//         this.selectedMeasure == 'PAA' ||
-//         this.selectedMeasure == 'VFA'
-//       ) {
-//         if (this.selectedFinanceYear == null) {
-//           this.text =
-//             'This job cannot be run without a valid finance year. Please select a finance year'
-//           this.snackbar = true
-//           this.timeout = 3000
-
-//           return
-//         }
-//       }
-
-//       if (this.selectedMeasure == 'GMM' || this.selectedMeasure == 'VFA') {
-//         if (this.selectedRiskAdjustmentYear == null && !this.externalSAP) {
-//           this.text =
-//             'This job cannot be run without a valid risk adjustment year. Please select a risk adjustment year'
-//           this.snackbar = true
-//           this.timeout = 3000
-//           return
-//         }
-//       }
-
-//       // Check if run_name, measurement_type already exists
-//       const exists = await CsmEngine.checkExistingRun(body)
-//       if (exists.data.result) {
-//         this.existingBody = body
-//         this.dialog = true
-//       } else {
-//         this.csmRuns.push(body)
-//         this.resetForm()
-//       }
-//     },
-//     resetForm() {
-//       this.valDate = null
-//       this.runName = null
-//       this.selectedMeasure = null
-//       this.externalSAP = false
-//       this.selectedConfig = null
-//       this.selectedTransitionType = null
-//       this.selectedPAARun = null
-//       this.paa_eligibility_test = null
-//       this.showFinanceBlock = false
-//       this.$refs.openingBalDate.valDate = null
-//       this.showPAARuns = false
-//       this.showPAAFinance = false
-//       this.showGMMBlocks = false
-//       this.selectedFinanceYear = null
-//       this.selectedRiskAdjustmentYear = null
-//       this.$v.$reset()
-//     },
-//     getAvailableFinanceAndRaYears() {
-//       this.availableFinanceYears = []
-//       this.availableRiskAdjustmentYears = []
-//       let paaRunId = 0
-//       if (this.selectedPAARun !== null) {
-//         paaRunId = this.selectedPAARun.id
-//       }
-//       CsmEngine.getAvailableFinanceAndRaYears(this.selectedMeasure, paaRunId).then((res) => {
-//         if (res.data.finance !== null) {
-//           this.availableFinanceYears = res.data.finance
-//         } else {
-//           this.availableFinanceYears = []
-//         }
-
-//         if (res.data.ra !== null) {
-//           this.availableRiskAdjustmentYears = res.data.ra
-//         } else {
-//           this.availableRiskAdjustmentYears = []
-//         }
-//       })
-//     },
-//     showPAAFinanceBlock() {
-//       if (this.selectedMeasure == 'PAA' && this.selectedPAARun !== null) {
-//         this.getAvailableFinanceAndRaYears()
-//         this.showPAAFinance = true
-//       } else {
-//         this.showPAAFinance = false
-//       }
-//     },
-//     showFinanceFile() {
-//       if (this.selectedMeasure !== null) {
-//         if (this.selectedMeasure == 'GMM' || this.selectedMeasure == 'VFA') {
-//           this.showGMMBlocks = true
-//           this.showPAARuns = false
-//           this.showPAAFinance = false
-//           this.selectedPAARun = null
-//           this.getAvailableFinanceAndRaYears()
-//         } else {
-//           this.showPAARuns = true
-//           this.showGMMBlocks = false
-//           if (this.selectedPAARun !== null) {
-//             this.showGMMBlocks = false
-//             this.getAvailableFinanceAndRaYears()
-//           }
-//         }
-//       } else {
-//         this.showGMMBlocks = false
-//         this.showPAARuns = false
-//         this.showPAAFinance = false
-//         this.showFinanceVersion = false
-//         this.selectedFinanceYear = null
-//         this.selectedRiskAdjustmentYear = null
-//         this.selectedPAARun = null
-//         this.selectedTransitionType = null
-//         this.selectedConfig = null
-//       }
-//     },
-//     showVariables(value) {
-//       this.showFinanceVariables = value
-//     },
-//     uploadFinanceFile() {
-//       if (this.csmFile !== null) {
-//         const formdata = new FormData()
-//         formdata.append('file', this.csmFile)
-//         this.loading = true
-//         CsmEngine.uploadFinanceFile(formdata)
-//           .then((res) => {
-//             this.csmFile = null
-//             this.financeVariables = res.data
-//             this.loading = false
-//           })
-//           .catch(() => {
-//             this.loading = false
-//           })
-//       }
-//     },
-//     getGroupSteps() {
-//       if (this.selectedGroup !== 'All Groups') {
-//         CsmEngine.getGroupSteps(this.selectedGroup).then((res) => {
-//           this.stepResults = res.data.steps
-//         })
-//       } else {
-//         CsmEngine.getProductSteps(this.selectedProduct).then((res) => {
-//           this.groups = []
-//           this.stepResults = res.data.steps
-//           this.groups = res.data.groups
-//           this.groups.unshift('All Groups')
-//         })
-//       }
-//     },
-//     confirmOverride(value) {
-//       if (value) {
-//         this.csmRuns.push(this.existingBody)
-//         this.resetForm()
-//       }
-//       this.existingBody = null
-//       this.dialog = false
-//     },
-
-//     async executeRun(body) {
-//       this.isRunning = true
-//       if (this.csmFile !== null) {
-//         const formdata = new FormData()
-//         formdata.append('file', this.csmFile)
-//         await CsmEngine.uploadFinanceFile({ form: formdata })
-//       }
-
-//       try {
-//         const response = await CsmEngine.runCsmProcess(body)
-//         this.returnText = 'Processing is now complete. View the results '
-//         this.selectedConfig = null
-//         this.isRunning = false
-//         this.noError = true
-//         if (this.selectedMeasure == 'GMM' || this.selectedMeasure == 'VFA') {
-//           this.completedRunId = response.data.run.id
-//         }
-//         if (this.selectedMeasure == 'PAA') {
-//           this.completedRunId = response.data.run.paa_run_id
-//         }
-//       } catch (err) {
-//         this.returnText = 'Error: ' + err
-//         this.selectedConfig = null
-//         this.isRunning = false
-//         this.noError = false
-//       }
-//     },
-//     getProductSteps() {
-//       CsmEngine.getProductSteps(this.selectedProduct).then((res) => {
-//         this.stepResults = res.data.steps
-//         this.groups = res.data.groups
-//         this.groups.unshift('All Groups')
-//         this.selectedGroup = 'All Groups'
-//       })
-//     },
-//     async runCsm() {
-//       this.isRunning = true
-//       CsmEngine.runCsmProcess(this.csmRuns).then((res) => {
-//         this.timeout = 3000
-//         this.snackbar = true
-//         this.text = res.data.message
-//         setTimeout(() => {
-//           this.$router.push({ name: 'csm-runs' })
-//         }, 2000)
-//       })
-//     }
-//   }
-// }
 </script>
 
 <style scoped>
