@@ -48,7 +48,7 @@
                 </v-col>
                 <v-col v-if="showPAARuns" cols="4">
                   <v-select
-                    v-model="selectedPAARun"
+                    v-model="selectedPAARun.value.value"
                     variant="outlined"
                     density="compact"
                     placeholder="Select a PAA Run"
@@ -58,6 +58,7 @@
                     item-value="id"
                     clearable
                     return-object
+                    :error-messages="selectedPAARun.errorMessage.value"
                     @update:modelValue="showPAAFinanceBlock"
                   ></v-select>
                 </v-col>
@@ -154,6 +155,7 @@
                 </v-col>
               </v-row>
             </form>
+            <v-divider v-if="csmRuns.length" class="my-3"></v-divider>
 
             <v-row v-if="csmRuns.length > 0" class="mx-6">
               <v-col>
@@ -357,13 +359,21 @@ const schema = yup.object({
       }
       return schema
     }),
-  selectedPAARun: yup.object().nullable(),
+  selectedPAARun: yup
+    .object()
+    .nullable()
+    .when('selectedMeasure', ([selectedMeasure], schema) => {
+      if (selectedMeasure === 'PAA') {
+        return schema.required('A PAA configuration is required')
+      }
+      return schema
+    }),
   paaEligibilityTest: yup.boolean().nullable(),
   selectedFinanceYear: yup
     .number()
     .nullable()
     .when('selectedMeasure', ([selectedMeasure], schema) => {
-      if (selectedMeasure === 'GMM' || selectedMeasure === 'VFA') {
+      if (selectedMeasure === 'GMM' || selectedMeasure === 'VFA' || selectedMeasure === 'PAA') {
         return schema.required('A valid finance year is required')
       }
       return schema
@@ -373,7 +383,7 @@ const schema = yup.object({
     .string()
     .nullable()
     .when('selectedMeasure', ([selectedMeasure], schema) => {
-      if (selectedMeasure === 'GMM' || selectedMeasure === 'VFA') {
+      if (selectedMeasure === 'GMM' || selectedMeasure === 'VFA' || selectedMeasure === 'PAA') {
         return schema.required('A valid finance version is required')
       }
       return schema
@@ -382,7 +392,7 @@ const schema = yup.object({
     .date()
     .nullable()
     .when('selectedMeasure', ([selectedMeasure], schema) => {
-      if (selectedMeasure === 'GMM' || selectedMeasure === 'VFA') {
+      if (selectedMeasure === 'GMM' || selectedMeasure === 'VFA' || selectedMeasure === 'PAA') {
         return schema.required('A valid opening balance date is required')
       }
       return schema
@@ -403,6 +413,7 @@ const selectedConfig = useField('selectedConfig')
 const selectedTransitionType = useField('selectedTransitionType')
 const selectedFinanceYear = useField('selectedFinanceYear')
 const financeVersion = useField('financeVersion')
+const selectedPAARun = useField('selectedPAARun')
 
 const $router = useRouter()
 // const openingBalDate = ref(null)
@@ -434,7 +445,7 @@ const isRunning = ref(false)
 const noError = ref(true)
 const paaRuns = ref([])
 const csmRuns: any = ref([])
-const selectedPAARun: any = ref(null)
+// const selectedPAARun: any = ref(null)
 // const selectedFinanceYear = ref(null)
 const selectedRiskAdjustmentYear = ref(null)
 const availableFinanceYears = ref([])
@@ -509,8 +520,9 @@ const getAvailableFinanceAndRaYears = () => {
   availableFinanceYears.value = []
   availableRiskAdjustmentYears.value = []
   let paaRunId = 0
-  if (selectedPAARun.value !== null) {
-    paaRunId = selectedPAARun.value.id
+  console.log('selectedPAARun', selectedPAARun.value.value)
+  if (selectedPAARun.value.value) {
+    paaRunId = (selectedPAARun.value.value as { id: number }).id
   }
   CsmEngine.getAvailableFinanceAndRaYears(selectedMeasure.value.value, paaRunId).then((res) => {
     if (res.data.finance !== null) {
@@ -542,7 +554,7 @@ const showFinanceFile = () => {
       showGMMBlocks.value = true
       showPAARuns.value = false
       showPAAFinance.value = false
-      selectedPAARun.value = null
+      selectedPAARun.value.value = null
       getAvailableFinanceAndRaYears()
     } else {
       showPAARuns.value = true
@@ -559,7 +571,7 @@ const showFinanceFile = () => {
     showFinanceVersion.value = false
     selectedFinanceYear.value.value = null
     selectedRiskAdjustmentYear.value = null
-    selectedPAARun.value = null
+    selectedPAARun.value.value = null
     selectedTransitionType.value.value = null
     selectedConfig.value.value = null
   }
@@ -572,16 +584,16 @@ const addToJobs = handleSubmit(async (values) => {
   body.run_date = formatDateString(runDate.value.value, true, true, false)
   body.name = runName.value.value
   body.measurement_type = selectedMeasure.value.value
-  if (selectedConfig.value) {
+  if (selectedConfig.value.value) {
     body.configuration_name = (
       selectedConfig.value.value as { configuration_name: string }
     ).configuration_name
   }
 
   body.transition_type = selectedTransitionType.value.value
-  if (selectedPAARun.value !== null) {
-    body.paa_run_id = selectedPAARun.value.id
-    body.paa_run_name = selectedPAARun.value.name
+  if (selectedPAARun.value.value) {
+    body.paa_run_id = (selectedPAARun.value.value as { id: number }).id
+    body.paa_run_name = (selectedPAARun.value.value as { name: string }).name
   }
 
   body.paa_eligibility_test = paaEligibilityTest.value
@@ -640,7 +652,7 @@ const resetForm = () => {
   externalSAP.value = false
   selectedConfig.value.value = null
   selectedTransitionType.value.value = null
-  selectedPAARun.value = null
+  selectedPAARun.value.value = null
   openingBalDate.value.value = null
   showPAARuns.value = false
   showPAAFinance.value = false
@@ -649,7 +661,6 @@ const resetForm = () => {
   showGMMBlocks.value = false
   selectedFinanceYear.value.value = null
   selectedRiskAdjustmentYear.value = null
-  selectedPAARun.value = null
   selectedTransitionType.value.value = null
 }
 

@@ -6,98 +6,100 @@
           <template #header> Shock Settings </template>
           <template #default>
             <v-container>
-              <h4 class="mb-2">Create Shock Setting</h4>
-              <v-row>
-                <v-col cols="3">
-                  <v-text-field
-                    v-model="settingName"
-                    variant="outlined"
-                    density="compact"
-                    placeholder="Enter a name for this scenario"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <v-textarea
-                    v-model="settingDescription"
-                    variant="outlined"
-                    rows="3"
-                    label="Provide a description for this scenario"
-                  ></v-textarea>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <p>Select the desired combination for this setting from the options below</p>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="3">
-                  <v-checkbox v-model="mortality" :label="`Mortality`"></v-checkbox>
-                </v-col>
-                <v-col cols="3">
-                  <v-checkbox v-model="lapse" :label="`Lapse`"></v-checkbox>
-                </v-col>
-                <v-col cols="3">
-                  <v-checkbox v-model="disability" :label="`Disability`"></v-checkbox>
-                </v-col>
-                <v-col cols="3">
-                  <v-checkbox v-model="criticalIllness" :label="`Critical Illness`"></v-checkbox>
-                </v-col>
-                <v-col cols="3">
-                  <v-checkbox v-model="retrenchment" :label="`Retrenchment`"></v-checkbox>
-                </v-col>
-                <v-col cols="3">
-                  <v-checkbox v-model="realYieldCurve" :label="`Real Yield Curve`"></v-checkbox>
-                </v-col>
-                <v-col cols="3">
-                  <v-checkbox
-                    v-model="nominalYieldCurve"
-                    :label="`Nominal Yield Curve`"
-                  ></v-checkbox>
-                </v-col>
-                <v-col cols="3">
-                  <v-checkbox v-model="expense" :label="`Expense`"></v-checkbox>
-                </v-col>
-                <v-col cols="3">
-                  <v-checkbox v-model="inflation" :label="`Inflation`"></v-checkbox>
-                </v-col>
-                <v-col cols="3">
-                  <v-checkbox
-                    v-model="mortalityCatastrophe"
-                    :label="`Mortality Catastrophe`"
-                  ></v-checkbox>
-                </v-col>
-                <v-col cols="3">
-                  <v-checkbox
-                    v-model="morbidityCatastrophe"
-                    :label="`Morbidity Catastrophe`"
-                  ></v-checkbox>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="3">
-                  <v-select
-                    v-model="selectedShockBasis"
-                    variant="outlined"
-                    density="compact"
-                    placeholder="Select a Shock Basis"
-                    label="Shock Basis"
-                    :items="shockBases"
-                    item-title="Basis"
-                    item-value="Basis"
-                  >
-                  </v-select>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <v-btn rounded width="250" size="small" color="primary" @click="addToScenarios"
-                    >Add to Shock Settings</v-btn
-                  >
-                </v-col>
-              </v-row>
+              <form @submit.prevent="addToScenarios">
+                <h4 class="mb-2">Create Shock Setting</h4>
+                <v-row>
+                  <v-col cols="3">
+                    <v-text-field
+                      v-model="settingName"
+                      variant="outlined"
+                      density="compact"
+                      placeholder="Enter a name for this scenario"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col>
+                    <v-textarea
+                      v-model="settingDescription"
+                      variant="outlined"
+                      rows="3"
+                      label="Provide a description for this scenario"
+                    ></v-textarea>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col>
+                    <p>Select the desired combination for this setting from the options below</p>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="3">
+                    <v-checkbox v-model="mortality" :label="`Mortality`"></v-checkbox>
+                  </v-col>
+                  <v-col cols="3">
+                    <v-checkbox v-model="lapse" :label="`Lapse`"></v-checkbox>
+                  </v-col>
+                  <v-col cols="3">
+                    <v-checkbox v-model="disability" :label="`Disability`"></v-checkbox>
+                  </v-col>
+                  <v-col cols="3">
+                    <v-checkbox v-model="criticalIllness" :label="`Critical Illness`"></v-checkbox>
+                  </v-col>
+                  <v-col cols="3">
+                    <v-checkbox v-model="retrenchment" :label="`Retrenchment`"></v-checkbox>
+                  </v-col>
+                  <v-col cols="3">
+                    <v-checkbox v-model="realYieldCurve" :label="`Real Yield Curve`"></v-checkbox>
+                  </v-col>
+                  <v-col cols="3">
+                    <v-checkbox
+                      v-model="nominalYieldCurve"
+                      :label="`Nominal Yield Curve`"
+                    ></v-checkbox>
+                  </v-col>
+                  <v-col cols="3">
+                    <v-checkbox v-model="expense" :label="`Expense`"></v-checkbox>
+                  </v-col>
+                  <v-col cols="3">
+                    <v-checkbox v-model="inflation" :label="`Inflation`"></v-checkbox>
+                  </v-col>
+                  <v-col cols="3">
+                    <v-checkbox
+                      v-model="mortalityCatastrophe"
+                      :label="`Mortality Catastrophe`"
+                    ></v-checkbox>
+                  </v-col>
+                  <v-col cols="3">
+                    <v-checkbox
+                      v-model="morbidityCatastrophe"
+                      :label="`Morbidity Catastrophe`"
+                    ></v-checkbox>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="3">
+                    <v-select
+                      v-model="selectedShockBasis"
+                      variant="outlined"
+                      density="compact"
+                      placeholder="Select a Shock Basis"
+                      label="Shock Basis"
+                      :items="shockBases"
+                      item-title="Basis"
+                      item-value="Basis"
+                    >
+                    </v-select>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col>
+                    <v-btn type="submit" rounded width="250" size="small" color="primary"
+                      >Add to Shock Settings</v-btn
+                    >
+                  </v-col>
+                </v-row>
+              </form>
               <v-row>
                 <v-col>
                   <v-divider></v-divider>
@@ -132,13 +134,29 @@ import { onMounted, ref } from 'vue'
 import BaseCard from '@/renderer/components/BaseCard.vue'
 import DataGrid from '@/renderer/components/tables/DataGrid.vue'
 import ConfirmationDialog from '@/renderer/components/ConfirmDialog.vue'
+import { useField, useForm } from 'vee-validate'
+import * as yup from 'yup'
+
+const schema = yup.object({
+  settingName: yup.string().required(),
+  settingDescription: yup.string().required(),
+  selectedShockBasis: yup.string().nullable()
+})
+
+const { handleSubmit, handleReset } = useForm({
+  validationSchema: schema
+})
+
+const settingName = useField('settingName')
+const settingDescription = useField('settingDescription')
+const selectedShockBasis = useField('selectedShockBasis')
 
 const confirmAction = ref()
 const columnDefs = ref([])
-const selectedShockBasis = ref(null)
+// const selectedShockBasis = ref(null)
 const shockBases: any = ref([])
-const settingName = ref('')
-const settingDescription = ref('')
+// const settingName = ref('')
+// const settingDescription = ref('')
 const mortality = ref(false)
 const disability = ref(false)
 const lapse = ref(false)
@@ -201,12 +219,12 @@ const deleteShockSetting = async (scenario: any) => {
   }
 }
 
-const addToScenarios = () => {
+const addToScenarios = handleSubmit(() => {
   console.log('valid')
 
   const setting: any = {}
-  setting.name = settingName.value
-  setting.description = settingDescription.value
+  setting.name = settingName.value.value
+  setting.description = settingDescription.value.value
   setting.mortality = mortality.value
   setting.disability = disability.value
   setting.lapse = lapse.value
@@ -215,7 +233,7 @@ const addToScenarios = () => {
   setting.real_yield_curve = realYieldCurve.value
   setting.expense = expense.value
   setting.retrenchment = retrenchment.value
-  setting.shock_basis = selectedShockBasis.value
+  setting.shock_basis = selectedShockBasis.value.value
   setting.inflation = inflation.value
   setting.morbidity_catastrophe = morbidityCatastrophe.value
   setting.mortality_catastrophe = mortalityCatastrophe.value
@@ -224,8 +242,8 @@ const addToScenarios = () => {
   ValuationService.saveShockSetting(setting).then((res) => {
     if (res.status === 201) {
       shockScenarios.value.push(res.data)
-      settingName.value = ''
-      settingDescription.value = ''
+      settingName.value.value = ''
+      settingDescription.value.value = ''
       mortality.value = false
       disability.value = false
       lapse.value = false
@@ -237,10 +255,11 @@ const addToScenarios = () => {
       morbidityCatastrophe.value = false
       mortalityCatastrophe.value = false
       retrenchment.value = false
-      selectedShockBasis.value = null
+      selectedShockBasis.value.value = null
+      handleReset()
     }
   })
-}
+})
 
 const createColumnDefs = (data: any, tableName: string) => {
   console.log(tableName)
