@@ -13,7 +13,7 @@
             <v-row v-if="csmRuns.length > 0">
               <v-col>
                 <v-expansion-panels>
-                  <v-expansion-panel v-for="item in csmRuns" :key="item.id">
+                  <v-expansion-panel v-for="item in paginatedJobs" :key="item.id">
                     <v-expansion-panel-title>
                       <template #default="{ open }">
                         <v-row no-gutters>
@@ -34,7 +34,7 @@
                                 </v-list-item-subtitle>
                                 <v-list-item-subtitle v-else>
                                   Start:
-                                  {{ item.creation_date }} | Run duration:
+                                  {{ formatDateString(item.creation_date) }} | Run duration:
                                   {{ toMinutes(item.run_time) }} | Status:
                                   {{ item.processing_status }}
                                 </v-list-item-subtitle>
@@ -53,7 +53,7 @@
                                 </v-list-item-subtitle>
                                 <v-list-item-subtitle v-else>
                                   Start:
-                                  {{ item.creation_date }} | Run duration:
+                                  {{ formatDateString(item.creation_date) }} | Run duration:
                                   {{ toMinutes(item.run_time) }} | Status:
                                   {{ item.processing_status }} | User:
                                   {{ item.user_name }}
@@ -106,23 +106,12 @@
               </v-col>
             </v-row>
           </template>
+          <template #actions>
+            <v-pagination v-model="currentPage" :length="totalPages"></v-pagination>
+          </template>
         </base-card>
       </v-col>
     </v-row>
-    <!-- <v-dialog v-model="dialog" persistent max-width="500">
-      <v-card>
-        <v-card-title class="headline"
-          ><v-icon class="mr-3" color="red" size="25">mdi-alert-circle</v-icon>Delete
-          Confirmation</v-card-title
-        >
-        <v-card-text>Are you sure you want to delete </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="primary darken-1" text @click="dialog = false">No</v-btn>
-          <v-btn color="primary darken-1" text @click="deleteJob(selectedJobId)">Yes</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog> -->
     <confirm-dialog ref="confirmDeleteDialog"></confirm-dialog>
   </v-container>
 </template>
@@ -130,9 +119,9 @@
 <script setup lang="ts">
 import CsmEngine from '@/renderer/api/CsmEngine'
 import ConfirmDialog from '@/renderer/components/ConfirmDialog.vue'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import BaseCard from '@/renderer/components/BaseCard.vue'
-
+import { DateTime } from 'luxon'
 let pollTimer
 const confirmDeleteDialog = ref()
 // const backSign = ref('<')
@@ -140,6 +129,20 @@ const dialog = ref(false)
 // const selectedJobId = ref(null)
 const csmRuns: any = ref([])
 // const loadingComlete = ref(false)
+
+const pageSize = 10
+const currentPage = ref(1)
+const totalPages = ref(3)
+
+const paginatedJobs: any = computed(() => {
+  const start = (currentPage.value - 1) * pageSize
+  const end = start + pageSize
+  return csmRuns.value.slice(start, end)
+})
+
+const formatDateString = (dateString: any) => {
+  return DateTime.fromISO(dateString).toLocaleString(DateTime.DATETIME_MED)
+}
 
 const toMinutes = (number) => {
   let minutes, seconds

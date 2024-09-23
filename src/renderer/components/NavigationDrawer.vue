@@ -14,9 +14,9 @@
         </v-col>
       </v-row>
     </v-container>
-    <v-list class="nav-text">
+    <v-list class="nav-text smaller-font">
       <v-list-item
-        class="list-item-text"
+        class="smaller-font"
         :to="{ name: 'dashboard' }"
         :title="'Dashboard'"
         :prepend-icon="'mdi-monitor-dashboard'"
@@ -48,7 +48,7 @@
           <template #activator="{ props }">
             <v-list-item v-bind="props" title="GMM"></v-list-item>
           </template>
-          <v-list-item :to="{ name: 'valuations-gmm-shock-settings' }">
+          <v-list-item class="smaller-font" :to="{ name: 'valuations-gmm-shock-settings' }">
             <v-list-item-title>Shock Settings</v-list-item-title>
           </v-list-item>
           <v-list-item :to="{ name: 'valuations-gmm-run-settings' }">
@@ -264,5 +264,13 @@ watchEffect(() => {
 
 .nav-bg {
   background-color: lightgrey !important;
+}
+
+.smaller-font :deep(.v-list-item-title),
+.smaller-font :deep(.v-list-item__append) {
+  font-size: 14px;
+}
+.smaller-font.v-list-item {
+  min-height: unset;
 }
 </style>

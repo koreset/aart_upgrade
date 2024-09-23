@@ -11,20 +11,22 @@
                 <v-row>
                   <v-col cols="3">
                     <v-text-field
-                      v-model="settingName"
+                      v-model="settingName.value.value"
                       variant="outlined"
                       density="compact"
                       placeholder="Enter a name for this scenario"
+                      :error-messages="settingName.errorMessage.value"
                     ></v-text-field>
                   </v-col>
                 </v-row>
                 <v-row>
                   <v-col>
                     <v-textarea
-                      v-model="settingDescription"
+                      v-model="settingDescription.value.value"
                       variant="outlined"
                       rows="3"
                       label="Provide a description for this scenario"
+                      :error-messages="settingDescription.errorMessage.value"
                     ></v-textarea>
                   </v-col>
                 </v-row>
@@ -80,7 +82,7 @@
                 <v-row>
                   <v-col cols="3">
                     <v-select
-                      v-model="selectedShockBasis"
+                      v-model="selectedShockBasis.value.value"
                       variant="outlined"
                       density="compact"
                       placeholder="Select a Shock Basis"
@@ -88,6 +90,7 @@
                       :items="shockBases"
                       item-title="Basis"
                       item-value="Basis"
+                      :error-messages="selectedShockBasis.errorMessage.value"
                     >
                     </v-select>
                   </v-col>
@@ -138,8 +141,8 @@ import { useField, useForm } from 'vee-validate'
 import * as yup from 'yup'
 
 const schema = yup.object({
-  settingName: yup.string().required(),
-  settingDescription: yup.string().required(),
+  settingName: yup.string().required('Please enter a name for this setting'),
+  settingDescription: yup.string().required('Please provide a description for this setting'),
   selectedShockBasis: yup.string().nullable()
 })
 
@@ -219,6 +222,23 @@ const deleteShockSetting = async (scenario: any) => {
   }
 }
 
+const resetForm = () => {
+  settingName.value.value = ''
+  settingDescription.value.value = ''
+  mortality.value = false
+  disability.value = false
+  lapse.value = false
+  criticalIllness.value = false
+  nominalYieldCurve.value = false
+  realYieldCurve.value = false
+  expense.value = false
+  inflation.value = false
+  mortalityCatastrophe.value = false
+  morbidityCatastrophe.value = false
+  retrenchment.value = false
+  selectedShockBasis.value.value = null
+  handleReset()
+}
 const addToScenarios = handleSubmit(() => {
   console.log('valid')
 
@@ -242,21 +262,7 @@ const addToScenarios = handleSubmit(() => {
   ValuationService.saveShockSetting(setting).then((res) => {
     if (res.status === 201) {
       shockScenarios.value.push(res.data)
-      settingName.value.value = ''
-      settingDescription.value.value = ''
-      mortality.value = false
-      disability.value = false
-      lapse.value = false
-      criticalIllness.value = false
-      nominalYieldCurve.value = false
-      realYieldCurve.value = false
-      expense.value = false
-      inflation.value = false
-      morbidityCatastrophe.value = false
-      mortalityCatastrophe.value = false
-      retrenchment.value = false
-      selectedShockBasis.value.value = null
-      handleReset()
+      resetForm()
     }
   })
 })

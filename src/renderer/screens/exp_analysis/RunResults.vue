@@ -10,7 +10,7 @@
             <v-row v-if="runResults.length > 0 && !loading">
               <v-col>
                 <v-expansion-panels>
-                  <v-expansion-panel v-for="item in runResults" :key="item.id">
+                  <v-expansion-panel v-for="item in paginatedJobs" :key="item.id">
                     <v-expansion-panel-title>
                       <template #default="{ open }">
                         <v-row no-gutters>
@@ -103,6 +103,9 @@
               </v-col>
             </v-row>
           </template>
+          <template #actions>
+            <v-pagination v-model="currentPage" :length="totalPages"></v-pagination>
+          </template>
         </base-card>
       </v-col>
     </v-row>
@@ -125,7 +128,7 @@
 
 <script setup lang="ts">
 import ExpService from '@/renderer/api/ExpAnalysisService.js'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import BaseCard from '@/renderer/components/BaseCard.vue'
 
 // data
@@ -133,6 +136,16 @@ const selectedRunId = ref(null)
 const runResults: any = ref([])
 const loading = ref(false)
 const dialog = ref(false)
+
+const pageSize = 10
+const currentPage = ref(1)
+const totalPages = ref(3)
+
+const paginatedJobs: any = computed(() => {
+  const start = (currentPage.value - 1) * pageSize
+  const end = start + pageSize
+  return runResults.value.slice(start, end)
+})
 
 const toMinutes = (number) => {
   let minutes, seconds
@@ -181,68 +194,6 @@ const confirmDelete = (runId: any) => {
 onMounted(() => {
   getRunResults()
 })
-
-// export default {
-//   filters: {
-//     moment: function (date) {
-//       return moment(date).format('MMMM Do YYYY, h:mm:ss a')
-//     },
-//     toMinutes: function (number) {
-//       let minutes, seconds
-//       if (number < 60) {
-//         minutes = 0
-//         seconds = Math.floor(number)
-//       } else {
-//         // TODO
-//         minutes = Math.floor(number / 60)
-//         seconds = number % 60
-//         seconds = Math.round(seconds)
-//       }
-//       return minutes + ' m, ' + seconds + ' s'
-//     },
-//     roundPercent: function (number) {
-//       return number.toFixed(2)
-//     }
-//   },
-
-//   data() {
-//     return {
-//       loading: false,
-//       dialog: false,
-//       runResults: []
-//     }
-//   },
-//   created() {
-//     this.getRunResults()
-//   },
-//   methods: {
-//     confirmDelete(runId) {
-//       this.selectedRunId = runId
-//       this.dialog = true
-//     },
-//     deleteRun(runId) {
-//       ExpService.deleteRun(runId)
-//         .then(() => {
-//           this.getRunResults()
-//           this.dialog = false
-//         })
-//         .catch((error) => {
-//           console.log(error)
-//         })
-//     },
-//     async getRunResults() {
-//       this.loading = true
-//       ExpService.getRunResults()
-//         .then((response) => {
-//           this.runResults = response.data
-//           this.loading = false
-//         })
-//         .catch((error) => {
-//           console.log(error)
-//         })
-//     }
-//   }
-// }
 </script>
 
 <style lang="scss" scoped></style>

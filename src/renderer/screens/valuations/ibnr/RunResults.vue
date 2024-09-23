@@ -28,8 +28,8 @@
                                 </v-list-item-subtitle>
                                 <v-list-item-subtitle v-else>
                                   Start:
-                                  {{ item.creation_date }} | Run duration: {{ item.run_time }} |
-                                  Status:
+                                  {{ formatDateString(item.creation_date) }} | Run duration:
+                                  {{ item.run_time }} | Status:
                                   {{ item.processing_status }}
                                 </v-list-item-subtitle>
                               </span>
@@ -44,8 +44,8 @@
                                 </v-list-item-subtitle>
                                 <v-list-item-subtitle v-else>
                                   Start:
-                                  {{ item.creation_date }} | Run duration: {{ item.run_time }} |
-                                  Status: {{ item.processing_status }} | User:
+                                  {{ formatDateString(item.creation_date) }} | Run duration:
+                                  {{ toMinutes(item.run_time) }} | Status: {{ item.processing_status }} | User:
                                   {{ item.user_name }}
                                 </v-list-item-subtitle>
                               </span>
@@ -129,6 +129,7 @@
 import IbnrService from '../../../api/IbnrService'
 import { onMounted, ref, computed } from 'vue'
 import BaseCard from '@/renderer/components/BaseCard.vue'
+import { DateTime } from 'luxon'
 
 let pollTimer
 
@@ -141,6 +142,19 @@ const currentPage = ref(1)
 const totalPages = ref(3)
 
 // methods
+
+const formatDateString = (dateString: any) => {
+  return DateTime.fromISO(dateString).toLocaleString(DateTime.DATETIME_MED)
+}
+
+const toMinutes = (number: any) => {
+  number = number * 60
+  const minutes = Math.floor(number / 60) // 7
+  let seconds = ((number % 60) / 100) * 60 // 30
+  seconds = Math.round(seconds)
+  return minutes + ' m, ' + seconds + ' s'
+}
+
 const confirmDelete = (jobId) => {
   dialog.value = true
   selectedRunId.value = jobId
