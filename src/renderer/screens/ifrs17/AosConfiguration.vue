@@ -32,7 +32,7 @@
                           v-on="on"
                           @click="showTableData(item)"
                         >
-                          <v-icon color="accent">mdi-information</v-icon><span>View Data</span>
+                          <v-icon color="primary">mdi-information</v-icon><span>Info</span>
                         </v-btn>
                       </template>
                       <span>Display contents of {{ item.configuration_name }} table</span>

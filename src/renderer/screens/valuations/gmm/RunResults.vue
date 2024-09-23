@@ -110,7 +110,15 @@
             </v-expansion-panels>
           </template>
           <template #actions>
-            <v-pagination v-model="currentPage" :length="totalPages"></v-pagination>
+            <v-row>
+              <v-col>
+                <v-pagination
+                  v-if="totalPages > 1"
+                  v-model="currentPage"
+                  :length="totalPages"
+                ></v-pagination>
+              </v-col>
+            </v-row>
           </template>
         </base-card>
       </v-col>

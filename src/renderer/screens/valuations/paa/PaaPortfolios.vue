@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col>
-        <base-card>
+        <base-card :show-actions="true">
           <template #header>
             <span class="headline">PAA Portfolios</span>
           </template>
@@ -75,7 +75,7 @@
                   <template #default>
                     <v-expansion-panels v-model="activePanel">
                       <v-expansion-panel
-                        v-for="item in portfolios"
+                        v-for="item in paginatedPortfolios"
                         :key="item.name"
                         @group:selected="checkClass"
                       >
@@ -210,6 +210,17 @@
               </v-col>
             </v-row>
           </template>
+          <template #actions>
+            <v-row>
+              <v-col>
+                <v-pagination
+                  v-if="totalPages > 1"
+                  v-model="currentPage"
+                  :length="totalPages"
+                ></v-pagination>
+              </v-col>
+            </v-row>
+          </template>
         </base-card>
       </v-col>
     </v-row>
@@ -219,7 +230,7 @@
 
 <script setup lang="ts">
 import BaseCard from '../../../components/BaseCard.vue'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import ModifiedGMMService from '../../../api/ModifiedGMMService'
 import ConfirmationDialog from '../../../components/ConfirmDialog.vue'
 import DataGrid from '../../../components/tables/DataGrid.vue'
@@ -240,6 +251,16 @@ const rowData: any = ref([])
 const columnDefs: any = ref([])
 
 const portfolios: any = ref([])
+
+const pageSize = 10
+const currentPage = ref(1)
+const totalPages = ref(0)
+
+const paginatedPortfolios: any = computed(() => {
+  const start = (currentPage.value - 1) * pageSize
+  const end = start + pageSize
+  return portfolios.value.slice(start, end)
+})
 
 const discountTypes = [
   { text: 'Undiscounted', value: 'undiscounted' },
@@ -380,7 +401,9 @@ onMounted(() => {
   ModifiedGMMService.getPaaPortfolios().then((res) => {
     if (res.data.length > 0) {
       portfolios.value = res.data
+      totalPages.value = Math.ceil(portfolios.value.length / pageSize)
       console.log('Portfolios', portfolios.value)
+      console.log('Total Pages', totalPages.value)
     } else {
       portfolios.value = []
       loadDataComplete.value = true

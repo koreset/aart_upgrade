@@ -28,7 +28,7 @@
                                 </v-list-item-subtitle>
                                 <v-list-item-subtitle v-else>
                                   Start:
-                                  {{ item.creation_date }} | Run duration:
+                                  {{ formatDateString(item.creation_date) }} | Run duration:
                                   {{ toMinutes(item.run_duration) }} | Status:
                                   {{ item.processing_status }}
                                 </v-list-item-subtitle>
@@ -44,7 +44,7 @@
                                 </v-list-item-subtitle>
                                 <v-list-item-subtitle v-else>
                                   Start:
-                                  {{ item.creation_date }} | Run duration:
+                                  {{ formatDateString(item.creation_date) }} | Run duration:
                                   {{ toMinutes(item.run_duration) }} | Status:
                                   {{ item.processing_status }} | User:
                                   {{ item.user_name }}
@@ -130,7 +130,7 @@
 import ExpService from '@/renderer/api/ExpAnalysisService.js'
 import { onMounted, ref, computed } from 'vue'
 import BaseCard from '@/renderer/components/BaseCard.vue'
-
+import { DateTime } from 'luxon'
 // data
 const selectedRunId = ref(null)
 const runResults: any = ref([])
@@ -146,6 +146,10 @@ const paginatedJobs: any = computed(() => {
   const end = start + pageSize
   return runResults.value.slice(start, end)
 })
+
+const formatDateString = (dateString: any) => {
+  return DateTime.fromISO(dateString).toLocaleString(DateTime.DATETIME_MED)
+}
 
 const toMinutes = (number) => {
   let minutes, seconds

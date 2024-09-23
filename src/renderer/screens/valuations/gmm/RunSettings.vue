@@ -56,255 +56,260 @@
                   >
                 </v-col>
               </v-row>
-              <v-row v-if="settingWorkflow == 'new'">
-                <v-col cols="6">
-                  <v-text-field
-                    v-model="settingRunName"
-                    :error-messages="errors.settingRunName"
-                    v-bind="settingRunNameAttrs"
-                    variant="outlined"
-                    density="compact"
-                    label="Enter a name for this run"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="6">
-                  <v-date-input
-                    v-model="runDate"
-                    readonly
-                    view-mode="month"
-                    prepend-icon=""
-                    prepend-inner-icon="$calendar"
-                    variant="outlined"
-                    density="compact"
-                    label="Run Date"
-                  ></v-date-input>
-                </v-col>
-              </v-row>
-              <v-row v-if="settingWorkflow == 'new'">
-                <v-col>
-                  <v-textarea
-                    v-model="settingDescription"
-                    variant="outlined"
-                    rows="3"
-                    placeholder="Enter a description for this run"
-                  ></v-textarea>
-                </v-col>
-              </v-row>
-              <v-row v-if="settingWorkflow == 'new'">
-                <v-col>
-                  <v-combobox
-                    v-model="selectedProducts"
-                    v-bind="setSelectedProducts"
-                    variant="outlined"
-                    density="compact"
-                    label="Available Products"
-                    :items="availableProducts"
-                    :clearable="true"
-                    placeholder="Choose products to run"
-                    multiple
-                    chips
-                    closable-chips
-                    return-object
-                    item-title="product_name"
-                    @update:model-value="validateProduct"
-                  ></v-combobox>
-                </v-col>
-              </v-row>
-              <v-row v-if="settingWorkflow == 'new'">
-                <v-col cols="4">
-                  <v-select
-                    v-model="selectedModelPointYear"
-                    v-bind="setSelectedModelPointYear"
-                    density="compact"
-                    variant="outlined"
-                    label="Select Model Point Year"
-                    :items="availableModelPointYears"
-                    item-title="Year"
-                    item-value="Year"
-                    @update:model-value="getModelPointVersions"
-                  ></v-select>
-                </v-col>
-                <v-col cols="4">
-                  <v-select
-                    v-model="selectedModelPointVersion"
-                    density="compact"
-                    variant="outlined"
-                    label="Select Model Point Version"
-                    :items="availableModelPointVersions"
-                    item-text="Year"
-                    item-value="Year"
-                  ></v-select>
-                </v-col>
+              <form @submit.prevent="addToRunJobs">
+                <v-row v-if="settingWorkflow == 'new'">
+                  <v-col cols="6">
+                    <v-text-field
+                      v-model="settingRunName"
+                      :error-messages="errors.settingRunName"
+                      v-bind="settingRunNameAttrs"
+                      variant="outlined"
+                      density="compact"
+                      label="Enter a name for this run"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-date-input
+                      v-model="runDate"
+                      readonly
+                      view-mode="month"
+                      prepend-icon=""
+                      prepend-inner-icon="$calendar"
+                      variant="outlined"
+                      density="compact"
+                      label="Run Date"
+                    ></v-date-input>
+                  </v-col>
+                </v-row>
+                <v-row v-if="settingWorkflow == 'new'">
+                  <v-col>
+                    <v-textarea
+                      v-model="settingDescription"
+                      variant="outlined"
+                      rows="3"
+                      placeholder="Enter a description for this run"
+                    ></v-textarea>
+                  </v-col>
+                </v-row>
+                <v-row v-if="settingWorkflow == 'new'">
+                  <v-col>
+                    <v-combobox
+                      v-model="selectedProducts"
+                      v-bind="setSelectedProducts"
+                      variant="outlined"
+                      density="compact"
+                      label="Available Products"
+                      :items="availableProducts"
+                      :clearable="true"
+                      placeholder="Choose products to run"
+                      multiple
+                      chips
+                      closable-chips
+                      return-object
+                      item-title="product_name"
+                      @update:model-value="validateProduct"
+                    ></v-combobox>
+                  </v-col>
+                </v-row>
+                <v-row v-if="settingWorkflow == 'new'">
+                  <v-col cols="4">
+                    <v-select
+                      v-model="selectedModelPointYear"
+                      v-bind="setSelectedModelPointYear"
+                      density="compact"
+                      variant="outlined"
+                      label="Select Model Point Year"
+                      :items="availableModelPointYears"
+                      item-title="Year"
+                      item-value="Year"
+                      @update:model-value="getModelPointVersions"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="4">
+                    <v-select
+                      v-model="selectedModelPointVersion"
+                      density="compact"
+                      variant="outlined"
+                      label="Select Model Point Version"
+                      :items="availableModelPointVersions"
+                      item-text="Year"
+                      item-value="Year"
+                    ></v-select>
+                  </v-col>
 
-                <v-col cols="4">
-                  <v-select
-                    v-model="selectedYieldYear"
-                    density="compact"
-                    variant="outlined"
-                    label="Select Yield Curve Year"
-                    :items="availableYieldYears"
-                    item-title="Year"
-                    item-value="Year"
-                  ></v-select>
-                </v-col>
-                <v-col cols="4">
-                  <v-select
-                    v-model="selectedParameterYear"
-                    density="compact"
-                    variant="outlined"
-                    label="Select Parameter Year"
-                    :items="availableParameterYears"
-                    item-title="Year"
-                    item-value="Year"
-                    @update:model-value="getRunBasis"
-                  ></v-select>
-                </v-col>
-                <v-col cols="4">
-                  <v-select
-                    v-model="selectedMorbidityYear"
-                    density="compact"
-                    variant="outlined"
-                    label="Select Morbidity Year"
-                    :items="availableMorbidityYears"
-                    item-title="Year"
-                    item-value="Year"
-                  ></v-select>
-                </v-col>
-                <v-col cols="4">
-                  <v-select
-                    v-model="selectedRetrenchmentYear"
-                    density="compact"
-                    variant="outlined"
-                    label="Select Retrenchment Year"
-                    :items="availableRetrenchmentYears"
-                    item-title="Year"
-                    item-value="Year"
-                  ></v-select>
-                </v-col>
-                <v-col cols="4">
-                  <v-select
-                    v-model="selectedLapseYear"
-                    density="compact"
-                    variant="outlined"
-                    label="Select Lapse Year"
-                    :items="availableLapseYears"
-                    item-title="Year"
-                    item-value="Year"
-                  ></v-select>
-                </v-col>
-                <v-col cols="4">
-                  <v-select
-                    v-model="selectedMortalityYear"
-                    density="compact"
-                    variant="outlined"
-                    label="Select Mortality Year"
-                    :items="availableMortalityYears"
-                    item-title="Year"
-                    item-value="Year"
-                  ></v-select>
-                </v-col>
-                <v-col cols="4">
-                  <v-select
-                    v-model="selectedShock"
-                    density="compact"
-                    variant="outlined"
-                    label="Select Applicable Shock"
-                    :items="shockData"
-                    item-title="name"
-                    item-value="name"
-                    return-object
-                  ></v-select>
-                </v-col>
-                <v-col cols="4">
-                  <v-select
-                    v-model="selectedYieldCurveBasis"
-                    density="compact"
-                    variant="outlined"
-                    label="Select Yield Curve Basis"
-                    :items="availableYieldCurveBases"
-                    item-title="basis"
-                    item-value="basis"
-                  ></v-select>
-                </v-col>
-                <v-col cols="4">
-                  <v-select
-                    v-model="selectedLapseMarginYear"
-                    density="compact"
-                    variant="outlined"
-                    label="Select Lapse Margin Years"
-                    :items="availableLapseMarginYears"
-                    item-title="Year"
-                    item-value="Year"
-                  ></v-select>
-                </v-col>
-                <v-col cols="4"
-                  ><v-text-field
-                    v-model="aggPeriod"
-                    density="compact"
-                    variant="outlined"
-                    type="number"
-                    label="Aggregation Period"
-                    placeholder="Enter Aggregation period in months"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="4"
-                  ><v-text-field
-                    v-model="yearEndMonth"
-                    density="compact"
-                    variant="outlined"
-                    type="number"
-                    max="12"
-                    min="1"
-                    label="Year End Month"
-                    placeholder="Enter Year End Month (1 - 12)"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="4">
-                  <v-select
-                    v-model="selectedBasis"
-                    density="compact"
-                    variant="outlined"
-                    label="Run Basis"
-                    placeholder="Select a Run Basis"
-                    :items="availableBases"
-                    item-title="name"
-                    item-value="name"
-                  ></v-select>
-                </v-col>
-              </v-row>
-              <v-row v-if="settingWorkflow == 'new'">
-                <v-col cols="3">
-                  <v-checkbox v-model="runSingle" :label="`Use a Single Model Point`"></v-checkbox>
-                </v-col>
-                <v-col cols="3">
-                  <v-checkbox
-                    v-model="ifrs17Indicator"
-                    :label="`IFRS17 Indicator`"
-                    @change="toggleIndicators('ifrs17')"
-                  ></v-checkbox
-                ></v-col>
-                <v-col cols="3">
-                  <v-checkbox
-                    v-model="licIndicator"
-                    :label="`LIC Indicator`"
-                    @change="toggleIndicators('lic')"
-                  ></v-checkbox
-                ></v-col>
-                <v-col cols="3">
-                  <v-checkbox
-                    v-model="noIndicator"
-                    :label="`Use No Indicators`"
-                    @change="toggleIndicators('none')"
-                  ></v-checkbox
-                ></v-col>
-              </v-row>
-              <v-row v-if="settingWorkflow == 'new'">
-                <v-col>
-                  <v-btn rounded color="primary" size="small" class="primary" @click="addToRunJobs"
-                    >Add to Run Jobs</v-btn
-                  >
-                </v-col>
-              </v-row>
+                  <v-col cols="4">
+                    <v-select
+                      v-model="selectedYieldYear"
+                      density="compact"
+                      variant="outlined"
+                      label="Select Yield Curve Year"
+                      :items="availableYieldYears"
+                      item-title="Year"
+                      item-value="Year"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="4">
+                    <v-select
+                      v-model="selectedParameterYear"
+                      density="compact"
+                      variant="outlined"
+                      label="Select Parameter Year"
+                      :items="availableParameterYears"
+                      item-title="Year"
+                      item-value="Year"
+                      @update:model-value="getRunBasis"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="4">
+                    <v-select
+                      v-model="selectedMorbidityYear"
+                      density="compact"
+                      variant="outlined"
+                      label="Select Morbidity Year"
+                      :items="availableMorbidityYears"
+                      item-title="Year"
+                      item-value="Year"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="4">
+                    <v-select
+                      v-model="selectedRetrenchmentYear"
+                      density="compact"
+                      variant="outlined"
+                      label="Select Retrenchment Year"
+                      :items="availableRetrenchmentYears"
+                      item-title="Year"
+                      item-value="Year"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="4">
+                    <v-select
+                      v-model="selectedLapseYear"
+                      density="compact"
+                      variant="outlined"
+                      label="Select Lapse Year"
+                      :items="availableLapseYears"
+                      item-title="Year"
+                      item-value="Year"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="4">
+                    <v-select
+                      v-model="selectedMortalityYear"
+                      density="compact"
+                      variant="outlined"
+                      label="Select Mortality Year"
+                      :items="availableMortalityYears"
+                      item-title="Year"
+                      item-value="Year"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="4">
+                    <v-select
+                      v-model="selectedShock"
+                      density="compact"
+                      variant="outlined"
+                      label="Select Applicable Shock"
+                      :items="shockData"
+                      item-title="name"
+                      item-value="name"
+                      return-object
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="4">
+                    <v-select
+                      v-model="selectedYieldCurveBasis"
+                      density="compact"
+                      variant="outlined"
+                      label="Select Yield Curve Basis"
+                      :items="availableYieldCurveBases"
+                      item-title="basis"
+                      item-value="basis"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="4">
+                    <v-select
+                      v-model="selectedLapseMarginYear"
+                      density="compact"
+                      variant="outlined"
+                      label="Select Lapse Margin Years"
+                      :items="availableLapseMarginYears"
+                      item-title="Year"
+                      item-value="Year"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="4"
+                    ><v-text-field
+                      v-model="aggPeriod"
+                      density="compact"
+                      variant="outlined"
+                      type="number"
+                      label="Aggregation Period"
+                      placeholder="Enter Aggregation period in months"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="4"
+                    ><v-text-field
+                      v-model="yearEndMonth"
+                      density="compact"
+                      variant="outlined"
+                      type="number"
+                      max="12"
+                      min="1"
+                      label="Year End Month"
+                      placeholder="Enter Year End Month (1 - 12)"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="4">
+                    <v-select
+                      v-model="selectedBasis"
+                      density="compact"
+                      variant="outlined"
+                      label="Run Basis"
+                      placeholder="Select a Run Basis"
+                      :items="availableBases"
+                      item-title="name"
+                      item-value="name"
+                    ></v-select>
+                  </v-col>
+                </v-row>
+                <v-row v-if="settingWorkflow == 'new'">
+                  <v-col cols="3">
+                    <v-checkbox
+                      v-model="runSingle"
+                      :label="`Use a Single Model Point`"
+                    ></v-checkbox>
+                  </v-col>
+                  <v-col cols="3">
+                    <v-checkbox
+                      v-model="ifrs17Indicator"
+                      :label="`IFRS17 Indicator`"
+                      @change="toggleIndicators('ifrs17')"
+                    ></v-checkbox
+                  ></v-col>
+                  <v-col cols="3">
+                    <v-checkbox
+                      v-model="licIndicator"
+                      :label="`LIC Indicator`"
+                      @change="toggleIndicators('lic')"
+                    ></v-checkbox
+                  ></v-col>
+                  <v-col cols="3">
+                    <v-checkbox
+                      v-model="noIndicator"
+                      :label="`Use No Indicators`"
+                      @change="toggleIndicators('none')"
+                    ></v-checkbox
+                  ></v-col>
+                </v-row>
+                <v-row v-if="settingWorkflow == 'new'">
+                  <v-col>
+                    <v-btn rounded type="submit" color="primary" size="small" class="primary"
+                      >Add to Run Jobs</v-btn
+                    >
+                  </v-col>
+                </v-row>
+              </form>
               <v-row v-if="runJobs.length > 0">
                 <v-divider></v-divider>
               </v-row>
