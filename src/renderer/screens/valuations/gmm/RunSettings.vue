@@ -136,18 +136,6 @@
                       item-value="Year"
                     ></v-select>
                   </v-col>
-
-                  <v-col cols="4">
-                    <v-select
-                      v-model="selectedYieldYear"
-                      density="compact"
-                      variant="outlined"
-                      label="Select Yield Curve Year"
-                      :items="availableYieldYears"
-                      item-title="Year"
-                      item-value="Year"
-                    ></v-select>
-                  </v-col>
                   <v-col cols="4">
                     <v-select
                       v-model="selectedParameterYear"
@@ -158,6 +146,29 @@
                       item-title="Year"
                       item-value="Year"
                       @update:model-value="getRunBasis"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="4">
+                    <v-select
+                      v-model="selectedYieldYear"
+                      density="compact"
+                      variant="outlined"
+                      label="Select Yield Curve Year"
+                      :items="availableYieldYears"
+                      item-title="Year"
+                      item-value="Year"
+                      @update:model-value="getYieldCurveCodes"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="4">
+                    <v-select
+                      v-model="selectedYieldCurveCode"
+                      density="compact"
+                      variant="outlined"
+                      label="Select Yield Curve Code"
+                      :items="availableYieldYears"
+                      item-title="code"
+                      item-value="code"
                     ></v-select>
                   </v-col>
                   <v-col cols="4">
@@ -527,6 +538,7 @@ const noIndicator = ref(false)
 
 const selectedModelPointVersion: any = ref(null)
 const selectedYieldYear: any = ref(null)
+const selectedYieldCurveCode: any = ref(null)
 const selectedParameterYear: any = ref(null)
 const selectedMorbidityYear: any = ref(null)
 const selectedRetrenchmentYear: any = ref(null)
@@ -547,6 +559,7 @@ const availableParameterYears: any = ref([])
 const availableMortalityYears: any = ref([])
 const availableLapseMarginYears: any = ref([])
 const availableModelPointVersions: any = ref([])
+const availableYieldCurveCodes: any = ref([])
 
 const availableYieldCurveBases = [
   { basis: 'N/A' },
@@ -691,6 +704,17 @@ const getModelPointVersions = async () => {
     ).then((resp) => {
       if (resp.data !== null) {
         availableModelPointVersions.value = resp.data
+      }
+    })
+  }
+}
+
+const getYieldCurveCodes = async () => {
+  if (selectedYieldYear.value !== null) {
+    selectedYieldCurveCode.value = null
+    ValuationService.getYieldCurveCodes(selectedYieldYear.value).then((resp) => {
+      if (resp.data !== null) {
+        availableYieldCurveCodes.value = resp.data
       }
     })
   }

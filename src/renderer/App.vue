@@ -37,4 +37,8 @@ body {
 .v-table {
   border: 1px solid rgb(208, 207, 207);
 }
+
+.v-toolbar {
+  height: 48px !important;
+}
 </style>

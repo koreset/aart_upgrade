@@ -105,7 +105,7 @@
                               >Development Factors - {{ options.title.text }}</v-card-title
                             >
                             <v-card-text>
-                              <ag-charts-vue :options="options" />
+                              <!-- <ag-charts-vue :options="options" /> -->
                             </v-card-text>
                           </v-card>
                         </v-col>
@@ -121,11 +121,11 @@
                         <v-col>
                           <v-card>
                             <v-card-text>
-                              <highcharts
+                              <Chart
                                 class="chart"
                                 :options="chartOptions"
                                 :updateArgs="updateArgs"
-                              ></highcharts>
+                              ></Chart>
                             </v-card-text>
                           </v-card>
                         </v-col>
@@ -245,6 +245,7 @@ import IbnrService from '@/renderer/api/IbnrService'
 import formatValues from '@/renderer/utils/format_values'
 import BaseCard from '@/renderer/components/BaseCard.vue'
 import DataGrid from '@/renderer/components/tables/DataGrid.vue'
+import { Chart } from 'highcharts-vue'
 
 const $route = useRoute()
 const $router = useRouter()

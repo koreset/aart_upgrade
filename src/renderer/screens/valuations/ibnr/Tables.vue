@@ -320,6 +320,7 @@ const getYieldCurveCodes = () => {
 }
 
 const getYieldCurveMonths = () => {
+  console.log(selectedYieldCurveYear.value, selectedYieldCurveCode.value)
   IbnrService.getYieldCurveMonths(selectedYieldCurveYear.value, selectedYieldCurveCode.value).then(
     (response) => {
       yieldCurveMonths.value = response.data

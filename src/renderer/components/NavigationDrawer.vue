@@ -259,11 +259,12 @@ watchEffect(() => {
 }
 
 .nav-text {
+  color: white !important;
   font-size: 10px !important;
 }
 
 .nav-bg {
-  background-color: lightgrey !important;
+  background-color: #2e566e !important;
 }
 
 .smaller-font :deep(.v-list-item-title),

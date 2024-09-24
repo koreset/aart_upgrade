@@ -3,60 +3,68 @@
 <template>
   <v-container>
     <v-row>
-      <v-stepper v-model:model-value="position">
-        <v-stepper-header>
-          <v-stepper-item title="Create Product" value="1"></v-stepper-item>
-          <v-stepper-item title="Transition States" value="2"></v-stepper-item>
-          <v-stepper-item title="Transitions" value="3"></v-stepper-item>
-          <v-stepper-item title="Rating Factors" value="4"></v-stepper-item>
-          <v-stepper-item title="Benefit Structure" value="5"></v-stepper-item>
-          <v-stepper-item title="Model Points" value="6"></v-stepper-item>
-          <v-stepper-item title="Save Product" value="7"></v-stepper-item>
-        </v-stepper-header>
-        <v-stepper-window>
-          <v-stepper-window-item value="1">
-            <create-product ref="currentStep" />
-          </v-stepper-window-item>
-          <v-stepper-window-item value="2">
-            <transition-states ref="currentStep" />
-          </v-stepper-window-item>
-          <v-stepper-window-item value="3">
-            <transitions ref="currentStep" />
-          </v-stepper-window-item>
-          <v-stepper-window-item value="4">
-            <rating-factors ref="currentStep" />
-          </v-stepper-window-item>
-          <v-stepper-window-item value="5">
-            <features ref="currentStep" />
-          </v-stepper-window-item>
-          <v-stepper-window-item value="6">
-            <model-points ref="currentStep" />
-          </v-stepper-window-item>
+      <v-col>
+        <v-stepper v-model:model-value="position" class="smaller-font" dark alt-labels>
+          <v-stepper-header>
+            <v-stepper-item title="Create Product" value="1"></v-stepper-item>
+            <v-divider></v-divider>
+            <v-stepper-item title="Transition States" value="2"></v-stepper-item>
+            <v-divider></v-divider>
+            <v-stepper-item title="Transitions" value="3"></v-stepper-item>
+            <v-divider></v-divider>
+            <v-stepper-item title="Rating Factors" value="4"></v-stepper-item>
+            <v-divider></v-divider>
+            <v-stepper-item title="Benefit Structure" value="5"></v-stepper-item>
+            <v-divider></v-divider>
+            <v-stepper-item title="Model Points" value="6"></v-stepper-item>
+            <v-divider></v-divider>
+            <v-stepper-item title="Save Product" value="7"></v-stepper-item>
+          </v-stepper-header>
+          <v-stepper-window>
+            <v-stepper-window-item value="1">
+              <create-product ref="currentStep" />
+            </v-stepper-window-item>
+            <v-stepper-window-item value="2">
+              <transition-states ref="currentStep" />
+            </v-stepper-window-item>
+            <v-stepper-window-item value="3">
+              <transitions ref="currentStep" />
+            </v-stepper-window-item>
+            <v-stepper-window-item value="4">
+              <rating-factors ref="currentStep" />
+            </v-stepper-window-item>
+            <v-stepper-window-item value="5">
+              <features ref="currentStep" />
+            </v-stepper-window-item>
+            <v-stepper-window-item value="6">
+              <model-points ref="currentStep" />
+            </v-stepper-window-item>
 
-          <v-row>
-            <v-col>
-              <v-btn
-                class="ml-2 mb-3"
-                size="small"
-                rounded
-                color="primary"
-                :disabled="position === 0"
-                @click="movePrev"
-                >Prev</v-btn
-              >
-              <v-btn
-                class="ml-9 mb-3"
-                size="small"
-                rounded
-                color="primary"
-                :disabled="position === 6"
-                @click="moveNext"
-                >Next</v-btn
-              >
-            </v-col>
-          </v-row>
-        </v-stepper-window>
-      </v-stepper>
+            <v-row>
+              <v-col>
+                <v-btn
+                  class="ml-2 mb-3"
+                  size="small"
+                  rounded
+                  color="primary"
+                  :disabled="position === 0"
+                  @click="movePrev"
+                  >Prev</v-btn
+                >
+                <v-btn
+                  class="ml-9 mb-3"
+                  size="small"
+                  rounded
+                  color="primary"
+                  :disabled="position === 6"
+                  @click="moveNext"
+                  >Next</v-btn
+                >
+              </v-col>
+            </v-row>
+          </v-stepper-window>
+        </v-stepper>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -113,5 +121,8 @@ const movePrev = () => {
 
 .color-black {
   color: black;
+}
+.smaller-font {
+  font-size: 14px;
 }
 </style>
