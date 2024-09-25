@@ -203,5 +203,13 @@ export default {
   },
   getModelPointVersions(productId, year) {
     return Api.get('products/' + productId + '/modelpointversions/' + year)
+  },
+  deleteValuationJobs(runIds) {
+    const payload = JSON.stringify(runIds)
+    console.log('payload', payload)
+    return Api.delete('valuations/jobs', {
+      data: payload,
+      headers: { 'Content-Type': 'application/json' }
+    })
   }
 }

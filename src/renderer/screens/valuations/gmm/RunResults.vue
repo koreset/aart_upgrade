@@ -7,15 +7,54 @@
             <span class="headline">Valuation Run Results</span>
           </template>
           <template #default>
+            <v-row
+              ><v-col>
+                <v-btn
+                  rounded
+                  size="small"
+                  class="mb-2"
+                  variant="outlined"
+                  @click="getSelectStatus"
+                  >{{ selectBtnText }}</v-btn
+                >
+                <v-btn
+                  v-if="selectedItems.length > 0 && showSelect"
+                  rounded
+                  size="small"
+                  class="ml-2 mb-2"
+                  variant="outlined"
+                  @click="selectedItems = []"
+                  >Clear Selection</v-btn
+                >
+
+                <v-btn
+                  v-if="selectedItems.length > 0 && showSelect"
+                  rounded
+                  size="small"
+                  class="ml-2 mb-2"
+                  variant="outlined"
+                  @click="deleteRuns(selectedItems)"
+                  >Delete Selected</v-btn
+                >
+              </v-col></v-row
+            >
             <v-expansion-panels>
               <v-expansion-panel v-for="job in paginatedJobs" :key="job.id">
-                <v-expansion-panel-title>
+                <v-expansion-panel-title class="custom-panel-title px-3">
                   <template #default="{ expanded }">
                     <v-row no-gutters>
-                      <v-col class="d-flex justify-start" cols="3">
+                      <v-col class="d-flex align-center justify-start" cols="3">
+                        <v-checkbox
+                          v-if="showSelect"
+                          density="compact"
+                          class="mr-2 no-padding-checkbox"
+                          hide-details
+                          :modelValue="isSelected(job.id)"
+                          @click.stop="toggleSelect(job.id)"
+                        />
                         {{ job.run_name }}
                       </v-col>
-                      <v-col class="text-grey" cols="9">
+                      <v-col class="text-grey d-flex align-center" cols="9">
                         <v-fade-transition leave-absolute>
                           <span v-if="expanded" key="0">
                             <v-list-item-subtitle v-if="job.status == 'In Progress'">
@@ -124,9 +163,11 @@
       </v-col>
     </v-row>
   </v-container>
+  <confirm-dialog ref="confirmDelete" />
 </template>
 
 <script setup lang="ts">
+import ConfirmDialog from '@/renderer/components/ConfirmDialog.vue'
 import BaseCard from '../../../components/BaseCard.vue'
 import { computed, onMounted, ref } from 'vue'
 import ProductService from '../../../api/ProductService'
@@ -134,6 +175,10 @@ import { DateTime } from 'luxon'
 
 let pollTimer: any = null
 
+const confirmDelete = ref()
+const selectedItems: any = ref([])
+const selectBtnText = ref('Show Selection')
+const showSelect = ref(false)
 const loading = ref(false)
 const runJobs = ref([])
 const pageSize = 10
@@ -158,6 +203,32 @@ const toMinutes = (number: any) => {
   return minutes + ' m, ' + seconds + ' s'
 }
 
+// const selectItem = (e: any) => {
+//   console.log(e)
+// }
+
+const isSelected = (id) => {
+  return selectedItems.value.includes(id)
+}
+
+const toggleSelect = (id: any) => {
+  if (selectedItems.value.includes(id)) {
+    selectedItems.value = selectedItems.value.filter((item) => item !== id)
+  } else {
+    selectedItems.value.push(id)
+  }
+  console.log(selectedItems.value)
+}
+
+const getSelectStatus = () => {
+  showSelect.value = !showSelect.value
+  if (showSelect.value) {
+    selectBtnText.value = 'Hide Selection'
+  } else {
+    selectBtnText.value = 'Show Selection'
+  }
+}
+
 const deleteRun = async (runId: any) => {
   // loading.value = true;
   // await ProductService.deleteValuationJob(runId);
@@ -168,6 +239,30 @@ const deleteRun = async (runId: any) => {
   // }
   // totalPages.value = Math.ceil(runJobs.value.length / pageSize);
   // loading.value = false;
+}
+
+const deleteRuns = async (runIds: any) => {
+  try {
+    const result = await confirmDelete.value.open(
+      'Delete Valuation Jobs',
+      'Are you sure you want to delete the selected valuation jobs?'
+    )
+    if (!result) {
+      return
+    }
+    console.log(runIds)
+    loading.value = true
+    await ProductService.deleteValuationJobs(runIds)
+    const res = await ProductService.getValuationJobs()
+    runJobs.value = res.data
+    if (runJobs.value === undefined || runJobs.value === null) {
+      runJobs.value = []
+    }
+    totalPages.value = Math.ceil(runJobs.value.length / pageSize)
+    loading.value = false
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 onMounted(async () => {
@@ -201,4 +296,23 @@ onMounted(async () => {
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+/* Custom styling to minimize the spacing */
+.custom-panel-title {
+  padding: 0; /* Remove default padding */
+  height: auto; /* Let height adjust automatically */
+  display: flex;
+  align-items: center; /* Align items vertically in the center */
+}
+
+/* Remove padding and margin from checkbox */
+.no-padding-checkbox {
+  padding: 0;
+  margin: 0;
+}
+
+.v-checkbox {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+</style>
