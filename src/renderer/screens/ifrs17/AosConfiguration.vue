@@ -1,203 +1,202 @@
 <template>
-  <base-card>
-    <template #header>
-      <span class="headline">AOS Configuration</span>
-    </template>
-    <template #default>
-      <v-container>
-        <v-row>
-          <v-col>
-            <v-table>
-              <thead>
-                <tr class="table-col">
-                  <th class="table-row">Configuration Name</th>
-                  <th class="table-row">Coverage Units</th>
-                  <th class="table-row">External SAP Source</th>
-                  <th class="table-row">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in existingConfigs" :key="item.id">
-                  <td>{{ item.configuration_name }}</td>
-                  <td>{{ item.coverage_unit_option }}</td>
-                  <td>{{ item.external_sap }}</td>
-                  <td>
-                    <v-tooltip left>
-                      <template #activator="{ on, attrs }">
-                        <v-btn
-                          variant="outlined"
-                          size="small"
-                          rounded
-                          v-bind="attrs"
-                          v-on="on"
-                          @click="showTableData(item)"
-                        >
-                          <v-icon color="primary">mdi-information</v-icon><span>Info</span>
-                        </v-btn>
-                      </template>
-                      <span>Display contents of {{ item.configuration_name }} table</span>
-                    </v-tooltip>
+  <v-container>
+    <v-row>
+      <v-col>
+        <base-card>
+          <template #header>
+            <span class="headline">AOS Configuration</span>
+          </template>
+          <template #default>
+            <v-container>
+              <v-row>
+                <v-col>
+                  <v-table>
+                    <thead>
+                      <tr class="table-col">
+                        <th class="table-row">Configuration Name</th>
+                        <th class="table-row">Coverage Units</th>
+                        <th class="table-row">External SAP Source</th>
+                        <th class="table-row">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="item in existingConfigs" :key="item.id">
+                        <td>{{ item.configuration_name }}</td>
+                        <td>{{ item.coverage_unit_option }}</td>
+                        <td>{{ item.external_sap }}</td>
+                        <td>
+                          <v-btn
+                            variant="outlined"
+                            size="small"
+                            rounded
+                            @click="showTableData(item)"
+                          >
+                            <v-icon color="primary">mdi-information</v-icon><span>Info</span>
+                          </v-btn>
 
-                    <v-btn
-                      size="small"
-                      variant="outlined"
-                      color="red"
-                      rounded
-                      class="ml-3"
-                      @click="removeFromConfigs(item)"
-                    >
-                      <v-icon>mdi-delete</v-icon><span>Delete</span>
-                    </v-btn>
-                  </td>
-                </tr>
-              </tbody>
-            </v-table>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <file-info
-              :tableTitle="'AOS'"
-              :rowData="rowData"
-              :columnDefs="columnDefs"
-              :onUpdate:isInfoDialogOpen="closeInfoBox"
-              :isDialogOpen="infoDialog"
-            />
-          </v-col>
-        </v-row>
+                          <v-btn
+                            size="small"
+                            variant="outlined"
+                            color="red"
+                            rounded
+                            class="ml-3"
+                            @click="removeFromConfigs(item)"
+                          >
+                            <v-icon>mdi-delete</v-icon><span>Delete</span>
+                          </v-btn>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </v-table>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <file-info
+                    :tableTitle="'AOS'"
+                    :rowData="rowData"
+                    :columnDefs="columnDefs"
+                    :onUpdate:isInfoDialogOpen="closeInfoBox"
+                    :isDialogOpen="infoDialog"
+                  />
+                </v-col>
+              </v-row>
 
-        <v-divider class="mb-9 mt-9"></v-divider>
-        <v-row>
-          <v-col>
-            <h4>Create a new configuration</h4>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-text-field
-              v-model="aosSetName"
-              variant="outlined"
-              density="compact"
-              label="Enter a name for this configuration"
-            ></v-text-field>
-          </v-col>
-          <v-col>
-            <v-select
-              v-model="coverageUnitOption"
-              variant="outlined"
-              density="compact"
-              label="Choose a Coverage Unit Option"
-              placeholder="Coverage Unit Options"
-              :items="coverageUnitOptions"
-              item-title="text"
-              item-value="value"
-            >
-            </v-select>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-checkbox
-              v-model="useManualSap"
-              :label="`Use imported Scoped Aggregation Results`"
-              @click="toggleSap"
-            ></v-checkbox>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-table>
-              <thead>
-                <tr class="table-row">
-                  <th class="table-col">Variable</th>
-                  <th class="table-col">Description</th>
-                  <th class="table-col minwidth-name">Run Name</th>
-                  <th class="table-col minwidth">Time</th>
-                  <th class="table-col">Notes</th>
-                  <th class="table-col">Assumption Basis</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in aosVars" :key="item.name">
-                  <td>{{ item.name }}</td>
-                  <td>{{ item.description }}</td>
-                  <td>
-                    <v-select
-                      v-model="item.run_name"
-                      class="mt-7"
-                      density="compact"
-                      clearable
-                      variant="outlined"
-                      label="Select a Run"
-                      :items="valuationRuns"
-                      item-title="run_name"
-                      item-value="run_name"
-                      @change="uniqueRuns"
-                    ></v-select>
-                  </td>
-                  <td>{{ item.time }}</td>
-                  <td>{{ item.notes }}</td>
-                  <td>{{ item.assumption_basis }}</td>
-                </tr>
-              </tbody>
-            </v-table>
-          </v-col>
-        </v-row>
-        <v-row v-if="filteredRuns.length > 0">
-          <v-col>
-            <v-table>
-              <thead>
-                <tr class="table-row">
-                  <th class="table-col">Run Name</th>
-                  <th class="table-col">Description</th>
-                  <th class="table-col">MPF</th>
-                  <th class="table-col">Mortality</th>
-                  <th class="table-col">Morbidity</th>
-                  <th class="table-col">Lapse</th>
-                  <th class="table-col">Retrenchment</th>
-                  <th class="table-col">Parameter</th>
-                  <th class="table-col">Yield Curve</th>
-                  <th class="table-col">Discount Rate</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in filteredRuns" :key="item.run_name">
-                  <td>{{ item.run_name }}</td>
-                  <td>{{ item.run_description }}</td>
-                  <td>{{ item.run_parameters.modelpoint_year }}</td>
-                  <td>{{ item.run_parameters.mortality_year }}</td>
-                  <td>{{ item.run_parameters.morbidity_year }}</td>
-                  <td>{{ item.run_parameters.lapse_year }}</td>
-                  <td>{{ item.run_parameters.retrenchment_year }}</td>
-                  <td>{{ item.run_parameters.parameter_year }}</td>
-                  <td>{{ item.run_parameters.yieldcurve_year }}</td>
-                  <td>{{ item.yield_curve_basis }}</td>
-                </tr>
-              </tbody>
-            </v-table>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-btn
-              rounded
-              size="small"
-              variant="outlined"
-              class="primary"
-              @click="saveConfiguration"
-            >
-              Save Configuration
-            </v-btn>
-          </v-col>
-        </v-row>
-        <v-snackbar v-model="snackbar" :timeout="timeout" :multi-line="true">
-          {{ text }}
-          <v-btn rounded color="red" text @click="snackbar = false">Close</v-btn>
-        </v-snackbar>
-        <confirmation-dialog ref="confirmAction" />
-      </v-container>
-    </template>
-  </base-card>
+              <v-divider class="mb-9 mt-9"></v-divider>
+              <v-row>
+                <v-col>
+                  <h4>Create a new configuration</h4>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-text-field
+                    v-model="aosSetName"
+                    variant="outlined"
+                    density="compact"
+                    label="Enter a name for this configuration"
+                  ></v-text-field>
+                </v-col>
+                <v-col>
+                  <v-select
+                    v-model="coverageUnitOption"
+                    variant="outlined"
+                    density="compact"
+                    label="Choose a Coverage Unit Option"
+                    placeholder="Coverage Unit Options"
+                    :items="coverageUnitOptions"
+                    item-title="text"
+                    item-value="value"
+                  >
+                  </v-select>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-checkbox
+                    v-model="useManualSap"
+                    :label="`Use imported Scoped Aggregation Results`"
+                    @click="toggleSap"
+                  ></v-checkbox>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-table>
+                    <thead>
+                      <tr class="table-row">
+                        <th class="table-col">Variable</th>
+                        <th class="table-col">Description</th>
+                        <th class="table-col minwidth-name">Run Name</th>
+                        <th class="table-col minwidth">Time</th>
+                        <th class="table-col">Notes</th>
+                        <th class="table-col">Assumption Basis</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="item in aosVars" :key="item.name">
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.description }}</td>
+                        <td>
+                          <v-select
+                            v-model="item.run_name"
+                            class="mt-7"
+                            density="compact"
+                            clearable
+                            variant="outlined"
+                            label="Select a Run"
+                            :items="valuationRuns"
+                            item-title="run_name"
+                            item-value="run_name"
+                            @change="uniqueRuns"
+                          ></v-select>
+                        </td>
+                        <td>{{ item.time }}</td>
+                        <td>{{ item.notes }}</td>
+                        <td>{{ item.assumption_basis }}</td>
+                      </tr>
+                    </tbody>
+                  </v-table>
+                </v-col>
+              </v-row>
+              <v-row v-if="filteredRuns.length > 0">
+                <v-col>
+                  <v-table>
+                    <thead>
+                      <tr class="table-row">
+                        <th class="table-col">Run Name</th>
+                        <th class="table-col">Description</th>
+                        <th class="table-col">MPF</th>
+                        <th class="table-col">Mortality</th>
+                        <th class="table-col">Morbidity</th>
+                        <th class="table-col">Lapse</th>
+                        <th class="table-col">Retrenchment</th>
+                        <th class="table-col">Parameter</th>
+                        <th class="table-col">Yield Curve</th>
+                        <th class="table-col">Discount Rate</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="item in filteredRuns" :key="item.run_name">
+                        <td>{{ item.run_name }}</td>
+                        <td>{{ item.run_description }}</td>
+                        <td>{{ item.run_parameters.modelpoint_year }}</td>
+                        <td>{{ item.run_parameters.mortality_year }}</td>
+                        <td>{{ item.run_parameters.morbidity_year }}</td>
+                        <td>{{ item.run_parameters.lapse_year }}</td>
+                        <td>{{ item.run_parameters.retrenchment_year }}</td>
+                        <td>{{ item.run_parameters.parameter_year }}</td>
+                        <td>{{ item.run_parameters.yieldcurve_year }}</td>
+                        <td>{{ item.yield_curve_basis }}</td>
+                      </tr>
+                    </tbody>
+                  </v-table>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-btn
+                    rounded
+                    size="small"
+                    variant="outlined"
+                    class="primary"
+                    @click="saveConfiguration"
+                  >
+                    Save Configuration
+                  </v-btn>
+                </v-col>
+              </v-row>
+              <v-snackbar v-model="snackbar" :timeout="timeout" :multi-line="true">
+                {{ text }}
+                <v-btn rounded color="red" text @click="snackbar = false">Close</v-btn>
+              </v-snackbar>
+              <confirmation-dialog ref="confirmAction" />
+            </v-container>
+          </template>
+        </base-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script setup lang="ts">
@@ -236,10 +235,12 @@ const aosVars: any = ref([])
 
 onMounted(() => {
   CsmService.getAosVariables().then((response) => {
+    console.log(response.data)
     aosVars.value = response.data
   })
 
   CsmService.getExistingConfigs().then((res) => {
+    console.log(res.data)
     existingConfigs.value = res.data
     uniqueRuns()
   })
@@ -305,6 +306,7 @@ const getManualSapList = () => {
 
 const getValuationJobList = () => {
   ProductService.getValuationJobs().then((response) => {
+    console.log(response.data)
     valuationRuns.value = response.data
   })
 }
@@ -325,6 +327,7 @@ const createColumnDefs = (data) => {
 }
 
 const uniqueRuns = () => {
+  console.log('uniqueRuns')
   if (!useManualSap.value) {
     filteredRuns.value = []
     aosVars.value.forEach((item) => {
@@ -336,6 +339,7 @@ const uniqueRuns = () => {
       }
     })
   }
+  console.log(filteredRuns.value)
 }
 
 const saveConfiguration = () => {

@@ -24,23 +24,23 @@
       <v-list-item :to="{ name: 'product-setup' }" :prepend-icon="'mdi-table-settings'">
         <v-list-item-title>Product Configuration</v-list-item-title>
       </v-list-item>
-      <v-list-item :to="{ name: 'products' }" :prepend-icon="'mdi-table-settings'">
+      <v-list-item :to="{ name: 'products' }" :prepend-icon="'mdi-dolly'">
         <v-list-item-title>Products</v-list-item-title>
       </v-list-item>
-      <v-list-item :to="{ name: 'global-tables' }" :prepend-icon="'mdi-table'">
+      <v-list-item :to="{ name: 'global-tables' }" :prepend-icon="'mdi-table-multiple'">
         <v-list-item-title>Global Tables</v-list-item-title>
       </v-list-item>
-      <v-list-item :to="{ name: 'product-comparison' }" :prepend-icon="'mdi-table'">
+      <v-list-item :to="{ name: 'product-comparison' }" :prepend-icon="'mdi-compare-horizontal'">
         <v-list-item-title>Product Comparison</v-list-item-title>
       </v-list-item>
-      <v-list-item :to="{ name: 'reporting' }" :prepend-icon="'mdi-table'">
+      <v-list-item :to="{ name: 'reporting' }" :prepend-icon="'mdi-chart-box-multiple'">
         <v-list-item-title>Reports</v-list-item-title>
       </v-list-item>
       <v-list-group value="Valuations">
         <template #activator="{ props }">
           <v-list-item
             v-bind="props"
-            prepend-icon="mdi-account-circle"
+            prepend-icon="mdi-file-table-box-multiple-outline"
             title="Valuations"
           ></v-list-item>
         </template>
@@ -123,7 +123,7 @@
         <template #activator="{ props }">
           <v-list-item
             v-bind="props"
-            prepend-icon="mdi-account-circle"
+            prepend-icon="mdi-file-table-box-multiple-outline"
             title="Pricing"
           ></v-list-item>
         </template>
@@ -135,7 +135,7 @@
         <template #activator="{ props }">
           <v-list-item
             v-bind="props"
-            prepend-icon="mdi-account-circle"
+            prepend-icon="mdi-file-table-box-multiple-outline"
             title="Exp Analysis"
           ></v-list-item>
         </template>
@@ -156,7 +156,7 @@
         <template #activator="{ props }">
           <v-list-item
             v-bind="props"
-            prepend-icon="mdi-account-circle"
+            prepend-icon="mdi-file-table-box-multiple-outline"
             title="IFRS17"
           ></v-list-item>
         </template>
@@ -180,7 +180,7 @@
         <template #activator="{ props }">
           <v-list-item
             v-bind="props"
-            prepend-icon="mdi-account-circle"
+            prepend-icon="mdi-chart-box-multiple"
             title="IFRS17 Reports"
           ></v-list-item>
         </template>

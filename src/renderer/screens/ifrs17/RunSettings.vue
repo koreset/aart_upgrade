@@ -54,7 +54,7 @@
                     placeholder="Select a PAA Run"
                     label="PAA Run"
                     :items="paaRuns"
-                    item-title="name"
+                    :item-title="getTitle()"
                     item-value="id"
                     clearable
                     return-object
@@ -470,6 +470,7 @@ onMounted(() => {
     aosConfigs.value = res.data
   })
   CsmEngine.getPAARuns().then((res) => {
+    console.log('respaa', res.data)
     paaRuns.value = res.data
   })
 })
@@ -479,6 +480,11 @@ const removeFromJobs = (item: any) => {
   csmRuns.value.splice(csmRuns.value.indexOf(item), 1)
 }
 
+const getTitle = () => {
+  return (item: any) => {
+    return `${item.name} - [ Run date: ${item.run_date} ] `
+  }
+}
 const runNameDuplicate = async (value) => {
   if (value) {
     // const obj = csmRuns.value.find((x) => x.name === value)

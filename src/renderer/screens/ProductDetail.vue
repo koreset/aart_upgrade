@@ -24,7 +24,7 @@
               :items="products"
               item-title="product_name"
               item-value="product_code"
-              label="Select a product category"
+              label="Select a product"
               return-object
               @update:model-value="getProduct"
             />

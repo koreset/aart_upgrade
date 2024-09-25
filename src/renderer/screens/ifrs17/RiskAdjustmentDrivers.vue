@@ -1,170 +1,181 @@
 <template>
-  <base-card>
-    <template #header>
-      <span class="headline">Risk Adjustment Configuration - Risk Drivers</span>
-    </template>
-    <template #default>
-      <v-container>
-        <v-row v-if="riskDrivers.length > 0">
-          <v-col>
-            <v-table>
-              <thead>
-                <tr class="table-row">
-                  <th class="table-col">Product</th>
-                  <th class="table-col">Mortality Risk</th>
-                  <th class="table-col">Morbidity Risk</th>
-                  <th class="table-col">Longevity Risk</th>
-                  <th class="table-col">Expense Risk</th>
-                  <th class="table-col">Lapse Risk</th>
-                  <th class="table-col">Catastrophe</th>
-                  <th class="table-col">Operational</th>
-                  <th class="table-col">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in riskDrivers" :key="item.product_code">
-                  <td>{{ item.product_code }}</td>
-                  <td>{{ item.mortality_risk }}</td>
-                  <td>{{ item.morbidity_risk }}</td>
-                  <td>{{ item.longevity_risk }}</td>
-                  <td>{{ item.expense_risk }}</td>
-                  <td>{{ item.lapse_risk }}</td>
-                  <td>{{ item.catastrophe_risk }}</td>
-                  <td>{{ item.operational_risk }}</td>
-                  <td>
-                    <v-btn variant="text" size="small" @click="deleteRiskDriver(item)"
-                      ><v-icon color="red">mdi-delete</v-icon></v-btn
-                    >
-                  </td>
-                </tr>
-              </tbody>
-            </v-table>
-          </v-col>
-        </v-row>
-        <v-divider v-if="riskDrivers.length > 0" class="mb-4 mt-4"></v-divider>
-        <v-row>
-          <v-col cols="3">
-            <v-select
-              v-model="selectedProduct"
-              variant="outlined"
-              density="compact"
-              label="Select a Product"
-              :items="productList"
-              item-title="product_name"
-              item-value="product_code"
-            >
-            </v-select>
-          </v-col>
-        </v-row>
-        <v-row v-if="selectedProduct">
-          <v-col cols="6"
-            ><v-select
-              v-model="mortalityRisk"
-              clearable
-              variant="outlined"
-              density="compact"
-              label="Mortality Risk"
-              :items="driverList"
-              item-title="risk_type"
-              item-value="risk_type"
-            ></v-select
-          ></v-col>
-          <v-col cols="6"
-            ><v-select
-              v-model="morbidityRisk"
-              clearable
-              variant="outlined"
-              density="compact"
-              label="Morbidity Risk"
-              :items="driverList"
-              item-title="risk_type"
-              item-value="risk_type"
-            ></v-select
-          ></v-col>
-          <v-col cols="6"
-            ><v-select
-              v-model="longevityRisk"
-              clearable
-              variant="outlined"
-              density="compact"
-              label="Longevity Risk"
-              :items="driverList"
-              item-title="risk_type"
-              item-value="risk_type"
-            ></v-select
-          ></v-col>
-          <v-col cols="6"
-            ><v-select
-              v-model="expenseRisk"
-              clearable
-              variant="outlined"
-              density="compact"
-              label="Expense Risk"
-              :items="driverList"
-              item-title="risk_type"
-              item-value="risk_type"
-            ></v-select
-          ></v-col>
-          <v-col cols="6"
-            ><v-select
-              v-model="lapseRisk"
-              clearable
-              variant="outlined"
-              density="compact"
-              label="Lapse Risk"
-              :items="driverList"
-              item-title="risk_type"
-              item-value="risk_type"
-            ></v-select
-          ></v-col>
-          <v-col cols="6"
-            ><v-select
-              v-model="catastropheRisk"
-              clearable
-              variant="outlined"
-              density="compact"
-              label="Catastophe"
-              :items="driverList"
-              item-title="risk_type"
-              item-value="risk_type"
-            ></v-select
-          ></v-col>
-        </v-row>
-        <v-row v-if="selectedProduct">
-          <v-col cols="6"
-            ><v-select
-              v-model="operationalRisk"
-              clearable
-              variant="outlined"
-              density="compact"
-              label="Operational"
-              :items="driverList"
-              item-title="risk_type"
-              item-value="risk_type"
-            ></v-select
-          ></v-col>
-        </v-row>
-        <v-row v-if="selectedProduct">
-          <v-col cols="4" offset="4">
-            <v-btn rounded variant="outlined" size="small" class="primary" @click="addToList"
-              >Add to Drivers List
-            </v-btn>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-btn rounded class="primary" variant="outlined" size="small" @click="saveDrivers"
-              >Save Risk Drivers</v-btn
-            >
-          </v-col>
-        </v-row>
-        <v-snackbar v-model="snackbar" :timeout="timeout" :multi-line="true">
-          {{ text }}
-          <v-btn rounded color="red" text @click="snackbar = false">Close</v-btn>
-        </v-snackbar>
-      </v-container>
-    </template>
-  </base-card>
+  <v-container>
+    <v-row>
+      <v-col>
+        <base-card>
+          <template #header>
+            <span class="headline">Risk Adjustment Configuration - Risk Drivers</span>
+          </template>
+          <template #default>
+            <v-container>
+              <v-row v-if="riskDrivers.length > 0">
+                <v-col>
+                  <v-table>
+                    <thead>
+                      <tr class="table-row">
+                        <th class="table-col">Product</th>
+                        <th class="table-col">Mortality Risk</th>
+                        <th class="table-col">Morbidity Risk</th>
+                        <th class="table-col">Longevity Risk</th>
+                        <th class="table-col">Expense Risk</th>
+                        <th class="table-col">Lapse Risk</th>
+                        <th class="table-col">Catastrophe</th>
+                        <th class="table-col">Operational</th>
+                        <th class="table-col">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="item in riskDrivers" :key="item.product_code">
+                        <td>{{ item.product_code }}</td>
+                        <td>{{ item.mortality_risk }}</td>
+                        <td>{{ item.morbidity_risk }}</td>
+                        <td>{{ item.longevity_risk }}</td>
+                        <td>{{ item.expense_risk }}</td>
+                        <td>{{ item.lapse_risk }}</td>
+                        <td>{{ item.catastrophe_risk }}</td>
+                        <td>{{ item.operational_risk }}</td>
+                        <td>
+                          <v-btn variant="text" size="small" @click="deleteRiskDriver(item)"
+                            ><v-icon color="red">mdi-delete</v-icon></v-btn
+                          >
+                        </td>
+                      </tr>
+                    </tbody>
+                  </v-table>
+                </v-col>
+              </v-row>
+              <v-divider v-if="riskDrivers.length > 0" class="mb-4 mt-4"></v-divider>
+              <v-row>
+                <v-col cols="3">
+                  <v-select
+                    v-model="selectedProduct"
+                    variant="outlined"
+                    density="compact"
+                    label="Select a Product"
+                    :items="productList"
+                    item-title="product_name"
+                    item-value="product_code"
+                  >
+                  </v-select>
+                </v-col>
+              </v-row>
+              <v-row v-if="selectedProduct">
+                <v-col cols="6"
+                  ><v-select
+                    v-model="mortalityRisk"
+                    clearable
+                    variant="outlined"
+                    density="compact"
+                    label="Mortality Risk"
+                    :items="driverList"
+                    item-title="risk_type"
+                    item-value="risk_type"
+                  ></v-select
+                ></v-col>
+                <v-col cols="6"
+                  ><v-select
+                    v-model="morbidityRisk"
+                    clearable
+                    variant="outlined"
+                    density="compact"
+                    label="Morbidity Risk"
+                    :items="driverList"
+                    item-title="risk_type"
+                    item-value="risk_type"
+                  ></v-select
+                ></v-col>
+                <v-col cols="6"
+                  ><v-select
+                    v-model="longevityRisk"
+                    clearable
+                    variant="outlined"
+                    density="compact"
+                    label="Longevity Risk"
+                    :items="driverList"
+                    item-title="risk_type"
+                    item-value="risk_type"
+                  ></v-select
+                ></v-col>
+                <v-col cols="6"
+                  ><v-select
+                    v-model="expenseRisk"
+                    clearable
+                    variant="outlined"
+                    density="compact"
+                    label="Expense Risk"
+                    :items="driverList"
+                    item-title="risk_type"
+                    item-value="risk_type"
+                  ></v-select
+                ></v-col>
+                <v-col cols="6"
+                  ><v-select
+                    v-model="lapseRisk"
+                    clearable
+                    variant="outlined"
+                    density="compact"
+                    label="Lapse Risk"
+                    :items="driverList"
+                    item-title="risk_type"
+                    item-value="risk_type"
+                  ></v-select
+                ></v-col>
+                <v-col cols="6"
+                  ><v-select
+                    v-model="catastropheRisk"
+                    clearable
+                    variant="outlined"
+                    density="compact"
+                    label="Catastophe"
+                    :items="driverList"
+                    item-title="risk_type"
+                    item-value="risk_type"
+                  ></v-select
+                ></v-col>
+              </v-row>
+              <v-row v-if="selectedProduct">
+                <v-col cols="6"
+                  ><v-select
+                    v-model="operationalRisk"
+                    clearable
+                    variant="outlined"
+                    density="compact"
+                    label="Operational"
+                    :items="driverList"
+                    item-title="risk_type"
+                    item-value="risk_type"
+                  ></v-select
+                ></v-col>
+              </v-row>
+              <v-row v-if="selectedProduct">
+                <v-col cols="4" offset="4">
+                  <v-btn rounded variant="outlined" size="small" class="primary" @click="addToList"
+                    >Add to Drivers List
+                  </v-btn>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-btn
+                    rounded
+                    class="primary"
+                    variant="outlined"
+                    size="small"
+                    @click="saveDrivers"
+                    >Save Risk Drivers</v-btn
+                  >
+                </v-col>
+              </v-row>
+              <v-snackbar v-model="snackbar" :timeout="timeout" :multi-line="true">
+                {{ text }}
+                <v-btn rounded color="red" text @click="snackbar = false">Close</v-btn>
+              </v-snackbar>
+            </v-container>
+          </template>
+        </base-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script setup lang="ts">
