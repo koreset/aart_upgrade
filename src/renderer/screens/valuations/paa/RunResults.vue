@@ -7,15 +7,57 @@
             <span class="headline">Projection Runs</span>
           </template>
           <template #default>
+            <v-row
+              ><v-col>
+                <v-btn
+                  rounded
+                  size="small"
+                  class="mb-2"
+                  variant="outlined"
+                  @click="getSelectStatus"
+                  >{{ selectBtnText }}</v-btn
+                >
+                <v-btn
+                  v-if="selectedItems.length > 0 && showSelect"
+                  rounded
+                  size="small"
+                  class="ml-2 mb-2"
+                  variant="outlined"
+                  @click="selectedItems = []"
+                  >Clear Selection</v-btn
+                >
+
+                <v-btn
+                  v-if="selectedItems.length > 0 && showSelect"
+                  rounded
+                  size="small"
+                  class="ml-2 mb-2"
+                  variant="outlined"
+                  @click="deleteRuns(selectedItems)"
+                  >Delete Selected</v-btn
+                >
+              </v-col></v-row
+            >
             <v-row v-if="runJobs.length > 0 && !loading">
               <v-col>
                 <v-expansion-panels>
                   <v-expansion-panel v-for="item in paginatedJobs" :key="item.id">
-                    <v-expansion-panel-title>
+                    <v-expansion-panel-title class="custom-panel-title px-3">
                       <template #default="{ expanded }">
                         <v-row no-gutters>
-                          <v-col cols="3" class="text-container"> {{ item.name }}</v-col>
-                          <v-col cols="9" class="text--secondary pl-1">
+                          <v-col class="d-flex align-center justify-start" cols="4">
+                            <v-checkbox
+                              v-if="showSelect"
+                              density="compact"
+                              class="mr-2 no-padding-checkbox"
+                              hide-details
+                              :modelValue="isSelected(item.id)"
+                              @click.stop="toggleSelect(item.id)"
+                            />
+                            {{ item.name }}
+                          </v-col>
+
+                          <v-col cols="8" class="text--secondary pl-1">
                             <v-fade-transition leave-absolute>
                               <span v-if="expanded" key="0">
                                 <v-list-item-subtitle v-if="item.processing_status == 'processing'">
@@ -122,14 +164,22 @@
       </v-card>
     </v-dialog>
   </v-container>
+  <confirm-dialog ref="confirmationDialog" />
 </template>
 
 <script setup lang="ts">
+import ConfirmDialog from '@/renderer/components/ConfirmDialog.vue'
+
 import ModifiedGMMService from '../../../api/ModifiedGMMService'
 import { onMounted, ref, computed } from 'vue'
 import toMinutes from '../../../utils/helpers'
 import { DateTime } from 'luxon'
 import BaseCard from '../../../components/BaseCard.vue'
+
+// selection variables
+const selectedItems: any = ref([])
+const selectBtnText = ref('Show Selection')
+const showSelect = ref(false)
 
 const pageSize = 10
 const currentPage = ref(1)
@@ -141,12 +191,56 @@ const paginatedJobs: any = computed(() => {
   return runJobs.value.slice(start, end)
 })
 
+const confirmationDialog = ref()
 const selectedRunId = ref(null)
 const dialog = ref(false)
 const runJobs: any = ref([])
 const loading = ref(false)
 let pollTimer: any = null
 
+// selection methods
+const isSelected = (id) => {
+  return selectedItems.value.includes(id)
+}
+
+const toggleSelect = (id: any) => {
+  if (selectedItems.value.includes(id)) {
+    selectedItems.value = selectedItems.value.filter((item) => item !== id)
+  } else {
+    selectedItems.value.push(id)
+  }
+  console.log(selectedItems.value)
+}
+
+const getSelectStatus = () => {
+  showSelect.value = !showSelect.value
+  if (showSelect.value) {
+    selectBtnText.value = 'Hide Selection'
+  } else {
+    selectBtnText.value = 'Show Selection'
+  }
+}
+
+const deleteRuns = async (items: any) => {
+  try {
+    const result = await confirmationDialog.value.open(
+      'Delete Valuation Jobs',
+      'Are you sure you want to delete the selected valuation jobs?'
+    )
+
+    if (!result) {
+      return
+    }
+
+    items.forEach((item) => {
+      deleteRun(item)
+    })
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+// other methods
 const formatDateString = (dateString: any) => {
   return DateTime.fromISO(dateString).toLocaleString(DateTime.DATETIME_MED)
 }
@@ -156,7 +250,7 @@ const confirmDelete = (jobId: any) => {
   selectedRunId.value = jobId
 }
 
-const deleteRun = (itemId: any) => {
+const deleteRun = async (itemId: any) => {
   ModifiedGMMService.deleteRun(itemId)
   runJobs.value = runJobs.value.filter(function (elem: any) {
     return elem.id !== itemId
@@ -202,5 +296,24 @@ onMounted(async () => {
   /* Allows the text to expand to its full length */
   white-space: normal;
   /* Allows the text to wrap */
+}
+
+/* Custom styling to minimize the spacing */
+.custom-panel-title {
+  padding: 0; /* Remove default padding */
+  height: auto; /* Let height adjust automatically */
+  display: flex;
+  align-items: center; /* Align items vertically in the center */
+}
+
+/* Remove padding and margin from checkbox */
+.no-padding-checkbox {
+  padding: 0;
+  margin: 0;
+}
+
+.v-checkbox {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 </style>

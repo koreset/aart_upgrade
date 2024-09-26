@@ -239,6 +239,8 @@ const handleUpload = (data: {
 }
 
 const getProducts = async () => {
+  selectedProduct.value = null
+
   const matchedCategory = allProducts.value.find(
     (item: any) => item.id === selectedProductCategory.value
   )

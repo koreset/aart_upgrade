@@ -74,9 +74,7 @@
                                     </v-col>
                                   </v-row>
                                   <v-row v-else>
-                                    <v-col cols="3"
-                                      ><h4>{{ item.name }}</h4></v-col
-                                    >
+                                    <v-col cols="3">{{ item.name }}</v-col>
                                   </v-row>
                                 </v-fade-transition>
                               </v-col>

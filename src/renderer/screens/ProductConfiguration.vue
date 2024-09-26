@@ -39,9 +39,9 @@
             <v-stepper-window-item value="6">
               <model-points ref="currentStep" />
             </v-stepper-window-item>
-
+            <v-divider class="my-5"></v-divider>
             <v-row>
-              <v-col>
+              <v-col class="d-flex">
                 <v-btn
                   class="ml-2 mb-3"
                   size="small"
@@ -52,13 +52,16 @@
                   >Prev</v-btn
                 >
                 <v-btn
-                  class="ml-9 mb-3"
+                  class="ml-4 me-auto"
                   size="small"
                   rounded
                   color="primary"
                   :disabled="position === 6"
                   @click="moveNext"
                   >Next</v-btn
+                >
+                <v-btn class="ml-9 mb-3" size="small" rounded color="primary" @click="resetForm"
+                  >Reset configuration</v-btn
                 >
               </v-col>
             </v-row>
@@ -98,6 +101,10 @@ const moveNext = async () => {
 
 const movePrev = () => {
   position.value--
+}
+
+const resetForm = () => {
+  position.value = 0
 }
 
 // I want to make disabled reactive and a computed property

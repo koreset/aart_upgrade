@@ -76,7 +76,7 @@
                     density="compact"
                     placeholder="Select an AoS Configuration"
                     :items="aosConfigs"
-                    item-title="configuration_name"
+                    :item-title="getConfigTitle()"
                     item-value="configuration_name"
                     clearable
                     return-object
@@ -483,6 +483,13 @@ const removeFromJobs = (item: any) => {
 const getTitle = () => {
   return (item: any) => {
     return `${item.name} - [ Run date: ${item.run_date} ] `
+  }
+}
+
+const getConfigTitle = () => {
+  return (item: any) => {
+    console.log('item', item)
+    return `${item.configuration_name}`
   }
 }
 const runNameDuplicate = async (value) => {

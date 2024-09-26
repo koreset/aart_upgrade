@@ -175,10 +175,15 @@ import { DateTime } from 'luxon'
 
 let pollTimer: any = null
 
-const confirmDelete = ref()
+
+// selection variables
 const selectedItems: any = ref([])
 const selectBtnText = ref('Show Selection')
 const showSelect = ref(false)
+
+
+
+const confirmDelete = ref()
 const loading = ref(false)
 const runJobs = ref([])
 const pageSize = 10

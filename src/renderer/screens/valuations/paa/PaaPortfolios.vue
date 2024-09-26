@@ -79,7 +79,7 @@
                         :key="item.name"
                         @group:selected="checkClass"
                       >
-                        <v-expansion-panel-title :class="expansionColor">
+                        <v-expansion-panel-title>
                           <template #default="{ expanded }">
                             <v-row no-gutters>
                               <v-col cols="12">
@@ -98,9 +98,7 @@
                                     </v-col>
                                   </v-row>
                                   <v-row v-else>
-                                    <v-col cols="3"
-                                      ><h4>{{ item.name }}</h4></v-col
-                                    >
+                                    <v-col cols="3">{{ item.name }}</v-col>
                                   </v-row>
                                 </v-fade-transition>
                               </v-col>

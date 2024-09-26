@@ -96,7 +96,7 @@
                   <v-checkbox
                     v-model="useManualSap"
                     :label="`Use imported Scoped Aggregation Results`"
-                    @click="toggleSap"
+                    @update:modelValue="toggleSap"
                   ></v-checkbox>
                 </v-col>
               </v-row>
@@ -244,6 +244,7 @@ onMounted(() => {
     existingConfigs.value = res.data
     uniqueRuns()
   })
+  getValuationJobList()
 })
 
 // methods
@@ -252,6 +253,10 @@ const closeInfoBox = (value) => {
 }
 
 const toggleSap = () => {
+  for (const object of aosVars.value) {
+    object.run_name = null
+  }
+
   if (useManualSap.value) {
     getManualSapList()
   } else {

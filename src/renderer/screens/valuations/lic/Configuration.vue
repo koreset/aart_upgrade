@@ -10,7 +10,7 @@
             <v-container>
               <v-row>
                 <v-col>
-                  <v-table class="trans-tables">
+                  <v-table>
                     <thead>
                       <tr class="table-row">
                         <th class="table-col">Configuration Name</th>
@@ -23,22 +23,15 @@
                         <td>{{ item.configuration_name }}</td>
                         <td>{{ item.run_type }}</td>
                         <td>
-                          <v-tooltip left>
-                            <template #activator="{ on, attrs }">
-                              <v-btn
-                                v-bind="attrs"
-                                size="small"
-                                variant="outlined"
-                                rounded
-                                v-on="on"
-                                @click="showTableData(item)"
-                              >
-                                <v-icon color="primary">mdi-information</v-icon>
-                                <span>Info</span>
-                              </v-btn>
-                            </template>
-                            <span>Display contents of {{ item.configuration_name }} table</span>
-                          </v-tooltip>
+                          <v-btn
+                            size="small"
+                            variant="outlined"
+                            rounded
+                            @click="showTableData(item)"
+                          >
+                            <v-icon color="primary">mdi-information</v-icon>
+                            <span>Info</span>
+                          </v-btn>
 
                           <v-btn
                             class="ml-6"
@@ -100,67 +93,31 @@
                   <v-table class="trans-tables">
                     <thead>
                       <tr class="table-row">
-                        <th class="table-col">Variable</th>
-                        <th class="table-col">Description</th>
-                        <th class="table-col">Run Name</th>
-                        <th class="table-col">Notes</th>
+                        <th class="minwidth table-col">Variable</th>
+                        <th class="minwidth table-col">Run Name</th>
                         <th class="table-col">Assumption Basis</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr v-for="item in licVars" :key="item.id">
                         <td>{{ item.name }}</td>
-                        <td>{{ item.description }}</td>
                         <td>
                           <v-select
                             v-model="item.run_id"
+                            :disabled="licRuns.length === 0 || licRuns === null"
                             class="mt-7"
                             density="compact"
                             clearable
                             variant="outlined"
                             label="Select a Run"
                             :items="licRuns"
-                            item-title="run_name"
+                            :item-title="getItemTitle(item)"
                             item-value="id"
+                            placeholder="Select a Run"
                             @update:modelValue="uniqueRuns"
                           ></v-select>
                         </td>
-                        <td>{{ item.notes }}</td>
                         <td>{{ item.assumption_basis }}</td>
-                      </tr>
-                    </tbody>
-                  </v-table>
-                </v-col>
-              </v-row>
-              <v-row v-if="filteredRuns.length > 0">
-                <v-col>
-                  <v-table class="trans-tables">
-                    <thead>
-                      <tr class="table-row">
-                        <th class="table-col">Run Name</th>
-                        <th class="table-col">Description</th>
-                        <th class="table-col">MPF</th>
-                        <th class="table-col">Mortality</th>
-                        <th class="table-col">Morbidity</th>
-                        <th class="table-col">Lapse</th>
-                        <th class="table-col">Retrenchment</th>
-                        <th class="table-col">Parameter</th>
-                        <th class="table-col">Yield Curve</th>
-                        <th class="table-col">Discount Rate</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="item in filteredRuns" :key="item.run_name">
-                        <td>{{ item.run_name }}</td>
-                        <td>{{ item.run_description }}</td>
-                        <td>{{ item.run_parameters.modelpoint_year }}</td>
-                        <td>{{ item.run_parameters.mortality_year }}</td>
-                        <td>{{ item.run_parameters.morbidity_year }}</td>
-                        <td>{{ item.run_parameters.lapse_year }}</td>
-                        <td>{{ item.run_parameters.retrenchment_year }}</td>
-                        <td>{{ item.run_parameters.parameter_year }}</td>
-                        <td>{{ item.run_parameters.yieldcurve_year }}</td>
-                        <td>{{ item.yield_curve_basis }}</td>
                       </tr>
                     </tbody>
                   </v-table>
@@ -192,13 +149,19 @@
                 {{ text }}
                 <v-btn rounded color="red" text @click="snackbar = false">Close</v-btn>
               </v-snackbar>
-              <confirmation-dialog ref="confirm" />
             </v-container>
           </template>
         </base-card>
       </v-col>
     </v-row>
     <confirm-dialog ref="confirmationDialog" />
+    <file-info
+      :tableTitle="configItemName"
+      :rowData="rowData"
+      :columnDefs="columnDefs"
+      :onUpdate:isInfoDialogOpen="closeInfoBox"
+      :isDialogOpen="infoDialog"
+    />
   </v-container>
 </template>
 
@@ -211,23 +174,15 @@ import { onMounted, ref } from 'vue'
 import ConfirmDialog from '@/renderer/components/ConfirmDialog.vue'
 import { useRouter } from 'vue-router'
 import BaseCard from '@/renderer/components/BaseCard.vue'
+import FileInfo from '@/renderer/components/FileInfo.vue'
 
 const $router = useRouter()
 
 // data
+const configItemName = ref('')
+const infoDialog = ref(false)
 const confirmationDialog: any = ref()
-// const selectedConfigId = ref(0)
-// const selectedConfigName = ref('')
-// const deleteDialog = ref(false)
-// const coverageUnitOption = ref(null)
 const showConfigurationForm = ref(false)
-// const coverageUnitOptions = ref([
-//   {
-//     text: 'Undiscounted Coverage Units',
-//     value: 'UndiscountedCoverageUnits'
-//   },
-//   { text: 'Discounted Coverage Units', value: 'DiscountedCoverageUnits' }
-// ])
 const text: any = ref(null)
 const timeout = ref(3000)
 const snackbar = ref(false)
@@ -235,11 +190,8 @@ const licConfigs: any = ref([])
 const licRuns: any = ref([])
 const columnDefs: any = ref([])
 const rowData: any = ref([])
-const tableDialog = ref(false)
-// const selectedRun = ref(null)
-// const selectedChangeType = ref(null)
+// const tableDialog = ref(false)
 const selectedRunType = ref(null)
-// const aosList = ref([])
 const configurationName = ref(null)
 const filteredRuns: any = ref([])
 const licVars: any = ref([])
@@ -253,27 +205,29 @@ const runTypes = ref([
     value: 'cash_flows'
   }
 ])
-// const changeTypes = ref([
-//   { change_type: 'Not Applicable' },
-//   { change_type: 'Current Service' },
-//   { change_type: 'Future Service' }
-// ])
-
-// const varHeaders = ref([
-//   { text: 'Variable', value: 'duration_in_force_months' },
-//   { text: 'Description', value: 'current_year' },
-//   { text: 'Run Name', value: 'past_year' },
-//   { text: 'Notes', value: 'variance' },
-//   { text: 'Assumption Basis', value: 'change' }
-// ])
 
 // methods
 onMounted(async () => {
   const response = await LicService.getLicVariables()
   licVars.value = response.data
+  licVars.value.forEach((item) => {
+    item.run_id = null
+  })
   const response2 = await LicService.getLicConfigs()
   licConfigs.value = response2.data
+  console.log(licConfigs.value)
 })
+
+const closeInfoBox = (value) => {
+  infoDialog.value = value
+}
+
+const getItemTitle = (item) => {
+  console.log(item)
+  return (item: any) => {
+    return `${item.run_name} - [ Run date: ${item.run_date} ] `
+  }
+}
 
 const deleteConfig = async (item) => {
   const res = await confirmationDialog.value.open(
@@ -319,7 +273,8 @@ const createColumnDefs = (data) => {
 
 const showTableData = (item) => {
   loadData(item)
-  tableDialog.value = true
+  configItemName.value = item.configuration_name
+  infoDialog.value = true
 }
 
 const loadData = (item) => {
@@ -346,9 +301,9 @@ const loadData = (item) => {
 
 const saveConfiguration = () => {
   const payload: any = {}
-  payload.configuration_name = configurationName
-  payload.lic_variables = licVars
-  payload.run_type = selectedRunType
+  payload.configuration_name = configurationName.value
+  payload.lic_variables = licVars.value
+  payload.run_type = selectedRunType.value
   LicService.saveRunConfig(payload).then((res) => {
     if (res.status === 201) {
       text.value = 'LIC Configuration saved successfully'
@@ -380,6 +335,7 @@ const uniqueRuns = () => {
       }
     }
   })
+  console.log(filteredRuns.value)
 }
 
 // export default {
@@ -607,5 +563,8 @@ const uniqueRuns = () => {
 
 .trans-tables {
   border: 1px solid #38546c;
+}
+.minwidth {
+  min-width: 200px;
 }
 </style>
