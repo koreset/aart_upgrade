@@ -67,8 +67,9 @@
                             class="primary"
                             variant="outlined"
                             size="small"
+                            color="red"
                             rounded
-                            @click="confirmDelete(item.id)"
+                            @click="deleteRun(item.id)"
                             >Delete Run</v-btn
                           >
                           <v-btn
@@ -117,20 +118,7 @@
         </base-card>
       </v-col>
     </v-row>
-    <v-dialog v-model="dialog" persistent max-width="500">
-      <v-card>
-        <v-card-title class="headline"
-          ><v-icon class="mr-3" color="red" size="25">mdi-alert-circle</v-icon>Delete
-          Confirmation</v-card-title
-        >
-        <v-card-text>Are you sure you want to delete </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="primary darken-1" text @click="dialog = false">No</v-btn>
-          <v-btn color="primary darken-1" text @click="deleteRun(selectedRunId)">Yes</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <confirmation-dialog ref="confirmDeleteAction" />
   </v-container>
 </template>
 
@@ -139,22 +127,18 @@ import LicService from '@/renderer/api/LicService'
 import { onMounted, ref, computed } from 'vue'
 import BaseCard from '@/renderer/components/BaseCard.vue'
 import { DateTime } from 'luxon'
+import ConfirmationDialog from '@/renderer/components/ConfirmDialog.vue'
 
 let pollTimer
 
+const confirmDeleteAction = ref()
 const runJobs: any = ref([])
-const dialog = ref(false)
-const selectedRunId = ref(null)
 const loading = ref(false)
 const pageSize = 10
 const currentPage = ref(1)
 const totalPages = ref(3)
 
 // methods
-const confirmDelete = (jobId) => {
-  dialog.value = true
-  selectedRunId.value = jobId
-}
 
 const paginatedJobs: any = computed(() => {
   const start = (currentPage.value - 1) * pageSize
@@ -184,12 +168,18 @@ const toMinutes = (number) => {
 // }
 
 const deleteRun = async (itemId: any) => {
-  // await IbnrService.deleteRun(itemId)
-  runJobs.value = runJobs.value.filter(function (elem: any) {
-    return elem.id !== itemId
+  const confirmed = await confirmDeleteAction.value.open(
+    'Deleting LIC Run',
+    'Are you sure you want to delete this run?'
+  )
+  if (!confirmed) {
+    return
+  }
+  LicService.deleteLicRun(itemId).then(() => {
+    runJobs.value = runJobs.value.filter(function (elem: any) {
+      return elem.id !== itemId
+    })
   })
-
-  dialog.value = false
 }
 
 onMounted(async () => {
