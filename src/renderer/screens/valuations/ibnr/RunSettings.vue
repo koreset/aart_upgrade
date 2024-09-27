@@ -190,7 +190,6 @@
                   :items="ibnrMethods"
                   item-title="text"
                   item-value="value"
-                  return-object
                 ></v-select>
               </v-col>
             </v-row>
@@ -249,7 +248,13 @@
 
             <v-row>
               <v-col>
-                <v-btn rounded width="200" small class="primary" @click="addToRunJobs"
+                <v-btn
+                  rounded
+                  width="200"
+                  size="small"
+                  variant="outlined"
+                  class="primary"
+                  @click="addToRunJobs"
                   >Add to Run Jobs</v-btn
                 >
               </v-col>
@@ -316,7 +321,9 @@
             </v-row>
             <v-row v-if="runJobs.length > 0" class="mx-9">
               <v-col>
-                <v-btn class="primary" small rounded @click="executeJobs">Run Jobs</v-btn>
+                <v-btn class="primary" size="small" variant="outlined" rounded @click="executeJobs"
+                  >Run Jobs</v-btn
+                >
               </v-col>
             </v-row>
           </template>
@@ -472,7 +479,7 @@ const addToRunJobs = () => {
     job.claims_input_version = selectedInputVersion.value
     job.parameter_year = selectedParameterYear.value
     job.yield_curve_year = selectedYieldCurveYear.value
-    job.yield_curve_month = selectedYieldCurveMonth.value
+    job.yield_curve_month = Number(selectedYieldCurveMonth.value)
     job.inflation_indicator = inflationIndicator.value
     job.bootstrap_indicator = bootStrapIndicator.value
     job.calculation_interval = calculationInterval.value
@@ -517,12 +524,13 @@ const removeFromRunJobs = (jobName) => {
   })
 }
 const executeJobs = () => {
-  IbnrService.runJobs(runJobs).then((res) => {
+  console.log('payload', runJobs.value)
+  IbnrService.runJobs(runJobs.value).then((res) => {
     timeout.value = 3000
     snackbar.value = true
     snackBarText.value = res.data.message
     setTimeout(() => {
-      $router.push({ path: '/valuations-ibnr-run-results' })
+      $router.push({ name: 'valuations-ibnr-run-results' })
     }, 2000)
   })
 }
