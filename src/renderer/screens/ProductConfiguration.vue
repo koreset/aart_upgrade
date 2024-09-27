@@ -73,7 +73,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useProductStore } from '@/renderer/store/product_config'
 
 import CreateProduct from '@/renderer/components/productconfig/CreateProduct.vue'
@@ -82,12 +82,24 @@ import Transitions from '@/renderer/components/productconfig/Transitions.vue'
 import RatingFactors from '@/renderer/components/productconfig/RatingFactors.vue'
 import Features from '@/renderer/components/productconfig/Features.vue'
 import ModelPoints from '@/renderer/components/productconfig/ModelPoints.vue'
+import { useRoute } from 'vue-router'
+import ProductService from '../api/ProductService'
 
+const route = useRoute()
 const store = useProductStore()
 const position = ref(0)
 
 const currentStep: any = ref(null)
 const myproduct = store.getProduct
+
+onMounted(() => {
+  console.log('route', route)
+  if (route.params.id) {
+    ProductService.getProductById(route.params.id).then((response) => {
+      console.log('response', response)
+    })
+  }
+})
 
 const moveNext = async () => {
   const isValid = currentStep.value ? await currentStep.value.validateForm() : false

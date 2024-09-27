@@ -125,8 +125,9 @@
                             clearable
                             variant="outlined"
                             label="Select a Run"
+                            placeholder="Select a Run"
                             :items="valuationRuns"
-                            item-title="run_name"
+                            :item-title="getTitle"
                             item-value="run_name"
                             @change="uniqueRuns"
                           ></v-select>
@@ -237,6 +238,9 @@ onMounted(() => {
   CsmService.getAosVariables().then((response) => {
     console.log(response.data)
     aosVars.value = response.data
+    aosVars.value.forEach((item) => {
+      item.run_name = null
+    })
   })
 
   CsmService.getExistingConfigs().then((res) => {
@@ -252,6 +256,10 @@ const closeInfoBox = (value) => {
   infoDialog.value = value
 }
 
+const getTitle = (item) => {
+  console.log('Item: ', item)
+  return `${item.run_name} - [ Run date: ${item.run_date} ] `
+}
 const toggleSap = () => {
   for (const object of aosVars.value) {
     object.run_name = null

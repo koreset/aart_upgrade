@@ -5,7 +5,7 @@
         <span class="headline">{{ tableTitle }}</span>
       </template>
       <template #default>
-        <data-grid :columnDefs="columnDefs" :rowData="rowData" />
+        <data-grid :showExport="showExport" :columnDefs="columnDefs" :rowData="rowData" />
       </template>
       <template #actions>
         <v-btn size="small" @click="upload">Close</v-btn>
@@ -24,6 +24,7 @@ interface Props {
   rowData: any
   columnDefs: any
   tableTitle: string
+  showExport?: boolean
 }
 
 const emit = defineEmits<{

@@ -87,6 +87,19 @@
             ></v-select>
           </v-col>
         </v-row>
+        <v-row v-if="showIbnrTableTypes">
+          <v-col>
+            <v-select
+              v-model="selectedTableType"
+              variant="outlined"
+              density="compact"
+              label="Select a table type"
+              :items="ibnrTableTypes"
+              item-title="name"
+              item-value="value"
+            ></v-select>
+          </v-col>
+        </v-row>
         <v-row>
           <v-col>
             <v-btn
@@ -148,7 +161,9 @@ const props = defineProps({
   showMonth: { type: Boolean, default: false },
   showVersion: { type: Boolean, default: false },
   showExpTableTypes: { type: Boolean, default: false },
+  showIbnrTableTypes: { type: Boolean, default: false },
   showYieldCurveCode: { type: Boolean, default: false },
+  showPaaModelPoints: { type: Boolean, default: false },
   assumptionType: { type: String, default: '' },
   uploadComplete: { type: Boolean, default: false }
 })
@@ -173,6 +188,10 @@ const fileName: any = ref(null)
 const expTableTypes = [
   { name: 'Actual Data', value: 'actual_data' },
   { name: 'Exposure Data', value: 'exposure_data' }
+]
+const ibnrTableTypes = [
+  { name: 'Claims Data', value: 'claims_data' },
+  { name: 'Earned Premium', value: 'earned_premium' }
 ]
 
 // computed

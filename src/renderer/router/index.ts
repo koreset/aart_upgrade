@@ -38,6 +38,15 @@ export default createRouter({
       }
     },
     {
+      path: '/product-edit/:id',
+      name: 'product-edit',
+      component: () => import('../screens/ProductConfiguration.vue'),
+      meta: {
+        titleKey: 'title.productEdit'
+      }
+    },
+
+    {
       path: '/global-tables',
       name: 'global-tables',
       component: () => import('../screens/GlobalTables.vue'),

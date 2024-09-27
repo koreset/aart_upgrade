@@ -4,7 +4,7 @@
       <v-col>
         <base-card>
           <template #header>
-            <span class="headline">Projection Runs</span>
+            <span class="headline">PAA Runs</span>
           </template>
           <template #default>
             <v-row
@@ -32,6 +32,7 @@
                   rounded
                   size="small"
                   class="ml-2 mb-2"
+                  color="red"
                   variant="outlined"
                   @click="deleteRuns(selectedItems)"
                   >Delete Selected</v-btn
@@ -98,13 +99,21 @@
                       </v-row>
                       <v-row>
                         <v-col class="d-flex justify-space-between">
-                          <v-btn class="primary" small rounded @click="confirmDelete(item.id)"
+                          <v-btn
+                            class="primary"
+                            size="small"
+                            color="red"
+                            rounded
+                            variant="outlined"
+                            @click="confirmDelete(item.id)"
                             >Delete Run</v-btn
                           >
                           <v-btn
                             class="primary ml-5"
-                            small
+                            size="small"
+                            color="primary"
                             rounded
+                            variant="outlined"
                             :to="'/valuations/paa/run-detail/' + item.id"
                             >View Results</v-btn
                           >

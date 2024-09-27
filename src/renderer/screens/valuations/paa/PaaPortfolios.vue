@@ -87,13 +87,26 @@
                                   <v-row v-if="expanded" no-gutters style="width: 100%">
                                     <v-col cols="3">{{ item.name }}</v-col>
                                     <v-col cols="9" class="d-flex justify-end">
+                                      <file-updater
+                                        :upload-complete="loadDataComplete"
+                                        :show-year="true"
+                                        :showVersion="true"
+                                        :show-ibnr-table-types="false"
+                                        :tableType="'PAA Model Points'"
+                                        :actionName="'Upload PAA Model Points'"
+                                        @uploadFile="handleUpload($event, item)"
+                                      />
+
                                       <v-btn
-                                        class="ml-7 pb-2 mr-9"
-                                        variant="text"
-                                        icon
+                                        class="ml-7 mr-3"
+                                        variant="outlined"
+                                        size="small"
+                                        color="primary"
+                                        rounded
                                         @click="deletePortfolio(item.id)"
                                       >
-                                        <v-icon color="red">mdi-delete</v-icon>
+                                        <v-icon color="red">mdi-delete</v-icon
+                                        ><span>Delete Portfolio</span>
                                       </v-btn>
                                     </v-col>
                                   </v-row>
@@ -233,6 +246,7 @@ import ModifiedGMMService from '../../../api/ModifiedGMMService'
 import ConfirmationDialog from '../../../components/ConfirmDialog.vue'
 import DataGrid from '../../../components/tables/DataGrid.vue'
 import formatValues from '@/renderer/utils/format_values'
+import FileUpdater from '@/renderer/components/FileUpdater.vue'
 
 const confirmDialog = ref()
 const activePanel = ref([])
@@ -292,6 +306,32 @@ const createPortfolio = () => {
     premiumEarningPattern.value = null
     selectedInsuranceType.value = null
   })
+}
+
+const handleUpload = (event: any, item: any) => {
+  console.log('Handling Upload', event, item)
+  const formData = new FormData()
+  formData.append('file', event.file)
+  formData.append('year', event.selectedYear)
+  formData.append('mp_version', event.version)
+  formData.append('portfolio_name', item.name)
+  formData.append('portfolio_id', item.id)
+  // this.loading = true
+  ModifiedGMMService.uploadGmmModelpointTables(formData)
+    .then((res) => {
+      console.log(res)
+      // this.uploadSuccess = true;
+      // this.resetErrorState();
+      // this.$emit("successUpload", this.tableId);
+      // this.loading = false;
+    })
+    .catch((err) => {
+      console.log(err)
+      // this.errorMessages.push(err.data.error);
+      // this.uploadSuccess = false;
+      // this.selectedYear = null;
+      // this.loading = false;
+    })
 }
 
 const getMpVersions = (id: number, year: number) => {

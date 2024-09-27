@@ -96,16 +96,8 @@
                               rounded
                               size="small"
                               color="primary"
-                              :to="
-                                '/valuation-jobs/' +
-                                run.id +
-                                '/' +
-                                run.product_id +
-                                '/' +
-                                run.product_name +
-                                '/' +
-                                job.run_name +
-                                '/control'
+                              @click.stop="
+                                viewControl(run.id, run.product_id, run.product_name, job.run_name)
                               "
                               >View Control</v-btn
                             >
@@ -162,6 +154,18 @@
         </base-card>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col>
+        <file-info
+          :tableTitle="tableTitle"
+          :rowData="rowData"
+          :columnDefs="columnDefs"
+          :onUpdate:isInfoDialogOpen="closeInfoBox"
+          :isDialogOpen="infoDialog"
+          :show-export="true"
+        />
+      </v-col>
+    </v-row>
   </v-container>
   <confirm-dialog ref="confirmDelete" />
 </template>
@@ -171,18 +175,23 @@ import ConfirmDialog from '@/renderer/components/ConfirmDialog.vue'
 import BaseCard from '../../../components/BaseCard.vue'
 import { computed, onMounted, ref } from 'vue'
 import ProductService from '../../../api/ProductService'
+import ValuationService from '../../../api/ValuationService'
 import { DateTime } from 'luxon'
+import formatValues from '@/renderer/utils/format_values'
+import FileInfo from '@/renderer/components/FileInfo.vue'
 
 let pollTimer: any = null
-
 
 // selection variables
 const selectedItems: any = ref([])
 const selectBtnText = ref('Show Selection')
 const showSelect = ref(false)
 
+const infoDialog = ref(false)
 
-
+const tableTitle = ref('')
+const rowData: any = ref([])
+const columnDefs: any = ref([])
 const confirmDelete = ref()
 const loading = ref(false)
 const runJobs = ref([])
@@ -215,6 +224,9 @@ const toMinutes = (number: any) => {
 const isSelected = (id) => {
   return selectedItems.value.includes(id)
 }
+const closeInfoBox = (value: any) => {
+  infoDialog.value = value
+}
 
 const toggleSelect = (id: any) => {
   if (selectedItems.value.includes(id)) {
@@ -235,15 +247,23 @@ const getSelectStatus = () => {
 }
 
 const deleteRun = async (runId: any) => {
-  // loading.value = true;
-  // await ProductService.deleteValuationJob(runId);
-  // const res = await ProductService.getValuationJobs();
-  // runJobs.value = res.data;
-  // if (runJobs.value === undefined || runJobs.value === null) {
-  //   runJobs.value = [];
-  // }
-  // totalPages.value = Math.ceil(runJobs.value.length / pageSize);
-  // loading.value = false;
+  const result = await confirmDelete.value.open(
+    'Deleting Valuation Job Run',
+    'Are you sure you want to delete the selected valuation job run?'
+  )
+  if (!result) {
+    return
+  }
+
+  loading.value = true
+  await ValuationService.deleteProjectionJob(runId)
+  const res = await ProductService.getValuationJobs()
+  runJobs.value = res.data
+  if (runJobs.value === undefined || runJobs.value === null) {
+    runJobs.value = []
+  }
+  totalPages.value = Math.ceil(runJobs.value.length / pageSize)
+  loading.value = false
 }
 
 const deleteRuns = async (runIds: any) => {
@@ -268,6 +288,31 @@ const deleteRuns = async (runIds: any) => {
   } catch (error) {
     console.log(error)
   }
+}
+
+const viewControl = (runId: any, productId: any, productName: any, runName: any) => {
+  console.log(runId, productId, productName, runName)
+  ProductService.getValuationJobControl(runId).then((resp) => {
+    console.log(resp.data)
+    rowData.value = resp.data.projections
+    createColumnDefs(rowData.value)
+    console.log(rowData.value)
+    console.log(columnDefs.value)
+    tableTitle.value = productName + ' - ' + runName
+    infoDialog.value = true
+  })
+}
+
+const createColumnDefs = (data) => {
+  columnDefs.value = []
+  Object.keys(data[0]).forEach((element) => {
+    const header: any = {}
+    header.headerName = element
+    header.field = element
+    header.valueFormatter = formatValues
+    header.minWidth = 200
+    columnDefs.value.push(header)
+  })
 }
 
 onMounted(async () => {

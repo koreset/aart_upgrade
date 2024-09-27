@@ -63,13 +63,25 @@
                                   <v-row v-if="expanded" no-gutters style="width: 100%">
                                     <v-col cols="3">{{ item.name }}</v-col>
                                     <v-col cols="9" class="d-flex justify-end">
+                                      <file-updater
+                                        :upload-complete="loadDataComplete"
+                                        :show-year="true"
+                                        :showVersion="true"
+                                        :show-ibnr-table-types="true"
+                                        :tableType="'IBNR Data'"
+                                        :actionName="'Upload Ibnr Data'"
+                                        @uploadFile="handleUpload($event, item)"
+                                      />
+
                                       <v-btn
-                                        class="ml-7 pb-2 mr-9"
-                                        variant="text"
-                                        icon
+                                        class="ml-5 mr-3"
+                                        variant="outlined"
+                                        rounded
+                                        size="small"
                                         @click="deletePortfolio(item.id)"
                                       >
-                                        <v-icon color="red">mdi-delete</v-icon>
+                                        <v-icon color="red">mdi-delete</v-icon
+                                        ><span>Delete Portfolio</span>
                                       </v-btn>
                                     </v-col>
                                   </v-row>
@@ -232,6 +244,7 @@ import IbnrService from '../../../api/IbnrService'
 import ConfirmationDialog from '../../../components/ConfirmDialog.vue'
 import DataGrid from '../../../components/tables/DataGrid.vue'
 import formatValues from '../../../utils/format_values'
+import FileUpdater from '@/renderer/components/FileUpdater.vue'
 
 const confirmDialog = ref()
 const activePanel = ref([])
@@ -270,17 +283,42 @@ const createPortfolio = () => {
   console.log('Creating Portfolio')
   const portfolio = {
     name: portfolioName.value,
-    premium_earning_pattern: premiumEarningPattern.value,
-    discount_option: discountOption.value,
-    insurance_type: selectedInsuranceType.value
+    discount_option: discountOption.value
   }
-  ModifiedGMMService.createPaaPortfolio(portfolio).then((res) => {
+  IbnrService.createPortfolio(portfolio).then((res) => {
     portfolios.value.push(res.data)
     portfolioName.value = null
     discountOption.value = null
     premiumEarningPattern.value = null
     selectedInsuranceType.value = null
   })
+}
+
+const handleUpload = (event: any, item: any) => {
+  console.log('Handling Upload', event, item)
+  const formData = new FormData()
+  formData.append('file', event.file)
+  formData.append('year', event.selectedYear)
+  formData.append('type', event.dataTableType)
+  formData.append('portfolio_name', item.name)
+  formData.append('portfolio_id', item.id)
+  formData.append('version_name', event.version)
+  // this.loading = true
+  IbnrService.uploadLicModelpoints(formData)
+    .then((res) => {
+      console.log('Response', res)
+      // this.uploadSuccess = true
+      // this.resetErrorState()
+      // this.$emit('successUpload', this.tableId)
+      // this.loading = false
+    })
+    .catch((err) => {
+      console.log('Error', err)
+      // this.errorMessages.push(err.data.error)
+      // this.uploadSuccess = false
+      // this.selectedYear = null
+      // this.loading = false
+    })
 }
 
 const getMpVersions = (id: number, year: number) => {

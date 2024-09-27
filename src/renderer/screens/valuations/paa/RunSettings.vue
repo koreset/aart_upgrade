@@ -299,7 +299,7 @@ const executeJobs = () => {
     snackbar.value = true
     text.value = res.data.message
     setTimeout(() => {
-      $router.push({ path: '/m-gmm/projection-runs' })
+      $router.push({ path: '/valuations/paa/run-results' })
     }, 2000)
   })
 }

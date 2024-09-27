@@ -97,7 +97,13 @@
                 </v-row>
                 <v-row>
                   <v-col>
-                    <v-btn type="submit" rounded width="250" size="small" color="primary"
+                    <v-btn
+                      type="submit"
+                      rounded
+                      width="250"
+                      size="small"
+                      variant="outlined"
+                      color="primary"
                       >Add to Shock Settings</v-btn
                     >
                   </v-col>

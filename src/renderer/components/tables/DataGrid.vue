@@ -20,8 +20,9 @@
         <v-btn
           v-if="showDeleteButton"
           size="small"
+          variant="outlined"
           rounded
-          color="primary"
+          color="red"
           class="custom-btn primary white--text ml-4 mt-4"
           @click="deleteRow"
           >Delete Selected</v-btn

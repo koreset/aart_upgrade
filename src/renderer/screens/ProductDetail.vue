@@ -135,8 +135,10 @@
         <v-btn class="ml-9 mb-3" rounded :size="buttonSize" color="primary" @click="openDialog"
           >Upload Model Points</v-btn
         >
-        <v-btn class="ml-9 mb-3" size="small" rounded color="primary">Run Valuations</v-btn>
-        <v-btn class="ml-9 mb-3" size="small" rounded color="primary"
+        <v-btn class="ml-9 mb-3" size="small" rounded color="primary" @click="runValuations"
+          >Run Valuations</v-btn
+        >
+        <v-btn class="ml-9 mb-3" size="small" rounded color="primary" @click="editConfiguration"
           >Edit Product Configuration</v-btn
         >
         <v-spacer></v-spacer>
@@ -226,6 +228,21 @@ const countForVersion = computed(() => {
   console.log('selected item: ', selectedItem)
   return selectedItem ? selectedItem.count : null
 })
+
+const editConfiguration = () => {
+  router.push({ name: 'product-edit', params: { id: selectedProduct.value.id } })
+}
+
+const runValuations = () => {
+  router.push('/valuations/gmm/run-settings')
+  // Only run projections if there are available model points
+  // if (this.modelPointCount.length > 0) {
+  //   this.$router.push('/run-valuations')
+  // } else {
+  //   this.snackbar = true
+  //   this.text = 'You will need to upload model points for the product before running projections'
+  // }
+}
 
 const handleUpload = (data: {
   file: File | null
