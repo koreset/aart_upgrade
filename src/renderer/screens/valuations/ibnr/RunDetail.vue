@@ -56,95 +56,49 @@
                 <v-progress-circular :width="3" indeterminate></v-progress-circular>
               </v-col>
             </v-row>
-            <v-container v-if="tableData.length > 0">
-              <v-row>
-                <v-col>
-                  <v-tabs
-                    v-model="tab"
-                    center-active
-                    dark
-                    background-color="primary tab-rounded"
-                    class="white--text"
-                    @update:modelValue="checkDataSummaries"
+            <v-row v-if="tableData.length > 0">
+              <v-col>
+                <v-tabs
+                  v-model="tab"
+                  center-active
+                  dark
+                  background-color="primary tab-rounded"
+                  class="white--text"
+                  @update:modelValue="checkDataSummaries"
+                >
+                  <v-tab v-for="item in tableData" :key="item.table_name" class="custom-btn">
+                    {{ convertSnakeCaseToSpace(item.table_name) }}
+                  </v-tab>
+                </v-tabs>
+                <v-tabs-window v-model="tab">
+                  <v-tabs-window-item
+                    v-for="data in tableData"
+                    :key="data.table_name"
+                    active-class="active-tab"
+                    class="tab-item-border"
                   >
-                    <v-tab v-for="item in tableData" :key="item.table_name" class="custom-btn">
-                      {{ convertSnakeCaseToSpace(item.table_name) }}
-                    </v-tab>
-                  </v-tabs>
-                  <v-tabs-window v-model="tab">
-                    <v-tabs-window-item
-                      v-for="data in tableData"
-                      :key="data.table_name"
-                      active-class="active-tab"
-                      class="tab-item-border"
-                    >
-                      <data-grid
-                        :columnDefs="data.column_defs"
-                        :rowData="data.row_data"
-                        :pagination="true"
-                      >
-                      </data-grid>
-                      <!-- <tables-ibnr-data-table
-                        :chartXAxisTitle="'Year'"
-                        :chartTitle="data.table_name"
-                        :tableName="data.table_name"
-                        :columnDefs="data.column_defs"
-                        :rowData="data.row_data"
-                        :pagination="true"
-                      /> -->
-                      <v-row
-                        v-if="
-                          options.data.length > 0 &&
-                          selectedProduct !== null &&
-                          checkCandidateGraphTable(data.table_name)
-                        "
-                      >
-                        <v-col>
-                          <v-card outlined>
-                            <v-card-title class="header--title white--text accent"
-                              >Development Factors - {{ options.title.text }}</v-card-title
-                            >
-                            <v-card-text>
-                              <!-- <ag-charts-vue :options="options" /> -->
-                            </v-card-text>
-                          </v-card>
-                        </v-col>
-                      </v-row>
-                      <v-row
-                        v-if="
-                          chartOptions.series.length > 0 &&
-                          selectedProduct !== null &&
-                          checkCandidateGraphTable(data.table_name)
-                        "
-                        class="mt-5 mb-5"
-                      >
-                        <v-col>
-                          <v-card>
-                            <v-card-text>
-                              <Chart
-                                class="chart"
-                                :options="chartOptions"
-                                :updateArgs="updateArgs"
-                              ></Chart>
-                            </v-card-text>
-                          </v-card>
-                        </v-col>
-                      </v-row>
-                    </v-tabs-window-item>
-                  </v-tabs-window>
-                </v-col>
-              </v-row>
-              <!-- <v-row>
-                <v-col>
-                  <v-card>
-                    <v-card-title class="header-title white--text accent">Charts</v-card-title>
-                    <v-card-text>
-                      <div id="gen-charts"></div>
-                    </v-card-text>
-                  </v-card>
-                </v-col>
-              </v-row> -->
-            </v-container>
+                    <v-row>
+                      <v-col>
+                        <data-grid
+                          :show-export="true"
+                          :columnDefs="data.column_defs"
+                          :rowData="data.row_data"
+                          :pagination="true"
+                        >
+                        </data-grid>
+                      </v-col>
+                    </v-row>
+                    <v-row v-if="tableHasGraphs(data.table_name)">
+                      <v-col><ag-charts :options="options"></ag-charts> </v-col>
+                    </v-row>
+                    <v-row v-else>
+                      <v-col cols="1">Chart</v-col>
+                      <v-col cols="11"><ag-charts :options="options"></ag-charts> </v-col>
+                    </v-row>
+                  </v-tabs-window-item>
+                </v-tabs-window>
+              </v-col>
+            </v-row>
             <v-row v-if="runSettings !== null" class="mx-1">
               <v-col>
                 <v-table class="trans-tables">
@@ -245,7 +199,9 @@ import IbnrService from '@/renderer/api/IbnrService'
 import formatValues from '@/renderer/utils/format_values'
 import BaseCard from '@/renderer/components/BaseCard.vue'
 import DataGrid from '@/renderer/components/tables/DataGrid.vue'
-import { Chart } from 'highcharts-vue'
+import { AgCharts } from 'ag-charts-vue3'
+import type { AgChartOptions } from 'ag-charts-community'
+// import { Chart } from 'highcharts-vue'
 
 const $route = useRoute()
 const $router = useRouter()
@@ -290,36 +246,64 @@ const resultList = [
   }
 ]
 
-const chartOptions = ref({
-  credits: {
-    enabled: false
-  },
-  lang: {
-    thousandsSep: ','
-  },
-  chart: { type: 'column' },
-  title: { text: 'My Chart' },
-  xAxis: { categories: [], title: { text: 'Reserves' } },
-  yAxis: { title: { text: 'Count' } },
-  series: []
+// const chartOptions = ref({
+//   credits: {
+//     enabled: false
+//   },
+//   lang: {
+//     thousandsSep: ','
+//   },
+//   chart: { type: 'column' },
+//   title: { text: 'My Chart' },
+//   xAxis: { categories: [], title: { text: 'Reserves' } },
+//   yAxis: { title: { text: 'Count' } },
+//   series: []
+// })
+
+// const updateArgs = ref([true, true, { duration: 1000 }])
+// const sampleData = ref([
+//   { month: 'Jan', avgTemp: 2.3, iceCreamSales: 162000 },
+//   { month: 'Mar', avgTemp: 6.3, iceCreamSales: 302000 },
+//   { month: 'May', avgTemp: 16.2, iceCreamSales: 800000 },
+//   { month: 'Jul', avgTemp: 22.8, iceCreamSales: 1254000 },
+//   { month: 'Sep', avgTemp: 14.5, iceCreamSales: 950000 },
+//   { month: 'Nov', avgTemp: 8.9, iceCreamSales: 200000 }
+// ])
+// const sampleSeries = ref([[{ type: 'bar', xKey: 'month', yKey: 'iceCreamSales' }]])
+
+const options = ref<AgChartOptions>({
+  // Data: Data to be displayed in the chart
+  data: [
+    { month: 'Jan', avgTemp: 2.3, iceCreamSales: 162000 },
+    { month: 'Mar', avgTemp: 6.3, iceCreamSales: 302000 },
+    { month: 'May', avgTemp: 16.2, iceCreamSales: 800000 },
+    { month: 'Jul', avgTemp: 22.8, iceCreamSales: 1254000 },
+    { month: 'Sep', avgTemp: 14.5, iceCreamSales: 950000 },
+    { month: 'Nov', avgTemp: 8.9, iceCreamSales: 200000 }
+  ],
+  // Series: Defines which chart type and data to use
+  series: [{ type: 'bar', xKey: 'month', yKey: 'iceCreamSales' }]
 })
 
-const updateArgs = ref([true, true, { duration: 1000 }])
+// const options: any = ref({
+//   data: [],
+//   title: {
+//     text: 'Weighted Succession Average Ratio'
+//   },
+//   series: [
+//     {
+//       type: 'line',
+//       xKey: 'reporting_delay',
+//       yKey: 'value',
+//       yName: 'Reporting Delay'
+//     }
+//   ]
+// })
 
-const options: any = ref({
-  data: [],
-  title: {
-    text: 'Weighted Succession Average Ratio'
-  },
-  series: [
-    {
-      type: 'line',
-      xKey: 'reporting_delay',
-      yKey: 'value',
-      yName: 'Reporting Delay'
-    }
-  ]
-})
+// onMounted(() => {
+//   options.value.series = sampleSeries.value
+//   options.value.data = sampleData.value
+// })
 
 const convertSnakeCaseToSpace = (str) => {
   return str.replace(/_/g, ' ')
@@ -351,16 +335,16 @@ const getResultsByProduct = () => {
         tableData.value.push(tableDef)
         // Weighted factors
         if (item.graphData !== undefined && item.table_name === 'Development Factors') {
-          options.value.data = []
-          const entries = Object.entries(item.graphData).map(function ([key, value]) {
-            return { reporting_delay: key, value }
-          })
-          entries.shift() // this removes the first variable
-          // options.value = { ...options }
-          options.value.data = entries.slice(0, 30)
-          options.value.title.text =
-            'Weighted Succession Average Ratio' + ' - ' + selectedProduct.value
-
+          // options.value.data = []
+          // const entries = Object.entries(item.graphData).map(function ([key, value]) {
+          //   return { reporting_delay: key, value }
+          // })
+          // entries.shift() // this removes the first variable
+          // // options.value = { ...options }
+          // options.value.data = entries.slice(0, 30)
+          // options.value.title.text =
+          //   'Weighted Succession Average Ratio' + ' - ' + selectedProduct.value
+          // console.log('Options:', options.value)
           // options = options
         }
 
@@ -377,21 +361,19 @@ const getResultsByProduct = () => {
           //   chartOptions.value.title.text = 'IBNR Frequencies' + ' - ' + selectedProduct.value
           // }
           // chartOptions.value.xAxis.categories = item.data.map((item) => Math.round(item.reserve))
-
           // // make the Axis labels to comma separated
           // chartOptions.value.xAxis.labels = {
           //   formatter: function () {
           //     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
           //   }
           // }
-
-          options.value.series = [
-            {
-              name: 'Frequency',
-              data: item.data.map((item) => item.frequency)
-            }
-          ]
-          chartOptions.value = options
+          // options.value.series = [
+          //   {
+          //     name: 'Frequency',
+          //     data: item.data.map((item) => item.frequency)
+          //   }
+          // ]
+          // chartOptions.value = options
         }
       })
       loadingResults.value = false
@@ -444,7 +426,7 @@ const getResults = () => {
   }
 }
 
-const checkCandidateGraphTable = (tableName) => {
+const tableHasGraphs = (tableName) => {
   if (
     tableName === 'IBNR Frequency' ||
     tableName === 'Mack Model Frequency Results' ||

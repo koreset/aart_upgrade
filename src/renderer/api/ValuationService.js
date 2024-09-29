@@ -76,5 +76,11 @@ export default {
   },
   getModelPointVersionsForProduct(productId, year) {
     return Api.get('product-tables/' + productId + '/year/' + year + '/get-versions')
+  },
+  getAggregationVariables() {
+    return Api.get('result-aggregations/variables')
+  },
+  getAggregatedResults(runId, variables) {
+    return Api.post('result-aggregations/run/' + runId, variables)
   }
 }

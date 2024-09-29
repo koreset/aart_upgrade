@@ -95,6 +95,12 @@ export default createRouter({
       component: () => import('../screens/valuations/gmm/RunResults.vue')
     },
     {
+      path: '/valuations/gmm/result-aggregations',
+      name: 'valuations-gmm-result-aggregations',
+      component: () => import('../screens/valuations/gmm/ResultAggregations.vue')
+    },
+
+    {
       path: '/valuations/gmm/run-detail/:id/:prodId/:prod_name/:run_name',
       name: 'valuation-gmm-run-results-detail',
       component: () => import('../screens/valuations/gmm/RunDetail.vue'),
@@ -159,7 +165,7 @@ export default createRouter({
     {
       path: '/valuations/ibnr/run-results',
       name: 'valuations-ibnr-run-results',
-      component: () => import('../screens/valuations/ibnr/RunResults.vue')
+      component: () => import('../screens/valuations/ibnr/TestChart.vue')
     },
     {
       path: '/valuations/ibnr/run-details/:id',

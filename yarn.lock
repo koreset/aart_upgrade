@@ -1190,15 +1190,33 @@ acorn@^8.9.0:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.12.0.tgz#1627bfa2e058148036133b8d9b51a700663c294c"
   integrity sha512-RTvkC4w+KNXrM39/lWCUaG0IbRkWdCv7W/IOW9oU6SawyxulvkQy5HQPVTKxEjczcUvapcrw3cFx/60VN/NRNw==
 
-ag-charts-community@9.3.1, ag-charts-community@^9.0.2:
+ag-charts-community@9.3.1:
   version "9.3.1"
   resolved "https://registry.yarnpkg.com/ag-charts-community/-/ag-charts-community-9.3.1.tgz#0867448d7b9b30c393c7a5c0018324529a91c2b1"
   integrity sha512-/+dTQXSHbOwmynsKA32b5MmkwYM53sYuRkrL8ZPjTdwnR0uLKhSOrwMryx8U/HqN7YkprmQKtoiLNKU9MQ3hvw==
 
-ag-charts-vue3@^9.0.2:
-  version "9.3.1"
-  resolved "https://registry.yarnpkg.com/ag-charts-vue3/-/ag-charts-vue3-9.3.1.tgz#051ae9968bd8256626b46318dd2a7904ae99a688"
-  integrity sha512-MrJKowBK98qoM6SRjnBb5PJxLVnrI5CYwWSeHBQ/8swxJ2Siqufhx2XyLsegWVIGw0XM1dd86N9R56a59KDWfw==
+ag-charts-community@^10.2.0:
+  version "10.2.0"
+  resolved "https://registry.yarnpkg.com/ag-charts-community/-/ag-charts-community-10.2.0.tgz#88cf07d7c220875739c085bc2758f50aa468a5a7"
+  integrity sha512-zRB5xvMj14Mli8kEmcy4wDBzJpdOF7+3yqCXrr8ug3sGjMlAJaf33Vu6qqxzlS/Vpip6TNvjPK9Q6RdtDHslRw==
+  dependencies:
+    ag-charts-locale "10.2.0"
+    ag-charts-types "10.2.0"
+
+ag-charts-locale@10.2.0:
+  version "10.2.0"
+  resolved "https://registry.yarnpkg.com/ag-charts-locale/-/ag-charts-locale-10.2.0.tgz#b89af32f9ca3a3ea8eaf1862bcb5c179f5d345c0"
+  integrity sha512-JAwuJFXwoVE94YFuwo1ZtnCJa4rFLQna+t2xT5qT2KUaohVPHB+Zd8ivP62lOv9j2ZgzSg4WANBo2UT1LCtl2Q==
+
+ag-charts-types@10.2.0:
+  version "10.2.0"
+  resolved "https://registry.yarnpkg.com/ag-charts-types/-/ag-charts-types-10.2.0.tgz#9af7e333d196d02da1635b19b2649a9b2d06241a"
+  integrity sha512-PUqH1QtugpYLnlbMdeSZVf5PpT1XZVsP69qN1JXhetLtQpVC28zaj7ikwu9CMA9N9b+dBboA9QcjUQUJZVUokQ==
+
+ag-charts-vue3@^10.2.0:
+  version "10.2.0"
+  resolved "https://registry.yarnpkg.com/ag-charts-vue3/-/ag-charts-vue3-10.2.0.tgz#bf879531aadcd944f0304a227f82276634247c66"
+  integrity sha512-gt8kciXcG1V+HgVcrUGtj/Vxdlnnhxi6yaX5zVwFF7FCWDa99OexSxpuoRktxBCbCdBwz2sKueKM1lNpWzJSiQ==
 
 ag-grid-community@31.3.2, ag-grid-community@^31.0.3:
   version "31.3.2"

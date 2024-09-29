@@ -57,6 +57,9 @@
           <v-list-item :to="{ name: 'valuations-gmm-run-results' }">
             <v-list-item-title>Run Results</v-list-item-title>
           </v-list-item>
+          <v-list-item :to="{ name: 'valuations-gmm-result-aggregations' }">
+            <v-list-item-title>Results Aggregations</v-list-item-title>
+          </v-list-item>
         </v-list-group>
         <v-list-group value="PAA">
           <template #activator="{ props }">
