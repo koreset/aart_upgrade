@@ -234,6 +234,11 @@ const onValuationJobChange = (job) => {
 }
 
 const getAggregatedResultsForProductAndSpCode = () => {
+  if (selectedSpCode.value === 'All SP Codes') {
+    getAggregatedResultsForProduct()
+    return
+  }
+
   ValuationService.getAggregatedResultsForProductAndSpCode(
     selectedValuationJob.value.id,
     selectedJobProduct.value.product_code,
@@ -273,6 +278,9 @@ const getAggregatedResultsForProduct = () => {
 
 const getAggregatedResults = async () => {
   console.log(selectedVariables.value)
+  if (selectedVariables.value.length === 0) {
+    return
+  }
   const result = await ValuationService.getAggregatedResults(
     selectedValuationJob.value.id,
     selectedVariables.value
