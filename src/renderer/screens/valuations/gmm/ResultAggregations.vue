@@ -35,6 +35,8 @@
               <v-col v-if="selectedValuationJob" cols="3">
                 <v-select
                   v-model="selectedJobProduct"
+                  label="Product"
+                  placeholder="Select Product"
                   variant="outlined"
                   density="compact"
                   item-title="product_name"
@@ -42,8 +44,23 @@
                   return-object
                   :items="jobProducts"
                   @update:model-value="getAggregatedResultsForProduct"
-                ></v-select> </v-col
-            ></v-row>
+                ></v-select>
+              </v-col>
+              <v-col
+                v-if="selectedJobProduct && selectedJobProduct.product_name !== 'All Products'"
+                cols="3"
+              >
+                <v-select
+                  v-model="selectedSpCode"
+                  label="SP Code"
+                  placeholder="Select SP Code"
+                  variant="outlined"
+                  density="compact"
+                  :items="spCodes"
+                  @update:model-value="getAggregatedResultsForProductAndSpCode"
+                ></v-select>
+              </v-col>
+            </v-row>
             <v-row v-if="rowData.length > 0">
               <v-col>
                 <data-grid
@@ -192,8 +209,10 @@ const selectedFromAvailable = ref<string[]>([])
 const selectedFromTarget = ref<string[]>([])
 const rowData: any = ref([])
 const columnDefs: any = ref([])
+const spCodes: any = ref([])
 
 const jobProducts: any = ref([])
+const selectedSpCode: any = ref(null)
 const itemProps = (item) => {
   return {
     title: item.run_name,
@@ -214,7 +233,21 @@ const onValuationJobChange = (job) => {
   getAggregatedResults()
 }
 
+const getAggregatedResultsForProductAndSpCode = () => {
+  ValuationService.getAggregatedResultsForProductAndSpCode(
+    selectedValuationJob.value.id,
+    selectedJobProduct.value.product_code,
+    selectedSpCode.value,
+    selectedVariables.value
+  ).then((res) => {
+    rowData.value = res.data
+    createColumnDefs(rowData.value)
+  })
+}
+
 const getAggregatedResultsForProduct = () => {
+  spCodes.value = []
+  selectedSpCode.value = null
   if (selectedJobProduct.value.product_id === null) {
     getAggregatedResults()
     return
@@ -227,6 +260,14 @@ const getAggregatedResultsForProduct = () => {
   ).then((res) => {
     rowData.value = res.data
     createColumnDefs(rowData.value)
+    ValuationService.getSpCodesForProduct(
+      selectedValuationJob.value.id,
+      selectedJobProduct.value.product_code
+    ).then((res) => {
+      spCodes.value = res.data
+      spCodes.value.unshift('All SP Codes')
+      console.log('sp codes', spCodes.value)
+    })
   })
 }
 

@@ -85,5 +85,16 @@ export default {
   },
   getAggregatedResultsForProduct(runId, productCode, variables) {
     return Api.post('result-aggregations/run/' + runId + '/product-code/' + productCode, variables)
+  },
+  getAggregatedResultsForProductAndSpCode(runId, productCode, spCode, variables) {
+    return Api.post(
+      'result-aggregations/run/' + runId + '/product-code/' + productCode + '/sp-code/' + spCode,
+      variables
+    )
+  },
+  getSpCodesForProduct(runId, productCode) {
+    return Api.get(
+      'result-aggregations/run/' + runId + '/product-code/' + productCode + '/sp-codes'
+    )
   }
 }
