@@ -31,7 +31,7 @@ defineProps({
 .v-card-title {
   font-size: small;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-  background-color: rgb(104, 103, 103);
+  background-color: #223f54;
   color: white;
 }
 </style>

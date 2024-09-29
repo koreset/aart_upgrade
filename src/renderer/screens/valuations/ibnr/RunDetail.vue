@@ -89,11 +89,13 @@
                       </v-col>
                     </v-row>
                     <v-row v-if="tableHasGraphs(data.table_name)">
-                      <v-col><ag-charts :options="options"></ag-charts> </v-col>
-                    </v-row>
-                    <v-row v-else>
-                      <v-col cols="1">Chart</v-col>
-                      <v-col cols="11"><ag-charts :options="options"></ag-charts> </v-col>
+                      <v-col
+                        ><base-card :show-actions="false"
+                          ><template #header
+                            ><span class="headline">{{ data.table_name }}</span></template
+                          ><template #default
+                            ><ag-charts :options="options"></ag-charts></template></base-card
+                      ></v-col>
                     </v-row>
                   </v-tabs-window-item>
                 </v-tabs-window>
@@ -103,28 +105,28 @@
               <v-col>
                 <v-table class="trans-tables">
                   <thead>
-                    <tr>
-                      <th class="minwidth">Run Name</th>
-                      <th class="minwidth">Portfolio</th>
-                      <th class="minwidth">Run Date</th>
-                      <th class="minwidth">Claims Data Year</th>
-                      <th class="minwidth">Claims Data Version</th>
-                      <th class="minwidth">Parameter Year</th>
-                      <th class="minwidth">Yield Curve Year</th>
-                      <th class="minwidth">Yield Curve Month</th>
-                      <th class="minwidth">IBNR Method</th>
-                      <th class="minwidth">Calculation Interval</th>
-                      <th class="minwidth">Inflation Indicator</th>
-                      <th class="minwidth">Inflation Date</th>
-                      <th class="minwidth">Data Input Start Date</th>
-                      <th class="minwidth">Data Input End Date</th>
-                      <th class="minwidth">Bootstrap Indicator</th>
-                      <th class="minwidth">Simulations</th>
-                      <th class="minwidth">Manual Rerun</th>
-                      <th class="minwidth">Mack Model Indicator</th>
-                      <th class="minwidth">Mack Model Simulations</th>
-                      <th class="minwidth">Mack Model Distribution</th>
-                      <th class="minwidth">User</th>
+                    <tr class="table-row">
+                      <th class="minwidth table-col">Run Name</th>
+                      <th class="minwidth table-col">Portfolio</th>
+                      <th class="minwidth table-col">Run Date</th>
+                      <th class="minwidth table-col">Claims Data Year</th>
+                      <th class="minwidth table-col">Claims Data Version</th>
+                      <th class="minwidth table-col">Parameter Year</th>
+                      <th class="minwidth table-col">Yield Curve Year</th>
+                      <th class="minwidth table-col">Yield Curve Month</th>
+                      <th class="minwidth table-col">IBNR Method</th>
+                      <th class="minwidth table-col">Calculation Interval</th>
+                      <th class="minwidth table-col">Inflation Indicator</th>
+                      <th class="minwidth table-col">Inflation Date</th>
+                      <th class="minwidth table-col">Data Input Start Date</th>
+                      <th class="minwidth table-col">Data Input End Date</th>
+                      <th class="minwidth table-col">Bootstrap Indicator</th>
+                      <th class="minwidth table-col">Simulations</th>
+                      <th class="minwidth table-col">Manual Rerun</th>
+                      <th class="minwidth table-col">Mack Model Indicator</th>
+                      <th class="minwidth table-col">Mack Model Simulations</th>
+                      <th class="minwidth table-col">Mack Model Distribution</th>
+                      <th class="minwidth table-col">User</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -200,7 +202,7 @@ import formatValues from '@/renderer/utils/format_values'
 import BaseCard from '@/renderer/components/BaseCard.vue'
 import DataGrid from '@/renderer/components/tables/DataGrid.vue'
 import { AgCharts } from 'ag-charts-vue3'
-import type { AgChartOptions } from 'ag-charts-community'
+// import type { AgChartOptions } from 'ag-charts-community'
 // import { Chart } from 'highcharts-vue'
 
 const $route = useRoute()
@@ -271,34 +273,35 @@ const resultList = [
 // ])
 // const sampleSeries = ref([[{ type: 'bar', xKey: 'month', yKey: 'iceCreamSales' }]])
 
-const options = ref<AgChartOptions>({
-  // Data: Data to be displayed in the chart
-  data: [
-    { month: 'Jan', avgTemp: 2.3, iceCreamSales: 162000 },
-    { month: 'Mar', avgTemp: 6.3, iceCreamSales: 302000 },
-    { month: 'May', avgTemp: 16.2, iceCreamSales: 800000 },
-    { month: 'Jul', avgTemp: 22.8, iceCreamSales: 1254000 },
-    { month: 'Sep', avgTemp: 14.5, iceCreamSales: 950000 },
-    { month: 'Nov', avgTemp: 8.9, iceCreamSales: 200000 }
-  ],
-  // Series: Defines which chart type and data to use
-  series: [{ type: 'bar', xKey: 'month', yKey: 'iceCreamSales' }]
-})
-
-// const options: any = ref({
-//   data: [],
-//   title: {
-//     text: 'Weighted Succession Average Ratio'
-//   },
-//   series: [
-//     {
-//       type: 'line',
-//       xKey: 'reporting_delay',
-//       yKey: 'value',
-//       yName: 'Reporting Delay'
-//     }
-//   ]
+// const options = ref<AgChartOptions>({
+//   // Data: Data to be displayed in the chart
+//   data: [
+//     { month: 'Jan', avgTemp: 2.3, iceCreamSales: 162000 },
+//     { month: 'Mar', avgTemp: 6.3, iceCreamSales: 302000 },
+//     { month: 'May', avgTemp: 16.2, iceCreamSales: 800000 },
+//     { month: 'Jul', avgTemp: 22.8, iceCreamSales: 1254000 },
+//     { month: 'Sep', avgTemp: 14.5, iceCreamSales: 950000 },
+//     { month: 'Nov', avgTemp: 8.9, iceCreamSales: 200000 }
+//   ],
+//   // Series: Defines which chart type and data to use
+//   series: [{ type: 'line', yName: 'Ice cream sales', xKey: 'month', yKey: 'iceCreamSales' }],
+//   title: { text: 'Ice Cream Sales' }
 // })
+
+const options: any = ref({
+  data: [],
+  title: {
+    text: 'Weighted Succession Average Ratio'
+  },
+  series: [
+    {
+      type: 'line',
+      xKey: 'reporting_delay',
+      yKey: 'value',
+      yName: 'Reporting Delay'
+    }
+  ]
+})
 
 // onMounted(() => {
 //   options.value.series = sampleSeries.value
@@ -335,15 +338,15 @@ const getResultsByProduct = () => {
         tableData.value.push(tableDef)
         // Weighted factors
         if (item.graphData !== undefined && item.table_name === 'Development Factors') {
-          // options.value.data = []
-          // const entries = Object.entries(item.graphData).map(function ([key, value]) {
-          //   return { reporting_delay: key, value }
-          // })
-          // entries.shift() // this removes the first variable
+          options.value.data = []
+          const entries = Object.entries(item.graphData).map(function ([key, value]) {
+            return { reporting_delay: key, value }
+          })
+          entries.shift() // this removes the first variable
           // // options.value = { ...options }
-          // options.value.data = entries.slice(0, 30)
-          // options.value.title.text =
-          //   'Weighted Succession Average Ratio' + ' - ' + selectedProduct.value
+          options.value.data = entries.slice(0, 30)
+          options.value.title.text =
+            'Weighted Succession Average Ratio' + ' - ' + selectedProduct.value
           // console.log('Options:', options.value)
           // options = options
         }

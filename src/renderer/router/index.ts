@@ -165,7 +165,7 @@ export default createRouter({
     {
       path: '/valuations/ibnr/run-results',
       name: 'valuations-ibnr-run-results',
-      component: () => import('../screens/valuations/ibnr/TestChart.vue')
+      component: () => import('../screens/valuations/ibnr/RunResults.vue')
     },
     {
       path: '/valuations/ibnr/run-details/:id',
