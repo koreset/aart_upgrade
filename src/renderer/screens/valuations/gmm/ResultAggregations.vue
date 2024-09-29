@@ -41,6 +41,7 @@
                   item-value="product_id"
                   return-object
                   :items="jobProducts"
+                  @update:model-value="getAggregatedResultsForProduct"
                 ></v-select> </v-col
             ></v-row>
             <v-row v-if="rowData.length > 0">
@@ -185,7 +186,7 @@ const dialog = ref(false)
 const selectedVariables: any = ref([])
 const valuationJobs = ref([])
 const selectedValuationJob: any = ref(null)
-const selectedJobProduct = ref(null)
+const selectedJobProduct: any = ref(null)
 const aggregationVariables: any = ref([])
 const selectedFromAvailable = ref<string[]>([])
 const selectedFromTarget = ref<string[]>([])
@@ -211,6 +212,22 @@ const onValuationJobChange = (job) => {
   jobProducts.value.unshift({ product_id: null, product_name: 'All Products' })
   selectedJobProduct.value = jobProducts.value[0]
   getAggregatedResults()
+}
+
+const getAggregatedResultsForProduct = () => {
+  if (selectedJobProduct.value.product_id === null) {
+    getAggregatedResults()
+    return
+  }
+
+  ValuationService.getAggregatedResultsForProduct(
+    selectedValuationJob.value.id,
+    selectedJobProduct.value.product_code,
+    selectedVariables.value
+  ).then((res) => {
+    rowData.value = res.data
+    createColumnDefs(rowData.value)
+  })
 }
 
 const getAggregatedResults = async () => {
