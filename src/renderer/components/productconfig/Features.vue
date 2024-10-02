@@ -43,7 +43,7 @@ import ProductService from '../../api/ProductService'
 import { useVuelidate } from '@vuelidate/core'
 import { useProductStore } from '../../store/product_config'
 
-const store = useProductStore()
+const productStore = useProductStore()
 const mutualExclusive = (value: any) => {
   const funeral = value.some(
     (item: any) => item !== null && item !== undefined && item.name === 'FUNERAL_COVER'
@@ -91,7 +91,7 @@ const validateForm = async () => {
       }
     })
   } else {
-    store.setProductFeatures(selectedFeatures.value)
+    productStore.setProductFeatures(selectedFeatures.value)
   }
 
   return result

@@ -93,7 +93,7 @@ const validateForm = async () => {
     })
     return false
   }
-  store.setProductFamily(selectedProductFamily.value)
+  store.setProductFamilyId(selectedProductFamily.value)
   store.setProductName(productName.value)
   store.setProductCode(productCode.value)
   v$.value.$reset()

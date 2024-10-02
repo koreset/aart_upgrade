@@ -54,6 +54,10 @@ onMounted(async () => {
   selectVariables.value.forEach((item: any) => {
     headers.value.push({ text: item.code, width: 150 })
   })
+  console.log('selectVariables', selectVariables.value)
+  console.log('headers', headers.value)
+
+  store.setProductModelPoints(selectVariables.value)
 })
 
 const rules = {

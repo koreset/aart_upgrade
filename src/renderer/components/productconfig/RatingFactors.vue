@@ -115,10 +115,10 @@
         <v-col>
           <v-table class="trans-tables">
             <thead>
-              <tr>
-                <th class="text-left">Rating Table</th>
-                <th class="text-left">Factors</th>
-                <th class="text-left">Actions</th>
+              <tr class="table-row">
+                <th class="table-col text-left">Rating Table</th>
+                <th class="table-col text-left">Factors</th>
+                <th class="table-col text-left">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -139,9 +139,6 @@
               </tr>
             </tbody>
           </v-table>
-          <!-- <v-alert v-if="applicableFactorsErrors.length > 0" variant="outlined" density="compact" type="error">
-            {{ applicableFactorsErrors[0] }}
-          </v-alert> -->
         </v-col>
       </v-row>
       <v-divider class="mt-5 mb-5"></v-divider>
@@ -239,6 +236,7 @@ const addToRatingFactors = async () => {
       snackbar.value = true
     } else {
       applicableFactors.value.push(payload)
+      store.addToProductRatingFactors(payload)
       selectedTable.value = null
       fd1.value = { factor: null, dimension: null }
       fd2.value = { factor: null, dimension: null }

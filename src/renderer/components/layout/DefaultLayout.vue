@@ -1,8 +1,10 @@
 <script setup lang="tsx">
 import NavigationDrawer from '@/renderer/components/NavigationDrawer.vue'
 import { useRoute } from 'vue-router'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { useAppStore } from '@/renderer/store/app'
 
+const appStore = useAppStore()
 const drawer = ref(true)
 
 const route: any = useRoute()
@@ -11,6 +13,14 @@ const titleKey: string = (route?.meta?.titleKey || 'title.main') as string
 const toggleDrawer = (): void => {
   drawer.value = !drawer.value
 }
+
+onMounted(async () => {
+  const result = await window.mainApi?.sendSync('msgGetUserLicense')
+  console.log('License:', result)
+  if (result) {
+    appStore.setLicense(result)
+  }
+})
 </script>
 
 <template>

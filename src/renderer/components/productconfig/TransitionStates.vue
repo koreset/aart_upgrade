@@ -11,8 +11,9 @@
           density="compact"
           :items="transitions"
           item-title="state"
-          item-value="state"
+          item-value="id"
           placeholder="Select transition states"
+          return-object
         ></v-select>
       </v-col>
     </v-row>
@@ -32,6 +33,7 @@ const selectedTransitions: any = ref(null)
 onMounted(() => {
   ProductService.getTransitionStates().then((resp) => {
     transitions.value = resp.data
+    console.log('transitions', transitions.value)
   })
 })
 

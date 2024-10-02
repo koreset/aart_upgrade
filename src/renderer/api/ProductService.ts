@@ -1,7 +1,7 @@
 import instance from './Api'
 
 const Api = instance
-const licenseServerUrl = import.meta.env.VITE_LICENSE_SERVER_URL
+const licenseServerUrl = import.meta.env.VITE_APP_LICENSE_SERVER
 
 export default {
   deleteProduct(id) {
@@ -150,6 +150,7 @@ export default {
     return Api.get('reports/disclosures/' + id)
   },
   getOrgUsers(organization) {
+    console.log('getting org users', licenseServerUrl)
     const json = JSON.stringify(organization)
     return Api.post('get-org-users', json, {
       baseURL: licenseServerUrl + '/',

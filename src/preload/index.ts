@@ -13,7 +13,9 @@ const mainAvailChannels: string[] = [
   'msgGetAccessToken',
   'msgGetMachineFingerprint',
   'msgSetUserLicense',
-  'msgSaveBaseUrl'
+  'msgGetUserLicense',
+  'msgSaveBaseUrl',
+  'msgGetLicenseServerUrl'
 ]
 const rendererAvailChannels: string[] = []
 

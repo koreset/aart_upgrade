@@ -39,6 +39,10 @@
             <v-stepper-window-item value="6">
               <model-points ref="currentStep" />
             </v-stepper-window-item>
+            <v-stepper-window-item value="7">
+              <upload ref="currentStep" :editMode="editMode" />
+            </v-stepper-window-item>
+
             <v-divider class="my-5"></v-divider>
             <v-row>
               <v-col class="d-flex">
@@ -74,7 +78,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useProductStore } from '@/renderer/store/product_config'
 
 import CreateProduct from '@/renderer/components/productconfig/CreateProduct.vue'
 import TransitionStates from '@/renderer/components/productconfig/TransitionStates.vue'
@@ -82,19 +85,24 @@ import Transitions from '@/renderer/components/productconfig/Transitions.vue'
 import RatingFactors from '@/renderer/components/productconfig/RatingFactors.vue'
 import Features from '@/renderer/components/productconfig/Features.vue'
 import ModelPoints from '@/renderer/components/productconfig/ModelPoints.vue'
+import Upload from '../components/productconfig/Upload.vue'
 import { useRoute } from 'vue-router'
 import ProductService from '../api/ProductService'
 
 const route = useRoute()
-const store = useProductStore()
 const position = ref(0)
+const editMode = ref(false)
 
 const currentStep: any = ref(null)
-const myproduct = store.getProduct
+const licenseServerUrl = import.meta.env.VITE_APP_LICENSE_SERVER
+const authUrl = import.meta.env.VITE_APP_AUTH_URL
 
 onMounted(() => {
+  console.log('licenseServerUrl:', licenseServerUrl)
+  console.log('authUrl:', authUrl)
   console.log('route', route)
   if (route.params.id) {
+    editMode.value = true
     ProductService.getProductById(route.params.id).then((response) => {
       console.log('response', response)
     })
@@ -106,8 +114,6 @@ const moveNext = async () => {
   if (!isValid) {
     return
   }
-  console.log(myproduct.product_name)
-  console.log(myproduct.product_code)
   position.value++
 }
 

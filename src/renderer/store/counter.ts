@@ -10,6 +10,9 @@ export const useCounterStore = defineStore('counter', {
   actions: {
     counterIncrease(amount: number) {
       this.counter += amount
+    },
+    counterDecrease(amount: number) {
+      this.counter -= amount
     }
   }
 })

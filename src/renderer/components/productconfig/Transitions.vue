@@ -9,7 +9,7 @@
             density="compact"
             :items="selectedStartStates"
             label="Pick a start state (Health by default)"
-            item-text="state"
+            item-title="state"
             item-value="state"
           ></v-select>
         </v-col>
@@ -20,7 +20,7 @@
             density="compact"
             :items="selectedEndStates"
             label="Pick an end state"
-            item-text="state"
+            item-title="state"
             item-value="state"
           ></v-select>
         </v-col>
@@ -47,12 +47,12 @@
         <v-col>
           <v-table>
             <thead>
-              <tr>
-                <th class="text-left">Start</th>
-                <th class="text-left">End</th>
-                <th class="text-left">Rating Table Name</th>
-                <th class="text-left">Absorbing</th>
-                <th class="text-left">Actions</th>
+              <tr class="table-row">
+                <th class="table-col text-left">Start</th>
+                <th class="table-col text-left">End</th>
+                <th class="table-col text-left">Rating Table Name</th>
+                <th class="table-col text-left">Absorbing</th>
+                <th class="table-col text-left">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -82,7 +82,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, toRaw } from 'vue'
+import { ref, computed } from 'vue'
 import { useProductStore } from '@/renderer/store/product_config'
 import { required } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
@@ -109,11 +109,11 @@ const rules = {
 const v$ = useVuelidate(rules, { associatedTable, startState, endState })
 
 const selectedStartStates = computed(() => {
-  return toRaw(store.getProductTransitionStates).filter((item: any) => item === 'Health')
+  return store.getProductTransitionStates.filter((item: any) => item.state === 'Health')
 })
 
 const selectedEndStates = computed(() => {
-  return toRaw(store.getProductTransitionStates).filter((item: any) => item !== 'Health')
+  return store.getProductTransitionStates.filter((item: any) => item.state !== 'Health')
 })
 
 const removeItem = (item: any) => {

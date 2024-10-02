@@ -15,7 +15,7 @@
                   variant="outlined"
                   color="primary"
                   @click="dialog = true"
-                  >Select required variables</v-btn
+                  >Select variables</v-btn
                 >
               </v-col>
               <v-col cols="3">
@@ -92,20 +92,16 @@
                   </template>
                   <template #default>
                     <v-list class="scrollable-list">
-                      <v-list-item-group multiple>
-                        <v-list-item
-                          v-for="(item, index) in aggregationVariables"
-                          :key="index"
-                          :class="{
-                            'selected-item': selectedFromAvailable.includes(item)
-                          }"
-                          @click="toggleSelection(item, 'available')"
-                        >
-                          <v-list-item-content>
-                            <v-list-item-title>{{ item }}</v-list-item-title>
-                          </v-list-item-content>
-                        </v-list-item>
-                      </v-list-item-group>
+                      <v-list-item
+                        v-for="(item, index) in aggregationVariables"
+                        :key="index"
+                        :class="{
+                          'selected-item': selectedFromAvailable.includes(item)
+                        }"
+                        @click="toggleSelection(item, 'available')"
+                      >
+                        <v-list-item-title>{{ item }}</v-list-item-title>
+                      </v-list-item>
                     </v-list>
                   </template>
                 </base-card>
@@ -161,20 +157,16 @@
                   </template>
                   <template #default>
                     <v-list class="scrollable-list">
-                      <v-list-item-group multiple>
-                        <v-list-item
-                          v-for="(item, index) in selectedVariables"
-                          :key="index"
-                          :class="{
-                            'selected-item': selectedFromTarget.includes(item)
-                          }"
-                          @click="toggleSelection(item, 'target')"
-                        >
-                          <v-list-item-content>
-                            <v-list-item-title>{{ item }}</v-list-item-title>
-                          </v-list-item-content>
-                        </v-list-item>
-                      </v-list-item-group>
+                      <v-list-item
+                        v-for="(item, index) in selectedVariables"
+                        :key="index"
+                        :class="{
+                          'selected-item': selectedFromTarget.includes(item)
+                        }"
+                        @click="toggleSelection(item, 'target')"
+                      >
+                        <v-list-item-title>{{ item }}</v-list-item-title>
+                      </v-list-item>
                     </v-list>
                   </template>
                 </base-card>
@@ -221,7 +213,6 @@ const itemProps = (item) => {
 }
 
 const onValuationJobChange = (job) => {
-  console.log(selectedVariables.value)
   jobProducts.value = []
   selectedJobProduct.value = null
   rowData.value = []
@@ -271,13 +262,11 @@ const getAggregatedResultsForProduct = () => {
     ).then((res) => {
       spCodes.value = res.data
       spCodes.value.unshift('All SP Codes')
-      console.log('sp codes', spCodes.value)
     })
   })
 }
 
 const getAggregatedResults = async () => {
-  console.log(selectedVariables.value)
   if (selectedVariables.value.length === 0) {
     return
   }
@@ -285,14 +274,12 @@ const getAggregatedResults = async () => {
     selectedValuationJob.value.id,
     selectedVariables.value
   )
-  console.log(result.data)
   rowData.value = result.data
   createColumnDefs(rowData.value)
 }
 onMounted(async () => {
   const res = await ProductService.getValuationJobs()
   valuationJobs.value = res.data
-  console.log(valuationJobs.value)
 
   const res2 = await ValuationService.getAggregationVariables()
   aggregationVariables.value = res2.data

@@ -2,6 +2,9 @@ import axios from 'axios'
 
 const baseUrl = window.mainApi.sendSync('msgGetBaseUrl')
 const accessToken = window.mainApi.sendSync('msgGetAccessToken')
+const licenseServerUrl = window.mainApi.sendSync('msgGetLicenseServerUrl')
+
+console.log('Base License URL:', licenseServerUrl)
 
 const instance = axios.create({
   baseURL: baseUrl,

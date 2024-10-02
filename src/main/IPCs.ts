@@ -115,6 +115,12 @@ export default class IPCs {
       event.returnValue = store.get('baseUrl', null)
     })
 
+    // get the license server url from environment
+    ipcMain.on('msgGetLicenseServerUrl', (event: IpcMainEvent) => {
+      console.log('LICENSE SERVER URL BACK: ', process.env)
+      event.returnValue = "This is the requested URL"
+    })
+
     // get the user access token
     ipcMain.on('msgGetAccessToken', (event: IpcMainEvent) => {
       event.returnValue = store.get('access_token', null)
@@ -134,6 +140,10 @@ export default class IPCs {
       store.set('license', license)
       store.set('activated', true)
       event.returnValue = 'success'
+    })
+
+    ipcMain.on('msgGetUserLicense', (event: IpcMainEvent) => {
+      event.returnValue = store.get('license', null)
     })
   }
 }
