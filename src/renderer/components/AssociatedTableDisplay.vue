@@ -175,6 +175,7 @@ watch(
 )
 
 associatedTables.value = props.product.product_tables
+console.log('associatedTables', associatedTables.value)
 
 associatedTables.value = associatedTables.value
   .map((table) => ({

@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col>
-        <base-card>
+        <base-card :show-actions="false">
           <template #header>
             <span class="headline">Pricing Tables</span>
           </template>
@@ -25,7 +25,7 @@
               </v-row>
               <v-row v-if="selectedProduct !== null">
                 <v-col>
-                  <base-card>
+                  <base-card v-if="selectedProduct" :show-actions="false">
                     <template #header
                       ><span class="headline">
                         Pricing Tables for {{ selectedProduct.product_name }}</span
@@ -238,7 +238,10 @@ import PricingService from '@/renderer/api/PricingService'
 import ProductService from '@/renderer/api/ProductService'
 import { ref, onMounted } from 'vue'
 import BaseCard from '@/renderer/components/BaseCard.vue'
+import ConfirmationDialog from '@/renderer/components/ConfirmDialog.vue'
+import AssociatedPricingTableDisplay from '@/renderer/components/AssociatedPricingTableDisplay.vue'
 
+const confirmDelete = ref()
 // const showDialog = ref(false)
 // const pricingParamsFile: any = ref(null)
 // const pricingDemographicsFile: any = ref(null)
@@ -305,14 +308,6 @@ onMounted(async () => {
 
   console.log('All Products', allProducts.value)
 
-  // let productList = [];
-  //     this.$store.state.productFamilies.forEach((family) => {
-  //       family.products.forEach((product) => {
-  //         if (product.product_state !== "pending") {
-  //           productList.push(product);
-  //         }
-  //       });
-  //     });
   allProducts.value.forEach((family: any) => {
     family.products.forEach((product: any) => {
       if (product.product_state !== 'pending') {
