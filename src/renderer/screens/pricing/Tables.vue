@@ -35,7 +35,7 @@
                       <associated-pricing-table-display :product="selectedProduct" />
                     </template>
                   </base-card>
-                  <!-- <v-card class="mt-6">
+                  <v-card class="mt-6">
                     <v-card-title class="header-title accent white--text"
                       >Model Points</v-card-title
                     >
@@ -84,7 +84,7 @@
                         </v-col>
                       </v-row>
                     </v-card-text>
-                  </v-card> -->
+                  </v-card>
                   <!-- <v-card class="mt-6">
                     <v-card-title class="header-title accent white--text"
                       >Global Tables</v-card-title
@@ -173,7 +173,7 @@
       </v-col>
     </v-row>
 
-    <!-- <v-snackbar v-model="snackbar" centered :timeout="timeout" :multi-line="true">
+    <v-snackbar v-model="snackbar" centered :timeout="timeout" :multi-line="true">
       {{ text }}
       <v-btn rounded color="red" text @click="snackbar = false">Close</v-btn>
     </v-snackbar>
@@ -219,7 +219,7 @@
           </v-form>
         </v-card-text>
       </v-card>
-    </v-dialog> -->
+    </v-dialog>
     <!-- <table-uploader
       ref="tableUploader"
       :filePlaceHolder="filePlaceHolder"
@@ -234,7 +234,7 @@
 
 <script setup lang="ts">
 import PricingService from '@/renderer/api/PricingService'
-// import formatValues from '@/renderer/utils/format_values'
+import formatValues from '@/renderer/utils/format_values'
 import ProductService from '@/renderer/api/ProductService'
 import { ref, onMounted } from 'vue'
 import BaseCard from '@/renderer/components/BaseCard.vue'
@@ -245,22 +245,23 @@ const confirmDelete = ref()
 // const showDialog = ref(false)
 // const pricingParamsFile: any = ref(null)
 // const pricingDemographicsFile: any = ref(null)
-const modelPointCount = ref(0)
-// const modelPointsDialog = ref(false)
+const modelPointCount: any = ref(0)
+const modelPointsDialog = ref(false)
 const modelPoints: any = ref([])
 const modelPointSets: any = ref([])
 // const availableProducts: any = ref([])
 // const pricingTables: any = ref([])
 // const selectedProduct: any = ref(null)
+const selectedYear = ref(null)
 // const file: any = ref(null)
 // const formTitle = ref('')
 // const filePlaceHolder = ref('')
 // const tableType = ref('')
 // const selectedType = ref(null)
 // const uploadSuccess = ref(false)
-// const loading = ref(false)
+const loading = ref(false)
 // const availableTypes = ref([{ name: 'Pricing Parameters' }])
-// const timeout = 3000
+const timeout = 3000
 // const shocksData: any = ref([])
 // const yieldCurveData: any = ref([])
 // const marginsData: any = ref([])
@@ -268,29 +269,30 @@ const modelPointSets: any = ref([])
 // const globalTableData: any = ref([])
 // const selectedTable = ref('')
 // const globalTables = ref([{ name: 'Pricing Parameters' }])
-// const snackbar = ref(false)
-// const text = ref('')
-// const tableDialog = ref(false)
+const snackbar = ref(false)
+const text = ref('')
+const tableDialog = ref(false)
 // const tableData: any = ref([])
-// const columnDefs: any = ref([])
-// const rowData: any = ref([])
+const columnDefs: any = ref([])
+const rowData: any = ref([])
 // const dialog = ref(false)
-// const selectedTableName = ref('')
-// const loadingComplete = ref(false)
-// const modelpointFile: any = ref(null)
-// const error = ref(false)
-// const errorMessages: any = ref([])
+const selectedTableName = ref('')
+const loadingComplete = ref(false)
+const modelpointFile: any = ref(null)
+const error = ref(false)
+const errorMessages: any = ref([])
 // const errorParams = ref(false)
 // const errorParamsMessages: any = ref([])
 // const errorDemographicsParams = ref(false)
 // const errorDemographicsMessages: any = ref([])
 const productsList: any = ref([])
-// const uploadDisabled = ref(false)
-// const showFileUpload = ref(false)
-// const showDownloadTemplate = ref(false)
+const uploadDisabled = ref(false)
+const showFileUpload = ref(false)
+const showDownloadTemplate: any = ref(false)
 // const paramsAvailable = ref(false)
 const allProducts: any = ref([])
 const selectedProduct: any = ref(null)
+const items: any = []
 
 const getModelPointsCount = () => {
   PricingService.getModelPointCount(selectedProduct.value.product_code).then((res) => {
@@ -299,6 +301,44 @@ const getModelPointsCount = () => {
     modelPoints.value = res.data.model_points
     modelPointSets.value = res.data.model_point_sets
   })
+}
+
+const getModelPoints = (modelPoints) => {
+  console.log('getting model points')
+  console.log(modelPoints)
+  loadingComplete.value = false
+  if (modelPoints !== null && modelPoints.length > 0) {
+    items.value = []
+    columnDefs.value = []
+    rowData.value = []
+    createColumnDefs(modelPoints)
+    modelPoints.forEach((item) => {
+      const transformed = {}
+      const keys = Object.keys(item)
+      keys.forEach((i) => {
+        if (isNaN(item[i])) {
+          transformed[i] = item[i]
+        } else {
+          const value = Number(item[i])
+          transformed[i] = value
+        }
+      })
+      rowData.value.push(transformed)
+    })
+    loadingComplete.value = true
+    selectedTableName.value = 'Model Points'
+    tableDialog.value = true
+  } else {
+    text.value = 'No data was found for this product'
+    snackbar.value = true
+  }
+}
+
+const dismissModelPointsDialog = () => {
+  modelPointsDialog.value = false
+  errorMessages.value = []
+  error.value = false
+  modelpointFile.value = null
 }
 
 onMounted(async () => {
@@ -316,6 +356,68 @@ onMounted(async () => {
     })
   })
 })
+
+const deleteModelPoints = (mp: any) => {
+  console.log(mp)
+  PricingService.deleteModelPoints(selectedProduct.value.product_code, mp.version).then(
+    (response) => {
+      text.value = response.data
+      snackbar.value = true
+      modelPointCount.value = 0
+      modelPoints.value = []
+    }
+  )
+  console.log('delete model points')
+}
+
+const uploadModelPoints = () => {
+  if (modelpointFile.value === null) {
+    errorMessages.value.push('Please select a file to upload')
+    error.value = true
+    return
+  }
+
+  uploadDisabled.value = true
+  loading.value = true
+  const formdata = new FormData()
+  formdata.append('file', modelpointFile)
+  ProductService.postProductPricingModelPoints(formdata, selectedProduct.value.id)
+    .then(() => {
+      showFileUpload.value = false
+      modelPointsDialog.value = false
+      error.value = false
+      errorMessages.value = []
+      modelpointFile.value = null
+      selectedYear.value = null
+      uploadDisabled.value = false
+      loading.value = false
+
+      PricingService.getModelPointCount(selectedProduct.value.product_code).then((res) => {
+        modelPointCount.value = res.data.count
+        modelPoints.value = res.data.model_points
+      })
+    })
+    .catch((err) => {
+      // //If its an unknown column message, strip puth
+      errorMessages.value.push(err.data.error)
+      error.value = true
+      uploadDisabled.value = false
+      loading.value = false
+      showDownloadTemplate.value = true
+    })
+}
+
+const createColumnDefs = (data) => {
+  columnDefs.value = []
+  Object.keys(data[0]).forEach((element) => {
+    const header: any = {}
+    header.headerName = element
+    header.field = element
+    header.minWidth = 200
+    header.valueFormatter = formatValues
+    columnDefs.value.push(header)
+  })
+}
 
 // export default {
 //   validations: {

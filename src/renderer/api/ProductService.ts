@@ -178,6 +178,22 @@ export default {
   deleteProductTable(productId, tableId) {
     return Api.delete('products/' + productId + '/product-tables/' + tableId)
   },
+  deleteProductTablev2(productId, tableId, year) {
+    return Api.delete('products/' + productId + '/product-tables/' + tableId + '/year/' + year)
+  },
+  getProductTableYears(productId, tableName, dataType, tableType) {
+    return Api.get(
+      'products/' +
+        productId +
+        '/table-name/' +
+        tableName +
+        '/data-type/' +
+        dataType +
+        '/table-type/' +
+        tableType
+    )
+  },
+
   getGlobalTableData(tableName) {
     return Api.get('global-tables/' + tableName)
   },

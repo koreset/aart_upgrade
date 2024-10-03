@@ -30,7 +30,7 @@
                   depressed
                   rounded
                   size="small"
-                  @click.stop="confirmDelete(item)"
+                  @click.stop="chooseYear(item)"
                 >
                   <v-icon color="error">mdi-delete</v-icon>
                   <span>Delete</span>
@@ -59,6 +59,32 @@
       :isDialogOpen="infoDialog"
     />
     <confirmation-dialog ref="confirmAction" />
+    <v-dialog v-model="yearsDialog" persistent max-width="550px">
+      <base-card>
+        <template #header>
+          <span class="headline">Choose the relevant data year</span>
+        </template>
+        <template #default>
+          <v-row>
+            <v-col>
+              <v-select
+                v-model="selectedYear"
+                variant="outlined"
+                density="compact"
+                label="Select a year for this data set"
+                :items="availableDataYears"
+                item-title="year"
+                item-value="year"
+              ></v-select>
+            </v-col>
+          </v-row>
+        </template>
+        <template #actions>
+          <v-spacer></v-spacer>
+          <v-btn rounded variant="text" @click="closeDialog">Close</v-btn>
+        </template>
+      </base-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -70,6 +96,7 @@ import ProductService from '../api/ProductService'
 import FileInfo from '../components/FileInfo.vue'
 import formatValues from '../utils/format_values.js'
 import ConfirmationDialog from './ConfirmDialog.vue'
+import BaseCard from './BaseCard.vue'
 
 const props = defineProps({
   product: {
@@ -83,8 +110,12 @@ const infoDialog = ref(false)
 const rowData: any = ref([])
 const columnDefs: any = ref([])
 const tableTitle = ref('Table Info')
+const yearsDialog = ref(false)
+const selectedYear: any = ref(null)
+const availableDataYears = ref([])
 
 const selectedTableId: any = ref(0)
+const selectedItem: any = ref({})
 // file upload dialog props
 const showModelPoint = ref(false)
 const yearLabel = ref('') // 'Select a year'
@@ -94,6 +125,11 @@ const isDialogOpen = ref(false)
 const years = ref<number[]>(Array.from({ length: 10 }, (v, k) => new Date().getFullYear() - k))
 const updateDialog = (value: boolean) => {
   isDialogOpen.value = value
+}
+
+const closeDialog = () => {
+  yearsDialog.value = false
+  confirmDelete(selectedItem.value)
 }
 
 const openDialog = (item: any) => {
@@ -190,7 +226,25 @@ associatedTables.value = associatedTables.value
   .filter((table) => table.table !== 'Shocks' && table.table !== 'Yield_Curve')
   .sort((a, b) => a.readonly - b.readonly)
 
+const chooseYear = (item: any) => {
+  console.log('item choose year', item)
+  availableDataYears.value = []
+  selectedYear.value = null
+  ProductService.getProductTableYears(
+    props.product.id,
+    item.table,
+    'valuations',
+    item.table_class
+  ).then((response) => {
+    availableDataYears.value = response.data
+  })
+
+  selectedItem.value = item
+  yearsDialog.value = true
+}
+
 const confirmDelete = async (item: any) => {
+  console.log('item', item)
   const result = await confirmAction.value.open(
     'Deleting Data for ' + item.table + ' table',
     'Are you sure you want to delete this data?'
@@ -201,7 +255,11 @@ const confirmDelete = async (item: any) => {
 }
 
 const deleteTable = (item: any) => {
-  ProductService.deleteProductTable(props.product.id, item.id).then((response) => {})
+  ProductService.deleteProductTablev2(props.product.id, item.id, selectedYear.value).then(
+    (response) => {
+      console.log('response', response)
+    }
+  )
 }
 
 const viewTable = (item: any) => {
