@@ -3,7 +3,8 @@ import { defineStore } from 'pinia'
 export const useAppStore = defineStore('app', {
   state: () => ({
     user: null,
-    licenseData: null
+    licenseData: null,
+    allProducts: []
   }),
   actions: {
     setUser(user: any) {
@@ -21,10 +22,14 @@ export const useAppStore = defineStore('app', {
     clearAll() {
       this.user = null
       this.licenseData = null
+    },
+    setProducts(products: any) {
+      this.allProducts = products
     }
   },
   getters: {
     getUser: (state): any => state.user,
-    getLicenseData: (state): any => state.licenseData
+    getLicenseData: (state): any => state.licenseData,
+    getAllProducts: (state): any => state.allProducts
   }
 })

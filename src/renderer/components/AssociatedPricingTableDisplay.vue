@@ -5,7 +5,7 @@
         <v-table>
           <tbody>
             <tr v-for="item in product.product_pricing_tables" :key="item.id">
-              <td style="width: 80%">{{ item.table }}</td>
+              <td :class="{ unpopulated: !item.populated }">{{ item.table }}</td>
               <td style="text-align: center">
                 <v-btn
                   depressed
@@ -81,6 +81,7 @@ const props = defineProps({
 })
 
 const product = ref(props.product)
+console.log('pricing product', product.value)
 
 // data
 const infoDialog = ref(false)
@@ -361,5 +362,8 @@ const showTableData = (itemId: number, itemTable: string, prodCode: string) => {
 div.row.table-container > div > div > div {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
+}
+.unpopulated {
+  color: red;
 }
 </style>

@@ -173,9 +173,10 @@ import LoadingIndicator from '../components/LoadingIndicator.vue'
 import DataGrid from '../components/tables/DataGrid.vue'
 import { formatValues } from '../utils/format_values.js'
 import ConfirmationDialog from '../components/ConfirmDialog.vue'
-
+import { useAppStore } from '../store/app'
 // const route = useRoute()
 const router = useRouter()
+const appStore = useAppStore()
 
 const allProducts: any = ref([])
 const productCategories: any = ref([])
@@ -376,8 +377,10 @@ const createColumnDefs = (data) => {
 
 onMounted(async () => {
   console.log('Mounted')
-  const prodResponse = await ProductService.getProducts()
-  allProducts.value = prodResponse.data
+  // const prodResponse = await ProductService.getProducts()
+  // allProducts.value = prodResponse.data
+  allProducts.value = await appStore.getAllProducts
+  console.log('All Products:', allProducts.value)
   productCategories.value = allProducts.value.map((item: any) => ({
     id: item.id,
     name: item.name

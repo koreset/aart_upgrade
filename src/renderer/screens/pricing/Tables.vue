@@ -25,10 +25,10 @@
               </v-row>
               <v-row v-if="selectedProduct !== null">
                 <v-col>
-                  <base-card v-if="selectedProduct" :show-actions="false">
+                  <base-card v-if="pricingProduct" :show-actions="false">
                     <template #header
                       ><span class="headline">
-                        Pricing Tables for {{ selectedProduct.product_name }}</span
+                        Pricing Tables for {{ pricingProduct.product.product_name }}</span
                       ></template
                     >
                     <template #default>
@@ -269,7 +269,9 @@ import BaseCard from '@/renderer/components/BaseCard.vue'
 import ConfirmationDialog from '@/renderer/components/ConfirmDialog.vue'
 import AssociatedPricingTableDisplay from '@/renderer/components/AssociatedPricingTableDisplay.vue'
 import FileInfo from '@/renderer/components/FileInfo.vue'
+import { useAppStore } from '@/renderer/store/app'
 
+const appStore = useAppStore()
 const confirmDelete = ref()
 const showDialog = ref(false)
 // const pricingParamsFile: any = ref(null)
@@ -321,13 +323,20 @@ const showDownloadTemplate: any = ref(false)
 // const paramsAvailable = ref(false)
 const allProducts: any = ref([])
 const selectedProduct: any = ref(null)
+const pricingProduct: any = ref(null)
 const items: any = []
 
 const closeDialog = () => {
   showDialog.value = false
 }
 
-const getModelPointsCount = () => {
+const getModelPointsCount = async () => {
+  console.log('getting model points count', selectedProduct.value)
+  pricingProduct.value = null
+  const resp = await ProductService.getProductById(selectedProduct.value.id)
+  console.log('getting model points count', resp.data)
+  pricingProduct.value = resp.data
+
   PricingService.getModelPointCount(selectedProduct.value.product_code).then((res) => {
     console.log(res.data)
     modelPointCount.value = res.data.count
@@ -376,8 +385,9 @@ const dismissModelPointsDialog = () => {
 
 onMounted(async () => {
   console.log('Mounted')
-  const prodResponse = await ProductService.getProducts()
-  allProducts.value = prodResponse.data
+  // const prodResponse = await ProductService.getProducts()
+  // allProducts.value = prodResponse.data
+  allProducts.value = appStore.getAllProducts
 
   console.log('All Products', allProducts.value)
 

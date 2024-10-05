@@ -207,8 +207,10 @@ import { creditlifeConfig } from '@/renderer/data/creditlifeconfig'
 // import { required } from 'vuelidate/lib/validators'
 // import formatValues from '@/renderer/utils/format_values'
 import { onMounted, ref } from 'vue'
+import { useAppStore } from '@/renderer/store/app'
 
 // data
+const appStore = useAppStore()
 const infoText = ref('')
 const profitSignature = ref(false)
 const pricingScenarios: any = ref([])
@@ -268,8 +270,9 @@ const selectedMpVersionErrors = ref([])
 // lifecycle hooks
 onMounted(async () => {
   console.log('Mounted')
-  const prodResponse = await ProductService.getProducts()
-  allProducts.value = prodResponse.data
+  // const prodResponse = await ProductService.getProducts()
+  // allProducts.value = prodResponse.data
+  allProducts.value = appStore.getAllProducts
 
   console.log('All Products', allProducts.value)
 
