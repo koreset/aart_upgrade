@@ -28,10 +28,12 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { inject, onMounted, Ref, ref, watch } from 'vue'
 import ProductService from '../../api/ProductService'
 import { useVuelidate } from '@vuelidate/core'
 import { useProductStore } from '../../store/product_config'
+
+const resetFields = inject<Ref<boolean>>('resetFields', ref(false))
 
 const store = useProductStore()
 const mustContainYear = (value) => {
@@ -80,6 +82,12 @@ const validateForm = async () => {
 
 defineExpose({
   validateForm
+})
+
+watch(resetFields, (value) => {
+  if (value) {
+    selectVariables.value = []
+  }
 })
 </script>
 <style scoped>

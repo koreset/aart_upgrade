@@ -114,12 +114,12 @@ const openDialog = (item: any) => {
 const handleUpload = async (file: any) => {
   console.log(file)
   const formdata = new FormData()
-  formdata.append('file', file)
+  formdata.append('file', file.file)
   formdata.append('table_id', selectedTableId.value)
   formdata.append('product_id', product.value.id)
   formdata.append('product_code', product.value.product_code)
   loading.value = true
-  PricingService.uploadProductPricingTable({ formdata, productId: product.value.id })
+  PricingService.uploadProductPricingTable(formdata, product.value.id)
     .then(() => {
       // uploadSuccess.value = true
       loading.value = false

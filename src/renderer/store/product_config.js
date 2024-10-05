@@ -29,6 +29,21 @@ export const useProductStore = defineStore({
     getSelectedFeatures: (state) => state.product_features
   },
   actions: {
+    resetProductState() {
+      this.product = {
+        product_name: '',
+        product_code: '',
+        product_family_id: 0,
+        product_transition_states: [],
+        product_transitions: [],
+        product_rating_factors: [],
+        global_tables: [],
+        product_tables: [],
+        product_pricing_tables: [],
+        product_modelpoint_variables: [],
+        product_features: []
+      }
+    },
     setProductName(name) {
       this.product.product_name = name
     },

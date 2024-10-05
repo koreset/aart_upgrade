@@ -155,12 +155,13 @@
 import { required } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
 import ProductService from '../../api/ProductService'
-import { ref, onMounted, computed, toRaw } from 'vue'
+import { ref, onMounted, computed, toRaw, inject, Ref, watch } from 'vue'
 import { useProductStore } from '@/renderer/store/product_config'
 
 const snackbar: any = ref(false)
 const snackbarMessage: any = ref('')
 const timeout: any = ref(2000)
+const resetFields = inject<Ref<boolean>>('resetFields', ref(false))
 
 // data
 const selectedTable: any = ref(null)
@@ -261,6 +262,19 @@ const validateForm = async () => {
 
 defineExpose({
   validateForm
+})
+
+watch(resetFields, (newVal) => {
+  if (newVal) {
+    selectedTable.value = null
+    fd1.value = { factor: null, dimension: null }
+    fd2.value = { factor: null, dimension: null }
+    fd3.value = { factor: null, dimension: null }
+    fd4.value = { factor: null, dimension: null }
+    selectedTableErrors.value = []
+    fd1FactorErrors.value = []
+    applicableFactors.value = []
+  }
 })
 
 // export default {

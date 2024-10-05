@@ -109,10 +109,11 @@
 <script setup lang="ts">
 import ProductService from '@/renderer/api/ProductService'
 // import Papa from 'papaparse'
-import { computed, onMounted, ref } from 'vue'
+import { computed, inject, onMounted, Ref, ref, watch } from 'vue'
 import { useAppStore } from '@/renderer/store/app'
 import { useProductStore } from '@/renderer/store/product_config'
 
+const resetFields = inject<Ref<boolean>>('resetFields', ref(false))
 const appStore = useAppStore()
 const productStore = useProductStore()
 
@@ -153,6 +154,18 @@ const validateForm = async () => {
 
 defineExpose({
   validateForm
+})
+
+watch(resetFields, (value) => {
+  if (value) {
+    selectedReviewer.value = null
+    file.value = null
+    files.value = []
+    fileDescriptors.value = []
+    tableClass.value = ''
+    table.value = ''
+    commonFilesAdded.value = false
+  }
 })
 
 // computed

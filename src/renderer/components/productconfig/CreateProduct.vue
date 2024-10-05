@@ -42,10 +42,11 @@
 <script setup lang="ts">
 import { required } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, inject, Ref, watch } from 'vue'
 import { useProductStore } from '@/renderer/store/product_config'
 import ProductService from '@/renderer/api/ProductService'
 
+const resetFields = inject<Ref<boolean>>('resetFields', ref(false))
 const store = useProductStore()
 const productFamilies: any = ref([])
 const selectedProductFamily: any = ref(null)
@@ -104,6 +105,17 @@ const validateForm = async () => {
 }
 
 defineExpose({ validateForm })
+
+watch(resetFields, (newVal) => {
+  if (newVal) {
+    selectedProductFamily.value = null
+    productName.value = ''
+    productCode.value = ''
+    productFamilyErrorMessage.value = ''
+    productNameErrorMessage.value = ''
+    productCodeErrorMessage.value = ''
+  }
+})
 
 onMounted(async () => {
   const response = await ProductService.getProductFamilies()

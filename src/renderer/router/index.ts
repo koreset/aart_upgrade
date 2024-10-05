@@ -202,6 +202,11 @@ export default createRouter({
       name: 'pricing-tables',
       component: () => import('../screens/pricing/Tables.vue')
     },
+    {
+      path: '/pricing/run-settings',
+      name: 'pricing-run-settings',
+      component: () => import('../screens/pricing/RunSettings.vue')
+    },
 
     {
       path: '/exp-analysis/configuration',

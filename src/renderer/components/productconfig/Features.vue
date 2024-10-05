@@ -37,11 +37,13 @@
   </v-form>
 </template>
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { inject, onMounted, Ref, ref, watch } from 'vue'
 import ProductService from '../../api/ProductService'
 // import { required } from 'vuelidate/lib/validators'
 import { useVuelidate } from '@vuelidate/core'
 import { useProductStore } from '../../store/product_config'
+
+const resetFields = inject<Ref<boolean>>('resetFields', ref(false))
 
 const productStore = useProductStore()
 const mutualExclusive = (value: any) => {
@@ -99,5 +101,12 @@ const validateForm = async () => {
 
 defineExpose({
   validateForm
+})
+
+watch(resetFields, (value) => {
+  if (value) {
+    selectedFeatures.value = []
+    selectedFeaturesErrors.value = []
+  }
 })
 </script>

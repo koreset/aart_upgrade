@@ -83,8 +83,8 @@ export default {
       }
     })
   },
-  uploadProductPricingTable(payload) {
-    return Api.post('products/' + payload.productId + '/update-pricing-table', payload.formdata, {
+  uploadProductPricingTable(payload, productId) {
+    return Api.post('products/' + productId + '/update-pricing-table', payload, {
       headers: {
         'Content-Type': 'multipart/form-data',
         Accept: 'multipart/form-data'

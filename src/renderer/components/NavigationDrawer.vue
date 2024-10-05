@@ -31,7 +31,7 @@
         <v-list-item-title>Global Tables</v-list-item-title>
       </v-list-item>
       <v-list-item :to="{ name: 'product-comparison' }" :prepend-icon="'mdi-compare-horizontal'">
-        <v-list-item-title>Product Comparison</v-list-item-title>
+        <v-list-item-title>Cash Flow Comparison</v-list-item-title>
       </v-list-item>
       <v-list-item :to="{ name: 'reporting' }" :prepend-icon="'mdi-chart-box-multiple'">
         <v-list-item-title>Reports</v-list-item-title>
@@ -132,6 +132,9 @@
         </template>
         <v-list-item :to="{ name: 'pricing-tables' }">
           <v-list-item-title>Tables</v-list-item-title>
+        </v-list-item>
+        <v-list-item :to="{ name: 'pricing-run-settings' }">
+          <v-list-item-title>Run Settings</v-list-item-title>
         </v-list-item>
       </v-list-group>
       <v-list-group value="Exp Analysis">

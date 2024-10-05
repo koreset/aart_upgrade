@@ -35,21 +35,20 @@
                       <associated-pricing-table-display :product="selectedProduct" />
                     </template>
                   </base-card>
-                  <v-card class="mt-6">
-                    <v-card-title class="header-title accent white--text"
-                      >Model Points</v-card-title
-                    >
-                    <v-card-text>
+                  <base-card class="mt-6">
+                    <template #header>
+                      <span class="headline">Model Points</span>
+                    </template>
+                    <template #default>
                       <v-row class="mt-3 mb-3">
                         <v-col>
                           <v-btn
-                            outlined
-                            depressed
+                            variant="outlined"
                             rounded
-                            small
+                            size="small"
                             @click.stop="modelPointsDialog = true"
                           >
-                            <v-icon color="accent">mdi-file-upload</v-icon>
+                            <v-icon color="accent">mdi-upload</v-icon>
                             <span>Upload</span>
                           </v-btn>
                         </v-col>
@@ -67,49 +66,70 @@
                         </v-col>
                         <v-col class="mr-1" cols="1">
                           <v-btn
-                            depressed
+                            variant="outlined"
                             rounded
-                            small
+                            size="small"
                             @click.stop="getModelPoints(mp.model_points)"
                           >
                             <v-icon left color="primary">mdi-information</v-icon>
-                            <span>INFO</span>
+                            <span>Info</span>
                           </v-btn>
                         </v-col>
-                        <v-col class="mr-1 ml-3" cols="1">
-                          <v-btn depressed rounded small @click.stop="deleteModelPoints(mp)">
+                        <v-col class="mr-1 ml-1" cols="1">
+                          <v-btn
+                            rounded
+                            variant="outlined"
+                            size="small"
+                            @click.stop="deleteModelPoints(mp)"
+                          >
                             <v-icon color="error">mdi-delete</v-icon>
-                            <span>DELETE</span>
+                            <span>Delete</span>
                           </v-btn>
                         </v-col>
                       </v-row>
-                    </v-card-text>
-                  </v-card>
-                  <!-- <v-card class="mt-6">
-                    <v-card-title class="header-title accent white--text"
-                      >Global Tables</v-card-title
-                    >
-                    <v-card-text>
+                    </template>
+                  </base-card>
+                  <base-card class="mt-6">
+                    <template #header>
+                      <span class="headline">Global Tables</span>
+                    </template>
+                    <template #default>
                       <v-row class="borderline blue-grey lighten-5 mx-2 mt-3 mb-1 accent-4--text">
                         <v-col cols="8">
                           <p>Pricing Parameters</p>
                         </v-col>
                         <v-col class="mr-1" cols="1">
-                          <v-btn depressed rounded small @click.stop="getPricingParams()">
-                            <v-icon left color="primary">mdi-information</v-icon>
-                            <span>INFO</span>
+                          <v-btn
+                            rounded
+                            size="small"
+                            variant="outlined"
+                            @click.stop="getPricingParams()"
+                          >
+                            <v-icon color="primary">mdi-information</v-icon>
+                            <span>Info</span>
                           </v-btn>
                         </v-col>
                         <v-col class="mr-4" cols="1">
-                          <v-btn depressed rounded small @click.stop="uploadPricingParamsForm()">
-                            <v-icon color="accent">mdi-file-upload</v-icon>
+                          <v-btn
+                            rounded
+                            size="small"
+                            variant="outlined"
+                            @click.stop="uploadPricingParamsForm()"
+                          >
+                            <v-icon color="accent">mdi-upload</v-icon>
                             <span>Upload</span>
                           </v-btn>
                         </v-col>
                         <v-col class="mr-1 ml-3" cols="1">
-                          <v-btn depressed rounded small @click.stop="deletePricingParameters()">
+                          <v-btn
+                            depressed
+                            rounded
+                            size="small"
+                            variant="outlined"
+                            @click.stop="deletePricingParameters()"
+                          >
                             <v-icon color="error">mdi-delete</v-icon>
-                            <span>DELETE</span>
+                            <span>Delete</span>
                           </v-btn>
                         </v-col>
                       </v-row>
@@ -121,21 +141,23 @@
                           <v-btn
                             depressed
                             rounded
-                            small
+                            size="small"
+                            variant="outlined"
                             @click.stop="getPricingPolicyDemographics()"
                           >
                             <v-icon left color="primary">mdi-information</v-icon>
-                            <span>INFO</span>
+                            <span>Info</span>
                           </v-btn>
                         </v-col>
                         <v-col class="mr-4" cols="1">
                           <v-btn
                             depressed
                             rounded
-                            small
+                            size="small"
+                            variant="outlined"
                             @click.stop="uploadPricingDemographicsForm()"
                           >
-                            <v-icon color="accent">mdi-file-upload</v-icon>
+                            <v-icon color="accent">mdi-upload</v-icon>
                             <span>Upload</span>
                           </v-btn>
                         </v-col>
@@ -143,30 +165,30 @@
                           <v-btn
                             depressed
                             rounded
-                            small
+                            size="small"
+                            variant="outlined"
                             @click.stop="deletePricingPolicyDemographics()"
                           >
                             <v-icon color="error">mdi-delete</v-icon>
-                            <span>DELETE</span>
+                            <span>Delete</span>
                           </v-btn>
                         </v-col>
                       </v-row>
-                    </v-card-text>
-                  </v-card> -->
+                    </template>
+                  </base-card>
                 </v-col>
               </v-row>
-              <!-- <v-row>
+              <v-row>
                 <v-col>
                   <file-info
-                    :tableDialog="tableDialog"
-                    :tableName="selectedTableName"
-                    :selectedRowData="rowData"
-                    :selectedColumnDefs="columnDefs"
-                    :loadingComplete="loadingComplete"
-                    @resetTableDialog="dismissTableDialog"
+                    :tableTitle="selectedTableName"
+                    :rowData="rowData"
+                    :columnDefs="columnDefs"
+                    :onUpdate:isInfoDialogOpen="closeDialog"
+                    :isDialogOpen="tableDialog"
                   />
                 </v-col>
-              </v-row> -->
+              </v-row>
             </v-container>
           </template>
         </base-card>
@@ -178,38 +200,44 @@
       <v-btn rounded color="red" text @click="snackbar = false">Close</v-btn>
     </v-snackbar>
     <v-dialog v-model="modelPointsDialog" width="600">
-      <v-card class="rounded-lg mt-2">
-        <v-card-title class="header-title accent white--text"> Upload Model points </v-card-title>
-        <v-card-text>
+      <base-card :show-actions="false">
+        <template #header>
+          <span class="headline"> Upload Model points </span>
+        </template>
+        <template #default>
           <v-form>
             <v-container>
               <v-row>
                 <v-col>
                   <v-file-input
                     v-model="modelpointFile"
-                    outlined
-                    dense
-                    show-size
+                    variant="outlined"
+                    density="compact"
                     accept=".csv"
-                    :error="error"
-                    :error-messages="errorMessages"
                     prepend-icon="mdi-paperclip"
+                    label="Model Points File (csv)"
                     placeholder="Click to select a model point file for upload"
+                    show-size
                   >
-                    <template #selection="{ text }">
-                      <v-chip small label color="primary">{{ text }}</v-chip>
-                    </template>
                   </v-file-input>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col class="d-flex justify-center">
-                  <v-btn rounded color="primary" small @click="uploadModelPoints">Upload</v-btn>
+                  <v-btn
+                    variant="outlined"
+                    rounded
+                    color="primary"
+                    size="small"
+                    @click="uploadModelPoints"
+                    >Upload</v-btn
+                  >
                   <v-btn
                     class="ml-4"
                     rounded
+                    variant="outlined"
                     color="primary"
-                    small
+                    size="small"
                     @click="dismissModelPointsDialog"
                     >Cancel</v-btn
                   >
@@ -217,8 +245,8 @@
               </v-row>
             </v-container>
           </v-form>
-        </v-card-text>
-      </v-card>
+        </template>
+      </base-card>
     </v-dialog>
     <!-- <table-uploader
       ref="tableUploader"
@@ -240,9 +268,10 @@ import { ref, onMounted } from 'vue'
 import BaseCard from '@/renderer/components/BaseCard.vue'
 import ConfirmationDialog from '@/renderer/components/ConfirmDialog.vue'
 import AssociatedPricingTableDisplay from '@/renderer/components/AssociatedPricingTableDisplay.vue'
+import FileInfo from '@/renderer/components/FileInfo.vue'
 
 const confirmDelete = ref()
-// const showDialog = ref(false)
+const showDialog = ref(false)
 // const pricingParamsFile: any = ref(null)
 // const pricingDemographicsFile: any = ref(null)
 const modelPointCount: any = ref(0)
@@ -254,9 +283,9 @@ const modelPointSets: any = ref([])
 // const selectedProduct: any = ref(null)
 const selectedYear = ref(null)
 // const file: any = ref(null)
-// const formTitle = ref('')
-// const filePlaceHolder = ref('')
-// const tableType = ref('')
+const formTitle = ref('')
+const filePlaceHolder = ref('')
+const tableType = ref('')
 // const selectedType = ref(null)
 // const uploadSuccess = ref(false)
 const loading = ref(false)
@@ -293,6 +322,10 @@ const showDownloadTemplate: any = ref(false)
 const allProducts: any = ref([])
 const selectedProduct: any = ref(null)
 const items: any = []
+
+const closeDialog = () => {
+  showDialog.value = false
+}
 
 const getModelPointsCount = () => {
   PricingService.getModelPointCount(selectedProduct.value.product_code).then((res) => {
@@ -380,7 +413,7 @@ const uploadModelPoints = () => {
   uploadDisabled.value = true
   loading.value = true
   const formdata = new FormData()
-  formdata.append('file', modelpointFile)
+  formdata.append('file', modelpointFile.value)
   ProductService.postProductPricingModelPoints(formdata, selectedProduct.value.id)
     .then(() => {
       showFileUpload.value = false
@@ -405,6 +438,132 @@ const uploadModelPoints = () => {
       loading.value = false
       showDownloadTemplate.value = true
     })
+}
+
+const getPricingParams = () => {
+  loadingComplete.value = false
+  PricingService.getPricingParams(selectedProduct.value.product_code)
+    .then((res) => {
+      const params = res.data.data
+      if (params !== null) {
+        items.value = []
+        columnDefs.value = []
+        rowData.value = []
+        createColumnDefs(params)
+
+        const transformed = {}
+        params.forEach((item) => {
+          const keys = Object.keys(item)
+          keys.forEach((i) => {
+            if (isNaN(item[i])) {
+              transformed[i] = item[i]
+            } else {
+              const value = Number(item[i])
+              transformed[i] = value
+            }
+          })
+          rowData.value.push(transformed)
+        })
+      }
+
+      selectedTableName.value = 'Pricing Parameters'
+      tableDialog.value = true
+      loadingComplete.value = true
+    })
+    .catch(() => {
+      text.value = 'No data was found for this product'
+      snackbar.value = true
+    })
+}
+
+const uploadPricingParamsForm = () => {
+  showDialog.value = true
+  formTitle.value = 'Upload Pricing Parameters'
+  filePlaceHolder.value = 'Click to select a pricing parameters file for upload'
+  tableType.value = 'pricing_parameters'
+}
+
+const deletePricingParameters = async () => {
+  const res = await confirmDelete.value.open(
+    'Deleting Pricing Parameters',
+    `Are you sure you want to delete parameters for ${selectedProduct.value.product_code}?`
+  )
+
+  if (!res) return
+  console.log('delete pricing parameters')
+
+  PricingService.deletePricingParameters(selectedProduct.value.product_code)
+    .then((response) => {
+      text.value = response.data
+      snackbar.value = true
+    })
+    .catch((err) => {
+      text.value = err.data.error
+      snackbar.value = true
+    })
+}
+
+const getPricingPolicyDemographics = () => {
+  loadingComplete.value = false
+  PricingService.getPricingDemographics(selectedProduct.value.product_code)
+    .then((res) => {
+      console.log(res.data)
+      const demographics = res.data.data
+      if (demographics !== null && demographics.length > 0) {
+        items.value = []
+        columnDefs.value = []
+        rowData.value = []
+        createColumnDefs(demographics)
+
+        demographics.forEach((item) => {
+          const transformed = {}
+          const keys = Object.keys(item)
+          keys.forEach((i) => {
+            if (isNaN(item[i])) {
+              transformed[i] = item[i]
+            } else {
+              const value = Number(item[i])
+              transformed[i] = value
+            }
+          })
+          rowData.value.push(transformed)
+        })
+      }
+
+      selectedTableName.value = 'Pricing Policy Demographics'
+      tableDialog.value = true
+      loadingComplete.value = true
+    })
+    .catch(() => {
+      text.value = 'No data was found for this product'
+      snackbar.value = true
+    })
+}
+
+const deletePricingPolicyDemographics = async () => {
+  const res = await confirmDelete.value.open(
+    'Deleting Pricing Demographics',
+    `Are you sure you want to delete demographics for ${selectedProduct.value.product_code}?`
+  )
+  if (!res) return
+  PricingService.deletePricingDemographics(selectedProduct.value.product_code)
+    .then(() => {
+      text.value = 'deleted successfully'
+      snackbar.value = true
+    })
+    .catch((err) => {
+      text.value = err.data.error
+      snackbar.value = true
+    })
+
+  console.log('delete pricing demographics')
+}
+
+const uploadPricingDemographicsForm = () => {
+  showDialog.value = true
+  formTitle.value = 'Upload Pricing Demographics'
+  filePlaceHolder.value = 'Click to select a pricing demographics file for upload'
+  tableType.value = 'pricing_demographics'
 }
 
 const createColumnDefs = (data) => {

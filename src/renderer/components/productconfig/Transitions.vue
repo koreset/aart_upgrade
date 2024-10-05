@@ -82,7 +82,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, inject, Ref, watch } from 'vue'
 import { useProductStore } from '@/renderer/store/product_config'
 import { required } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
@@ -99,6 +99,7 @@ const endStateErrors: any = ref([])
 const snackbar: any = ref(false)
 const snackbarMessage: any = ref('')
 const timeout: any = ref(2000)
+const resetFields = inject<Ref<boolean>>('resetFields', ref(false))
 
 const rules = {
   associatedTable: { required },
@@ -190,6 +191,20 @@ const validateForm = async () => {
   // }
   return true
 }
+
+watch(resetFields, (newVal) => {
+  if (newVal) {
+    applicableTransitions.value = []
+    startState.value = null
+    endState.value = null
+    absorbing.value = false
+    associatedTable.value = ''
+    v$.value.$reset()
+    associatedTableErrors.value = []
+    startStateErrors.value = []
+    endStateErrors.value = []
+  }
+})
 
 defineExpose({
   validateForm
