@@ -69,7 +69,7 @@
           </v-expansion-panel>
           <v-expansion-panel title="Associated Tables">
             <v-expansion-panel-text>
-              <associated-table-display :product="selectedProduct" />
+              <associated-table-display :product="product" />
             </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -263,7 +263,6 @@ const getProducts = async () => {
   )
   if (matchedCategory) {
     products.value = matchedCategory.products
-    console.log('Get products', products.value)
   } else {
     console.log('No matching category found')
     products.value = [] // or any default value you see fit
@@ -271,10 +270,11 @@ const getProducts = async () => {
 }
 
 const getProduct = async () => {
-  console.log('Get product', selectedProduct.value)
+  product.value = null
+  console.log('Selected product', selectedProduct.value)
   const response = await ProductService.getProductById(selectedProduct.value.id)
   product.value = response.data
-  console.log('Product Value', product.value)
+  console.log('Get product tables', product.value.product.product_tables)
   try {
     const resp = await ProductService.getModelPointCountForProduct(selectedProduct.value.id)
     if (resp.data.results.length > 0) {
@@ -356,10 +356,6 @@ const getModelPoints = () => {
         mpData.value.push(transformed)
       })
     }
-
-    // this.selectedTableName = "Model Points";
-    // this.tableDialog = true;
-    // this.loadingComplete = true;
   })
 }
 
@@ -378,50 +374,10 @@ const createColumnDefs = (data) => {
   })
 }
 
-/// Watches for changes in the route params and fetches the product data
-
-// watchEffect(async () => {
-//   try {
-//     console.log('Watch effect')
-//     paramId.value = route.params.id
-//     const response = await ProductService.getProductById(paramId.value)
-//     product.value = response.data
-//     modelPointVars.value = response.data.product.product_modelpoint_variables
-
-//     sortedUniqueYears.value = [] // Clear the data
-//     const resp = await ProductService.getModelPointCountForProduct(paramId.value)
-//     modelPointCount.value = resp.data.results
-//     mpData.value = [] // Clear the data
-//     console.log(mpData.value)
-//     uniqueYears.value = Array.from(new Set(modelPointCount.value.map((item: any) => item.year)))
-//     if (uniqueYears.value.length > 0) {
-//       sortedUniqueYears.value = uniqueYears.value.sort((a: any, b: any) => b - a)
-//     }
-//     transitionStates.value = response.data.product.product_transition_states
-//       .map((item: { state: any }) => item.state)
-//       .join(', ')
-//     const trueKeys = Object.entries(response.data.product.product_features)
-//       .filter(([key, value]) => value === true)
-//       .map(([key]) => key)
-
-//     benefitStructures.value = trueKeys.map((key) =>
-//       key
-//         .split('_')
-//         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-//         .join(' ')
-//     )
-//   } catch (error) {
-//     console.log(error)
-//   }
-// })
-
 onMounted(async () => {
   console.log('Mounted')
   const prodResponse = await ProductService.getProducts()
   allProducts.value = prodResponse.data
-
-  console.log('All Products', allProducts.value)
-
   productCategories.value = allProducts.value.map((item: any) => ({
     id: item.id,
     name: item.name

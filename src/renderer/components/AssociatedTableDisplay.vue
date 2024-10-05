@@ -5,7 +5,7 @@
         <v-table>
           <tbody>
             <tr v-for="item in associatedTables" :key="item.table">
-              <td style="width: 80%">{{ item.table }}</td>
+              <td :class="{ unpopulated: !item.populated }">{{ item.table }}</td>
               <td style="text-align: center">
                 <v-btn depressed rounded size="small" @click.stop="viewTable(item)">
                   <v-icon left color="primary">mdi-information</v-icon>
@@ -123,6 +123,8 @@ const uploadTitle = ref('')
 const mpLabel = ref('')
 const isDialogOpen = ref(false)
 const years = ref<number[]>(Array.from({ length: 10 }, (v, k) => new Date().getFullYear() - k))
+const associatedTables: any = ref({})
+
 const updateDialog = (value: boolean) => {
   isDialogOpen.value = value
 }
@@ -189,8 +191,6 @@ const handleUpload = (data: {
   })
 }
 
-const associatedTables: any = ref({})
-
 // watch for changes in the props.product.product_tables
 watch(
   () => props.product.product_tables,
@@ -210,7 +210,7 @@ watch(
   }
 )
 
-associatedTables.value = props.product.product_tables
+associatedTables.value = props.product.product.product_tables
 console.log('associatedTables', associatedTables.value)
 
 associatedTables.value = associatedTables.value
@@ -268,14 +268,21 @@ const viewTable = (item: any) => {
 }
 
 const loadData = (item) => {
-  ProductService.getProductTable({
-    product_code: props.product.product_code,
-    table_id: item.id
-  }).then((response) => {
-    rowData.value = response.data
-    createColumnDefs(response.data)
-    infoDialog.value = true
-  })
+  console.log('item', item)
+  try {
+    ProductService.getProductTable({
+      product_code: props.product.product.product_code,
+      table_id: item.id
+    }).then((response) => {
+      rowData.value = response.data
+      if (response.data !== null && response.data.length > 0) {
+        createColumnDefs(response.data)
+        infoDialog.value = true
+      }
+    })
+  } catch (error) {
+    console.log('error', error)
+  }
 }
 </script>
 
@@ -283,5 +290,9 @@ const loadData = (item) => {
 .table-row {
   border-bottom: 1px solid;
   border-color: #eee;
+}
+
+.unpopulated {
+  color: red;
 }
 </style>

@@ -33,7 +33,7 @@
                   Select the desired combination for this setting from the options below
                 </v-col>
               </v-row>
-              <v-row class="pa-5">
+              <v-row>
                 <v-col class="mt-3" cols="3">
                   <v-select
                     v-model="selectedShockBasis"

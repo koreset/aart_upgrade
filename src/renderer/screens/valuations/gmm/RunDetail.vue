@@ -141,7 +141,7 @@
               <template #default>
                 <v-table>
                   <thead>
-                    <tr>
+                    <tr class="table-row">
                       <th class="text-left table-col">Run Name</th>
                       <th class="text-left table-col">Run Date</th>
                       <th class="text-left table-col">Model Points</th>

@@ -33,7 +33,7 @@
                   Select the desired combination for this setting from the options below
                 </v-col>
               </v-row>
-              <v-row class="pa-5">
+              <v-row>
                 <v-col class="mt-3" cols="3">
                   <v-select
                     v-model="selectedShockBasis"
@@ -54,40 +54,39 @@
                   <v-checkbox v-model="expenses" :label="`Expenses`"></v-checkbox>
                 </v-col>
               </v-row>
+              <v-row>
+                <v-col>
+                  <v-btn
+                    rounded
+                    width="250"
+                    size="small"
+                    variant="outlined"
+                    class="primary"
+                    @click="addToScenarios"
+                    >Add to Shock Settings</v-btn
+                  >
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-divider></v-divider>
+                </v-col>
+              </v-row>
+              <h4 class="mt-4">Available Scenarios</h4>
+              <v-row v-if="shockScenarios.length > 0">
+                <v-col>
+                  <data-grid
+                    ref="table"
+                    :pagination="true"
+                    :rowSelection="rowSelection"
+                    :columnDefs="columnDefs"
+                    :showExport="showExport"
+                    :rowData="shockScenarios"
+                    @update:row-deleted="deleteShockSetting"
+                  />
+                </v-col>
+              </v-row>
             </v-container>
-            <v-row>
-              <v-col>
-                <v-btn
-                  rounded
-                  width="250"
-                  size="small"
-                  variant="outlined"
-                  class="primary"
-                  @click="addToScenarios"
-                  >Add to Shock Settings</v-btn
-                >
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col>
-                <v-divider></v-divider>
-              </v-col>
-            </v-row>
-            <h4 class="mt-4">Available Scenarios</h4>
-
-            <v-row v-if="shockScenarios.length > 0">
-              <v-col>
-                <data-grid
-                  ref="table"
-                  :pagination="true"
-                  :rowSelection="rowSelection"
-                  :columnDefs="columnDefs"
-                  :showExport="showExport"
-                  :rowData="shockScenarios"
-                  @update:row-deleted="deleteShockSetting"
-                />
-              </v-col>
-            </v-row>
           </template>
         </base-card>
       </v-col>

@@ -45,7 +45,7 @@ body {
 }
 
 .table-row {
-  background-color: rgb(169, 169, 169);
+  background-color: #223f54;
   color: white;
 }
 

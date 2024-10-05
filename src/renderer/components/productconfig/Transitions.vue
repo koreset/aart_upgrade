@@ -63,7 +63,7 @@
                 <td>{{ item.absorbing }}</td>
                 <td>
                   <v-btn variant="text" icon @click="removeItem(item)">
-                    <v-icon>mdi-delete</v-icon>
+                    <v-icon color="red">mdi-delete</v-icon>
                   </v-btn>
                 </td>
               </tr>
