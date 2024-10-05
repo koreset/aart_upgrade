@@ -136,6 +136,9 @@
         <v-list-item :to="{ name: 'pricing-run-settings' }">
           <v-list-item-title>Run Settings</v-list-item-title>
         </v-list-item>
+        <v-list-item :to="{ name: 'pricing-run-results' }">
+          <v-list-item-title>Run Results</v-list-item-title>
+        </v-list-item>
       </v-list-group>
       <v-list-group value="Exp Analysis">
         <template #activator="{ props }">

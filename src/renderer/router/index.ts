@@ -207,6 +207,11 @@ export default createRouter({
       name: 'pricing-run-settings',
       component: () => import('../screens/pricing/RunSettings.vue')
     },
+    {
+      path: '/pricing/run-results',
+      name: 'pricing-run-results',
+      component: () => import('../screens/pricing/RunResults.vue')
+    },
 
     {
       path: '/exp-analysis/configuration',
