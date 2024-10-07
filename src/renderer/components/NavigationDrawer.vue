@@ -16,7 +16,6 @@
     </v-container>
     <v-list class="nav-text smaller-font">
       <v-list-item
-        class="smaller-font"
         :to="{ name: 'dashboard' }"
         :title="'Dashboard'"
         :prepend-icon="'mdi-monitor-dashboard'"
@@ -44,11 +43,11 @@
             title="Valuations"
           ></v-list-item>
         </template>
-        <v-list-group value="GMM">
+        <v-list-group subgroup class="first-level-group" value="GMM">
           <template #activator="{ props }">
             <v-list-item v-bind="props" title="GMM"></v-list-item>
           </template>
-          <v-list-item class="smaller-font" :to="{ name: 'valuations-gmm-shock-settings' }">
+          <v-list-item class="second-level-item" :to="{ name: 'valuations-gmm-shock-settings' }">
             <v-list-item-title>Shock Settings</v-list-item-title>
           </v-list-item>
           <v-list-item :to="{ name: 'valuations-gmm-run-settings' }">
@@ -61,7 +60,7 @@
             <v-list-item-title>Results Aggregations</v-list-item-title>
           </v-list-item>
         </v-list-group>
-        <v-list-group value="PAA">
+        <v-list-group subgroup class="first-level-group" value="PAA">
           <template #activator="{ props }">
             <v-list-item v-bind="props" title="PAA"></v-list-item>
           </template>
@@ -84,7 +83,7 @@
             <v-list-item-title>Run Results</v-list-item-title>
           </v-list-item>
         </v-list-group>
-        <v-list-group value="IBNR">
+        <v-list-group subgroup class="first-level-group" value="IBNR">
           <template #activator="{ props }">
             <v-list-item v-bind="props" title="IBNR"></v-list-item>
           </template>
@@ -104,7 +103,7 @@
             <v-list-item-title>Run Results</v-list-item-title>
           </v-list-item>
         </v-list-group>
-        <v-list-group value="LIC">
+        <v-list-group subgroup class="first-level-group" value="LIC">
           <template #activator="{ props }">
             <v-list-item v-bind="props" title="LIC"></v-list-item>
           </template>
@@ -122,7 +121,7 @@
           </v-list-item>
         </v-list-group>
       </v-list-group>
-      <v-list-group value="Pricing">
+      <v-list-group class="first-level-group" value="Pricing">
         <template #activator="{ props }">
           <v-list-item
             v-bind="props"
@@ -140,7 +139,7 @@
           <v-list-item-title>Run Results</v-list-item-title>
         </v-list-item>
       </v-list-group>
-      <v-list-group value="Exp Analysis">
+      <v-list-group class="first-level-group" value="Exp Analysis">
         <template #activator="{ props }">
           <v-list-item
             v-bind="props"
@@ -161,7 +160,7 @@
           <v-list-item-title>Run Results</v-list-item-title>
         </v-list-item>
       </v-list-group>
-      <v-list-group value="IFRS17">
+      <v-list-group class="first-level-group" value="IFRS17">
         <template #activator="{ props }">
           <v-list-item
             v-bind="props"
@@ -185,7 +184,7 @@
           <v-list-item-title>Run Results</v-list-item-title>
         </v-list-item>
       </v-list-group>
-      <v-list-group value="IFRS17 Reports">
+      <v-list-group class="first-level-group" value="IFRS17 Reports">
         <template #activator="{ props }">
           <v-list-item
             v-bind="props"
@@ -278,9 +277,14 @@ watchEffect(() => {
 
 .smaller-font :deep(.v-list-item-title),
 .smaller-font :deep(.v-list-item__append) {
-  font-size: 14px;
+  font-size: 12px;
+  padding-left: 0 !important;
 }
 .smaller-font.v-list-item {
   min-height: unset;
+}
+.first-level-group :deep(.v-list-group__items) {
+  padding-left: 0 !important;
+  --indent-padding: calc(var(--parent-padding) - 16px) !important;
 }
 </style>
