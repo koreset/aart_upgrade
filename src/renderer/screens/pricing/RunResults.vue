@@ -74,7 +74,7 @@
                         rounded
                         size="small"
                         variant="outlined"
-                        :to="'/pricing-jobs/' + job.id"
+                        :to="'/pricing/run-details/' + job.id"
                         class="primary text--white mr-4"
                         >View Results</v-btn
                       >

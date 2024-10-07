@@ -13,6 +13,7 @@
               item-title="name"
               item-value="id"
               label="Select a product category"
+              return-object
               @update:model-value="getProducts"
             />
           </v-col>
@@ -173,10 +174,12 @@ import LoadingIndicator from '../components/LoadingIndicator.vue'
 import DataGrid from '../components/tables/DataGrid.vue'
 import { formatValues } from '../utils/format_values.js'
 import ConfirmationDialog from '../components/ConfirmDialog.vue'
-import { useAppStore } from '../store/app'
+
+// import { useAppStore } from '../store/app'
+
 // const route = useRoute()
 const router = useRouter()
-const appStore = useAppStore()
+// const appStore = useAppStore()
 
 const allProducts: any = ref([])
 const productCategories: any = ref([])
@@ -234,6 +237,36 @@ const editConfiguration = () => {
   router.push({ name: 'product-edit', params: { id: selectedProduct.value.id } })
 }
 
+onMounted(async () => {
+  console.log('Mounted')
+  const prodResponse = await ProductService.getProducts()
+  allProducts.value = prodResponse.data
+  // allProducts.value = await appStore.getAllProducts
+  console.log('All Products:', allProducts.value)
+  productCategories.value = allProducts.value.map((item: any) => ({
+    id: item.id,
+    name: item.name
+  }))
+
+  console.log('Product Categories:', productCategories.value)
+
+  if (router.currentRoute.value.params.id && router.currentRoute.value.params.familyId) {
+    const id = router.currentRoute.value.params.id
+    const familyId = router.currentRoute.value.params.familyId
+    console.log('ID:', id)
+    console.log('Family ID:', familyId)
+    selectedProductCategory.value = productCategories.value.find(
+      (item: any) => item.id === Number(familyId)
+    )
+
+    console.log('Selected Product Category:', selectedProductCategory.value)
+    getProducts()
+    if (products.value.length > 0) {
+      selectedProduct.value = products.value.find((item: any) => item.id === Number(id))
+    }
+  }
+})
+
 const runValuations = () => {
   router.push('/valuations/gmm/run-settings')
   // Only run projections if there are available model points
@@ -260,7 +293,7 @@ const getProducts = async () => {
   selectedProduct.value = null
 
   const matchedCategory = allProducts.value.find(
-    (item: any) => item.id === selectedProductCategory.value
+    (item: any) => item.id === selectedProductCategory.value.id
   )
   if (matchedCategory) {
     products.value = matchedCategory.products
@@ -374,18 +407,6 @@ const createColumnDefs = (data) => {
     columnDefs.value.push(header)
   })
 }
-
-onMounted(async () => {
-  console.log('Mounted')
-  // const prodResponse = await ProductService.getProducts()
-  // allProducts.value = prodResponse.data
-  allProducts.value = await appStore.getAllProducts
-  console.log('All Products:', allProducts.value)
-  productCategories.value = allProducts.value.map((item: any) => ({
-    id: item.id,
-    name: item.name
-  }))
-})
 </script>
 
 <style scoped>

@@ -32,9 +32,6 @@
             placeholder="Add Associated file"
             prepend-icon="mdi-paperclip"
           >
-            <template #selection="{ text }">
-              <v-chip small label color="primary">{{ text }}</v-chip>
-            </template>
           </v-file-input>
         </v-col>
       </v-row>
@@ -112,7 +109,7 @@ import ProductService from '@/renderer/api/ProductService'
 import { computed, inject, onMounted, Ref, ref, watch } from 'vue'
 import { useAppStore } from '@/renderer/store/app'
 import { useProductStore } from '@/renderer/store/product_config'
-
+import { useRouter } from 'vue-router'
 const resetFields = inject<Ref<boolean>>('resetFields', ref(false))
 const appStore = useAppStore()
 const productStore = useProductStore()
@@ -122,6 +119,7 @@ const props = defineProps<{
 }>()
 
 // data
+const $router = useRouter()
 const uploadDisabled = ref(false)
 const uploadInProgress = ref(false)
 const selectedReviewer: any = ref(null)
@@ -276,7 +274,7 @@ const uploadToServer = async () => {
 
   formData.append('product', JSON.stringify(snakifyKeys(productStore.getProduct)))
   formData.append('product_features', JSON.stringify(snakifyKeys(productStore.getSelectedFeatures)))
-  formData.append('editMode', props.editMode)
+  formData.append('editMode', props.editMode.value)
   const user = await window.mainApi?.sendSync('msgGetAuthenticatedUser')
   console.log('User:', user)
   formData.append('user', user.email)
@@ -285,9 +283,13 @@ const uploadToServer = async () => {
   console.log('formData:', formData)
   ProductService.postConfiguredProduct(formData)
     .then((res) => {
+      console.log('Response:', res.data)
       uploadDisabled.value = false
       // $emit('productComplete', res.data)
       uploadInProgress.value = false
+      const prodId = res.data.id
+      const familyId = res.data.product_family_id
+      $router.push({ name: 'product-detail', params: { id: prodId, familyId } })
     })
     .catch((err) => {
       console.log('Error:', err)

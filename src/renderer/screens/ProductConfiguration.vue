@@ -13,7 +13,12 @@
           <v-stepper-window>
             <template v-for="step in steps" :key="step.value">
               <v-stepper-window-item :value="step.value">
-                <component :is="step.component" ref="currentStep" v-bind="step.props" />
+                <component
+                  :is="step.component"
+                  ref="currentStep"
+                  :editMode="editMode"
+                  v-bind="step.props"
+                />
               </v-stepper-window-item>
             </template>
 

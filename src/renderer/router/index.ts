@@ -59,6 +59,11 @@ export default createRouter({
       name: 'product-detail',
       component: () => import('../screens/ProductDetail.vue')
     },
+    {
+      path: '/products/:id/:familyId',
+      name: 'product-detail',
+      component: () => import('../screens/ProductDetail.vue')
+    },
 
     {
       path: '/products',
@@ -212,7 +217,11 @@ export default createRouter({
       name: 'pricing-run-results',
       component: () => import('../screens/pricing/RunResults.vue')
     },
-
+    {
+      path: '/pricing/run-details/:id',
+      name: 'pricing-run-details',
+      component: () => import('../screens/pricing/RunDetails.vue')
+    },
     {
       path: '/exp-analysis/configuration',
       name: 'exp-analysis-configuration',
