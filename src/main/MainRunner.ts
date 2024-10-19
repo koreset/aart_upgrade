@@ -61,7 +61,7 @@ export const createMainWindow = async (mainWindow: BrowserWindow): Promise<Brows
   // Listen for update events
   autoUpdater.on('update-available', () => {
     console.log('Update available')
-    mainWindow.webContents.send('update_available')
+    mainWindow.webContents.send('updateAvailable')
   })
 
   autoUpdater.on('update-downloaded', () => {

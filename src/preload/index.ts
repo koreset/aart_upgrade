@@ -15,7 +15,8 @@ const mainAvailChannels: string[] = [
   'msgSetUserLicense',
   'msgGetUserLicense',
   'msgSaveBaseUrl',
-  'msgGetLicenseServerUrl'
+  'msgGetLicenseServerUrl',
+  'updateAvailable'
 ]
 const rendererAvailChannels: string[] = []
 

@@ -14,6 +14,10 @@ const toggleDrawer = (): void => {
   drawer.value = !drawer.value
 }
 
+window.mainApi?.on('updateAvailable', () => {
+  alert('Update Available')
+})
+
 onMounted(async () => {
   const response = await ProductService.getProducts()
   console.log('App Products:', response)
