@@ -2,8 +2,8 @@
 const dotenv = require('dotenv')
 
 const baseConfig = {
-  productName: 'Vutron',
-  appId: 'com.vutron.vutron',
+  productName: 'AART',
+  appId: 'za.co.adsolutions.aart',
   asar: true,
   extends: null,
   compression: 'maximum',
@@ -67,25 +67,6 @@ const baseConfig = {
   },
   nsis: {
     oneClick: true
-  },
-  linux: {
-    executableName: 'vutron',
-    icon: 'buildAssets/icons',
-    category: 'Utility',
-    target: [
-      {
-        target: 'snap',
-        arch: 'x64'
-      },
-      {
-        target: 'deb',
-        arch: 'x64'
-      },
-      {
-        target: 'rpm',
-        arch: 'x64'
-      }
-    ]
   }
 }
 

@@ -105,7 +105,7 @@
 <script setup lang="ts">
 import { computed, defineProps, ref, watch } from 'vue'
 import { DataPayload } from './types'
-const newprops = defineProps(['tableType','showVersionField', 'assumptionType', 'uploadComplete'])
+const newprops = defineProps(['tableType', 'showVersionField', 'assumptionType', 'uploadComplete'])
 
 const emit = defineEmits<{
   (e: 'uploadFile', payload: DataPayload): void

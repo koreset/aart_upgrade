@@ -1,6 +1,11 @@
 import { app, BrowserWindow, RenderProcessGoneDetails } from 'electron'
 import Constants from './utils/Constants'
 import IPCs from './IPCs'
+const { autoUpdater } = require('electron-updater')
+const log = require('electron-log')
+
+autoUpdater.logger = log
+autoUpdater.logger.transports.file.level = 'info'
 
 const exitApp = (mainWindow: BrowserWindow): void => {
   if (mainWindow && !mainWindow.isDestroyed()) {
@@ -50,6 +55,14 @@ export const createMainWindow = async (mainWindow: BrowserWindow): Promise<Brows
   } else {
     await mainWindow.loadFile(Constants.APP_INDEX_URL_PROD)
   }
+
+  autoUpdater.checkForUpdatesAndNotify()
+
+  // Listen for update events
+  autoUpdater.on('update-available', () => {
+    console.log('Update available')
+    mainWindow.webContents.send('update_available')
+  })
 
   return mainWindow
 }

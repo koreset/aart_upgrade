@@ -319,6 +319,7 @@ onMounted(async () => {
   loading.value = true
   const res = await ProductService.getValuationJobs()
   runJobs.value = res.data
+  console.log('run jobs: ', runJobs.value)
   if (runJobs.value === undefined || runJobs.value === null) {
     runJobs.value = []
   }

@@ -235,6 +235,9 @@
           <v-list-item-title>CSM Projection</v-list-item-title>
         </v-list-item>
       </v-list-group>
+      <v-list-item :to="{ name: 'tasks' }" :prepend-icon="'mdi-table-settings'">
+        <v-list-item-title>Tasks</v-list-item-title>
+      </v-list-item>
     </v-list>
   </v-navigation-drawer>
 </template>

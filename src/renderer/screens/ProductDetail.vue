@@ -30,9 +30,6 @@
               @update:model-value="getProduct"
             />
           </v-col>
-          <!-- <v-col v-if="selectedProduct" cols="3">
-            <v-btn class="btn-bg mt-2" rounded :size="buttonSize" @click="openDialog">Show Product</v-btn>
-          </v-col> -->
         </v-row>
       </template>
     </base-card>
@@ -40,7 +37,7 @@
       <template #header>
         {{ selectedProduct.product_name }}
       </template>
-      <template #default>
+      <template v-if="selectedProduct.product_state != 'pending'" #default>
         <v-expansion-panels variant="inset" class="my-4">
           <v-expansion-panel title="Model Point Variables">
             <v-expansion-panel-text>
@@ -133,10 +130,32 @@
         <v-divider class="mt-4"></v-divider>
       </template>
       <template #actions>
-        <v-btn class="ml-9 mb-3" rounded :size="buttonSize" color="primary" @click="openDialog"
+        <v-btn
+          v-if="selectedProduct.product_state == 'pending'"
+          class="mr-9 mb-3"
+          rounded
+          :size="buttonSize"
+          color="primary"
+          @click="openDialog"
+          >Activate Product</v-btn
+        >
+
+        <v-btn
+          :disabled="selectedProduct.product_state == 'pending'"
+          class="mb-3"
+          rounded
+          :size="buttonSize"
+          color="primary"
+          @click="openDialog"
           >Upload Model Points</v-btn
         >
-        <v-btn class="ml-9 mb-3" size="small" rounded color="primary" @click="runValuations"
+        <v-btn
+          :disabled="selectedProduct.product_state == 'pending'"
+          class="ml-9 mb-3"
+          size="small"
+          rounded
+          color="primary"
+          @click="runValuations"
           >Run Valuations</v-btn
         >
         <v-btn class="ml-9 mb-3" size="small" rounded color="primary" @click="editConfiguration"

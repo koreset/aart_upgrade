@@ -365,6 +365,21 @@ export default createRouter({
       name: 'ifrs17-reports-csm-projection',
       component: () => import('../screens/ifrs17/reports/CsmProjectionReports.vue')
     },
+    {
+      path: '/tasks',
+      name: 'tasks',
+      component: () => import('../screens/Tasks.vue')
+    },
+    {
+      path: '/documentation',
+      name: 'documentation',
+      component: () => import('../screens/Documentation.vue')
+    },
+    {
+      path: '/app-settings',
+      name: 'app-settings',
+      component: () => import('../screens/AppSettings.vue')
+    },
 
     {
       path: '/error',

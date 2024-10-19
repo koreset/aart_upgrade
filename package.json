@@ -1,18 +1,18 @@
 {
-  "name": "vutron",
-  "version": "1.0.0",
-  "description": "Quick Start Templates for Vite + Vue 3 + Electron",
-  "homepage": "https://vutron.jooy2.com",
-  "author": "jooy2 <jooy2.contact@gmail.com>",
+  "name": "AART",
+  "version": "2.0.0",
+  "description": "Analysis and Actuarial Reporting Tool",
+  "homepage": "https://adsolutions.co.za",
+  "author": "Motlatsi Rasephali <motlatsi.rasephali@adsolutions.co.za>",
   "license": "MIT",
   "main": "dist/main/index.js",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/jooy2/vutron.git"
+    "url": "https://github.com/koreset/aart_upgrade.git"
   },
   "bugs": {
-    "url": "https://github.com/jooy2/vutron/issues"
+    "url": "https://github.com/koreset/aart_upgrade/issues"
   },
   "scripts": {
     "dev": "vite",
@@ -20,7 +20,7 @@
     "dev:debug:force": "vite -d --force",
     "build": "npm run build:pre && electron-builder --config=buildAssets/builder/config.js",
     "build:pre": "npm run format:fix && vue-tsc --noEmit && vite build",
-    "build:all": "npm run build:pre && electron-builder --config=buildAssets/builder/config.js -wml",
+    "build:all": "npm run build:pre && electron-builder --config=buildAssets/builder/config.js -wm",
     "build:dir": "npm run build:pre && electron-builder --config=buildAssets/builder/config.js --dir",
     "build:mac": "npm run build:pre && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --config=buildAssets/builder/config.js --mac",
     "build:linux": "npm run build:pre && electron-builder --config=buildAssets/builder/config.js --linux",
@@ -48,7 +48,9 @@
     "ag-grid-enterprise": "^31.0.3",
     "ag-grid-vue3": "^31.0.3",
     "axios": "^1.6.7",
+    "electron-log": "^5.2.0",
     "electron-store": "^8.1.0",
+    "electron-updater": "^6.3.9",
     "exceljs": "^4.4.0",
     "highcharts": "^11.3.0",
     "highcharts-vue": "^1.4.3",
@@ -62,6 +64,7 @@
     "node-unique-machine-id": "^1.1.0",
     "papaparse": "^5.4.1",
     "pinia": "^2.1.7",
+    "prismjs": "^1.29.0",
     "vee-validate": "^4.13.2",
     "vue": "^3.4.29",
     "vue-class-component": "^7.2.6",
@@ -104,6 +107,25 @@
   "overrides": {
     "vite-plugin-electron": {
       "electron": "$electron"
+    }
+  },
+  "build": {
+    "appId": "za.co.adsolutions.aart",
+    "productName": "AART",
+    "directories": {
+      "buildResources": "buildAssets/builder"
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "koreset",
+      "repo": "aart_upgrade",
+      "private": true
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "mac": {
+      "target": "dmg"
     }
   }
 }

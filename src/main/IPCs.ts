@@ -118,7 +118,7 @@ export default class IPCs {
     // get the license server url from environment
     ipcMain.on('msgGetLicenseServerUrl', (event: IpcMainEvent) => {
       console.log('LICENSE SERVER URL BACK: ', process.env)
-      event.returnValue = "This is the requested URL"
+      event.returnValue = 'This is the requested URL'
     })
 
     // get the user access token
