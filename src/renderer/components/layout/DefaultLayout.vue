@@ -4,6 +4,8 @@ import { useRoute } from 'vue-router'
 import { onMounted, ref } from 'vue'
 import { useAppStore } from '@/renderer/store/app'
 import ProductService from '@/renderer/api/ProductService'
+import log from 'electron-log'
+
 const appStore = useAppStore()
 const drawer = ref(true)
 
@@ -15,6 +17,7 @@ const toggleDrawer = (): void => {
 }
 
 window.mainApi?.on('updateAvailable', () => {
+  log.info('Update Available')
   alert('Update Available')
 })
 
