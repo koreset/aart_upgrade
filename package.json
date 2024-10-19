@@ -119,6 +119,7 @@
       "provider": "github",
       "owner": "koreset",
       "repo": "aart_upgrade",
+      "releaseType": "release",
       "private": true
     },
     "win": {
