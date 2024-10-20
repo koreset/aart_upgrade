@@ -5,6 +5,7 @@ import { onMounted, ref } from 'vue'
 import { useAppStore } from '@/renderer/store/app'
 import ProductService from '@/renderer/api/ProductService'
 import log from 'electron-log'
+// import { ipcRenderer } from 'electron'
 
 const appStore = useAppStore()
 const drawer = ref(true)
@@ -16,12 +17,22 @@ const toggleDrawer = (): void => {
   drawer.value = !drawer.value
 }
 
-window.mainApi?.on('updateAvailable', () => {
-  log.info('Update Available')
-  alert('Update Available')
+// ipcRenderer.on('update_available', (event) => {
+//   log.info('Update Available', event)
+//   alert('Update Available')
+// })
+
+window.mainApi?.on('update_not_available', () => {
+  log.info('Update not Available')
+  alert('Update not Available')
 })
 
 onMounted(async () => {
+  window.mainApi?.on('update_available', () => {
+    log.info('Update Available')
+    alert('Update Available')
+  })
+
   const response = await ProductService.getProducts()
   console.log('App Products:', response)
   appStore.setProducts(response.data)

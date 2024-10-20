@@ -15,10 +15,13 @@ const mainAvailChannels: string[] = [
   'msgSetUserLicense',
   'msgGetUserLicense',
   'msgSaveBaseUrl',
-  'msgGetLicenseServerUrl',
-  'updateAvailable'
+  'msgGetLicenseServerUrl'
 ]
-const rendererAvailChannels: string[] = []
+const rendererAvailChannels: string[] = [
+  'update_available',
+  'update_not_available',
+  'update_downloaded'
+]
 
 contextBridge.exposeInMainWorld('mainApi', {
   send: (channel: string, ...data: any[]): void => {
