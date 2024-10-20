@@ -2,12 +2,12 @@
 const dotenv = require('dotenv')
 
 const baseConfig = {
-  productName: 'AART',
+  productName: 'AARTv2',
   appId: 'za.co.adsolutions.aart',
   asar: true,
   extends: null,
   compression: 'maximum',
-  artifactName: '${productName} ${version}_${arch}.${ext}',
+  artifactName: '${productName}-${version}-${arch}.${ext}',
   directories: {
     output: './release/${version}'
   },
