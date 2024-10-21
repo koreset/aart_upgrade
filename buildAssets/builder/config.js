@@ -28,7 +28,6 @@ const baseConfig = {
         target: 'zip',
         arch: ['x64', 'arm64', 'universal']
       }
-
     ]
   },
   dmg: {

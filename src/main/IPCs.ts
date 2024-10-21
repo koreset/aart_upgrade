@@ -36,7 +36,7 @@ const decode = (token) => {
 export default class IPCs {
   static initialize(): void {
     // Get application version
-    ipcMain.on('msgRequestGetVersion', (event: IpcMainEvent) => {
+    ipcMain.on('msgGetAppVersion', (event: IpcMainEvent) => {
       event.returnValue = Constants.APP_VERSION
     })
 

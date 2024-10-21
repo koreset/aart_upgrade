@@ -10,7 +10,8 @@
     <v-container>
       <v-row>
         <v-col>
-          <v-img class="ml-3" src="../assets/aart-logo-02.png"></v-img>
+          <v-img class="ml-3" src="/images/aart-logo-02.png"></v-img>
+          <p class="nav-text">App Version: {{ appVersion }}</p>
         </v-col>
       </v-row>
     </v-container>
@@ -242,13 +243,20 @@
   </v-navigation-drawer>
 </template>
 <script setup lang="ts">
-import { watchEffect, defineProps, ref } from 'vue'
+import { watchEffect, defineProps, ref, onMounted } from 'vue'
 // import ProductService from '@/renderer/api/ProductService' // Assuming the 'ProductService' module is located in the 'api' folder at the root of your project
 const props = defineProps({
   drawer: {
     type: Boolean,
     required: true
   }
+})
+
+const appVersion = ref('')
+
+onMounted(async () => {
+  appVersion.value = await window.mainApi?.sendSync('msgGetAppVersion')
+  console.log('App Version:', appVersion.value)
 })
 
 // const products: any = ref([])
