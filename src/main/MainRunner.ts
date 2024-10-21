@@ -69,7 +69,6 @@ export const createMainWindow = async (mainWindow: BrowserWindow): Promise<Brows
     mainWindow.webContents.send('update_not_available')
   })
 
-
   autoUpdater.on('update-downloaded', () => {
     mainWindow.webContents.send('update_downloaded')
   })
