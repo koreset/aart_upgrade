@@ -4,6 +4,9 @@ import Store from 'electron-store'
 import _ from 'lodash'
 import { encrypt } from './utils/encryption'
 import { machine } from 'node-unique-machine-id'
+const log = require('electron-log')
+const { autoUpdater } = require('electron-updater')
+
 // import { generateMachineFingerprint } from './utils/fingerprint'
 const store = new Store()
 const { snakeCase } = _
@@ -81,10 +84,21 @@ export default class IPCs {
     })
 
     // restart the application
-    ipcMain.on('msgRestartApplication', (event: IpcMainEvent) => {
+    ipcMain.on('msgRestartApplication', (event: IpcMainEvent, updateIndicator: boolean) => {
+      console.log('====Quitting Application====')
+      console.log('updateIndicator', updateIndicator)
+      console.log(event)
       event.returnValue = 'success'
-      app.relaunch()
-      app.exit()
+
+      log.info('====Quitting Application====')
+      log.info('updateIndicator', updateIndicator)
+      log.info(event)
+      if (updateIndicator) {
+        autoUpdater.quitAndInstall()
+      } else {
+        app.relaunch()
+        app.exit()
+      }
     })
 
     // resize window

@@ -22,8 +22,16 @@ const baseConfig = {
     target: [
       {
         target: 'dmg',
-        arch: ['x64', 'arm64', 'universal']
+        arch: ['arm64']
+      },
+      {
+        target: 'zip',
+        arch: ['arm64']
       }
+      // {
+      //   target: 'dmg',
+      //   arch: ['x64', 'arm64', 'universal']
+      // },
       // {
       //   target: 'zip',
       //   arch: ['x64', 'arm64', 'universal']
@@ -91,7 +99,7 @@ baseConfig.files = [
 ]
 
 // TODO: Notarize for macOS
-baseConfig.mac.identity = null
+// baseConfig.mac.identity = null
 /* if (process.env.MAC_NOTARIZE === 'true') {
   baseConfig.afterSign = './buildAssets/builder/notarize.ts'
 } else {

@@ -6,9 +6,11 @@ import { useAppStore } from '@/renderer/store/app'
 import ProductService from '@/renderer/api/ProductService'
 import log from 'electron-log'
 // import { ipcRenderer } from 'electron'
+import ConfirmDialog from '../ConfirmDialog.vue'
 
 const appStore = useAppStore()
 const drawer = ref(true)
+const confirmationDialog = ref()
 
 const route: any = useRoute()
 const titleKey: string = (route?.meta?.titleKey || 'title.main') as string
@@ -17,22 +19,19 @@ const toggleDrawer = (): void => {
   drawer.value = !drawer.value
 }
 
-// ipcRenderer.on('update_available', (event) => {
-//   log.info('Update Available', event)
-//   alert('Update Available')
-// })
-
-window.mainApi?.on('update_not_available', () => {
-  log.info('Update not Available')
-  alert('Update not Available')
+window.mainApi?.on('update_available', async () => {
+  log.info('Update Available')
+  const res = await confirmationDialog.value?.open(
+    'Update Available',
+    'A new version of the application is available. Do you want to update now? This will restart the application.'
+  )
+  if (res) {
+    console.log('Update Now')
+    window.mainApi?.send('msgRestartApplication', true)
+  }
 })
 
 onMounted(async () => {
-  window.mainApi?.on('update_available', () => {
-    log.info('Update Available')
-    alert('Update Available')
-  })
-
   const response = await ProductService.getProducts()
   console.log('App Products:', response)
   appStore.setProducts(response.data)
@@ -61,6 +60,7 @@ onMounted(async () => {
     <v-main>
       <slot />
     </v-main>
+    <confirm-dialog ref="confirmationDialog" />
   </v-app>
 </template>
 
