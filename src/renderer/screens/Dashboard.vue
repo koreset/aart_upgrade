@@ -2,7 +2,7 @@
 <template>
   <v-container>
     <server-unavailable />
-    <v-row v-if="!productsAvailable">
+    <v-row v-if="!productsAvailable && !loading">
       <v-col>
         <v-card>
           <v-card-text>
@@ -53,17 +53,20 @@ import ProductService from '../api/ProductService'
 import { ref, onBeforeMount } from 'vue'
 
 const productsAvailable = ref(false)
+const loading = ref(false)
 
 onBeforeMount(() => {
+  loading.value = true
   ProductService.getProducts()
     .then((products: any) => {
       console.log(products)
       productsAvailable.value = products.data.length > 0
+      loading.value = false
     })
     .catch((error) => {
       console.error(error)
+      loading.value = false
     })
-  console.log('Dashboard mounted')
 })
 </script>
 

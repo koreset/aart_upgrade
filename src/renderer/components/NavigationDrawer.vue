@@ -239,6 +239,12 @@
       <v-list-item :to="{ name: 'tasks' }" :prepend-icon="'mdi-table-settings'">
         <v-list-item-title>Tasks</v-list-item-title>
       </v-list-item>
+      <v-list-item :to="{ name: 'app-settings' }" :prepend-icon="'mdi-table-settings'">
+        <v-list-item-title>Application Settings</v-list-item-title>
+      </v-list-item>
+      <v-list-item :to="{ name: 'documentation' }" :prepend-icon="'mdi-table-settings'">
+        <v-list-item-title>Documentation</v-list-item-title>
+      </v-list-item>
     </v-list>
   </v-navigation-drawer>
 </template>
