@@ -11,6 +11,15 @@ const baseConfig = {
   directories: {
     output: './release/${version}'
   },
+  publish: {
+    provider: 'github',
+    owner: 'OnajomeAkpoduado',
+    repo: 'aart_upgrade',
+    releaseType: 'release',
+    publishAutoUpdate: true,
+    releaseName: 'AARTv2 ${version}',
+    token: process.env.GH_TOKEN
+  },
   mac: {
     bundleVersion: '1.0',
     identity: 'Onajome Akpoduado (KYR2TJ3Z3M)',

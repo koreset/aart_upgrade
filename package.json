@@ -1,6 +1,6 @@
 {
   "name": "AARTv2",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Analysis and Actuarial Reporting Tool",
   "homepage": "https://adsolutions.co.za",
   "author": "Motlatsi Rasephali <motlatsi.rasephali@adsolutions.co.za>",
@@ -19,6 +19,7 @@
     "dev:debug": "vite -d",
     "dev:debug:force": "vite -d --force",
     "build": "npm run build:pre && electron-builder --config=buildAssets/builder/config.js",
+    "build:publish": "npm run build:pre && electron-builder --config=buildAssets/builder/config.js --publish always",
     "build:pre": "npm run format:fix && vue-tsc --noEmit && vite build",
     "build:all": "npm run build:pre && electron-builder --config=buildAssets/builder/config.js -wm",
     "build:dir": "npm run build:pre && electron-builder --config=buildAssets/builder/config.js --dir",
