@@ -228,10 +228,11 @@ associatedTables.value = associatedTables.value
 
 const chooseYear = (item: any) => {
   console.log('item choose year', item)
+  console.log('props.product.id', props.product.product.id)
   availableDataYears.value = []
   selectedYear.value = null
   ProductService.getProductTableYears(
-    props.product.id,
+    props.product.product.id,
     item.table,
     'valuations',
     item.table_class
@@ -255,7 +256,7 @@ const confirmDelete = async (item: any) => {
 }
 
 const deleteTable = (item: any) => {
-  ProductService.deleteProductTablev2(props.product.id, item.id, selectedYear.value).then(
+  ProductService.deleteProductTablev2(props.product.product.id, item.id, selectedYear.value).then(
     (response) => {
       console.log('response', response)
     }

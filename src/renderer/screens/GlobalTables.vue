@@ -220,6 +220,18 @@ const handleUpload = (payload: DataPayload) => {
 
 const deleteTableData = async (table: any) => {
   try {
+    if (table.name === 'Yield Curve') {
+      ValuationService.getAvailableYieldYears().then((response) => {
+        yieldCurveYears.value = response.data
+        if (yieldCurveYears.value === null) {
+          yieldCurveYears.value = []
+        }
+        if (yieldCurveYears.value.length > 0) {
+          yieldCurveDataDialog.value = true
+        }
+      })
+    }
+
     const result = await confirmDeleteDialog.value.open(
       'Deleting Data for ' + table.name + ' table',
       'Are you sure you want to delete this data?'

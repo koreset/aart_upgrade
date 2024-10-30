@@ -7,116 +7,130 @@
             <span class="headline">LIC Run Settings</span>
           </template>
           <template #default>
-            <v-row class="mt-9">
-              <v-col cols="6">
-                <v-text-field
-                  v-model="runName"
-                  variant="outlined"
-                  density="compact"
-                  label="Enter a name for this run"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="6">
-                <v-select
-                  v-model="runConfig"
-                  variant="outlined"
-                  density="compact"
-                  placeholder="Select a run configuration"
-                  label="Run Configuration"
-                  :items="runConfigs"
-                  item-title="configuration_name"
-                  item-value="id"
-                  return-object
-                >
-                </v-select>
-              </v-col>
-              <v-col cols="6">
-                <v-date-input
-                  v-model="runDate"
-                  readonly
-                  view-mode="month"
-                  prepend-icon=""
-                  prepend-inner-icon="$calendar"
-                  variant="outlined"
-                  density="compact"
-                  label="Run Date"
-                ></v-date-input>
-              </v-col>
-              <v-col cols="6">
-                <v-date-input
-                  v-model="openingBalanceDate"
-                  readonly
-                  view-mode="month"
-                  prepend-icon=""
-                  prepend-inner-icon="$calendar"
-                  variant="outlined"
-                  density="compact"
-                  label="Opening Balance Date"
-                ></v-date-input>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="6">
-                <v-select
-                  v-model="selectedParameterYear"
-                  variant="outlined"
-                  density="compact"
-                  placeholder="Parameter Year"
-                  label="Select a parameter Year"
-                  :items="availableParameterYears"
-                  @update:modelValue="getAvailableParameterVersions"
-                ></v-select>
-              </v-col>
-              <v-col cols="6">
-                <v-select
-                  v-model="selectedParameterVersion"
-                  variant="outlined"
-                  density="compact"
-                  placeholder="Parameter Version"
-                  label="Select a version"
-                  :items="availableParameterVersions"
-                ></v-select>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col>
-                <v-btn size="small" variant="outlined" rounded class="primary" @click="addJob"
-                  >Add Job</v-btn
-                >
-              </v-col>
-            </v-row>
-            <v-row v-if="runJobs.length > 0">
-              <v-col>
-                <v-table class="trans-tables">
-                  <thead>
-                    <tr class="table-row">
-                      <th class="table-col">Run Name</th>
-                      <th class="table-col">Run Date</th>
-                      <th class="table-col">Opening Balance Date</th>
-                      <th class="table-col">Run Configuration</th>
-                      <th class="table-col">Lic Parameter Year</th>
-                      <th class="table-col">Lic Parameter Version</th>
-                      <th class="table-col">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="item in runJobs" :key="item.run_name">
-                      <td>{{ item.run_name }}</td>
-                      <td>{{ item.run_date }}</td>
-                      <td>{{ item.opening_balance_date }}</td>
-                      <td>{{ item.lic_configuration_name }}</td>
-                      <td>{{ item.lic_parameter_year }}</td>
-                      <td>{{ item.lic_parameter_version }}</td>
-                      <td>
-                        <v-btn variant="text" size="small" icon @click="removeFromJobs(item)">
-                          <v-icon color="red">mdi-delete</v-icon>
-                        </v-btn>
-                      </td>
-                    </tr>
-                  </tbody>
-                </v-table>
-              </v-col>
-            </v-row>
+            <v-form ref="form">
+              <v-row class="mt-9">
+                <v-col cols="6">
+                  <v-text-field
+                    v-model="runName"
+                    variant="outlined"
+                    density="compact"
+                    label="Enter a name for this run"
+                    :rules="[() => !!runName || 'Run name is required']"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="6">
+                  <v-select
+                    v-model="runConfig"
+                    variant="outlined"
+                    density="compact"
+                    placeholder="Select a run configuration"
+                    label="Run Configuration"
+                    :items="runConfigs"
+                    item-title="configuration_name"
+                    item-value="id"
+                    return-object
+                    :rules="[() => !!runConfig || 'Run configuration is required']"
+                    required
+                  >
+                  </v-select>
+                </v-col>
+                <v-col cols="6">
+                  <v-date-input
+                    v-model="runDate"
+                    readonly
+                    view-mode="month"
+                    prepend-icon=""
+                    prepend-inner-icon="$calendar"
+                    variant="outlined"
+                    density="compact"
+                    label="Run Date"
+                    :rules="[() => !!runDate || 'Run date is required']"
+                    required
+                  ></v-date-input>
+                </v-col>
+                <v-col cols="6">
+                  <v-date-input
+                    v-model="openingBalanceDate"
+                    readonly
+                    view-mode="month"
+                    prepend-icon=""
+                    prepend-inner-icon="$calendar"
+                    variant="outlined"
+                    density="compact"
+                    label="Opening Balance Date"
+                    :rules="[() => !!openingBalanceDate || 'Opening balance date is required']"
+                    required
+                  ></v-date-input>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="6">
+                  <v-select
+                    v-model="selectedParameterYear"
+                    variant="outlined"
+                    density="compact"
+                    placeholder="Parameter Year"
+                    label="Select a parameter Year"
+                    :items="availableParameterYears"
+                    required
+                    :rules="[() => !!selectedParameterYear || 'Parameter year is required']"
+                    @update:modelValue="getAvailableParameterVersions"
+                  ></v-select>
+                </v-col>
+                <v-col cols="6">
+                  <v-select
+                    v-model="selectedParameterVersion"
+                    variant="outlined"
+                    density="compact"
+                    placeholder="Parameter Version"
+                    label="Select a version"
+                    required
+                    :rules="[() => !!selectedParameterVersion || 'Parameter version is required']"
+                    :items="availableParameterVersions"
+                  ></v-select>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-btn size="small" variant="outlined" rounded class="primary" @click="addJob"
+                    >Add Job</v-btn
+                  >
+                </v-col>
+              </v-row>
+              <v-row v-if="runJobs.length > 0">
+                <v-col>
+                  <v-table class="trans-tables">
+                    <thead>
+                      <tr class="table-row">
+                        <th class="table-col">Run Name</th>
+                        <th class="table-col">Run Date</th>
+                        <th class="table-col">Opening Balance Date</th>
+                        <th class="table-col">Run Configuration</th>
+                        <th class="table-col">Lic Parameter Year</th>
+                        <th class="table-col">Lic Parameter Version</th>
+                        <th class="table-col">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="item in runJobs" :key="item.run_name">
+                        <td>{{ item.run_name }}</td>
+                        <td>{{ item.run_date }}</td>
+                        <td>{{ item.opening_balance_date }}</td>
+                        <td>{{ item.lic_configuration_name }}</td>
+                        <td>{{ item.lic_parameter_year }}</td>
+                        <td>{{ item.lic_parameter_version }}</td>
+                        <td>
+                          <v-btn variant="text" size="small" icon @click="removeFromJobs(item)">
+                            <v-icon color="red">mdi-delete</v-icon>
+                          </v-btn>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </v-table>
+                </v-col>
+              </v-row>
+            </v-form>
 
             <v-row v-if="runJobs.length > 0">
               <v-col>
@@ -165,6 +179,7 @@ import { useRouter } from 'vue-router'
 import { VDateInput } from 'vuetify/labs/VDateInput'
 import formatDateString from '@/renderer/utils/helpers'
 
+const form = ref()
 const $router = useRouter()
 const dialog = ref(false)
 const overrideRun = ref(false)
@@ -206,10 +221,14 @@ const getAvailableParameterVersions = () => {
   })
 }
 
-const addJob = () => {
-  if (runName.value === null) {
+const addJob = async () => {
+  const isValid = await form.value.validate()
+  console.log('isvalid', isValid)
+  if (!isValid.valid) {
     return
   }
+  console.log(form.value)
+
   const job = {
     run_name: runName.value,
     run_date: formatDateString(runDate.value, true, true, false),

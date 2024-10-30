@@ -31,6 +31,7 @@
                   v-if="selectedItems.length > 0 && showSelect"
                   rounded
                   size="small"
+                  color="red"
                   class="ml-2 mb-2"
                   variant="outlined"
                   @click="deleteRuns(selectedItems)"
@@ -88,11 +89,13 @@
                     <v-list-item-title>
                       <v-container>
                         <v-row>
-                          <v-col cols="12">
-                            <p>{{ run.product_name }}</p>
+                          <v-col cols="9">
+                            {{ run.product_name }}
+                          </v-col>
+                          <v-col cols="3">
                             <v-btn
                               v-if="job.status !== 'Failed'"
-                              variant="plain"
+                              variant="outlined"
                               rounded
                               size="small"
                               color="primary"
@@ -103,8 +106,9 @@
                             >
                             <v-btn
                               v-if="job.status !== 'Failed'"
-                              variant="plain"
+                              variant="outlined"
                               rounded
+                              class="ml-2"
                               size="small"
                               color="primary"
                               :to="
@@ -128,12 +132,7 @@
                     </v-list-item-subtitle>
                   </v-list-item>
                   <v-divider></v-divider>
-                  <v-btn
-                    variant="plain"
-                    rounded
-                    size="small"
-                    color="primary"
-                    @click="deleteRun(job.id)"
+                  <v-btn variant="plain" rounded size="small" color="red" @click="deleteRun(job.id)"
                     >Delete {{ job.run_name }}</v-btn
                   >
                 </v-expansion-panel-text>
