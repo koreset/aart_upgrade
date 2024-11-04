@@ -92,7 +92,42 @@
                       </template>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text>
-                      <v-row v-if="item.failure_reason !== null && item.failure_reason !== ''">
+                      <v-list-item v-for="run in item.gmm_run_settings" :key="run.id">
+                        <v-list-item-title>
+                          <v-container>
+                            <v-row>
+                              <v-col cols="9">
+                                {{ run.name }}
+                              </v-col>
+                              <v-col cols="3">
+                                <v-btn
+                                  v-if="run.status !== 'Failed'"
+                                  variant="outlined"
+                                  rounded
+                                  size="small"
+                                  color="primary"
+                                  :to="'/valuations/paa/run-detail/' + run.id"
+                                  >View Results</v-btn
+                                >
+                                <v-btn
+                                  v-if="run.status !== 'Failed'"
+                                  variant="outlined"
+                                  rounded
+                                  class="ml-2"
+                                  size="small"
+                                  color="red"
+                                  @click.stop="confirmDelete(run.id)"
+                                  >Delete</v-btn
+                                >
+                              </v-col>
+                            </v-row>
+                          </v-container>
+                        </v-list-item-title>
+                        <v-list-item-subtitle v-if="run.status == 'Failed'">
+                          <p>Run Error: {{ run.status_error }}</p>
+                        </v-list-item-subtitle>
+                      </v-list-item>
+                      <!-- <v-row v-if="item.failure_reason !== null && item.failure_reason !== ''">
                         <v-col>
                           <b>Reason for failure: {{ item.failure_reason }}</b>
                         </v-col>
@@ -118,7 +153,7 @@
                             >View Results</v-btn
                           >
                         </v-col>
-                      </v-row>
+                      </v-row> -->
                     </v-expansion-panel-text>
                   </v-expansion-panel>
                 </v-expansion-panels>
@@ -270,9 +305,15 @@ const deleteRun = async (itemId: any) => {
 
 onMounted(async () => {
   loading.value = true
+  const resv2 = await ModifiedGMMService.getProjectionJobsv2()
+  console.log(resv2.data)
   const res = await ModifiedGMMService.getProjectionJobs()
-  runJobs.value = res.data
+  console.log(res.data)
+
+  runJobs.value = resv2.data
   console.log(runJobs.value)
+  totalPages.value = Math.ceil(runJobs.value.length / pageSize)
+  console.log(totalPages.value)
   loading.value = false
   if (
     runJobs.value.length > 0 &&

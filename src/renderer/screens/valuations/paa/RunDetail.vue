@@ -4,9 +4,17 @@
       <v-col>
         <base-card>
           <template #header>
-            <span class="headline">Projection Runs</span>
+            <span class="headline">PAA Run Results ({{ runSettings.name }}) </span>
           </template>
           <template #default>
+            <v-row class="mb-3">
+              <v-col>
+                <v-btn variant="plain" :to="'/valuations/paa/run-results'">
+                  {{ backButtonTitle }}
+                </v-btn>
+              </v-col>
+            </v-row>
+
             <base-card>
               <template #header>
                 <span class="headline">Aggregated Results</span>
@@ -51,10 +59,11 @@ const loadingComplete = ref(false)
 const rowData: any = ref([])
 const scopedRowData: any = ref([])
 const groupList: any = ref([])
-const runSettings: any = ref([])
+const runSettings: any = ref({})
 const cDefs: any = ref([])
 const spCDefs: any = ref([])
 const gridOptions: any = ref(null)
+const backButtonTitle = 'Back to Projection Runs'
 
 onMounted(() => {
   console.log('mounted')
@@ -65,10 +74,12 @@ onMounted(() => {
   gridOptions.value = {}
 
   ModifiedGMMService.getProjections(runId.value).then((res: any) => {
+    console.log(res.data)
     rowData.value = res.data.results
     scopedRowData.value = res.data.scoped_results
     groupList.value = res.data.groups
-    runSettings.value.push(res.data.run_settings)
+    runSettings.value = res.data.run_settings
+    console.log('runSettings.value', runSettings.value)
 
     if (scopedRowData.value.length > 0) {
       console.log(scopedRowData.value)

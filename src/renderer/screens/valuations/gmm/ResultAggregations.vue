@@ -8,16 +8,6 @@
           </template>
           <template #default>
             <v-row>
-              <v-col cols="2">
-                <v-btn
-                  rounded
-                  size="small"
-                  variant="outlined"
-                  color="primary"
-                  @click="dialog = true"
-                  >Select variables</v-btn
-                >
-              </v-col>
               <v-col cols="3">
                 <v-select
                   v-model="selectedValuationJob"
@@ -60,6 +50,17 @@
                   @update:model-value="getAggregatedResultsForProductAndSpCode"
                 ></v-select>
               </v-col>
+              <v-col cols="2">
+                <v-btn
+                  rounded
+                  size="small"
+                  variant="outlined"
+                  color="primary"
+                  @click="dialog = true"
+                  >Select variables</v-btn
+                >
+              </v-col>
+
             </v-row>
             <v-row v-if="rowData.length > 0">
               <v-col>

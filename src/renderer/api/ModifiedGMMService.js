@@ -65,6 +65,10 @@ export default {
     return Api.get('/gmm-engine/run-jobs')
   },
 
+  getProjectionJobsv2() {
+    return Api.get('/gmm-engine/v2/run-jobs')
+  },
+
   getProjections(runId) {
     return Api.get('/gmm-engine/projections/' + runId)
   },

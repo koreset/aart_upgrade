@@ -70,64 +70,60 @@
               <associated-table-display :product="product" />
             </v-expansion-panel-text>
           </v-expansion-panel>
+          <v-expansion-panel title="Product Model Points">
+            <v-expansion-panel-text>
+              <v-row>
+                <v-col cols="3">
+                  <v-select
+                    v-model="selectedYear"
+                    variant="outlined"
+                    density="compact"
+                    label="Select an MP year"
+                    :items="sortedUniqueYears"
+                    @update:model-value="getVersions"
+                  ></v-select>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-table>
+                    <thead>
+                      <tr class="table-row">
+                        <th class="table-col">Version</th><th class="table-col">Data Count</th
+                        ><th class="table-col text-center">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="item in mpVersions" :key="item.version"
+                        ><td>{{ item.version }}</td
+                        ><td>{{ item.count }}</td
+                        ><td class="text-right">
+                          <v-btn
+                            variant="outlined"
+                            class="mr-3"
+                            rounded
+                            :size="buttonSize"
+                            @click="getModelPoints(item)"
+                            >View</v-btn
+                          >
+                          <v-btn variant="outlined" class="mr-6" size="small" rounded color="red"
+                            >Delete Model Points</v-btn
+                          >
+                        </td></tr
+                      >
+                    </tbody>
+                  </v-table>
+                </v-col>
+              </v-row>
+              <loading-indicator :loading-data="loadingData" />
+              <v-row v-if="mpData.length > 0 && !loadingData">
+                <v-col>
+                  <data-grid :column-defs="columnDefs" :row-data="mpData" />
+                </v-col>
+              </v-row>
+            </v-expansion-panel-text>
+          </v-expansion-panel>
         </v-expansion-panels>
-        <v-divider></v-divider>
-        <v-row>
-          <v-col cols="12">
-            <v-card-title class="text-subtitle">Model Point Count</v-card-title>
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="3">
-                    <v-select
-                      v-model="selectedYear"
-                      variant="outlined"
-                      density="compact"
-                      label="Select an MP year"
-                      :items="sortedUniqueYears"
-                      @update:model-value="getVersions"
-                    ></v-select>
-                  </v-col>
-                  <v-col v-if="mpVersions.length > 0" cols="3">
-                    <v-select
-                      v-model="selectedVersion"
-                      variant="outlined"
-                      density="compact"
-                      label="Select a version"
-                      :items="mpVersions"
-                      item-title="version"
-                      item-value="version"
-                    ></v-select>
-                  </v-col>
-                  <v-col v-if="selectedVersion" class="mt-2" cols="2"
-                    >Data count: {{ countForVersion }}</v-col
-                  >
-                  <v-col v-if="selectedVersion" class="d-flex" cols="4">
-                    <v-btn
-                      variant="outlined"
-                      class="mb-3"
-                      rounded
-                      :size="buttonSize"
-                      @click="getModelPoints"
-                      >View</v-btn
-                    >
-                    <v-spacer></v-spacer>
-                    <v-btn variant="outlined" class="mb-3" size="small" rounded color="red"
-                      >Delete Model Points</v-btn
-                    >
-                  </v-col>
-                </v-row>
-                <loading-indicator :loading-data="loadingData" />
-                <v-row v-if="mpData.length > 0 && !loadingData">
-                  <v-col>
-                    <data-grid :column-defs="columnDefs" :row-data="mpData" />
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card-text>
-          </v-col>
-        </v-row>
-        <v-divider class="mt-4"></v-divider>
       </template>
       <template #actions>
         <v-btn
@@ -183,7 +179,7 @@
 
 <script setup lang="ts">
 import ProductService from '../api/ProductService'
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import ModelPointVariableDisplay from '../components/ModelPointVariableDisplay.vue'
 import AssociatedTableDisplay from '../components/AssociatedTableDisplay.vue'
@@ -240,17 +236,18 @@ const mpLabel = 'Enter a modelpoint version'
 
 const getVersions = async () => {
   selectedVersion.value = null
+  mpVersions.value = []
   mpData.value = []
   const year = selectedYear.value
   mpVersions.value = modelPointCount.value.filter((item: { year: any }) => item.year === year)
   console.log(mpVersions.value)
 }
 
-const countForVersion = computed(() => {
-  const selectedItem = modelPointCount.value.find((item) => item.version === selectedVersion.value)
-  console.log('selected item: ', selectedItem)
-  return selectedItem ? selectedItem.count : null
-})
+// const countForVersion = computed(() => {
+//   const selectedItem = modelPointCount.value.find((item) => item.version === selectedVersion.value)
+//   console.log('selected item: ', selectedItem)
+//   return selectedItem ? selectedItem.count : null
+// })
 
 const editConfiguration = () => {
   router.push({ name: 'product-edit', params: { id: selectedProduct.value.id } })
@@ -381,35 +378,33 @@ const deleteProduct = async () => {
   }
 }
 
-const getModelPoints = () => {
+const getModelPoints = (item) => {
   console.log(product.value)
   mpData.value = []
-  ProductService.getModelPointsForProduct(
-    product.value.product.id,
-    selectedYear.value,
-    selectedVersion.value
-  ).then((res) => {
-    console.log(res.data)
-    if (res.data !== null) {
-      // this.items = [];
-      columnDefs.value = []
-      mpData.value = []
-      createColumnDefs(res.data)
-      res.data.forEach((item) => {
-        const transformed: any = {}
-        const keys = Object.keys(item)
-        keys.forEach((i) => {
-          if (isNaN(item[i])) {
-            transformed[i] = item[i]
-          } else {
-            const value = Number(item[i])
-            transformed[i] = value
-          }
+  ProductService.getModelPointsForProduct(product.value.product.id, item.year, item.version).then(
+    (res) => {
+      console.log(res.data)
+      if (res.data !== null) {
+        // this.items = [];
+        columnDefs.value = []
+        mpData.value = []
+        createColumnDefs(res.data)
+        res.data.forEach((item) => {
+          const transformed: any = {}
+          const keys = Object.keys(item)
+          keys.forEach((i) => {
+            if (isNaN(item[i])) {
+              transformed[i] = item[i]
+            } else {
+              const value = Number(item[i])
+              transformed[i] = value
+            }
+          })
+          mpData.value.push(transformed)
         })
-        mpData.value.push(transformed)
-      })
+      }
     }
-  })
+  )
 }
 
 const createColumnDefs = (data) => {
