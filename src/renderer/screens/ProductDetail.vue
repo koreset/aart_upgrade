@@ -37,7 +37,7 @@
       <template #header>
         {{ selectedProduct.product_name }}
       </template>
-      <template v-if="selectedProduct.product_state != 'pending'" #default>
+      <template #default>
         <v-expansion-panels variant="inset" class="my-4">
           <v-expansion-panel title="Model Point Variables">
             <v-expansion-panel-text>
@@ -70,7 +70,10 @@
               <associated-table-display :product="product" />
             </v-expansion-panel-text>
           </v-expansion-panel>
-          <v-expansion-panel title="Product Model Points">
+          <v-expansion-panel
+            v-if="selectedProduct.product_state != 'pending'"
+            title="Product Model Points"
+          >
             <v-expansion-panel-text>
               <v-row>
                 <v-col cols="3">
@@ -84,7 +87,7 @@
                   ></v-select>
                 </v-col>
               </v-row>
-              <v-row>
+              <v-row v-if="mpVersions.length > 0">
                 <v-col>
                   <v-table>
                     <thead>
@@ -132,7 +135,7 @@
           rounded
           :size="buttonSize"
           color="primary"
-          @click="openDialog"
+          @click="openActivateDialog"
           >Activate Product</v-btn
         >
 
@@ -174,6 +177,29 @@
       @update:isDialogOpen="updateDialog"
     />
     <confirmation-dialog ref="confirmAction" />
+    <v-dialog v-model="activateDialog" persistent max-width="600">
+      <base-card>
+        <template #header>
+          <span class="headline">Activate {{ selectedProduct.product_name }}</span>
+        </template>
+        <template #default>
+          <v-container>
+            <v-textarea
+              v-model="remarks"
+              name="input-7-1"
+              label="Remarks"
+              auto-grow
+              variant="outlined"
+            ></v-textarea>
+          </v-container>
+        </template>
+        <template #actions>
+          <v-spacer></v-spacer>
+          <v-btn rounded color="accent" text @click="activateProduct(false)">Decline</v-btn>
+          <v-btn rounded color="accent" text @click="activateProduct(true)">Activate</v-btn>
+        </template>
+      </base-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -189,6 +215,8 @@ import LoadingIndicator from '../components/LoadingIndicator.vue'
 import DataGrid from '../components/tables/DataGrid.vue'
 import { formatValues } from '../utils/format_values.js'
 import ConfirmationDialog from '../components/ConfirmDialog.vue'
+import TaskService from '../api/TaskService'
+import ActivityService from '../api/ActivityService'
 
 // import { useAppStore } from '../store/app'
 
@@ -196,6 +224,7 @@ import ConfirmationDialog from '../components/ConfirmDialog.vue'
 const router = useRouter()
 // const appStore = useAppStore()
 
+const remarks = ref('')
 const allProducts: any = ref([])
 const productCategories: any = ref([])
 const products: any = ref([])
@@ -219,10 +248,15 @@ const selectedYear: any = ref(null)
 const mpVersions: any = ref([])
 const selectedVersion: any = ref(null)
 const confirmAction: any = ref()
+const activateDialog = ref(false)
 
 const openDialog = () => {
   console.log('Open Dialog')
   isDialogOpen.value = true
+}
+
+const openActivateDialog = () => {
+  activateDialog.value = true
 }
 
 const updateDialog = (value: boolean) => {
@@ -233,6 +267,7 @@ const buttonSize = 'small'
 const yearLabel = 'Select an applicable year for the model points'
 const uploadTitle = 'Upload Model Points'
 const mpLabel = 'Enter a modelpoint version'
+const user: any = ref({})
 
 const getVersions = async () => {
   selectedVersion.value = null
@@ -243,18 +278,14 @@ const getVersions = async () => {
   console.log(mpVersions.value)
 }
 
-// const countForVersion = computed(() => {
-//   const selectedItem = modelPointCount.value.find((item) => item.version === selectedVersion.value)
-//   console.log('selected item: ', selectedItem)
-//   return selectedItem ? selectedItem.count : null
-// })
-
 const editConfiguration = () => {
   router.push({ name: 'product-edit', params: { id: selectedProduct.value.id } })
 }
 
 onMounted(async () => {
   console.log('Mounted')
+  user.value = await window.mainApi?.sendSync('msgGetAuthenticatedUser')
+
   const prodResponse = await ProductService.getProducts()
   allProducts.value = prodResponse.data
   // allProducts.value = await appStore.getAllProducts
@@ -292,6 +323,57 @@ const runValuations = () => {
   //   this.snackbar = true
   //   this.text = 'You will need to upload model points for the product before running projections'
   // }
+}
+
+const activateProduct = async (value) => {
+  console.log('Activate Product:', selectedProduct.value)
+  console.log('User Value:', user.value)
+  const task: any = {}
+  if (value) {
+    const payload: any = {}
+
+    payload.productId = selectedProduct.value.id
+    payload.description = remarks.value
+
+    const res = await ProductService.activateProduct(payload)
+    console.log('Response:', res)
+    if (res.status === 200) {
+      console.log('Product activated')
+      selectedProduct.value.product_state = 'approved'
+    }
+    activateDialog.value = false
+    task.product_id = selectedProduct.value.id
+    task.product_code = selectedProduct.value.product_code
+    task.product_name = selectedProduct.value.product_name
+    task.approver = user.value.email
+
+    task.comments = remarks.value
+    task.status = 'completed'
+  } else {
+    activateDialog.value = false
+    // Create a task and forward back to the creator.... There should be a product that's associated with the task.
+    task.product_id = selectedProduct.value.id
+    task.product_code = selectedProduct.value.product_code
+    task.product_name = selectedProduct.value.product_name
+    task.approver = user.value
+    task.comments = remarks.value
+    task.status = 'active'
+  }
+
+  console.log('Task:', task)
+  TaskService.createTask(task).then(() => {})
+
+  const activityPayload: any = {}
+  activityPayload.type = 'product_activation'
+  activityPayload.description =
+    'Product ID: ' +
+    product.value.id +
+    ' with code:  ' +
+    product.value.product_code +
+    ' was activated'
+  activityPayload.object_type = 'product'
+  activityPayload.object_id = product.value.id
+  ActivityService.createActivity(activityPayload)
 }
 
 const handleUpload = (data: {
@@ -385,7 +467,7 @@ const getModelPoints = (item) => {
     (res) => {
       console.log(res.data)
       if (res.data !== null) {
-        // this.items = [];
+        // items = [];
         columnDefs.value = []
         mpData.value = []
         createColumnDefs(res.data)

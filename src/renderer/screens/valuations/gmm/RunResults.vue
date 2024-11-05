@@ -89,10 +89,10 @@
                     <v-list-item-title>
                       <v-container>
                         <v-row>
-                          <v-col cols="9">
+                          <v-col cols="8">
                             {{ run.product_name }}
                           </v-col>
-                          <v-col cols="3">
+                          <v-col cols="4">
                             <v-btn
                               v-if="job.status !== 'Failed'"
                               variant="outlined"
@@ -108,7 +108,7 @@
                               v-if="job.status !== 'Failed'"
                               variant="outlined"
                               rounded
-                              class="ml-2"
+                              class="ml-2 mr-2"
                               size="small"
                               color="primary"
                               :to="
