@@ -1202,6 +1202,14 @@ acorn@^8.9.0:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.12.0.tgz#1627bfa2e058148036133b8d9b51a700663c294c"
   integrity sha512-RTvkC4w+KNXrM39/lWCUaG0IbRkWdCv7W/IOW9oU6SawyxulvkQy5HQPVTKxEjczcUvapcrw3cFx/60VN/NRNw==
 
+ag-charts-community@10.3.1:
+  version "10.3.1"
+  resolved "https://registry.yarnpkg.com/ag-charts-community/-/ag-charts-community-10.3.1.tgz#bbfe72e8dd15161e5c573ded84cdf93fc30f041e"
+  integrity sha512-/FyXVoSkErYvWZWyAahRNtkaT0A6RH6d16JsgVPEzyu/hUWRpknXAAplz9jQvuIKPg7tEUfjGcl33C7v64v8Ew==
+  dependencies:
+    ag-charts-locale "10.3.1"
+    ag-charts-types "10.3.1"
+
 ag-charts-community@9.3.1:
   version "9.3.1"
   resolved "https://registry.yarnpkg.com/ag-charts-community/-/ag-charts-community-9.3.1.tgz#0867448d7b9b30c393c7a5c0018324529a91c2b1"
@@ -1215,15 +1223,32 @@ ag-charts-community@^10.2.0:
     ag-charts-locale "10.2.0"
     ag-charts-types "10.2.0"
 
+ag-charts-enterprise@^10.3.1:
+  version "10.3.1"
+  resolved "https://registry.yarnpkg.com/ag-charts-enterprise/-/ag-charts-enterprise-10.3.1.tgz#d9272976bf48ad35bd26e976dd7e360106c26d8f"
+  integrity sha512-vozsP2KoZl59XGt3y5BQwgJourFKdWqZg312Ei+n1duGSMtaf6GPJ4fzHsCS6IyPNM3bGlkrlOJ9wwIc0jpK7g==
+  dependencies:
+    ag-charts-community "10.3.1"
+
 ag-charts-locale@10.2.0:
   version "10.2.0"
   resolved "https://registry.yarnpkg.com/ag-charts-locale/-/ag-charts-locale-10.2.0.tgz#b89af32f9ca3a3ea8eaf1862bcb5c179f5d345c0"
   integrity sha512-JAwuJFXwoVE94YFuwo1ZtnCJa4rFLQna+t2xT5qT2KUaohVPHB+Zd8ivP62lOv9j2ZgzSg4WANBo2UT1LCtl2Q==
 
+ag-charts-locale@10.3.1:
+  version "10.3.1"
+  resolved "https://registry.yarnpkg.com/ag-charts-locale/-/ag-charts-locale-10.3.1.tgz#c6574fd8ed5ed6e6e3a52bed4c418a300ad18e4e"
+  integrity sha512-ZI2wNECqOXbr2C8RfSxu4LOEWktYZuSCuZIBYc0VoR3ETPE05/RaI9KdnXYPau36asoxzLHWfbeNNeyBg8sNMg==
+
 ag-charts-types@10.2.0:
   version "10.2.0"
   resolved "https://registry.yarnpkg.com/ag-charts-types/-/ag-charts-types-10.2.0.tgz#9af7e333d196d02da1635b19b2649a9b2d06241a"
   integrity sha512-PUqH1QtugpYLnlbMdeSZVf5PpT1XZVsP69qN1JXhetLtQpVC28zaj7ikwu9CMA9N9b+dBboA9QcjUQUJZVUokQ==
+
+ag-charts-types@10.3.1:
+  version "10.3.1"
+  resolved "https://registry.yarnpkg.com/ag-charts-types/-/ag-charts-types-10.3.1.tgz#b60163a5da5f27222db71d4fcc20c0aed1854c9c"
+  integrity sha512-oZvu9vJLk6lmzaYi0TmVVmHFZJpVNFziU0bnllx4wR3muXCmnxz5LouKIZ8CYnNiC7VO5HmHNlFu+0DmEO5zxg==
 
 ag-charts-vue3@^10.2.0:
   version "10.2.0"

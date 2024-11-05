@@ -90,12 +90,32 @@
                     </v-row>
                     <v-row v-if="tableHasGraphs(data.table_name)">
                       <v-col
-                        ><base-card :show-actions="false"
+                        ><base-card class="mx-4" :show-actions="false"
                           ><template #header
                             ><span class="headline">{{ data.table_name }}</span></template
                           ><template #default
-                            ><ag-charts :options="options"></ag-charts></template></base-card
-                      ></v-col>
+                            ><v-row
+                              ><v-col
+                                ><ag-charts
+                                  :options="options"
+                                ></ag-charts></v-col></v-row></template
+                        ></base-card>
+                      </v-col>
+                    </v-row>
+                    <v-row
+                      v-if="
+                        data.table_name === 'IBNR Frequency' ||
+                        data.table_name === 'Mack Model Frequency Results'
+                      "
+                    >
+                      <v-col>
+                        <base-card class="mx-4" :show-actions="false"
+                          ><template #header
+                            ><span class="headline">{{ data.table_name }}</span></template
+                          ><template #default>
+                            <Chart class="chart" :options="chartOptions"></Chart> </template
+                        ></base-card>
+                      </v-col>
                     </v-row>
                   </v-tabs-window-item>
                 </v-tabs-window>
@@ -196,14 +216,14 @@
 </template>
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import IbnrService from '@/renderer/api/IbnrService'
 import formatValues from '@/renderer/utils/format_values'
 import BaseCard from '@/renderer/components/BaseCard.vue'
 import DataGrid from '@/renderer/components/tables/DataGrid.vue'
 import { AgCharts } from 'ag-charts-vue3'
 // import type { AgChartOptions } from 'ag-charts-community'
-// import { Chart } from 'highcharts-vue'
+import { Chart } from 'highcharts-vue'
 
 const $route = useRoute()
 const $router = useRouter()
@@ -248,19 +268,24 @@ const resultList = [
   }
 ]
 
-// const chartOptions = ref({
-//   credits: {
-//     enabled: false
-//   },
-//   lang: {
-//     thousandsSep: ','
-//   },
-//   chart: { type: 'column' },
-//   title: { text: 'My Chart' },
-//   xAxis: { categories: [], title: { text: 'Reserves' } },
-//   yAxis: { title: { text: 'Count' } },
-//   series: []
-// })
+const chartOptions: any = ref({
+  credits: {
+    enabled: false
+  },
+  lang: {
+    thousandsSep: ','
+  },
+  chart: { type: 'column' },
+  title: { text: 'My Chart' },
+  xAxis: { categories: [], title: { text: 'Reserves' } },
+  yAxis: { title: { text: 'Frequency' } },
+  series: [
+    {
+      name: 'Frequency',
+      data: []
+    }
+  ]
+})
 
 // const updateArgs = ref([true, true, { duration: 1000 }])
 // const sampleData = ref([
@@ -289,6 +314,9 @@ const resultList = [
 // })
 
 const options: any = ref({
+  contextMenu: {
+    enabled: true
+  },
   data: [],
   title: {
     text: 'Weighted Succession Average Ratio'
@@ -303,10 +331,10 @@ const options: any = ref({
   ]
 })
 
-// onMounted(() => {
-//   options.value.series = sampleSeries.value
-//   options.value.data = sampleData.value
-// })
+onMounted(() => {
+  // options.value.series = sampleSeries.value
+  // options.value.data = sampleData.value
+})
 
 const convertSnakeCaseToSpace = (str) => {
   return str.replace(/_/g, ' ')
@@ -339,6 +367,7 @@ const getResultsByProduct = () => {
         // Weighted factors
         if (item.graphData !== undefined && item.table_name === 'Development Factors') {
           options.value.data = []
+          console.log('Development Factors', item.graphData)
           const entries = Object.entries(item.graphData).map(function ([key, value]) {
             return { reporting_delay: key, value }
           })
@@ -356,6 +385,34 @@ const getResultsByProduct = () => {
           item.table_name === 'IBNR Frequency' ||
           (item.table_name === 'Mack Model Frequency Results' && selectedProduct.value !== null)
         ) {
+          options.value.data = []
+          console.log('IBNR Frequencies', item.data)
+
+          const transformedData = item.data.map((item: any) => ({
+            x: item.reserve,
+            y: item.frequency
+          }))
+
+          console.log('Transformed Data:', transformedData)
+
+          // Update the chart's series data
+          // chartOptions.value.series[0].data = transformedData
+          chartOptions.value.title.text = 'Mack Model Frequencies' + ' - ' + selectedProduct.value
+          chartOptions.value.xAxis.labels = {
+            formatter: function () {
+              return this.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+            }
+          }
+
+          chartOptions.value.series = [
+            {
+              name: 'Frequency',
+              data: item.data.map((item) => item.frequency)
+            }
+          ]
+
+          chartOptions.value.xAxis.categories = item.data.map((item) => Math.round(item.reserve))
+
           // ------ We are working in this section --------
           // const options = { ...chartOptions }
           // if (item.table_name === 'Mack Model Frequency Results') {
@@ -430,11 +487,8 @@ const getResults = () => {
 }
 
 const tableHasGraphs = (tableName) => {
-  if (
-    tableName === 'IBNR Frequency' ||
-    tableName === 'Mack Model Frequency Results' ||
-    tableName === 'Development Factors'
-  ) {
+  console.log(tableName)
+  if (tableName === 'IBNR Frequency' || tableName === 'Development Factors') {
     return true
   } else {
     return false
@@ -458,7 +512,6 @@ const executeManualRun = () => {
 }
 
 const createColumnDefs = (data, tableName) => {
-  console.log(tableName)
   const cDefs: any = []
   if (typeof data !== 'undefined') {
     Object.keys(data).forEach((element) => {
@@ -530,10 +583,5 @@ const createColumnDefs = (data, tableName) => {
   min-width: 140px;
   font-size: 10px;
   white-space: nowrap;
-}
-
-.table-row {
-  background-color: grey;
-  color: white;
 }
 </style>
