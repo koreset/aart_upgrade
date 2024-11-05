@@ -60,7 +60,6 @@
                   >Select variables</v-btn
                 >
               </v-col>
-
             </v-row>
             <v-row v-if="rowData.length > 0">
               <v-col>
