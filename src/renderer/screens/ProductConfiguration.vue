@@ -77,6 +77,7 @@ const position = ref(1)
 const editMode = ref(false)
 const currentStep: any = ref()
 const resetFields: any = ref(false)
+const editProduct: any = ref(null)
 
 // Define steps with titles, components, and any props you want to pass
 const steps = shallowRef([
@@ -93,7 +94,9 @@ onMounted(() => {
   if (route.params.id) {
     editMode.value = true
     ProductService.getProductById(route.params.id).then((response) => {
-      console.log('response', response)
+      editProduct.value = response.data.product
+      console.log('response', editProduct.value)
+      productStore.setProductState(editProduct.value)
     })
   }
 })

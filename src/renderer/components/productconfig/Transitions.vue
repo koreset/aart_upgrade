@@ -82,7 +82,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, inject, Ref, watch } from 'vue'
+import { ref, computed, inject, Ref, watch, onMounted } from 'vue'
 import { useProductStore } from '@/renderer/store/product_config'
 import { required } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
@@ -122,6 +122,12 @@ const removeItem = (item: any) => {
 
   store.removeFromTransitions(item)
 }
+
+onMounted(() => {
+  if (store.getProductTransitions.length > 0) {
+    applicableTransitions.value = store.getProductTransitions
+  }
+})
 
 const addToTransitions = async () => {
   v$.value.$validate()

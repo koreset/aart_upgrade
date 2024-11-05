@@ -44,6 +44,14 @@ export const useProductStore = defineStore({
         product_features: []
       }
     },
+    setProductState(payload) {
+      console.log('Store Payload:', payload)
+      this.product.product_name = payload.product_name
+      this.product.product_code = payload.product_code
+      this.product.product_family_id = payload.product_family_id
+      this.product.product_transition_states = payload.product_transition_states
+      this.product.product_transitions = payload.product_transitions
+    },
     setProductName(name) {
       this.product.product_name = name
     },

@@ -36,6 +36,9 @@ onMounted(() => {
     transitions.value = resp.data
     console.log('transitions', transitions.value)
   })
+  if (store.getProductTransitionStates.length > 0) {
+    selectedTransitions.value = store.getProductTransitionStates
+  }
 })
 
 const validateForm = async () => {

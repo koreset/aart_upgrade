@@ -118,12 +118,23 @@ watch(resetFields, (newVal) => {
 })
 
 onMounted(async () => {
+  console.log('create product mounted')
   const response = await ProductService.getProductFamilies()
   if (response.status !== 200) {
     productFamilyErrorMessage.value = 'Error retrieving product families'
     return
   }
   productFamilies.value = response.data
+
+  if (store.getProductFamilyId !== 0) {
+    selectedProductFamily.value = store.getProductFamilyId
+  }
+  if (store.getProductName !== '') {
+    productName.value = store.getProductName
+  }
+  if (store.getProductCode !== '') {
+    productCode.value = store.getProductCode
+  }
 })
 </script>
 
