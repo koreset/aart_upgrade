@@ -47,6 +47,7 @@ body {
 .table-row {
   background-color: #223f54;
   color: white;
+  white-space: nowrap;
 }
 
 .v-table {

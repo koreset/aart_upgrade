@@ -40,6 +40,7 @@
           :rowData="localRowData"
           :columnDefs="localColumnDefs"
           @row-selected="onRowSelected"
+          @grid-ready="onGridReady"
         >
         </ag-grid-vue>
       </v-col>
@@ -52,7 +53,7 @@
 import 'ag-grid-community/styles/ag-grid.css' // Core CSS
 import 'ag-grid-community/styles/ag-theme-quartz.css' // Theme
 import { AgGridVue } from 'ag-grid-vue3' // Vue Grid Logic
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 
 const props = defineProps([
   'rowData',
@@ -79,26 +80,36 @@ const emit = defineEmits<{
 const showDeleteButton = ref(false)
 const selectedRow = ref(null)
 
-const localRowData = ref(props.rowData)
-const localColumnDefs = ref(props.columnDefs)
+// const localRowData = ref(props.rowData)
+// const localColumnDefs = ref(props.columnDefs)
+const localRowData = computed(() => props.rowData)
+const localColumnDefs = computed(() => props.columnDefs)
 
 const localShowExport = ref(true)
 
-watch(
-  () => props.rowData,
-  (newVal) => {
-    localRowData.value = newVal
-    // emit('update:rowData', newVal);
-  }
-)
+const gridApi = ref(null)
+const columnApi = ref(null)
 
-watch(
-  () => props.columnDefs,
-  (newVal) => {
-    localColumnDefs.value = newVal
-    // emit('update:columnDefs', newVal);
-  }
-)
+const onGridReady = (params) => {
+  gridApi.value = params.api
+  columnApi.value = params.columnApi
+}
+
+// watch(
+//   () => props.rowData,
+//   (newVal) => {
+//     localRowData.value = newVal
+//     // emit('update:rowData', newVal);
+//   }
+// )
+
+// watch(
+//   () => props.columnDefs,
+//   (newVal) => {
+//     localColumnDefs.value = newVal
+//     // emit('update:columnDefs', newVal);
+//   }
+// )
 
 watch(
   () => props.showExport,

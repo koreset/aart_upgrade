@@ -306,14 +306,9 @@ const deleteRun = async (itemId: any) => {
 onMounted(async () => {
   loading.value = true
   const resv2 = await ModifiedGMMService.getProjectionJobsv2()
-  console.log(resv2.data)
-  const res = await ModifiedGMMService.getProjectionJobs()
-  console.log(res.data)
 
   runJobs.value = resv2.data
-  console.log(runJobs.value)
   totalPages.value = Math.ceil(runJobs.value.length / pageSize)
-  console.log(totalPages.value)
   loading.value = false
   if (
     runJobs.value.length > 0 &&
