@@ -22,6 +22,8 @@
                   <v-date-input
                     v-model="runDate.value.value"
                     readonly
+                    hide-actions
+
                     view-mode="month"
                     prepend-icon=""
                     prepend-inner-icon="$calendar"
@@ -137,6 +139,8 @@
                   <v-date-input
                     v-model="openingBalDate.value.value"
                     readonly
+                    hide-actions
+
                     view-mode="month"
                     prepend-icon=""
                     prepend-inner-icon="$calendar"

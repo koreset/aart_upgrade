@@ -21,6 +21,8 @@
                 <v-date-input
                   v-model="runDate"
                   readonly
+                  hide-actions
+
                   view-mode="month"
                   prepend-icon=""
                   prepend-inner-icon="$calendar"
@@ -136,6 +138,8 @@
                 <v-date-input
                   v-model="dataInputStartDate"
                   readonly
+                  hide-actions
+
                   view-mode="month"
                   prepend-icon=""
                   prepend-inner-icon="$calendar"
@@ -148,6 +152,8 @@
                 <v-date-input
                   v-model="dataInputEndDate"
                   readonly
+                  hide-actions
+
                   view-mode="month"
                   prepend-icon=""
                   prepend-inner-icon="$calendar"
@@ -160,6 +166,8 @@
                 <v-date-input
                   v-model="inflationDate"
                   readonly
+                  hide-actions
+
                   view-mode="month"
                   prepend-icon=""
                   prepend-inner-icon="$calendar"

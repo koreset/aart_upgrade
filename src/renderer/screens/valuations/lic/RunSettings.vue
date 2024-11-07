@@ -39,6 +39,7 @@
                   <v-date-input
                     v-model="runDate"
                     readonly
+                    hide-actions
                     view-mode="month"
                     prepend-icon=""
                     prepend-inner-icon="$calendar"
@@ -53,6 +54,7 @@
                   <v-date-input
                     v-model="openingBalanceDate"
                     readonly
+                    hide-actions
                     view-mode="month"
                     prepend-icon=""
                     prepend-inner-icon="$calendar"

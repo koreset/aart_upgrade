@@ -20,7 +20,8 @@
                 <v-date-input
                   v-model="runDate"
                   readonly
-                  view-mode="month"
+                  view-mode="months"
+                  hide-actions
                   prepend-icon=""
                   prepend-inner-icon="$calendar"
                   variant="outlined"

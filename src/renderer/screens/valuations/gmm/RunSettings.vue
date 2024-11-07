@@ -72,6 +72,8 @@
                     <v-date-input
                       v-model="runDate"
                       readonly
+                      hide-actions
+
                       view-mode="month"
                       prepend-icon=""
                       prepend-inner-icon="$calendar"
