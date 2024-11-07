@@ -8,20 +8,49 @@
           </template>
           <template #default>
             <v-row>
+              <v-col v-if="variableGroups.length > 0" cols="3">
+                <v-select
+                  v-model="selectedVariableGroup"
+                  :items="variableGroups"
+                  item-value="name"
+                  item-title="name"
+                  return-object
+                  variant="outlined"
+                  density="compact"
+                  placeholder="Choose a variable group"
+                  label="Aggregation variable group"
+                  @update:modelValue="onVariableGroupChange"
+                ></v-select>
+              </v-col>
+              <v-col v-if="selectedVariableGroup !== null" cols="2">
+                <v-btn
+                  rounded
+                  size="small"
+                  variant="outlined"
+                  color="primary"
+                  @click="viewVariables"
+                  >View variable list</v-btn
+                >
+              </v-col>
+
               <v-col cols="2">
                 <v-btn
                   rounded
                   size="small"
                   variant="outlined"
                   color="primary"
-                  @click="dialog = true"
-                  >Select variables</v-btn
+                  @click="showVariableDialog"
+                  >Create variable group</v-btn
                 >
               </v-col>
-
-              <v-col cols="3">
+            </v-row>
+            <v-divider class="my-5"></v-divider>
+            <v-row>
+              <v-col cols="4">
                 <v-select
                   v-model="selectedValuationJob"
+                  :messages="varMessage"
+                  :disabled="selectedVariableGroup === null"
                   label="Valuation Run"
                   placeholder="Select Valuation Run"
                   variant="outlined"
@@ -31,9 +60,10 @@
                   :item-props="itemProps"
                   return-object
                   @update:model-value="onValuationJobChange"
+                  @update:focused="warnEmptyVariables"
                 ></v-select>
               </v-col>
-              <v-col v-if="selectedValuationJob" cols="3">
+              <v-col v-if="selectedValuationJob" cols="4">
                 <v-select
                   v-model="selectedJobProduct"
                   label="Product"
@@ -49,7 +79,7 @@
               </v-col>
               <v-col
                 v-if="selectedJobProduct && selectedJobProduct.product_name !== 'All Products'"
-                cols="3"
+                cols="4"
               >
                 <v-select
                   v-model="selectedSpCode"
@@ -62,6 +92,8 @@
                 ></v-select>
               </v-col>
             </v-row>
+            <loading-indicator :loading-data="loadingData"></loading-indicator>
+
             <v-row v-if="rowData.length > 0">
               <v-col>
                 <data-grid
@@ -79,11 +111,23 @@
     <v-dialog v-model="dialog" max-width="1000px">
       <base-card>
         <template #header>
-          <span class="headline">Select required aggregation variables</span>
+          <span class="headline">Create aggregation variable groups</span>
         </template>
 
         <template #default>
           <v-container>
+            <v-row>
+              <v-col cols="3">
+                <v-text-field
+                  v-model="variableGroupName"
+                  label="Variable Group Name"
+                  placeholder="Enter a name for the variable group"
+                  variant="outlined"
+                  density="compact"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+
             <v-row>
               <!-- Available Items List -->
               <v-col>
@@ -92,18 +136,22 @@
                     <span class="headline">Available Variables</span>
                   </template>
                   <template #default>
-                    <v-list class="scrollable-list">
-                      <v-list-item
-                        v-for="(item, index) in aggregationVariables"
-                        :key="index"
-                        :class="{
-                          'selected-item': selectedFromAvailable.includes(item)
-                        }"
-                        @click="toggleSelection(item, 'available')"
-                      >
-                        <v-list-item-title>{{ item }}</v-list-item-title>
-                      </v-list-item>
-                    </v-list>
+                    <v-row>
+                      <v-col>
+                        <v-list class="scrollable-list">
+                          <v-list-item
+                            v-for="(item, index) in aggregationVariables"
+                            :key="index"
+                            :class="{
+                              'selected-item': selectedFromAvailable.includes(item)
+                            }"
+                            @click="toggleSelection(item, 'available')"
+                          >
+                            <v-list-item-title>{{ item }}</v-list-item-title>
+                          </v-list-item>
+                        </v-list>
+                      </v-col>
+                    </v-row>
                   </template>
                 </base-card>
               </v-col>
@@ -147,6 +195,14 @@
                   >
                     ← Move
                   </v-btn>
+                  <v-btn
+                    v-if="variableGroupName !== '' && selectedVariables.length > 0"
+                    variant="outlined"
+                    rounded
+                    size="small"
+                    @click="saveVariableGroup"
+                    >Save Group</v-btn
+                  >
                 </v-row>
               </v-col>
 
@@ -191,13 +247,17 @@ import ProductService from '@/renderer/api/ProductService'
 import ValuationService from '@/renderer/api/ValuationService'
 import DataGrid from '@/renderer/components/tables/DataGrid.vue'
 import formatValues from '@/renderer/utils/format_values'
+import LoadingIndicator from '@/renderer/components/LoadingIndicator.vue'
 
+const loadingData = ref(false)
+const varMessage = ref('')
 const dialog = ref(false)
 const selectedVariables: any = ref([])
 const valuationJobs = ref([])
 const selectedValuationJob: any = ref(null)
 const selectedJobProduct: any = ref(null)
 const aggregationVariables: any = ref([])
+const baseAggregationVariables: any = ref([])
 const selectedFromAvailable = ref<string[]>([])
 const selectedFromTarget = ref<string[]>([])
 const rowData: any = ref([])
@@ -206,11 +266,40 @@ const spCodes: any = ref([])
 
 const jobProducts: any = ref([])
 const selectedSpCode: any = ref(null)
+const variableGroupName: any = ref('')
+const variableGroups: any = ref([])
+const selectedVariableGroup: any = ref(null)
 const itemProps = (item) => {
   return {
     title: item.run_name,
     subtitle: `Run date - ${item.run_date}`
   }
+}
+
+const warnEmptyVariables = () => {
+  if (selectedVariableGroup.value === null) {
+    varMessage.value = 'Please select variables to view results'
+  }
+}
+
+const onVariableGroupChange = () => {
+  console.log(selectedVariableGroup.value)
+  if (selectedVariableGroup.value === null) {
+    return
+  }
+  varMessage.value = selectedVariableGroup.value.name + ' will be used to generate results'
+}
+
+const viewVariables = () => {
+  selectedVariables.value = selectedVariableGroup.value.variables
+  aggregationVariables.value = aggregationVariables.value.filter(
+    (item) => !selectedVariables.value.includes(item)
+  )
+}
+const showVariableDialog = () => {
+  dialog.value = true
+  selectedVariables.value = []
+  aggregationVariables.value = baseAggregationVariables.value
 }
 
 const onValuationJobChange = (job) => {
@@ -225,65 +314,99 @@ const onValuationJobChange = (job) => {
   getAggregatedResults()
 }
 
+const saveVariableGroup = () => {
+  if (variableGroupName.value === '') {
+    return
+  }
+  const vGroup: any = {
+    name: variableGroupName.value,
+    variables: selectedVariables.value
+  }
+
+  ValuationService.saveVariableGroup(vGroup).then((res) => {
+    const newGroup = res.data
+    variableGroups.value.push(newGroup)
+    variableGroupName.value = ''
+    dialog.value = false
+    selectedVariables.value = []
+  })
+}
+
 const getAggregatedResultsForProductAndSpCode = () => {
   if (selectedSpCode.value === 'All SP Codes') {
     getAggregatedResultsForProduct()
     return
   }
-
+  rowData.value = []
+  loadingData.value = true
   ValuationService.getAggregatedResultsForProductAndSpCode(
     selectedValuationJob.value.id,
     selectedJobProduct.value.product_code,
     selectedSpCode.value,
-    selectedVariables.value
+    selectedVariableGroup.value.variables
   ).then((res) => {
     rowData.value = res.data
     createColumnDefs(rowData.value)
+    loadingData.value = false
   })
 }
 
 const getAggregatedResultsForProduct = () => {
   spCodes.value = []
   selectedSpCode.value = null
+  rowData.value = []
   if (selectedJobProduct.value.product_id === null) {
     getAggregatedResults()
     return
   }
-
+  loadingData.value = true
   ValuationService.getAggregatedResultsForProduct(
     selectedValuationJob.value.id,
     selectedJobProduct.value.product_code,
-    selectedVariables.value
+    selectedVariableGroup.value.variables
   ).then((res) => {
     rowData.value = res.data
     createColumnDefs(rowData.value)
+    loadingData.value = false
     ValuationService.getSpCodesForProduct(
       selectedValuationJob.value.id,
       selectedJobProduct.value.product_code
     ).then((res) => {
       spCodes.value = res.data
       spCodes.value.unshift('All SP Codes')
+      selectedSpCode.value = spCodes.value[0]
     })
   })
 }
 
 const getAggregatedResults = async () => {
-  if (selectedVariables.value.length === 0) {
+  // if (selectedVariables.value.length === 0) {
+  //   return
+  // }
+  if (selectedVariableGroup.value === null) {
     return
   }
+  loadingData.value = true
+
   const result = await ValuationService.getAggregatedResults(
     selectedValuationJob.value.id,
-    selectedVariables.value
+    selectedVariableGroup.value.variables
   )
   rowData.value = result.data
   createColumnDefs(rowData.value)
+  loadingData.value = false
 }
+
 onMounted(async () => {
   const res = await ProductService.getValuationJobs()
   valuationJobs.value = res.data
 
   const res2 = await ValuationService.getAggregationVariables()
   aggregationVariables.value = res2.data
+  baseAggregationVariables.value = res2.data
+
+  const resVars = await ValuationService.getVariableGroups()
+  variableGroups.value = resVars.data
 
   // get valuation runs list
 })

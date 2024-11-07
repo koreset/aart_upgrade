@@ -96,5 +96,11 @@ export default {
     return Api.get(
       'result-aggregations/run/' + runId + '/product-code/' + productCode + '/sp-codes'
     )
+  },
+  saveVariableGroup(variableGroup) {
+    return Api.post('aggregations/variable-groups', variableGroup)
+  },
+  getVariableGroups() {
+    return Api.get('aggregations/variable-groups')
   }
 }
