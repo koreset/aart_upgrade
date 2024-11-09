@@ -85,6 +85,12 @@
         </template>
       </base-card>
     </v-dialog>
+    <v-snackbar v-model="snackbar" :timeout="timeout">
+      {{ snackbarMessage }}
+      <template #actions>
+        <v-btn color="white" variant="text" @click="snackbar = false"> Close </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -104,6 +110,10 @@ const props = defineProps({
     required: true
   }
 })
+
+const snackbar = ref(false)
+const snackbarMessage = ref('')
+const timeout = 3000
 
 const confirmAction: any = ref()
 const infoDialog = ref(false)
@@ -282,6 +292,10 @@ const loadData = (item) => {
       if (response.data !== null && response.data.length > 0) {
         createColumnDefs(response.data)
         infoDialog.value = true
+      } else {
+        infoDialog.value = false
+        snackbarMessage.value = 'No data available for ' + item.table
+        snackbar.value = true
       }
     })
   } catch (error) {

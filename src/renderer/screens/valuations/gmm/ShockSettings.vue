@@ -179,7 +179,7 @@ const morbidityCatastrophe = ref(false)
 const retrenchment = ref(false)
 const rowSelection = ref(null)
 const shockScenarios: any = ref([])
-const showExport = ref(false)
+const showExport = ref(true)
 
 onMounted(() => {
   ValuationService.getShockSettings().then((response) => {

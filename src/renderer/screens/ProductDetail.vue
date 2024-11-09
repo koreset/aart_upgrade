@@ -18,7 +18,7 @@
             />
           </v-col>
           <v-col v-if="selectedProductCategory" cols="3">
-            <v-select
+            <v-autocomplete
               v-model="selectedProduct"
               variant="outlined"
               density="compact"
@@ -121,7 +121,13 @@
               <loading-indicator :loading-data="loadingData" />
               <v-row v-if="mpData.length > 0 && !loadingData">
                 <v-col>
-                  <data-grid :column-defs="columnDefs" :row-data="mpData" />
+                  <data-grid
+                    :show-close-button="true"
+                    :column-defs="columnDefs"
+                    :row-data="mpData"
+                    :table-title="`Model Points for ${selectedProduct.product_name}`"
+                    @update:clear-data="clearData"
+                  />
                 </v-col>
               </v-row>
             </v-expansion-panel-text>
@@ -253,6 +259,10 @@ const activateDialog = ref(false)
 const openDialog = () => {
   console.log('Open Dialog')
   isDialogOpen.value = true
+}
+
+const clearData = () => {
+  mpData.value = []
 }
 
 const openActivateDialog = () => {
@@ -463,6 +473,7 @@ const deleteProduct = async () => {
 const getModelPoints = (item) => {
   console.log(product.value)
   mpData.value = []
+  loadingData.value = true
   ProductService.getModelPointsForProduct(product.value.product.id, item.year, item.version).then(
     (res) => {
       console.log(res.data)
@@ -485,6 +496,7 @@ const getModelPoints = (item) => {
           mpData.value.push(transformed)
         })
       }
+      loadingData.value = false
     }
   )
 }
@@ -505,7 +517,7 @@ const createColumnDefs = (data) => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="css">
 .btn-bg {
   background-color: maroon;
   color: white !important;
@@ -513,5 +525,22 @@ const createColumnDefs = (data) => {
 
 .text-subtitle {
   font-size: 1rem;
+}
+
+div.v-expansion-panel.v-expansion-panel--active > button {
+  background-color: green !important;
+  color: white !important;
+}
+
+button.v-expansion-panel-title {
+  background-color: blue !important;
+  color: white !important;
+}
+
+.v-expansion-panel--active > .v-expansion-panel-title {
+  background-color: blueviolet !important;
+  color: white !important;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
 }
 </style>

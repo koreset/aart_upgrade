@@ -1,14 +1,16 @@
 <template>
-  <v-dialog v-model="isDialogOpen" width="70%">
-    <base-card>
+  <v-dialog v-model="isDialogOpen" width="70%" height="80vh">
+    <base-card :showActions="false">
       <template #header>
         <span class="headline">{{ tableTitle }}</span>
       </template>
       <template #default>
+        <v-row>
+          <v-col class="text-right">
+            <v-btn size="small" variant="plain" rounded @click="upload">Close</v-btn></v-col
+          >
+        </v-row>
         <data-grid :showExport="showExport" :columnDefs="columnDefs" :rowData="rowData" />
-      </template>
-      <template #actions>
-        <v-btn size="small" @click="upload">Close</v-btn>
       </template>
     </base-card>
   </v-dialog>

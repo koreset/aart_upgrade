@@ -24,11 +24,13 @@
                           </v-btn>
                         </td>
                         <td style="text-align: center">
-                          <bulk-file-updater
+                          <file-updater
+                            :show-version="true"
+                            :show-year="true"
                             :uploadComplete="uploadComplete"
                             :tableType="item.table_type"
                             @uploadFile="handleUpload"
-                          ></bulk-file-updater>
+                          ></file-updater>
                         </td>
                         <td style="text-align: center">
                           <v-btn
@@ -49,11 +51,13 @@
               <v-row v-if="tableData.length > 0 && !loadingData">
                 <v-col>
                   <data-grid
+                    :show-close-button="true"
                     :columnDefs="columnDefs"
                     :rowData="tableData"
                     :table-title="selectedTable"
                     :pagination="true"
                     :rowCount="rowCount"
+                    @update:clear-data="clearData"
                   />
                 </v-col>
               </v-row>
@@ -152,7 +156,7 @@
 <script setup lang="ts">
 import ConfirmationDialog from '../../../components/ConfirmDialog.vue'
 import DataGrid from '../../../components/tables/DataGrid.vue'
-import BulkFileUpdater from '../../../components/BulkFileUpdater.vue'
+import FileUpdater from '../../../components/FileUpdater.vue'
 import BaseCard from '../../../components/BaseCard.vue'
 
 import LicService from '../../../api/LicService'
@@ -162,6 +166,7 @@ import { ref, onMounted } from 'vue'
 import { DataPayload } from '../../../components/types'
 
 // data
+
 const viewHeader: string = 'LIC Tables'
 const confirmDeleteDialog: any = ref()
 // const selectedYieldCurveYear: any = ref(null)
@@ -201,6 +206,11 @@ onMounted(() => {
 })
 
 // methods
+const clearData = () => {
+  tableData.value = []
+  columnDefs.value = []
+}
+
 const handleUpload = (payload: DataPayload) => {
   console.log(payload)
   uploadComplete.value = false
@@ -210,25 +220,7 @@ const handleUpload = (payload: DataPayload) => {
   formdata.append('year', payload.selectedYear)
   formdata.append('month', payload.selectedMonth)
   formdata.append('yield_curve_code', payload.yieldCurveCode)
-
-  // if (this.selectedType !== null && this.file !== null) {
-  //       let formdata = new FormData();
-  //       formdata.append("file", this.file);
-  //       formdata.append("table_type", this.selectedType);
-  //       LicService.uploadTables(formdata)
-  //         .then((res) => {
-  //           if (res.status === 200) {
-  //             this.file = null;
-  //             this.selectedType = null;
-  //             this.text = "The data has been successfully updated";
-  //             this.timeout = 3000;
-  //             this.snackbar = true;
-  //           }
-  //         })
-  //         .catch(() => {
-
-  //         });
-  //     }
+  formdata.append('version', payload.version)
 
   LicService.uploadTables(formdata)
     .then((res: any) => {
@@ -292,45 +284,6 @@ const viewTable = (item: any) => {
     loadingData.value = false
   })
 }
-
-// Yield curve specfic methods
-
-// const deleteYieldCurveData = () => {
-//   console.log(selectedYieldCurveMonth.value)
-//   IbnrService.deleteYieldCurveData(
-//     selectedYieldCurveYear.value,
-//     selectedYieldCurveCode.value,
-//     selectedYieldCurveMonth.value
-//   ).then(() => {
-//     text.value = 'yield curve data deleted successfully'
-//     snackbar.value = true
-//     clearYieldDialog()
-//   })
-// }
-
-// const clearYieldDialog = () => {
-//   selectedYieldCurveYear.value = null
-//   selectedYieldCurveCode.value = null
-//   selectedYieldCurveMonth.value = null
-//   yieldCurveMonths.value = []
-//   yieldCurveCodes.value = []
-//   yieldCurveDataDialog.value = false
-// }
-
-// const getYieldCurveCodes = () => {
-//   console.log(selectedYieldCurveYear)
-//   IbnrService.getYieldCurveCodes(selectedYieldCurveYear.value).then((response) => {
-//     yieldCurveCodes.value = response.data
-//   })
-// }
-
-// const getYieldCurveMonths = () => {
-//   IbnrService.getYieldCurveMonths(selectedYieldCurveYear.value, selectedYieldCurveCode.value).then(
-//     (response) => {
-//       yieldCurveMonths.value = response.data
-//     }
-//   )
-// }
 
 const createColumnDefs = (data: any) => {
   columnDefs.value = []

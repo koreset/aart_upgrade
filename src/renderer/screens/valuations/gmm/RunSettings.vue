@@ -152,6 +152,30 @@
                   </v-col>
                   <v-col cols="4">
                     <v-select
+                      v-model="selectedBasis"
+                      density="compact"
+                      variant="outlined"
+                      label="Run Basis"
+                      placeholder="Select a Run Basis"
+                      :items="availableBases"
+                      item-title="name"
+                      item-value="name"
+                    ></v-select>
+                  </v-col>
+
+                  <v-col cols="4">
+                    <v-select
+                      v-model="selectedYieldCurveBasis"
+                      density="compact"
+                      variant="outlined"
+                      label="Select Yield Curve Basis"
+                      :items="availableYieldCurveBases"
+                      item-title="basis"
+                      item-value="basis"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="4">
+                    <v-select
                       v-model="selectedYieldYear"
                       density="compact"
                       variant="outlined"
@@ -231,17 +255,6 @@
                   </v-col>
                   <v-col cols="4">
                     <v-select
-                      v-model="selectedYieldCurveBasis"
-                      density="compact"
-                      variant="outlined"
-                      label="Select Yield Curve Basis"
-                      :items="availableYieldCurveBases"
-                      item-title="basis"
-                      item-value="basis"
-                    ></v-select>
-                  </v-col>
-                  <v-col cols="4">
-                    <v-select
                       v-model="selectedLapseMarginYear"
                       density="compact"
                       variant="outlined"
@@ -272,18 +285,6 @@
                       label="Year End Month"
                       placeholder="Enter Year End Month (1 - 12)"
                     ></v-text-field>
-                  </v-col>
-                  <v-col cols="4">
-                    <v-select
-                      v-model="selectedBasis"
-                      density="compact"
-                      variant="outlined"
-                      label="Run Basis"
-                      placeholder="Select a Run Basis"
-                      :items="availableBases"
-                      item-title="name"
-                      item-value="name"
-                    ></v-select>
                   </v-col>
                 </v-row>
                 <v-row v-if="settingWorkflow == 'new'">
@@ -473,9 +474,11 @@
         </base-card>
       </v-col>
     </v-row>
-    <v-snackbar v-model="snackbar" centered :timeout="timeout" :multi-line="true">
+    <v-snackbar v-model="snackbar" :timeout="timeout">
       {{ snackbarText }}
-      <v-btn rounded color="red" variant="text" @click="closeSnackBar">Close</v-btn>
+      <template #actions>
+        <v-btn color="white" variant="text" @click="snackbar = false"> Close </v-btn>
+      </template>
     </v-snackbar>
     <v-dialog v-model="dialog" max-width="500px">
       <v-card>
@@ -507,6 +510,9 @@ import _ from 'lodash'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import formatDateString from '@/renderer/utils/helpers'
+import { useRouter } from 'vue-router'
+
+const $router = useRouter()
 
 const validationSchema = yup.object({
   settingRunName: yup.string().required('Run name is required'),
@@ -524,6 +530,7 @@ const [settingRunName, settingRunNameAttrs] = defineField('settingRunName')
 const [selectedProducts, setSelectedProducts] = defineField('selectedProducts')
 const [selectedModelPointYear, setSelectedModelPointYear] = defineField('selectedModelPointYear')
 
+const templateRun = ref(false)
 const snackbarText = ref('')
 const timeout = ref(0)
 const snackbar = ref(false)
@@ -637,10 +644,6 @@ const openEditDialog = (column) => {
   dialog.value = true
 }
 
-const closeSnackBar = () => {
-  snackbar.value = false
-}
-
 const saveTemplate = () => {
   const payload: any = {}
 
@@ -651,7 +654,7 @@ const saveTemplate = () => {
   ValuationService.saveJobTemplate(payload).then((resp) => {
     timeout.value = 3000
     snackbar.value = true
-    snackbarText.value = resp.data.message
+    snackbarText.value = 'template successfully saved'
   })
 }
 
@@ -659,6 +662,7 @@ const loadTemplate = async () => {
   const resp = await ValuationService.getJobTemplate(selectedTemplate.value.id)
   const jobstemplate = JSON.parse(resp.data.content)
   runJobs.value = jobstemplate.jobs
+  templateRun.value = true
 }
 
 const displayFlow = () => {
@@ -674,6 +678,9 @@ const removeFromRunJobs = (runName) => {
 }
 
 const executeJobs = () => {
+  if (templateRun.value && runNameSuffix.value === '') {
+    return returnValidationError('You need to provide a run name suffix')
+  }
   runProjections()
 }
 
@@ -1086,9 +1093,9 @@ const runProjections = () => {
     timeout.value = 3000
     snackbar.value = true
     snackbarText.value = resp.data.message
-    // setTimeout(() => {
-    //   this.$router.push({ path: "/valuation-jobs" });
-    // }, 2000);
+    setTimeout(() => {
+      $router.push({ name: 'valuations-gmm-run-results' })
+    }, 2000)
   })
 }
 

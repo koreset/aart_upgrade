@@ -57,4 +57,11 @@ body {
 .v-toolbar {
   height: 48px !important;
 }
+.v-expansion-panel--active > .v-expansion-panel-title {
+  background-color: rgba(97, 136, 162, 0.7) !important;
+  color: white !important;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  min-height: 50px !important;
+}
 </style>

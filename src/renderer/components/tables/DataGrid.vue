@@ -3,7 +3,12 @@
   <v-container>
     <v-row v-if="tableTitle">
       <v-col cols="12">
-        <h4 style="width: 100%; border-bottom: 1px solid #b4b3b3">{{ tableTitle }} Data</h4>
+        <h4 class="h4-title title-display"
+          ><span>{{ tableTitle }} Data</span
+          ><span v-if="showCloseButton" class="text-left"
+            ><v-btn variant="plain" size="small" @click="clearRowData">Close</v-btn></span
+          ></h4
+        >
       </v-col>
     </v-row>
     <v-row>
@@ -67,13 +72,15 @@ const props = defineProps([
   'chartTitle',
   'chartXAxisTitle',
   'chartYAxisTitle',
-  'showExport'
+  'showExport',
+  'showCloseButton'
 ])
 
 // const emit = defineEmits(['delete-row'])
 
 const emit = defineEmits<{
   (e: 'update:row-deleted', value: any): void
+  (e: 'update:clear-data', value: any): void
 }>()
 
 // Grid variables
@@ -157,6 +164,20 @@ const deleteRow = () => {
   // emit event to parent component
   emit('update:row-deleted', selectedRow.value)
 }
+
+const clearRowData = () => {
+  emit('update:clear-data', null)
+}
 </script>
 
-<style scoped></style>
+<style scoped>
+.title-display {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.h4-title {
+  width: 100%;
+  border-bottom: 1px solid #b4b3b3;
+}
+</style>
