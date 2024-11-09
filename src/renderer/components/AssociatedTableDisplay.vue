@@ -131,7 +131,9 @@ const updateDialog = (value: boolean) => {
 
 const closeDialog = () => {
   yearsDialog.value = false
-  confirmDelete(selectedItem.value)
+  if (selectedYear.value) {
+    confirmDelete(selectedItem.value)
+  }
 }
 
 const openDialog = (item: any) => {
@@ -241,6 +243,7 @@ const chooseYear = (item: any) => {
   })
 
   selectedItem.value = item
+
   yearsDialog.value = true
 }
 

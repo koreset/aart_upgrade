@@ -73,7 +73,7 @@
                       v-model="runDate"
                       readonly
                       hide-actions
-
+                      locale="en-in"
                       view-mode="month"
                       prepend-icon=""
                       prepend-inner-icon="$calendar"

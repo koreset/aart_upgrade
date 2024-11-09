@@ -8,6 +8,31 @@
           </template>
           <template #default>
             <v-row>
+              <v-col cols="3">
+                <v-menu
+                  v-model="fromDateMenu"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                  max-width="290px"
+                  min-width="290px"
+                >
+                  <template #activator="{ props }">
+                    <v-text-field
+                      v-model="myRunDate"
+                      label="Picker in menu"
+                      variant="outlined"
+                      density="compact"
+                      prepend-icon="mdi-calendar"
+                      readonly
+                      v-bind="props"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker type="month" hide-header></v-date-picker>
+                </v-menu>
+              </v-col>
+            </v-row>
+            <v-row>
               <v-col v-if="variableGroups.length > 0" cols="3">
                 <v-select
                   v-model="selectedVariableGroup"
@@ -248,6 +273,9 @@ import ValuationService from '@/renderer/api/ValuationService'
 import DataGrid from '@/renderer/components/tables/DataGrid.vue'
 import formatValues from '@/renderer/utils/format_values'
 import LoadingIndicator from '@/renderer/components/LoadingIndicator.vue'
+
+const fromDateMenu = ref(null)
+const myRunDate = ref(null)
 
 const loadingData = ref(false)
 const varMessage = ref('')

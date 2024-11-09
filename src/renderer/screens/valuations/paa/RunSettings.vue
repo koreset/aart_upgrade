@@ -18,16 +18,18 @@
               </v-col>
               <v-col cols="6">
                 <v-date-input
-                  v-model="runDate"
+                  :v-model="runDate"
                   readonly
-                  view-mode="months"
+                  view-mode="year"
                   hide-actions
                   prepend-icon=""
                   prepend-inner-icon="$calendar"
                   variant="outlined"
                   density="compact"
                   label="Run Date"
-                ></v-date-input>
+                  :display-value="formattedDate"
+                  >{{ formattedDate }}</v-date-input
+                >
               </v-col>
             </v-row>
             <v-row class="mx-9">
@@ -217,7 +219,7 @@
 <script setup lang="ts">
 import _ from 'lodash'
 import ModifiedGMMService from '../../../api/ModifiedGMMService'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import BaseCard from '../../../components/BaseCard.vue'
 import { VDateInput } from 'vuetify/labs/VDateInput'
 import formatDateString from '@/renderer/utils/helpers'
@@ -229,36 +231,10 @@ const $router = useRouter()
 const runSingle = ref(false)
 const useIndividualResults = ref(false)
 const portfolios = ref([])
-// const projectionPeriod = ref(120);
-// const modelpointCount = ref(0);
-// const errorMessages = ref(null);
-// const file = ref(null);
-// const fileModelPoints = ref(null);
-// const fileParameters = ref(null);
-// const showFileUpload = ref(false);
-// const loading = ref(false);
-// const uploadDisabled = ref(true);
-// const uploadFileDialog = ref(false);
-// const showDownloadTemplate = ref(false);
-// const showDetail = ref(false);
 const runName = ref(null)
-// const fromDateMenu = ref(false);
 const runDate: any = ref(null)
 const runJobs: any = ref([])
 const availableYears = ref([])
-// const availableRunTypes = ref([{ type: "PAA" }, { type: "Modified GMM" }]);
-// const availableScenarios = ref([
-//   { scenario: "Control" },
-//   { scenario: "Reinsurance" },
-//   { scenario: "Control" },
-//   { scenario: "Discount Rate" },
-//   { scenario: "Claims" },
-//   { scenario: "Claims Exp" },
-//   { scenario: "Maintenance Exp" },
-//   { scenario: "Acquisition Exp" },
-//   { scenario: "Risk Adjustment" },
-//   { scenario: "Closing" },
-// ]);
 const availableParameterYears: any = ref([])
 const availablePremiumYears: any = ref([])
 const availableShocks: any = ref([])
@@ -268,27 +244,34 @@ const availableAggregateOptions = ref([
 ])
 const availableMpVersions = ref([])
 const selectedAggregationOption = ref(null)
-// const selectedScenario = ref(null);
 const selectedYear = ref(null)
 const selectedMpVersion = ref(null)
 const selectedParameterYear = ref(null)
-// const selectedModelPointsYear = ref(null);
-// const selectedDiscountCurveYear = ref(null);
-// const selectedExpectedClaimsYear = ref(null);
-// const selectedClaimsExpensesYear = ref(null);
-// const selectedMaintenanceExpenseYear = ref(null);
-// const selectedAcquisitionExpenseYear = ref(null);
-// const selectedRiskAdjustmentYear = ref(null);
-// const selectedReinsuranceYear = ref(null);
 const selectedPremiumEarningYear = ref(null)
-// const selectedRunType: any = ref(null);
-// const selectedPortfolio: any = ref(null);
 const selectedPortfolios: any = ref([])
 const selectedShock: any = ref(null)
 const snackbar = ref(false)
 const timeout = ref(5000)
 const text = ref('')
 const yearEndMonth = ref(12)
+
+// const formattedDate = computed(() => {
+//   if (!runDate.value) return ''
+//   console.log('Run Date', runDate.value)
+//   const date = new Date(runDate.value)
+//   const year = date.getFullYear()
+//   const month = String(date.getMonth() + 1).padStart(2, '0') // Ensure two digits
+//   console.log('Year', `${year}-${month}`)
+//   return `${year}-${month}`
+// })
+
+const formattedDate = computed(() => {
+  if (!runDate.value) return ''
+  const date = new Date(runDate.value)
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0') // Ensure two digits
+  return `${year}-${month}`
+})
 
 const removeFromRunJobs = (name: string) => {
   runJobs.value = runJobs.value.filter((item: any) => item.name !== name)
