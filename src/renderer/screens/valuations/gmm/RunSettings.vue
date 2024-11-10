@@ -177,6 +177,7 @@
                   <v-col cols="4">
                     <v-select
                       v-model="selectedYieldYear"
+                      :disabled="selectedParameterYear === null"
                       density="compact"
                       variant="outlined"
                       label="Select Yield Curve Year"
@@ -188,11 +189,12 @@
                   </v-col>
                   <v-col cols="4">
                     <v-select
-                      v-model="selectedYieldCurveCode"
+                      v-model="selectedYieldCurveMonth"
+                      :disabled="selectedParameterYear === null"
                       density="compact"
                       variant="outlined"
-                      label="Select Yield Curve Code"
-                      :items="availableYieldYears"
+                      label="Select Yield Curve Month"
+                      :items="availableYieldMonths"
                       item-title="code"
                       item-value="code"
                     ></v-select>
@@ -547,7 +549,7 @@ const noIndicator = ref(false)
 
 const selectedModelPointVersion: any = ref(null)
 const selectedYieldYear: any = ref(null)
-const selectedYieldCurveCode: any = ref(null)
+const selectedYieldCurveMonth: any = ref(null)
 const selectedParameterYear: any = ref(null)
 const selectedMorbidityYear: any = ref(null)
 const selectedRetrenchmentYear: any = ref(null)
@@ -569,6 +571,7 @@ const availableMortalityYears: any = ref([])
 const availableLapseMarginYears: any = ref([])
 const availableModelPointVersions: any = ref([])
 const availableYieldCurveCodes: any = ref([])
+const availableYieldMonths: any = ref([])
 
 const availableYieldCurveBases = [
   { basis: 'N/A' },
@@ -720,7 +723,7 @@ const getModelPointVersions = async () => {
 
 const getYieldCurveCodes = async () => {
   if (selectedYieldYear.value !== null) {
-    selectedYieldCurveCode.value = null
+    selectedYieldCurveMonth.value = null
     ValuationService.getYieldCurveCodes(selectedYieldYear.value).then((resp) => {
       if (resp.data !== null) {
         availableYieldCurveCodes.value = resp.data

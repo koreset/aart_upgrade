@@ -276,7 +276,7 @@ watchEffect(() => {
 
 <style scoped>
 .custom-navbar {
-  font-size: 8px !important;
+  font-size: 10px !important;
 }
 
 .list-item-text {
@@ -285,7 +285,7 @@ watchEffect(() => {
 
 .nav-text {
   color: white !important;
-  font-size: 10px !important;
+  font-size: 12px !important;
 }
 
 .nav-bg {
@@ -294,7 +294,7 @@ watchEffect(() => {
 
 .smaller-font :deep(.v-list-item-title),
 .smaller-font :deep(.v-list-item__append) {
-  font-size: 12px;
+  font-size: 14px;
   padding-left: 0 !important;
 }
 .smaller-font.v-list-item {
@@ -302,6 +302,11 @@ watchEffect(() => {
 }
 .first-level-group :deep(.v-list-group__items) {
   padding-left: 0 !important;
-  --indent-padding: calc(var(--parent-padding) - 16px) !important;
+  --indent-padding: calc(var(--parent-padding) - 0px) !important;
+}
+
+.v-list-item.v-list-item--active {
+  border-top-right-radius: 32px !important;
+  border-bottom-right-radius: 32px !important;
 }
 </style>
