@@ -1,14 +1,17 @@
 <template>
   <v-container>
-    <v-card class="rounded-lg">
-      <v-card-title v-if="product" class="header-title accent white--text mb-6"
-        >{{ product.product_name }} [{{ product.product_code }}] Pricing Analysis</v-card-title
-      >
-      <v-card-text>
+    <base-card :show-actions="false" class="rounded-lg">
+      <template #header>
+        <span v-if="product" class="headline"
+          >{{ product.product.product_name }} [{{ product.product.product_code }}] Pricing
+          Analysis</span
+        >
+      </template>
+      <template #default>
         <v-row
           ><v-col>
-            <v-btn class="custom-btn" plain text :to="'/pricing-jobs'">
-              {{ backButton }} Back to Pricing Run List
+            <v-btn variant="plain" text :to="'/pricing/run-results'">
+              {{ backButton }} Back to Pricing Jobs
             </v-btn></v-col
           ></v-row
         >
@@ -33,13 +36,21 @@
         <loading-indicator :loadingData="loadingData" />
         <v-row v-if="data.length > 0">
           <v-col>
-            <v-btn size="small" rounded class="primary">Generate PDF</v-btn>
-            <v-btn size="small" rounded class="primary ml-4" @click="downloadControlFile"
+            <v-btn size="small" variant="outlined" rounded class="primary" @click="generatePdf"
+              >Generate PDF</v-btn
+            >
+            <v-btn
+              size="small"
+              variant="outlined"
+              rounded
+              class="primary ml-4"
+              @click="downloadControlFile"
               >Download Control Results</v-btn
             >
             <v-btn
               v-if="selectedScenario"
               size="small"
+              variant="outlined"
               rounded
               class="primary ml-4"
               @click="deleteScenario"
@@ -50,7 +61,9 @@
         <div id="result-pane">
           <v-row v-if="options" id="chart-results" class="result-box mb-9 mt-6">
             <v-col cols="9">
-              <ag-charts v-if="options" :options="options"></ag-charts>
+              <div style="display: grid; width: 100%; height: 100%">
+                <ag-charts v-if="options" :options="options"></ag-charts>
+              </div>
             </v-col>
             <v-col cols="3">
               <v-table>
@@ -74,6 +87,7 @@
               <data-grid
                 :tableTitle="'Annual Premium Distribution'"
                 :columnDefs="columnDefs"
+                :show-export="true"
                 :rowData="rowData"
                 :rowSelection="rowSelection"
                 :pagination="true"
@@ -99,14 +113,14 @@
             <v-col>
               <v-table>
                 <thead>
-                  <tr>
-                    <th>Run Name</th>
-                    <th>Goal Seek</th>
-                    <th>Single Model Point</th>
-                    <th>Model Point Version</th>
-                    <th>Profit Signature</th>
-                    <th>Shock Basis</th>
-                    <th>Parameter Basis</th>
+                  <tr class="table-row">
+                    <th class="table-col">Run Name</th>
+                    <th class="table-col">Goal Seek</th>
+                    <th class="table-col">Single Model Point</th>
+                    <th class="table-col">Model Point Version</th>
+                    <th class="table-col">Profit Signature</th>
+                    <th class="table-col">Shock Basis</th>
+                    <th class="table-col">Parameter Basis</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -179,21 +193,22 @@
             </v-col>
           </v-row>
         </div>
-      </v-card-text>
-    </v-card>
+      </template>
+    </base-card>
   </v-container>
 </template>
 <script setup lang="ts">
 import PricingService from '@/renderer/api/PricingService'
 import ProductService from '@/renderer/api/ProductService'
 import { AgCharts } from 'ag-charts-vue3'
-// import { jsPDF } from 'jspdf'
-// import html2canvas from 'html2canvas'
-// import autoTable from 'jspdf-autotable'
+import { jsPDF } from 'jspdf'
+import html2canvas from 'html2canvas'
+import autoTable from 'jspdf-autotable'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import DataGrid from '@/renderer/components/tables/DataGrid.vue'
 import LoadingIndicator from '@/renderer/components/LoadingIndicator.vue'
+import BaseCard from '@/renderer/components/BaseCard.vue'
 // require('@gouch/to-title-case')
 
 // data
@@ -208,7 +223,7 @@ const headers = ref([])
 // const aggPointHeaders = ref([])
 const aggPoints = ref([])
 const pdfHeaders: any = ref([])
-const backButton = ref('<')
+const backButton = ref('< ')
 const selectedScenario: any = ref(null)
 const pricingRun: any = ref([])
 const product: any = ref(null)
@@ -458,6 +473,51 @@ const loadScenario = () => {
       ]
     }
     loadingData.value = false
+  })
+}
+
+const generatePdf = () => {
+  const canvas: any = document.getElementById('chart-results')
+  html2canvas(canvas).then((canvas) => {
+    const imgData = canvas.toDataURL('image/png')
+    // eslint-disable-next-line new-cap
+    const doc = new jsPDF('p', 'mm', 'a4')
+    doc.setFontSize(18)
+    doc.text(
+      'Pricing Analysis ( ' +
+        product.value.product_code +
+        ') - ' +
+        selectedScenario.value.description +
+        ' Scenario',
+      10,
+      10
+    )
+
+    const width = doc.internal.pageSize.getWidth()
+    const imgProps = doc.getImageProperties(imgData)
+    const imgHeight = (imgProps.height * width) / imgProps.width
+    // var height = doc.internal.pageSize.getHeight();
+    doc.addImage(imgData, 'PNG', 10, 15, width - 20, imgHeight - 10)
+    const headers = [pdfHeaders]
+    const body: any = []
+    pricingDistribution.value.forEach((item) => {
+      const row: any = [
+        item.age,
+        item['5000_male'],
+        item['5000_female'],
+        item['10000_male'],
+        item['10000_female'],
+        item['20000_male'],
+        item['20000_female'],
+        item['50000_male'],
+        item['50000_female']
+      ]
+      body.push(row)
+    })
+    doc.setFontSize(10)
+    autoTable(doc, { head: headers, body, startY: imgHeight + 10, theme: 'grid' })
+
+    doc.save(product.value.product_code + '_' + selectedScenario.value.description + '.pdf')
   })
 }
 

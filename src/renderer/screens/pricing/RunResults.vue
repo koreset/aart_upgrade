@@ -6,7 +6,7 @@
           <template #header>
             <span class="headline">Pricing Runs</span>
           </template>
-          <template v-if="runJobs.length === 0" #default
+          <template v-if="runJobs.length === 0 && !loading" #default
             ><h4 class="ma-4">There are no available Pricing runs at this time</h4></template
           >
           <template v-else #default>
@@ -121,6 +121,7 @@ import PricingService from '@/renderer/api/PricingService.js'
 import { onMounted, ref } from 'vue'
 import { DateTime } from 'luxon'
 import BaseCard from '@/renderer/components/BaseCard.vue'
+// import LoadingIndicator from '@/renderer/components/LoadingIndicator.vue'
 
 let pollTimer
 const reduceDecimal = (number) => {
