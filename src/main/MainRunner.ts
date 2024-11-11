@@ -26,7 +26,7 @@ export const createMainWindow = async (mainWindow: BrowserWindow): Promise<Brows
     webPreferences: Constants.DEFAULT_WEB_PREFERENCES
   })
 
-  mainWindow.setMenu(null)
+  // mainWindow.setMenu(null)
 
   mainWindow.maximize()
 

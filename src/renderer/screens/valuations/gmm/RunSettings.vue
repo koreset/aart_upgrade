@@ -336,7 +336,18 @@
                     <thead>
                       <tr class="table-row">
                         <th class="text-left table-col">Run Name</th>
-                        <th class="text-left table-col">Valuation Date</th>
+                        <th class="text-left table-col"
+                          >Valuation Date
+                          <v-btn
+                            v-if="settingWorkflow === 'existing'"
+                            size="small"
+                            variant="plain"
+                            icon
+                            @click="openEditDialog('run_date')"
+                          >
+                            <v-icon>mdi-pencil</v-icon>
+                          </v-btn></th
+                        >
                         <th class="text-left table-col">Description</th>
                         <th class="text-left table-col"
                           >Model Points
@@ -484,8 +495,20 @@
     </v-snackbar>
     <v-dialog v-model="dialog" max-width="500px">
       <v-card>
-        <v-card-title>Edit Column</v-card-title>
+        <v-card-title>Edit {{ columnName }}</v-card-title>
         <v-card-text>
+          <v-row>
+            <v-col>
+              <v-text-field
+                v-model="oldColumnValue"
+                readonly
+                :disabled="true"
+                variant="outlined"
+                density="compact"
+                label="Current Value"
+              ></v-text-field>
+            </v-col>
+          </v-row>
           <v-text-field
             v-model="newColumnValue"
             variant="outlined"
@@ -539,7 +562,9 @@ const snackbar = ref(false)
 
 const dialog = ref(false)
 const newColumnValue = ref('')
+const oldColumnValue = ref('')
 const currentColumn = ref('')
+const columnName = ref('')
 const runType = ref('')
 const runSingle = ref(false)
 
@@ -643,7 +668,9 @@ const toggleIndicators = (trigger) => {
 
 const openEditDialog = (column) => {
   newColumnValue.value = ''
+  oldColumnValue.value = runJobs.value[0][column]
   currentColumn.value = column
+  columnName.value = column
   dialog.value = true
 }
 
