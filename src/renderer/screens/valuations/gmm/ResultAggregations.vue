@@ -274,8 +274,8 @@ import DataGrid from '@/renderer/components/tables/DataGrid.vue'
 import formatValues from '@/renderer/utils/format_values'
 import LoadingIndicator from '@/renderer/components/LoadingIndicator.vue'
 
-const fromDateMenu = ref(null)
-const myRunDate = ref(null)
+const fromDateMenu: any = ref(null)
+const myRunDate: any = ref(null)
 
 const loadingData = ref(false)
 const varMessage = ref('')

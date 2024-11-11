@@ -78,11 +78,22 @@ import Prism from 'prismjs/components/prism-core' // Import only the languages y
 
 import { onMounted, ref } from 'vue'
 
+// interfaces
+interface LibraryFile {
+  data_variable: string
+  description: string
+  data_type: string
+  constraints: string
+  note: string
+  data_source: string
+}
+
 // data
 const search = ref('')
-const docfile = ref([])
-const libraryFile = ref([])
-const selectedTopic = ref(null)
+const docfile: any = ref([])
+// const libraryFile: any = ref([])
+const libraryFile = ref<LibraryFile[]>([])
+const selectedTopic: any = ref(null)
 const topics = ref([
   'Modelpoints',
   'Features',

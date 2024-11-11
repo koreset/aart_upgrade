@@ -216,11 +216,11 @@
             <v-row v-if="returnText !== ''" class="mx-6">
               <v-col v-if="noError && selectedMeasure.value.value === 'GMM'">
                 {{ returnText }}
-                <v-btn :to="'/csm-aos-run-reports/' + completedRunId" text>Here</v-btn>
+                <v-btn :to="'/csm-aos-run-reports/' + completedRunId" variant="plain">Here</v-btn>
               </v-col>
               <v-col v-if="noError && selectedMeasure.value.value === 'PAA'">
                 {{ returnText }}
-                <v-btn :to="'/csm-paa-run-reports/' + completedRunId" text>Here</v-btn>
+                <v-btn :to="'/csm-paa-run-reports/' + completedRunId" variant="plain">Here</v-btn>
               </v-col>
             </v-row>
             <v-row v-if="productList.length > 0">
@@ -308,16 +308,19 @@
         >
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn rounded color="primary darken-1" text @click="confirmOverride(false)">No</v-btn>
-          <v-btn rounded color="primary darken-1" text @click="confirmOverride(true)">Yes</v-btn>
+          <v-btn rounded color="primary darken-1" variant="plain" @click="confirmOverride(false)"
+            >No</v-btn
+          >
+          <v-btn rounded color="primary darken-1" variant="plain" @click="confirmOverride(true)"
+            >Yes</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
     <v-snackbar v-model="snackbar" :multi-line="multiLine" :timeout="timeout">
       {{ text }}
-
-      <template #action="{ attrs }">
-        <v-btn color="red" text v-bind="attrs" @click="snackbar = false"> Close </v-btn>
+      <template #actions>
+        <v-btn color="red" variant="plain" @click="snackbar = false"> Close </v-btn>
       </template>
     </v-snackbar>
   </v-container>
@@ -407,15 +410,15 @@ const { handleSubmit, handleReset } = useForm({
 })
 
 // data
-const runName = useField('runName')
-const runDate = useField('runDate')
-const selectedMeasure = useField('selectedMeasure')
-const openingBalDate = useField('openingBalDate')
-const selectedConfig = useField('selectedConfig')
-const selectedTransitionType = useField('selectedTransitionType')
-const selectedFinanceYear = useField('selectedFinanceYear')
-const financeVersion = useField('financeVersion')
-const selectedPAARun = useField('selectedPAARun')
+const runName: any = useField('runName')
+const runDate: any = useField('runDate')
+const selectedMeasure: any = useField('selectedMeasure')
+const openingBalDate: any = useField('openingBalDate')
+const selectedConfig: any = useField('selectedConfig')
+const selectedTransitionType: any = useField('selectedTransitionType')
+const selectedFinanceYear: any = useField('selectedFinanceYear')
+const financeVersion: any = useField('financeVersion')
+const selectedPAARun: any = useField('selectedPAARun')
 
 const $router = useRouter()
 // const openingBalDate = ref(null)

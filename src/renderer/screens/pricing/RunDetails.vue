@@ -10,7 +10,7 @@
       <template #default>
         <v-row
           ><v-col>
-            <v-btn variant="plain" text :to="'/pricing/run-results'">
+            <v-btn variant="plain" :to="'/pricing/run-results'">
               {{ backButton }} Back to Pricing Jobs
             </v-btn></v-col
           ></v-row

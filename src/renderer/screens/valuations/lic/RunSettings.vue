@@ -153,10 +153,18 @@
                 >
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn rounded color="primary darken-1" text @click="confirmOverride(false)"
+                  <v-btn
+                    rounded
+                    color="primary darken-1"
+                    variant="plain"
+                    @click="confirmOverride(false)"
                     >No</v-btn
                   >
-                  <v-btn rounded color="primary darken-1" text @click="confirmOverride(true)"
+                  <v-btn
+                    rounded
+                    color="primary darken-1"
+                    variant="plain"
+                    @click="confirmOverride(true)"
                     >Yes</v-btn
                   >
                 </v-card-actions>
@@ -164,7 +172,7 @@
             </v-dialog>
             <v-snackbar v-model="snackbar" :timeout="timeout" :multi-line="true">
               {{ text }}
-              <v-btn rounded color="red" text @click="snackbar = false">Close</v-btn>
+              <v-btn rounded color="red" variant="plain" @click="snackbar = false">Close</v-btn>
             </v-snackbar>
           </template>
         </base-card>

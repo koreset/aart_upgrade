@@ -105,8 +105,12 @@
         <v-card-text>Are you sure you want to delete </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn rounded color="primary darken-1" text @click="dialog = false">No</v-btn>
-          <v-btn rounded color="primary darken-1" text @click="deletePricingJob(selectedJobId)"
+          <v-btn rounded color="primary darken-1" variant="plain" @click="dialog = false">No</v-btn>
+          <v-btn
+            rounded
+            color="primary darken-1"
+            variant="plain"
+            @click="deletePricingJob(selectedJobId)"
             >Yes</v-btn
           >
         </v-card-actions>

@@ -207,8 +207,12 @@
         </template>
         <template #actions>
           <v-spacer></v-spacer>
-          <v-btn rounded color="accent" text @click="activateProduct(false)">Decline</v-btn>
-          <v-btn rounded color="accent" text @click="activateProduct(true)">Activate</v-btn>
+          <v-btn rounded color="accent" variant="plain" @click="activateProduct(false)"
+            >Decline</v-btn
+          >
+          <v-btn rounded color="accent" variant="plain" click="activateProduct(true)"
+            >Activate</v-btn
+          >
         </template>
       </base-card>
     </v-dialog>

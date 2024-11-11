@@ -270,12 +270,6 @@ export default createRouter({
       component: () => import('../screens/ifrs17/RunSettings.vue')
     },
     {
-      path: '/ifrs17/test-form',
-      name: 'ifrs17-test-form',
-      component: () => import('../screens/ifrs17/TestForm.vue')
-    },
-
-    {
       path: '/ifrs17/run-results',
       name: 'ifrs17-run-results',
       component: () => import('../screens/ifrs17/RunResults.vue')

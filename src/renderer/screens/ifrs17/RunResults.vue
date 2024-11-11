@@ -15,12 +15,12 @@
                 <v-expansion-panels>
                   <v-expansion-panel v-for="item in paginatedJobs" :key="item.id">
                     <v-expansion-panel-title>
-                      <template #default="{ open }">
+                      <template #default="{ expanded }">
                         <v-row no-gutters>
                           <v-col cols="3">{{ item.name }} - ( {{ item.measurement_type }} )</v-col>
                           <v-col cols="9" class="text--secondary">
                             <v-fade-transition leave-absolute>
-                              <span v-if="open" key="0">
+                              <span v-if="expanded" key="0">
                                 <v-list-item-subtitle
                                   v-if="
                                     item.processing_status == 'queued' ||

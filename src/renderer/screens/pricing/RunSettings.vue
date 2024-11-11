@@ -97,7 +97,7 @@
                               <v-checkbox
                                 v-if="value !== 'description' && value !== 'product_type'"
                                 v-model="clonedPricingConfig[name]"
-                                :label="name"
+                                :label="name.toString()"
                               ></v-checkbox>
                             </v-col>
                           </v-row>
@@ -182,7 +182,7 @@
     </v-row>
     <v-snackbar v-model="snackbar" centered :timeout="timeout" :multi-line="true">
       {{ feedBackMessage }}
-      <v-btn size="small" rounded variant="outlined" color="red" text @click="snackbar = false"
+      <v-btn size="small" rounded variant="outlined" color="red" @click="snackbar = false"
         >Close</v-btn
       >
     </v-snackbar>

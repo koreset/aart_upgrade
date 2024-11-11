@@ -12,12 +12,12 @@
                 <v-expansion-panels>
                   <v-expansion-panel v-for="item in paginatedJobs" :key="item.id">
                     <v-expansion-panel-title>
-                      <template #default="{ open }">
+                      <template #default="{ expanded }">
                         <v-row no-gutters>
                           <v-col cols="3">{{ item.name }}</v-col>
                           <v-col cols="9" class="text--secondary">
                             <v-fade-transition leave-absolute>
-                              <span v-if="open" key="0">
+                              <span v-if="expanded" key="0">
                                 <v-list-item-subtitle v-if="item.processing_status == 'processing'">
                                   Status: {{ item.processing_status }} | Current Progress:
                                   {{
@@ -68,7 +68,7 @@
                             size="small"
                             variant="outlined"
                             rounded
-                            @click="confirmDelete(item.id)"
+                            @click="deleteRun(item.id)"
                             >Delete Run</v-btn
                           >
                           <v-btn
@@ -109,20 +109,7 @@
         </base-card>
       </v-col>
     </v-row>
-    <v-dialog v-model="dialog" persistent max-width="500">
-      <v-card>
-        <v-card-title class="headline"
-          ><v-icon class="mr-3" color="red" size="25">mdi-alert-circle</v-icon>Delete
-          Confirmation</v-card-title
-        >
-        <v-card-text>Are you sure you want to delete </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="primary darken-1" text @click="dialog = false">No</v-btn>
-          <v-btn color="primary darken-1" text @click="deleteRun(selectedRunId)">Yes</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <confirmation-dialog ref="confirmAction"></confirmation-dialog>
   </v-container>
 </template>
 
@@ -131,11 +118,13 @@ import ExpService from '@/renderer/api/ExpAnalysisService.js'
 import { onMounted, ref, computed } from 'vue'
 import BaseCard from '@/renderer/components/BaseCard.vue'
 import { DateTime } from 'luxon'
+import ConfirmationDialog from '@/renderer/components/ConfirmDialog.vue'
+
 // data
-const selectedRunId = ref(null)
 const runResults: any = ref([])
 const loading = ref(false)
 const dialog = ref(false)
+const confirmAction = ref()
 
 const pageSize = 10
 const currentPage = ref(1)
@@ -181,6 +170,14 @@ const getRunResults = async () => {
 }
 
 const deleteRun = async (runId) => {
+  const resConfirm = await confirmAction.value.open(
+    'Delete Confirmation',
+    'Are you sure you want to delete this run?'
+  )
+  if (!resConfirm) {
+    return
+  }
+
   try {
     await ExpService.deleteRun(runId)
     getRunResults()
@@ -188,11 +185,6 @@ const deleteRun = async (runId) => {
   } catch (error) {
     console.log(error)
   }
-}
-
-const confirmDelete = (runId: any) => {
-  selectedRunId.value = runId
-  dialog.value = true
 }
 
 onMounted(() => {

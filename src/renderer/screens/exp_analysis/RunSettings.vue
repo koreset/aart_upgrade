@@ -202,7 +202,7 @@
     </v-row>
     <v-snackbar v-model="snackbar" :timeout="timeout" :multi-line="true">
       {{ text }}
-      <v-btn rounded color="red" text @click="snackbar = false">Close</v-btn>
+      <v-btn rounded color="red" variant="plain" @click="snackbar = false">Close</v-btn>
     </v-snackbar>
   </v-container>
 </template>

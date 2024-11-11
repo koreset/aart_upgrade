@@ -176,7 +176,7 @@
 
     <v-snackbar v-model="snackbar" centered :timeout="timeout" :multi-line="true">
       {{ text }}
-      <v-btn rounded color="red" text @click="snackbar = false">Close</v-btn>
+      <v-btn rounded color="red" variant="plain" @click="snackbar = false">Close</v-btn>
     </v-snackbar>
     <confirmation-dialog ref="confirmDelete" />
   </v-container>

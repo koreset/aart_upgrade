@@ -1,6 +1,7 @@
 import instance from './Api'
 
 const Api = instance
+
 const licenseServerUrl = import.meta.env.VITE_APP_LICENSE_SERVER
 
 export default {

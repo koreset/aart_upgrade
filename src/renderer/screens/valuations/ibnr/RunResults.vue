@@ -126,8 +126,10 @@
         <v-card-text>Are you sure you want to delete </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary darken-1" text @click="dialog = false">No</v-btn>
-          <v-btn color="primary darken-1" text @click="deleteRun(selectedRunId)">Yes</v-btn>
+          <v-btn color="primary darken-1" variant="plain" @click="dialog = false">No</v-btn>
+          <v-btn color="primary darken-1" variant="plain" @click="deleteRun(selectedRunId)"
+            >Yes</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>

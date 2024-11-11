@@ -9,7 +9,7 @@
           <template #default>
             <v-row
               ><v-col>
-                <v-btn class="custom-btn" variant="plain" text :to="'/valuations/lic/run-results'">
+                <v-btn class="custom-btn" variant="plain" :to="'/valuations/lic/run-results'">
                   Back to Run List
                 </v-btn></v-col
               ></v-row
@@ -116,7 +116,7 @@ const runList = ref([])
 const portfolioList: any = ref([])
 const productList: any = ref([])
 const rowData: any = ref([])
-const selectedRunDate = ref('')
+const selectedRunDate: any = ref('')
 const selectedPortfolio = ref('')
 const selectedProduct = ref('')
 const columnDefs: any = ref([])
