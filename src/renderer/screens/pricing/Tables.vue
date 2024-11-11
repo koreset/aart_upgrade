@@ -64,18 +64,17 @@
                         <v-col cols="5">
                           <p>Model point count: {{ mp.count }}</p>
                         </v-col>
-                        <v-col class="mr-1" cols="1">
+                        <v-col cols="3">
                           <v-btn
                             variant="outlined"
                             rounded
+                            class="mr-3"
                             size="small"
                             @click.stop="getModelPoints(mp.model_points)"
                           >
                             <v-icon left color="primary">mdi-information</v-icon>
                             <span>Info</span>
                           </v-btn>
-                        </v-col>
-                        <v-col class="mr-1 ml-1" cols="1">
                           <v-btn
                             rounded
                             variant="outlined"
@@ -95,12 +94,11 @@
                     </template>
                     <template #default>
                       <v-row class="borderline blue-grey lighten-5 mx-2 mt-3 mb-1 accent-4--text">
-                        <v-col cols="8">
-                          <p>Pricing Parameters</p>
-                        </v-col>
-                        <v-col class="mr-1" cols="1">
+                        <v-col cols="8"> <p>Pricing Parameters</p> </v-col>
+                        <v-col cols="4">
                           <v-btn
                             rounded
+                            class="mr-3"
                             size="small"
                             variant="outlined"
                             @click.stop="getPricingParams()"
@@ -108,10 +106,9 @@
                             <v-icon color="primary">mdi-information</v-icon>
                             <span>Info</span>
                           </v-btn>
-                        </v-col>
-                        <v-col class="mr-4" cols="1">
                           <v-btn
                             rounded
+                            class="mr-3"
                             size="small"
                             variant="outlined"
                             @click.stop="uploadPricingParamsForm()"
@@ -119,8 +116,6 @@
                             <v-icon color="accent">mdi-upload</v-icon>
                             <span>Upload</span>
                           </v-btn>
-                        </v-col>
-                        <v-col class="mr-1 ml-3" cols="1">
                           <v-btn
                             depressed
                             rounded
@@ -137,9 +132,10 @@
                         <v-col cols="8">
                           <p>Pricing Policy Demographics</p>
                         </v-col>
-                        <v-col class="mr-1" cols="1">
+                        <v-col cols="4">
                           <v-btn
                             depressed
+                            class="mr-3"
                             rounded
                             size="small"
                             variant="outlined"
@@ -148,10 +144,9 @@
                             <v-icon left color="primary">mdi-information</v-icon>
                             <span>Info</span>
                           </v-btn>
-                        </v-col>
-                        <v-col class="mr-4" cols="1">
                           <v-btn
                             depressed
+                            class="mr-3"
                             rounded
                             size="small"
                             variant="outlined"
@@ -160,8 +155,6 @@
                             <v-icon color="accent">mdi-upload</v-icon>
                             <span>Upload</span>
                           </v-btn>
-                        </v-col>
-                        <v-col class="mr-1 ml-3" cols="1">
                           <v-btn
                             depressed
                             rounded
