@@ -302,11 +302,15 @@ watchEffect(() => {
 }
 .first-level-group :deep(.v-list-group__items) {
   padding-left: 0 !important;
-  --indent-padding: calc(var(--parent-padding) - 0px) !important;
+  --indent-padding: calc(var(--parent-padding) - 16px) !important;
 }
 
 .v-list-item.v-list-item--active {
   border-top-right-radius: 32px !important;
   border-bottom-right-radius: 32px !important;
+}
+
+.v-list-group__items .v-list-item {
+  padding-inline-start: calc(var(--indent-padding)) !important;
 }
 </style>
