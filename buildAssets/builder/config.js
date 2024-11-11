@@ -99,7 +99,7 @@ baseConfig.files = [
 ]
 
 // TODO: Notarize for macOS
-// baseConfig.mac.identity = null
+baseConfig.mac.identity = null
 /* if (process.env.MAC_NOTARIZE === 'true') {
   baseConfig.afterSign = './buildAssets/builder/notarize.ts'
 } else {

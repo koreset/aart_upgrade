@@ -111,30 +111,5 @@
     "vite-plugin-electron": {
       "electron": "$electron"
     }
-  },
-  "build": {
-    "appId": "za.co.adsolutions.aart",
-    "productName": "AART",
-    "directories": {
-      "buildResources": "buildAssets/builder"
-    },
-    "publish": {
-      "provider": "github",
-      "owner": "koreset",
-      "repo": "aart_upgrade",
-      "releaseType": "release",
-      "private": true
-    },
-    "win": {
-      "target": "nsis"
-    },
-    "mac": {
-      "target": "dmg",
-      "identity": "Developer ID Application: Onajome Akpoduado (KYR2TJ3Z3M)",
-      "hardenedRuntime": true,
-      "entitlements": "build/entitlements.mac.plist",
-      "entitlementsInherit": "build/entitlements.mac.plist",
-      "gatekeeperAssess": false
-    }
   }
 }

@@ -23,7 +23,6 @@
                     v-model="runDate.value.value"
                     readonly
                     hide-actions
-
                     view-mode="month"
                     prepend-icon=""
                     prepend-inner-icon="$calendar"
@@ -140,7 +139,6 @@
                     v-model="openingBalDate.value.value"
                     readonly
                     hide-actions
-
                     view-mode="month"
                     prepend-icon=""
                     prepend-inner-icon="$calendar"
