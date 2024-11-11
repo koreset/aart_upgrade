@@ -95,13 +95,14 @@ export default {
     return Api.get('products/' + id + '/modelpoints/' + year + '/version/' + version)
   },
 
-  deleteModelPointsForProduct(id, year) {
-    return Api.delete('products/' + id + '/modelpoints/' + year)
+  deleteModelPointsForProduct(id, year, version) {
+    return Api.delete('products/' + id + '/modelpoints/' + year + '/version/' + version)
   },
 
   runProjections(payload) {
     return Api.post('projections', payload)
   },
+
   getValuationJobs() {
     return Api.get('valuations/jobs')
   },

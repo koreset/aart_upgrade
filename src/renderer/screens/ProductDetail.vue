@@ -109,7 +109,13 @@
                             @click="getModelPoints(item)"
                             >View</v-btn
                           >
-                          <v-btn variant="outlined" class="mr-6" size="small" rounded color="red"
+                          <v-btn
+                            variant="outlined"
+                            class="mr-6"
+                            size="small"
+                            rounded
+                            color="red"
+                            @click="deleteModelPoints(item)"
                             >Delete Model Points</v-btn
                           >
                         </td></tr
@@ -499,6 +505,23 @@ const getModelPoints = (item) => {
       loadingData.value = false
     }
   )
+}
+
+const deleteModelPoints = async (item) => {
+  console.log('Delete Model Points:', item)
+  const res = await confirmAction.value.open(
+    'Delete Model Points',
+    'Are you sure you want to delete the model points for this version?'
+  )
+  if (!res) return
+  ProductService.deleteModelPointsForProduct(
+    product.value.product.id,
+    item.year,
+    item.version
+  ).then((res) => {
+    console.log(res)
+    mpVersions.value = mpVersions.value.filter((i) => i.version !== item.version)
+  })
 }
 
 const createColumnDefs = (data) => {
