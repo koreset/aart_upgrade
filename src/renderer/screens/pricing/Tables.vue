@@ -576,6 +576,10 @@ const createColumnDefs = (data) => {
     header.headerName = element
     header.field = element
     header.minWidth = 200
+    header.sortable = true
+    header.filter = true
+    header.resizable = true
+
     header.valueFormatter = formatValues
     columnDefs.value.push(header)
   })

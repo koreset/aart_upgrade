@@ -517,7 +517,7 @@ const createColumnDefs = (data, tableName) => {
     Object.keys(data).forEach((element) => {
       // for the given table name, we process the columns for categories and series data
       // for the graph
-      const column: any = {}
+      const header: any = {}
 
       switch (tableName) {
         case 'Average Claim Amount':
@@ -526,45 +526,53 @@ const createColumnDefs = (data, tableName) => {
         case 'Claim History Summary':
         case 'Incurred Claims':
           if (element === 'accident_year') {
-            column.headerName = element
-            column.field = element
-            column.width = 200
-            column.chartDataType = 'category'
+            header.headerName = element
+            header.field = element
+            header.width = 200
+            header.sortable = true
+    header.filter = true
+    header.resizable = true
+
+            header.chartDataType = 'category'
             // column.valueFormatter = formatValues;
-            cDefs.push(column)
+            cDefs.push(header)
           } else {
-            column.headerName = element
-            column.field = element
-            column.chartDataType = 'series'
-            column.valueFormatter = formatValues
-            column.width = 150
-            cDefs.push(column)
+            header.headerName = element
+            header.field = element
+            header.chartDataType = 'series'
+            header.valueFormatter = formatValues
+            header.width = 150
+            header.sortable = true
+    header.filter = true
+    header.resizable = true
+
+            cDefs.push(header)
           }
           break
         default:
-          column.headerName = element
-          column.field = element
+          header.headerName = element
+          header.field = element
           if (element.includes('rd') || element.includes('earned')) {
             if (element.includes('rd')) {
-              column.width = 100
-              column.cellClass = 'triangulation-rd-cell'
+              header.width = 100
+              header.cellClass = 'triangulation-rd-cell'
             } else {
-              column.cellClass = 'triangulation-cell'
-              column.width = 175
+              header.cellClass = 'triangulation-cell'
+              header.width = 175
             }
-            column.valueFormatter = formatValues
+            header.valueFormatter = formatValues
           } else {
             if (element.includes('product_code') || element.includes('accident')) {
-              column.cellClass = 'triangulation-cell'
-              column.width = 175
+              header.cellClass = 'triangulation-cell'
+              header.width = 175
             } else {
-              column.cellClass = 'triangulation-cell'
-              column.width = 175
-              column.valueFormatter = formatValues
+              header.cellClass = 'triangulation-cell'
+              header.width = 175
+              header.valueFormatter = formatValues
             }
           }
 
-          cDefs.push(column)
+          cDefs.push(header)
           break
       }
 

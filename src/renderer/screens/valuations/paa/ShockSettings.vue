@@ -157,16 +157,20 @@ const createColumnDefs = (data: any, tableName: string) => {
   if (typeof data !== 'undefined') {
     Object.keys(data[0]).forEach((element) => {
       if (element !== 'id' && element !== 'year') {
-        const column: any = {}
-        column.headerName = element
-        column.field = element
-        column.minWidth = 200
-        cDefs.push(column)
+        const header: any = {}
+        header.headerName = element
+        header.field = element
+        header.minWidth = 200
+        header.sortable = true
+        header.filter = true
+        header.resizable = true
+
         if (element === 'name') {
-          column.checkboxSelection = true
-          column.pinned = 'left'
-          column.minWidth = 250
+          header.checkboxSelection = true
+          header.pinned = 'left'
+          header.minWidth = 250
         }
+        cDefs.push(header)
       }
     })
   }

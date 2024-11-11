@@ -429,7 +429,7 @@ const loadScenario = () => {
         xOffset: 10
       },
       legend: {
-        position: 'right',
+        position: 'bottom',
         enabled: true,
         item: {
           label: {
@@ -525,21 +525,29 @@ const createColumnDefs = (headers) => {
   const cDefs: any = []
   if (typeof headers !== 'undefined' && headers !== null && headers.length > 0) {
     headers.forEach((element) => {
-      const column: any = {}
+      const header: any = {}
 
       if (element === 'Age/Sum Assured' || element === 'projection_month') {
-        column.headerName = element
-        column.field = element
-        column.chartDataType = 'category'
-        column.pinned = 'left'
-        column.minWidth = 200
-        cDefs.push(column)
+        header.headerName = element
+        header.field = element
+        header.chartDataType = 'category'
+        header.pinned = 'left'
+        header.minWidth = 200
+        header.sortable = true
+        header.filter = true
+        header.resizable = true
+
+        cDefs.push(header)
       } else {
-        column.headerName = element
-        column.field = element
-        column.chartDataType = 'series'
-        column.minWidth = 200
-        cDefs.push(column)
+        header.headerName = element
+        header.field = element
+        header.chartDataType = 'series'
+        header.minWidth = 200
+        header.sortable = true
+        header.filter = true
+        header.resizable = true
+
+        cDefs.push(header)
       }
     })
   }

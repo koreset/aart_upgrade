@@ -551,6 +551,10 @@ const createColumnDefs = (data, tableName) => {
             column.field = element
             column.width = 200
             column.chartDataType = 'category'
+            column.sortable = true
+            column.filter = true
+            column.resizable = true
+
             // column.valueFormatter = formatValues;
             cDefs.push(column)
           } else {
@@ -559,8 +563,13 @@ const createColumnDefs = (data, tableName) => {
             column.chartDataType = 'series'
             column.valueFormatter = formatValues
             column.width = 150
+            column.sortable = true
+            column.filter = true
+            column.resizable = true
+
             cDefs.push(column)
           }
+
           break
         default:
           column.headerName = element
