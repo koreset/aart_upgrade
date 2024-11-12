@@ -10,8 +10,10 @@
     <v-container>
       <v-row>
         <v-col>
-          <v-img class="ml-3" src="/images/aart-logo-02.png"></v-img>
-          <p class="nav-text">App Version: {{ appVersion }}</p>
+          <img class="ml-3" width="100%" src="/images/aart-logo-02.png" />
+          <p class="nav-text"
+            >App Version: {{ appVersion }} | API version: {{ apiVersion.version }}</p
+          >
         </v-col>
       </v-row>
     </v-container>
@@ -249,6 +251,7 @@
   </v-navigation-drawer>
 </template>
 <script setup lang="ts">
+import TaskService from '@/renderer/api/TaskService'
 import { watchEffect, defineProps, ref, onMounted } from 'vue'
 // import ProductService from '@/renderer/api/ProductService' // Assuming the 'ProductService' module is located in the 'api' folder at the root of your project
 const props = defineProps({
@@ -258,11 +261,15 @@ const props = defineProps({
   }
 })
 
-const appVersion = ref('')
+const appVersion: any = ref('')
+const apiVersion: any = ref('')
 
 onMounted(async () => {
   appVersion.value = await window.mainApi?.sendSync('msgGetAppVersion')
   console.log('App Version:', appVersion.value)
+  TaskService.getApiVersion().then((response) => {
+    apiVersion.value = response.data
+  })
 })
 
 // const products: any = ref([])

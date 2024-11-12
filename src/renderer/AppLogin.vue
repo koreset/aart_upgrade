@@ -3,7 +3,7 @@
     <v-container>
       <v-row>
         <v-col cols="6">
-          <v-img class="ml-1 mt-4" src="./images/aart-logo-02.png"></v-img>
+          <img width="100%" class="ml-1 mt-4" src="/images/aart-logo-02.png" />
         </v-col>
         <v-col cols="6">
           <v-card v-if="!forgotPasswordFlow" class="win-height mt-10">

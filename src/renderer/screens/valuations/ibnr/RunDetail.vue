@@ -530,8 +530,8 @@ const createColumnDefs = (data, tableName) => {
             header.field = element
             header.width = 200
             header.sortable = true
-    header.filter = true
-    header.resizable = true
+            header.filter = true
+            header.resizable = true
 
             header.chartDataType = 'category'
             // column.valueFormatter = formatValues;
@@ -543,8 +543,8 @@ const createColumnDefs = (data, tableName) => {
             header.valueFormatter = formatValues
             header.width = 150
             header.sortable = true
-    header.filter = true
-    header.resizable = true
+            header.filter = true
+            header.resizable = true
 
             cDefs.push(header)
           }

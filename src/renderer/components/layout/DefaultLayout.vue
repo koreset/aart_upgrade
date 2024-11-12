@@ -1,5 +1,5 @@
 <script setup lang="tsx">
-import NavigationDrawer from '@/renderer/components/NavigationDrawer.vue'
+import NavigationDrawer from '@/renderer/screens/NavigationDrawer.vue'
 import { useRoute } from 'vue-router'
 import { onMounted, ref } from 'vue'
 import { useAppStore } from '@/renderer/store/app'
