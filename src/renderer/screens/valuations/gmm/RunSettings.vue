@@ -321,14 +321,14 @@
                 </v-row>
                 <v-row v-if="settingWorkflow == 'new'">
                   <v-col>
-                    <v-btn rounded type="submit" color="primary" size="small" class="primary"
+                    <v-btn rounded type="submit" variant="outlined" size="small" class="primary"
                       >Add to Run Jobs</v-btn
                     >
                   </v-col>
                 </v-row>
               </form>
               <v-row v-if="runJobs.length > 0">
-                <v-divider></v-divider>
+                <v-divider class="my-5"></v-divider>
               </v-row>
 
               <v-row v-if="runJobs.length > 0">
@@ -1174,17 +1174,6 @@ onMounted(async () => {
 <style scoped>
 .responsive-table {
   display: inline-block;
-}
-
-.table-col {
-  min-width: 120px;
-  font-size: 12px;
-  white-space: nowrap;
-}
-
-.table-row {
-  background-color: grey;
-  color: white;
 }
 
 .v-table {
