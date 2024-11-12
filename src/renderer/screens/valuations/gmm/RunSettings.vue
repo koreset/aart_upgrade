@@ -71,7 +71,6 @@
                   <v-col cols="6">
                     <v-date-input
                       v-model="runDate"
-                      readonly
                       hide-actions
                       locale="en-in"
                       view-mode="month"

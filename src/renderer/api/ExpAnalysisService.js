@@ -106,12 +106,12 @@ export default {
   deleteConfiguration(configurationId) {
     return Api.delete(`exp-analysis/delete-configuration/${configurationId}`)
   },
-  deleteConfigData(tableDataName, portfolioName, year, version) {
+  deleteConfigData(tableDataName, portfolioId, year, version) {
     return Api.delete(
       'exp-analysis/config-data/' +
         tableDataName +
         '/portfolio/' +
-        portfolioName +
+        portfolioId +
         '/year/' +
         year +
         '/version/' +

@@ -144,7 +144,7 @@
                                     @click="
                                       deleteData(
                                         'exposure_data',
-                                        item.name,
+                                        item.id,
                                         selectedYearVersion.year,
                                         selectedYearVersion.version
                                       )
@@ -156,7 +156,13 @@
                                 </v-col>
                               </v-row>
                               <v-row v-if="rowData.length > 0 && loadDataComplete">
-                                <data-grid :rowData="rowData" :columnDefs="columnDefs"></data-grid>
+                                <data-grid
+                                  :table-title="'Exposure Data'"
+                                  :show-close-button="true"
+                                  :rowData="rowData"
+                                  :columnDefs="columnDefs"
+                                  @update:clear-data="clearData"
+                                ></data-grid>
                               </v-row>
 
                               <v-divider class="my-5"></v-divider>
@@ -224,9 +230,9 @@
                                     @click="
                                       deleteData(
                                         'actual_data',
-                                        item.name,
-                                        selectedYearVersion.year,
-                                        selectedYearVersion.version
+                                        item.id,
+                                        selectedActualYearVersion.year,
+                                        selectedActualYearVersion.version
                                       )
                                     "
                                   >
@@ -235,10 +241,14 @@
                                   >
                                 </v-col>
                               </v-row>
+                              <loading-indicator v-if="loadingData"></loading-indicator>
                               <v-row v-if="actualRowData.length > 0 && loadDataComplete">
                                 <data-grid
+                                  :table-title="'Actual Data'"
+                                  :show-close-button="true"
                                   :rowData="actualRowData"
                                   :columnDefs="columnDefs"
+                                  @update:clear-data="clearData"
                                 ></data-grid>
                               </v-row>
                             </v-col>
@@ -266,6 +276,7 @@ import ConfirmDialog from '@/renderer/components/ConfirmDialog.vue'
 import FileUpdater from '@/renderer/components/FileUpdater.vue'
 import formatValues from '@/renderer/utils/format_values'
 import DataGrid from '@/renderer/components/tables/DataGrid.vue'
+import LoadingIndicator from '@/renderer/components/LoadingIndicator.vue'
 
 const confirmDeleteDialog = ref()
 const loadingData = ref(false)
@@ -321,6 +332,12 @@ const getActualDataVersions = (id: number, year: number) => {
     (item: any) => item.year === year
   )
   console.log('yearVersions', actualYearVersions.value)
+}
+
+const clearData = () => {
+  rowData.value = []
+  columnDefs.value = []
+  loadDataComplete.value = false
 }
 
 const checkClass = (item: any) => {
@@ -389,13 +406,14 @@ const showData = (id: number, name: string, year: number, version: number) => {
         createColumnDefs(rowData.value)
       }
     }
+    loadingData.value = false
   })
   loadDataComplete.value = true
 }
 
 const deleteData = async (
   tableType: string,
-  portfolioName: string,
+  portfolioId: string,
   year: number,
   version: number
 ) => {
@@ -406,9 +424,9 @@ const deleteData = async (
 
   if (!res) return
 
-  console.log('Deleting Data', tableType, portfolioName, year, version)
+  console.log('Deleting Data', tableType, portfolioId, year, version)
   loadingData.value = true
-  ExpService.deleteConfigData(tableType, portfolioName, year, version).then((res) => {
+  ExpService.deleteConfigData(tableType, portfolioId, year, version).then((res) => {
     console.log('Data', res.data)
     rowData.value = res.data
     columnDefs.value = Object.keys(res.data[0]).map((item) => {
