@@ -102,5 +102,18 @@ export default {
   },
   getVariableGroups() {
     return Api.get('aggregations/variable-groups')
+  },
+  getYieldCurveMonths(productCode, yieldYear, parameterYear, basis) {
+    return Api.get(
+      'projections/product-code/' +
+        productCode +
+        '/yield-year/' +
+        yieldYear +
+        '/parameter-year/' +
+        parameterYear +
+        '/basis/' +
+        basis +
+        '/get-months'
+    )
   }
 }

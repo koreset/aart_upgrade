@@ -176,26 +176,28 @@
                   <v-col cols="4">
                     <v-select
                       v-model="selectedYieldYear"
-                      :disabled="selectedParameterYear === null"
+                      :disabled="selectedParameterYear === null && selectedBasis === null"
                       density="compact"
                       variant="outlined"
                       label="Select Yield Curve Year"
                       :items="availableYieldYears"
                       item-title="Year"
                       item-value="Year"
-                      @update:model-value="getYieldCurveCodes"
+                      @update:model-value="getYieldCurveMonths"
                     ></v-select>
                   </v-col>
                   <v-col cols="4">
                     <v-select
                       v-model="selectedYieldCurveMonth"
-                      :disabled="selectedParameterYear === null"
+                      :disabled="
+                        selectedParameterYear === null &&
+                        selectedBasis === null &&
+                        selectedYieldYear === null
+                      "
                       density="compact"
                       variant="outlined"
                       label="Select Yield Curve Month"
-                      :items="availableYieldMonths"
-                      item-title="code"
-                      item-value="code"
+                      :items="availableYieldCurveMonths"
                     ></v-select>
                   </v-col>
                   <v-col cols="4">
@@ -384,6 +386,8 @@
                             <v-icon>mdi-pencil</v-icon>
                           </v-btn></th
                         >
+                        <th class="text-left table-col">Yield Curve Month </th>
+
                         <th class="text-left table-col"
                           >Lapse
                           <v-btn
@@ -447,6 +451,7 @@
                         <td>{{ item.modelpoint_year }}</td>
                         <td>{{ item.parameter_year }}</td>
                         <td>{{ item.yieldcurve_year }}</td>
+                        <td>{{ item.yieldcurve_month }}</td>
                         <td>{{ item.lapse_year }}</td>
                         <td>{{ item.lapse_margin_year }}</td>
                         <td>{{ item.mortality_year }}</td>
@@ -594,8 +599,7 @@ const availableParameterYears: any = ref([])
 const availableMortalityYears: any = ref([])
 const availableLapseMarginYears: any = ref([])
 const availableModelPointVersions: any = ref([])
-const availableYieldCurveCodes: any = ref([])
-const availableYieldMonths: any = ref([])
+const availableYieldCurveMonths: any = ref([])
 
 const availableYieldCurveBases = [
   { basis: 'N/A' },
@@ -747,12 +751,18 @@ const getModelPointVersions = async () => {
   }
 }
 
-const getYieldCurveCodes = async () => {
+const getYieldCurveMonths = async () => {
   if (selectedYieldYear.value !== null) {
     selectedYieldCurveMonth.value = null
-    ValuationService.getYieldCurveCodes(selectedYieldYear.value).then((resp) => {
+    ValuationService.getYieldCurveMonths(
+      selectedProducts.value[0].product_code,
+      selectedYieldYear.value,
+      selectedParameterYear.value,
+      selectedBasis.value
+    ).then((resp) => {
       if (resp.data !== null) {
-        availableYieldCurveCodes.value = resp.data
+        console.log('Yield Curve Months', resp.data)
+        availableYieldCurveMonths.value = resp.data
       }
     })
   }
@@ -1023,6 +1033,7 @@ const addToRunJobs = async () => {
   job.modelpoint_year = selectedModelPointYear.value
   job.mp_version = selectedModelPointVersion.value
   job.yieldcurve_year = selectedYieldYear.value
+  job.yieldcurve_month = selectedYieldCurveMonth.value
 
   if (selectedParameterYear.value === 'N/A') {
     job.parameter_year = 0
@@ -1089,9 +1100,11 @@ const resetFields = () => {
   selectedModelPointYear.value = null
   selectedModelPointVersion.value = null
   selectedYieldYear.value = null
+  selectedYieldCurveMonth.value = null
   selectedParameterYear.value = null
   selectedMorbidityYear.value = null
   selectedRetrenchmentYear.value = null
+  availableYieldCurveMonths.value = []
   selectedLapseYear.value = null
   selectedMortalityYear.value = null
   selectedShock.value = null
