@@ -94,8 +94,8 @@ const localColumnDefs = computed(() => props.columnDefs)
 
 const localShowExport = ref(true)
 
-const gridApi = ref(null)
-const columnApi = ref(null)
+const gridApi: any = ref(null)
+const columnApi: any = ref(null)
 
 const onGridReady = (params) => {
   gridApi.value = params.api
@@ -142,10 +142,10 @@ const statusBar = {
 }
 
 const exportDataCsv = () => {
-  // gridApi.exportDataAsCsv({
-  //   // suppressQuotes: true,
-  //   allColumns: true,
-  // });
+  gridApi.value.exportDataAsCsv({
+    suppressQuotes: true,
+    allColumns: true
+  })
 }
 
 const onRowSelected = (event) => {

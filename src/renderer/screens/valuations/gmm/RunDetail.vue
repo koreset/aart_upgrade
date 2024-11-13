@@ -104,34 +104,11 @@
                 <span class="headline">Model Point Stats</span>
               </template>
               <template #default>
-                <v-table class="trans-tables">
-                  <thead>
-                    <tr>
-                      <th>Variable</th>
-                      <th>Min</th>
-                      <th>Max</th>
-                      <th>Sum</th>
-                      <th>Average</th>
-                      <th>Male</th>
-                      <th>Female</th>
-                      <th>Number of Zeroes</th>
-                      <th>Number of lives</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="item in modelpointStats" :key="item.variable">
-                      <td>{{ transformText(item.variable) }}</td>
-                      <td>{{ item.min }}</td>
-                      <td>{{ item.max }}</td>
-                      <td>{{ item.sum }}</td>
-                      <td>{{ reduceDecimal(item.average) }}</td>
-                      <td>{{ item.male }}</td>
-                      <td>{{ item.female }}</td>
-                      <td>{{ item.number_of_zeroes }}</td>
-                      <td>{{ item.number_of_lives }}</td>
-                    </tr>
-                  </tbody>
-                </v-table>
+                <data-grid
+                  :show-export="true"
+                  :rowData="modelpointStats"
+                  :columnDefs="mpColDefs"
+                ></data-grid>
               </template>
             </base-card>
             <base-card v-if="runSettings !== null" :showActions="false">
@@ -245,6 +222,45 @@ const variableItems = [
   'expenses'
 ]
 
+const mpColDefs = [
+  {
+    headerName: 'Variable',
+    field: 'variable',
+    sortable: true,
+    filter: true,
+    resizable: true,
+    valueFormatter: (params) => transformText(params.value)
+  },
+
+  { headerName: 'Min', field: 'min', sortable: true, filter: true, resizable: true },
+  { headerName: 'Max', field: 'max', sortable: true, filter: true, resizable: true },
+  { headerName: 'Sum', field: 'sum', sortable: true, filter: true, resizable: true },
+  {
+    headerName: 'Average',
+    field: 'average',
+    sortable: true,
+    filter: true,
+    resizable: true,
+    valueFormatter: (params) => reduceDecimal(params)
+  },
+  { headerName: 'Male', field: 'male', sortable: true, filter: true, resizable: true },
+  { headerName: 'Female', field: 'female', sortable: true, filter: true, resizable: true },
+  {
+    headerName: 'Number of Zeroes',
+    field: 'number_of_zeroes',
+    sortable: true,
+    filter: true,
+    resizable: true
+  },
+  {
+    headerName: 'Number of Lives',
+    field: 'number_of_lives',
+    sortable: true,
+    filter: true,
+    resizable: true
+  }
+]
+
 const updateArgs: any = ref([true, true, { duration: 1000 }])
 
 const chartSeries: any = ref({
@@ -286,7 +302,8 @@ const transformText = (text: string) => {
 }
 
 const reduceDecimal = (number) => {
-  return Math.round(number)
+  console.log('number', number.value)
+  return Math.round(number.value)
 }
 
 const displayAggDataForSpCode = () => {
