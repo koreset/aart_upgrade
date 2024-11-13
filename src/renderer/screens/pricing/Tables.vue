@@ -10,7 +10,7 @@
             <v-container fluid>
               <v-row>
                 <v-col cols="3">
-                  <v-select
+                  <v-autocomplete
                     v-model="selectedProduct"
                     density="compact"
                     variant="outlined"
@@ -20,7 +20,7 @@
                     item-value="id"
                     return-object
                     @update:modelValue="getModelPointsCount"
-                  ></v-select>
+                  ></v-autocomplete>
                 </v-col>
               </v-row>
               <v-row v-if="selectedProduct !== null">
@@ -106,17 +106,16 @@
                             <v-icon color="primary">mdi-information</v-icon>
                             <span>Info</span>
                           </v-btn>
-                          <v-btn
-                            rounded
-                            class="mr-3"
-                            size="small"
-                            variant="outlined"
-                            @click.stop="uploadPricingParamsForm()"
+                          <file-updater
+                            :upload-complete="loadDataComplete"
+                            :tableType="'Pricing Parameters'"
+                            :actionName="'Upload Data'"
+                            @uploadFile="handleFileUpload($event, 'pricing_parameters')"
                           >
-                            <v-icon color="accent">mdi-upload</v-icon>
-                            <span>Upload</span>
-                          </v-btn>
+                          </file-updater>
+
                           <v-btn
+                            class="ml-3"
                             depressed
                             rounded
                             size="small"
@@ -144,18 +143,15 @@
                             <v-icon left color="primary">mdi-information</v-icon>
                             <span>Info</span>
                           </v-btn>
-                          <v-btn
-                            depressed
-                            class="mr-3"
-                            rounded
-                            size="small"
-                            variant="outlined"
-                            @click.stop="uploadPricingDemographicsForm()"
+                          <file-updater
+                            :upload-complete="loadDataComplete"
+                            :tableType="'Pricing Policy Demographics'"
+                            :actionName="'Upload Data'"
+                            @uploadFile="handleFileUpload($event, 'pricing_demographics')"
                           >
-                            <v-icon color="accent">mdi-upload</v-icon>
-                            <span>Upload</span>
-                          </v-btn>
+                          </file-updater>
                           <v-btn
+                            class="ml-3"
                             depressed
                             rounded
                             size="small"
@@ -263,57 +259,33 @@ import ConfirmationDialog from '@/renderer/components/ConfirmDialog.vue'
 import AssociatedPricingTableDisplay from '@/renderer/components/AssociatedPricingTableDisplay.vue'
 import FileInfo from '@/renderer/components/FileInfo.vue'
 import { useAppStore } from '@/renderer/store/app'
+import FileUpdater from '@/renderer/components/FileUpdater.vue'
 
 const appStore = useAppStore()
 const confirmDelete = ref()
 const showDialog = ref(false)
-// const pricingParamsFile: any = ref(null)
-// const pricingDemographicsFile: any = ref(null)
+const loadDataComplete = ref(false)
 const modelPointCount: any = ref(0)
 const modelPointsDialog = ref(false)
 const modelPoints: any = ref([])
 const modelPointSets: any = ref([])
-// const availableProducts: any = ref([])
-// const pricingTables: any = ref([])
-// const selectedProduct: any = ref(null)
 const selectedYear = ref(null)
-// const file: any = ref(null)
-const formTitle = ref('')
-const filePlaceHolder = ref('')
-const tableType = ref('')
-// const selectedType = ref(null)
-// const uploadSuccess = ref(false)
 const loading = ref(false)
-// const availableTypes = ref([{ name: 'Pricing Parameters' }])
 const timeout = 3000
-// const shocksData: any = ref([])
-// const yieldCurveData: any = ref([])
-// const marginsData: any = ref([])
-// const parametersData: any = ref([])
-// const globalTableData: any = ref([])
-// const selectedTable = ref('')
-// const globalTables = ref([{ name: 'Pricing Parameters' }])
 const snackbar = ref(false)
 const text = ref('')
 const tableDialog = ref(false)
-// const tableData: any = ref([])
 const columnDefs: any = ref([])
 const rowData: any = ref([])
-// const dialog = ref(false)
 const selectedTableName = ref('')
 const loadingComplete = ref(false)
 const modelpointFile: any = ref(null)
 const error = ref(false)
 const errorMessages: any = ref([])
-// const errorParams = ref(false)
-// const errorParamsMessages: any = ref([])
-// const errorDemographicsParams = ref(false)
-// const errorDemographicsMessages: any = ref([])
 const productsList: any = ref([])
 const uploadDisabled = ref(false)
 const showFileUpload = ref(false)
 const showDownloadTemplate: any = ref(false)
-// const paramsAvailable = ref(false)
 const allProducts: any = ref([])
 const selectedProduct: any = ref(null)
 const pricingProduct: any = ref(null)
@@ -392,6 +364,33 @@ onMounted(async () => {
     })
   })
 })
+
+const handleFileUpload = (event, tableType) => {
+  loadDataComplete.value = true
+  const payload = new FormData()
+  payload.append('file', event.file)
+  payload.append('product_code', selectedProduct.value.product_code)
+
+  switch (tableType) {
+    case 'pricing_parameters':
+      PricingService.uploadPricingParameters({ formdata: payload }).then(() => {
+        loadDataComplete.value = false
+        text.value = 'data table successfully uploaded'
+        snackbar.value = true
+      })
+      break
+    case 'pricing_demographics':
+      PricingService.uploadPricingDemographics({ formdata: payload }).then(() => {
+        loadDataComplete.value = false
+        text.value = 'data table successfully uploaded'
+        snackbar.value = true
+      })
+      break
+    default:
+      loadDataComplete.value = false
+      break
+  }
+}
 
 const deleteModelPoints = (mp: any) => {
   console.log(mp)
@@ -479,13 +478,6 @@ const getPricingParams = () => {
     })
 }
 
-const uploadPricingParamsForm = () => {
-  showDialog.value = true
-  formTitle.value = 'Upload Pricing Parameters'
-  filePlaceHolder.value = 'Click to select a pricing parameters file for upload'
-  tableType.value = 'pricing_parameters'
-}
-
 const deletePricingParameters = async () => {
   const res = await confirmDelete.value.open(
     'Deleting Pricing Parameters',
@@ -562,12 +554,13 @@ const deletePricingPolicyDemographics = async () => {
   console.log('delete pricing demographics')
 }
 
-const uploadPricingDemographicsForm = () => {
-  showDialog.value = true
-  formTitle.value = 'Upload Pricing Demographics'
-  filePlaceHolder.value = 'Click to select a pricing demographics file for upload'
-  tableType.value = 'pricing_demographics'
-}
+// const uploadPricingDemographicsForm = (event) => {
+//   console.log('Upload Pricing Demographics Form', event)
+//   // showDialog.value = true
+//   // formTitle.value = 'Upload Pricing Demographics'
+//   // filePlaceHolder.value = 'Click to select a pricing demographics file for upload'
+//   // tableType.value = 'pricing_demographics'
+// }
 
 const createColumnDefs = (data) => {
   columnDefs.value = []
