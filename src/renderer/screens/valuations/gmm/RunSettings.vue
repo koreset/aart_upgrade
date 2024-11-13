@@ -1094,7 +1094,7 @@ const addToRunJobs = async () => {
   job.modelpoint_year = selectedModelPointYear.value
   job.mp_version = selectedModelPointVersion.value
   job.yieldcurve_year = selectedYieldYear.value
-  job.yieldcurve_month = selectedYieldCurveMonth.value
+  job.yieldcurve_month = parseInt(selectedYieldCurveMonth.value)
 
   if (selectedParameterYear.value === 'N/A') {
     job.parameter_year = 0
