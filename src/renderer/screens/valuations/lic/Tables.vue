@@ -78,10 +78,6 @@
       </v-col>
     </v-row>
 
-    <v-snackbar v-model="snackbar" centered :timeout="timeout" :multi-line="true">
-      {{ text }}
-      <v-btn rounded color="red" variant="text" @click="snackbar = false">Close</v-btn>
-    </v-snackbar>
     <!-- <v-dialog v-model="yieldCurveDataDialog" persistent max-width="600">
       <v-card>
         <v-card-title class="header-title accent white--text"
@@ -186,7 +182,6 @@ const tables: any = ref([
   { name: 'Shocks' }
 ])
 
-const text: any = ref('')
 // const yieldCurveDataDialog: any = ref(false)
 const columnDefs: any = ref([])
 // const dialog: any = ref(false)
@@ -249,9 +244,9 @@ const deleteTableData = async (table: any) => {
     if (!result) {
       return
     }
-    LicService.deleteTable(table.value).then(() => {
+    LicService.deleteTable(table.table_type).then(() => {
       // this.text = res.data.message;
-      text.value = 'Table was successfully deleted'
+      snackbarText.value = 'Table was successfully deleted'
       snackbar.value = true
       // gmmTables = res.data.associated_tables;
     })
@@ -271,7 +266,7 @@ const viewTable = (item: any) => {
     }
 
     if (res.data.length === 0) {
-      text.value = 'No data available for this table'
+      snackbarText.value = 'No data available for this table'
       snackbar.value = true
     } else {
       tableData.value = res.data

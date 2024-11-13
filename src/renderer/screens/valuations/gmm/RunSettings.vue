@@ -725,6 +725,11 @@ const saveTemplate = (value) => {
   payload.description = settingDescription.value
   console.log('Payload', payload)
   ValuationService.saveJobTemplate(payload).then((resp) => {
+    jobTemplate.value = resp.data
+    runJobs.value.forEach((item) => {
+      item.jobs_template_id = jobTemplate.value.id
+    })
+
     timeout.value = 3000
     snackbar.value = true
     snackbarText.value = 'template successfully saved'
@@ -734,6 +739,7 @@ const saveTemplate = (value) => {
 
 const loadTemplate = async () => {
   const resp = await ValuationService.getJobTemplate(selectedTemplate.value.id)
+  console.log('Template', resp.data)
   const jobstemplate = JSON.parse(resp.data.content)
   runJobs.value = jobstemplate.jobs
   templateRun.value = true

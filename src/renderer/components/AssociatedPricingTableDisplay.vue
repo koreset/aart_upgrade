@@ -124,6 +124,7 @@ const handleUpload = async (file: any) => {
     .then(() => {
       // uploadSuccess.value = true
       loading.value = false
+      updatePopulatedTables(selectedTableId.value)
     })
     .catch((err) => {
       console.log(err)
@@ -145,13 +146,21 @@ const handleUpload = async (file: any) => {
 // end file upload dialog props
 
 // methods
-// const updatePopulatedTables = (itemId: number) => {
-//   props.product.product_pricing_tables.forEach((item: any) => {
-//     if (item.id === itemId) {
-//       item.populated = true
-//     }
-//   })
-// }
+const updatePopulatedTables = (itemId: number) => {
+  props.product.product_pricing_tables.forEach((item: any) => {
+    if (item.id === itemId) {
+      item.populated = true
+    }
+  })
+}
+
+const updateUnpopulatedTables = (itemId: number) => {
+  props.product.product_pricing_tables.forEach((item: any) => {
+    if (item.id === itemId) {
+      item.populated = false
+    }
+  })
+}
 
 const closeInfoBox = (value: boolean) => {
   infoDialog.value = value
@@ -202,7 +211,7 @@ const deleteTableData = async (productId: number, item: any) => {
   if (!res) return
   ProductService.deletePricingProductTable(productId, item.id).then((res) => {
     console.log(res)
-    // updatePopulatedTables()
+    updateUnpopulatedTables(item.id)
   })
 }
 

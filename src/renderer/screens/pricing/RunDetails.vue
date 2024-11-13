@@ -517,7 +517,14 @@ const generatePdf = () => {
     doc.setFontSize(10)
     autoTable(doc, { head: headers, body, startY: imgHeight + 10, theme: 'grid' })
 
-    doc.save(product.value.product_code + '_' + selectedScenario.value.description + '.pdf')
+    doc.save(
+      pricingRun.value.name +
+        '_' +
+        product.value.product.product_code +
+        '_' +
+        selectedScenario.value.description +
+        '.pdf'
+    )
   })
 }
 

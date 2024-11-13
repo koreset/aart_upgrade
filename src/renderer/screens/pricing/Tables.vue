@@ -258,10 +258,10 @@ import BaseCard from '@/renderer/components/BaseCard.vue'
 import ConfirmationDialog from '@/renderer/components/ConfirmDialog.vue'
 import AssociatedPricingTableDisplay from '@/renderer/components/AssociatedPricingTableDisplay.vue'
 import FileInfo from '@/renderer/components/FileInfo.vue'
-import { useAppStore } from '@/renderer/store/app'
+// import { useAppStore } from '@/renderer/store/app'
 import FileUpdater from '@/renderer/components/FileUpdater.vue'
 
-const appStore = useAppStore()
+// const appStore = useAppStore()
 const confirmDelete = ref()
 const showDialog = ref(false)
 const loadDataComplete = ref(false)
@@ -291,8 +291,11 @@ const selectedProduct: any = ref(null)
 const pricingProduct: any = ref(null)
 const items: any = []
 
-const closeDialog = () => {
-  showDialog.value = false
+const closeDialog = (value) => {
+  console.log('closing dialog', value)
+  showDialog.value = value
+  tableDialog.value = value
+  console.log('closing table dialog', tableDialog.value)
 }
 
 const getModelPointsCount = async () => {
@@ -313,7 +316,7 @@ const getModelPointsCount = async () => {
 const getModelPoints = (modelPoints) => {
   console.log('getting model points')
   console.log(modelPoints)
-  loadingComplete.value = false
+  loadingComplete.value = true
   if (modelPoints !== null && modelPoints.length > 0) {
     items.value = []
     columnDefs.value = []
@@ -350,9 +353,9 @@ const dismissModelPointsDialog = () => {
 
 onMounted(async () => {
   console.log('Mounted')
-  // const prodResponse = await ProductService.getProducts()
-  // allProducts.value = prodResponse.data
-  allProducts.value = appStore.getAllProducts
+  const prodResponse = await ProductService.getProducts()
+  allProducts.value = prodResponse.data
+  // allProducts.value = appStore.getAllProducts
 
   console.log('All Products', allProducts.value)
 

@@ -35,7 +35,7 @@
     </base-card>
     <base-card v-if="selectedProduct">
       <template #header>
-        {{ selectedProduct.product_name }}
+        {{ selectedProduct.product_name }} [ {{ selectedProduct.product_code }} ]
       </template>
       <template #default>
         <v-expansion-panels variant="inset" class="my-4">

@@ -147,6 +147,7 @@
                       <th class="text-left table-col">Model Points</th>
                       <th class="text-left table-col">Model Point Version</th>
                       <th class="text-left table-col">Yield Curve</th>
+                      <th class="text-left table-col">Yield Curve Month</th>
                       <th class="text-left table-col">Parameters</th>
                       <th class="text-left table-col">Transitions</th>
                       <th class="text-left table-col">Morbidity</th>
@@ -169,6 +170,7 @@
                       <td>{{ runSettings.modelpoint_year }}</td>
                       <td>{{ runSettings.mp_version }}</td>
                       <td>{{ runSettings.yieldcurve_year }}</td>
+                      <td>{{ runSettings.yieldcurve_month }}</td>
                       <td>{{ runSettings.parameter_year }}</td>
                       <td>{{ runSettings.transition_year }}</td>
                       <td>{{ runSettings.morbidity_year }}</td>
