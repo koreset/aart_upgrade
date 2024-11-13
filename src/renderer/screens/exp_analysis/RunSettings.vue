@@ -133,6 +133,53 @@
             </v-row>
 
             <v-row>
+              <v-col cols="3">
+                <v-select
+                  v-model="selectedMortalityYear"
+                  variant="outlined"
+                  density="compact"
+                  label="Mortality Data Period"
+                  placeholder="Select a Mortality year"
+                  :items="availableMortalityYears"
+                  @update:modelValue="getAvailableMortalityVersions"
+                ></v-select>
+              </v-col>
+              <v-col cols="3">
+                <v-select
+                  v-model="selectedMortalityVersion"
+                  variant="outlined"
+                  density="compact"
+                  label="Mortality Data Version"
+                  placeholder="Select a version"
+                  :items="availableMortalityVersions"
+                ></v-select>
+              </v-col>
+              <v-col cols="3">
+                <v-select
+                  v-model="selectedLapseYear"
+                  variant="outlined"
+                  density="compact"
+                  label="Lapse Data Period"
+                  placeholder="Select a lapse year version"
+                  :items="availableLapseYears"
+                  @update:modelValue="getAvailableLapseVersions"
+                ></v-select>
+              </v-col>
+              <v-col cols="3">
+                <v-select
+                  v-model="selectedLapseVersion"
+                  variant="outlined"
+                  density="compact"
+                  label="Lapse Data Version"
+                  placeholder="Select a lapse year version"
+                  :items="availableLapseVersions"
+                  item-text="version_name"
+                  item-value="version_name"
+                ></v-select>
+              </v-col>
+            </v-row>
+
+            <v-row>
               <v-col>
                 <v-btn
                   rounded
@@ -160,6 +207,10 @@
                       <th class="table-col minwidth">Exposure Data Version</th>
                       <th class="table-col minwidth">Actual Data Year</th>
                       <th class="table-col minwidth">Actual Data Version</th>
+                      <th class="table-col min-width">Lapse Data Year</th>
+                      <th class="table-col min-width">Lapse Data Version</th>
+                      <th class="table-col min-width">Mortality Data Year</th>
+                      <th class="table-col min-width">Mortality Data Version</th>
                       <th class="table-col text-left">Actions</th>
                     </tr>
                   </thead>
@@ -174,6 +225,10 @@
                       <td>{{ item.exposure_data_version }}</td>
                       <td>{{ item.actual_data_year }}</td>
                       <td>{{ item.actual_data_version }}</td>
+                      <td>{{ item.lapse_data_year }}</td>
+                      <td>{{ item.lapse_data_version }}</td>
+                      <td>{{ item.mortality_data_year }}</td>
+                      <td>{{ item.mortality_data_version }}</td>
                       <td>
                         <v-btn
                           variant="text"
@@ -236,6 +291,14 @@ const runJobs: any = ref([])
 const availableActualYears = ref([])
 const availableExposureYears = ref([])
 const availableYieldCurveYears = ref([])
+const availableMortalityYears = ref([])
+const availableLapseYears = ref([])
+const availableMortalityVersions = ref([])
+const availableLapseVersions = ref([])
+const selectedMortalityYear = ref(null)
+const selectedMortalityVersion = ref(null)
+const selectedLapseYear = ref(null)
+const selectedLapseVersion = ref(null)
 const selectedExposureVersion = ref(null)
 const availableExposureVersions = ref([])
 const availableActualVersions = ref([])
@@ -275,6 +338,18 @@ const getAvailableExposureVersions = () => {
     availableExposureVersions.value = res.data
   })
 }
+
+const getAvailableMortalityVersions = () => {
+  ExpService.getAvailableMortalityVersions(selectedMortalityYear.value).then((res) => {
+    availableMortalityVersions.value = res.data
+  })
+}
+
+const getAvailableLapseVersions = () => {
+  ExpService.getAvailableLapseVersions(selectedLapseYear.value).then((res) => {
+    availableLapseVersions.value = res.data
+  })
+}
 const getExposureAndActualYears = () => {
   availableActualVersions.value = []
   availableExposureVersions.value = []
@@ -283,6 +358,8 @@ const getExposureAndActualYears = () => {
   ExpService.getExposureAndActualYears(selectedConfiguration.value.id).then((res) => {
     availableActualYears.value = res.data.actual_years
     availableExposureYears.value = res.data.exposure_years
+    availableLapseYears.value = res.data.lapse_years
+    availableMortalityYears.value = res.data.mortality_years
   })
 }
 
@@ -300,6 +377,10 @@ const addToRunJobs = () => {
     job.exposure_data_version = selectedExposureVersion.value
     job.actual_data_year = selectedActualYear.value
     job.actual_data_version = selectedActualVersion.value
+    job.mortality_data_year = selectedMortalityYear.value
+    job.mortality_data_version = selectedMortalityVersion.value
+    job.lapse_data_year = selectedLapseYear.value
+    job.lapse_data_version = selectedLapseVersion.value
 
     runJobs.value.push(job)
 
@@ -317,6 +398,12 @@ const addToRunJobs = () => {
     availableExposureVersions.value = []
     availableActualYears.value = []
     availableExposureYears.value = []
+    selectedMortalityYear.value = null
+    selectedMortalityVersion.value = null
+    selectedLapseYear.value = null
+    selectedLapseVersion.value = null
+    availableMortalityVersions.value = []
+    availableLapseVersions.value = []
   }
 }
 const removeFromRunJobs = (jobName) => {

@@ -58,8 +58,14 @@ export default {
   getAvailableExposureVersions(configurationId, year) {
     return Api.get(`exp-analysis/get-exposure-versions/${configurationId}/${year}`)
   },
-  getAvailableActualVersions(configurationId, year) {
-    return Api.get(`exp-analysis/get-actual-versions/${configurationId}/${year}`)
+  getAvailableLapseVersions(year) {
+    return Api.get(`exp-analysis/get-lapse-versions/${year}`)
+  },
+  getAvailableMortalityVersions(year) {
+    return Api.get(`exp-analysis/get-mortality-versions/${year}`)
+  },
+  getAvailableActualVersions(year) {
+    return Api.get(`exp-analysis/get-actual-versions/${year}`)
   },
   checkRunName(runName) {
     return Api.post(`exp-analysis/check-run-name/${runName}`)

@@ -24,11 +24,14 @@
                           </v-btn>
                         </td>
                         <td style="text-align: center">
-                          <bulk-file-updater
+                          <file-updater
+                            :show-year="true"
+                            :showVersion="true"
+                            :actionName="'Upload Data'"
                             :uploadComplete="uploadComplete"
                             :tableType="item.table_type"
-                            @uploadFile="handleUpload"
-                          ></bulk-file-updater>
+                            @uploadFile="handleUpload($event, item)"
+                          ></file-updater>
                         </td>
                         <td style="text-align: center">
                           <v-btn
@@ -89,7 +92,7 @@
 <script setup lang="ts">
 import ConfirmationDialog from '@/renderer/components/ConfirmDialog.vue'
 import DataGrid from '@/renderer/components/tables/DataGrid.vue'
-import BulkFileUpdater from '@/renderer/components/BulkFileUpdater.vue'
+import FileUpdater from '@/renderer/components/FileUpdater.vue'
 import BaseCard from '@/renderer/components/BaseCard.vue'
 import ExpService from '@/renderer/api/ExpAnalysisService'
 import formatValues from '@/renderer/utils/format_values'
@@ -125,15 +128,16 @@ onMounted(() => {
 })
 
 // methods
-const handleUpload = (payload: DataPayload) => {
-  console.log(payload)
+const handleUpload = (event, payload: DataPayload) => {
+  console.log('Event:', event)
+  console.log('Payload:', payload)
   uploadComplete.value = false
   const formdata: any = new FormData()
-  formdata.append('file', payload.file)
-  formdata.append('table_type', payload.selectedType)
-  formdata.append('year', payload.selectedYear)
-  formdata.append('month', payload.selectedMonth)
-  formdata.append('yield_curve_code', payload.yieldCurveCode)
+  formdata.append('file', event.file)
+  formdata.append('table_type', event.selectedType)
+  formdata.append('year', event.selectedYear)
+  formdata.append('month', event.selectedMonth)
+  formdata.append('version', event.version)
   ExpService.uploadTables(formdata)
     .then((res: any) => {
       if (res.status === 200) {
