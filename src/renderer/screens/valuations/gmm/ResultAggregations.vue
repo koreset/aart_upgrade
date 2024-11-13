@@ -22,8 +22,9 @@
                   @update:modelValue="onVariableGroupChange"
                 ></v-select>
               </v-col>
-              <v-col v-if="selectedVariableGroup !== null" cols="2">
+              <v-col cols="4">
                 <v-btn
+                  v-if="selectedVariableGroup !== null"
                   rounded
                   size="small"
                   variant="outlined"
@@ -31,9 +32,6 @@
                   @click="viewVariables"
                   >View variable list</v-btn
                 >
-              </v-col>
-
-              <v-col cols="2">
                 <v-btn
                   rounded
                   size="small"
@@ -238,6 +236,47 @@
         </template>
       </base-card>
     </v-dialog>
+    <v-dialog v-model="viewDialog" max-width="1000px">
+      <base-card>
+        <template #header>
+          <span class="headline">{{ selectedVariableGroup.name }}</span>
+        </template>
+
+        <template #default>
+          <v-container>
+            <v-row>
+              <!-- Available Items List -->
+              <v-col>
+                <base-card :show-actions="false">
+                  <template #header>
+                    <span class="headline">Variable List</span>
+                  </template>
+                  <template #default>
+                    <v-row>
+                      <v-col>
+                        <v-list class="scrollable-list">
+                          <v-list-item
+                            v-for="(item, index) in selectedVariableGroup.variables"
+                            :key="index"
+                          >
+                            <v-list-item-title>{{ item }}</v-list-item-title>
+                          </v-list-item>
+                        </v-list>
+                      </v-col>
+                    </v-row>
+                  </template>
+                </base-card>
+              </v-col>
+            </v-row>
+          </v-container>
+        </template>
+
+        <template #actions>
+          <v-spacer></v-spacer>
+          <v-btn color="secondary" @click="viewDialog = false">Close</v-btn>
+        </template>
+      </base-card>
+    </v-dialog>
   </v-container>
 </template>
 <script setup lang="ts">
@@ -252,6 +291,7 @@ import LoadingIndicator from '@/renderer/components/LoadingIndicator.vue'
 const loadingData = ref(false)
 const varMessage = ref('')
 const dialog = ref(false)
+const viewDialog = ref(false)
 const selectedVariables: any = ref([])
 const valuationJobs = ref([])
 const selectedValuationJob: any = ref(null)
@@ -291,10 +331,7 @@ const onVariableGroupChange = () => {
 }
 
 const viewVariables = () => {
-  selectedVariables.value = selectedVariableGroup.value.variables
-  aggregationVariables.value = aggregationVariables.value.filter(
-    (item) => !selectedVariables.value.includes(item)
-  )
+  viewDialog.value = true
 }
 const showVariableDialog = () => {
   dialog.value = true

@@ -49,10 +49,20 @@
                   <v-btn
                     rounded
                     class="mt-2 ml-5"
-                    color="primary"
+                    variant="outlined"
                     size="small"
                     @click="updateRunSuffix"
                     >Update Run Name</v-btn
+                  >
+                  <v-btn
+                    v-if="selectedTemplate"
+                    rounded
+                    class="mt-2 ml-5"
+                    variant="outlined"
+                    color="red"
+                    size="small"
+                    @click="deleteSelectedTemplate"
+                    >Delete Template</v-btn
                   >
                 </v-col>
               </v-row>
@@ -481,7 +491,7 @@
             </v-container>
           </template>
           <template #actions>
-            <v-btn v-if="runJobs.length > 0" color="primary" @click="saveTemplate"
+            <v-btn v-if="runJobs.length > 0" color="primary" @click="saveTemplateDialog = true"
               >Save as template</v-btn
             >
             <v-btn v-if="runJobs.length > 0" color="primary" @click="executeJobs"
@@ -526,6 +536,31 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog v-model="saveTemplateDialog" persistent max-width="600">
+      <base-card class="rounded-lg">
+        <template #header>
+          <span class="headline">Create a Job Template</span>
+        </template>
+        <template #default>
+          <v-container>
+            <v-text-field
+              v-model="jobTemplateName"
+              variant="outlined"
+              density="compact"
+              label="Enter a name for the Job Template"
+            ></v-text-field>
+          </v-container>
+        </template>
+        <template #actions>
+          <v-spacer></v-spacer>
+          <v-btn rounded color="accent" variant="outlined" @click="saveTemplate(true)">Save</v-btn>
+          <v-btn rounded color="accent" variant="outlined" @click="saveTemplate(false)"
+            >Cancel</v-btn
+          >
+        </template>
+      </base-card>
+    </v-dialog>
+    <confirm-dialog ref="confirmDeleteAction" />
   </v-container>
 </template>
 
@@ -540,6 +575,7 @@ import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import formatDateString from '@/renderer/utils/helpers'
 import { useRouter } from 'vue-router'
+import ConfirmDialog from '@/renderer/components/ConfirmDialog.vue'
 
 const $router = useRouter()
 
@@ -559,12 +595,14 @@ const [settingRunName, settingRunNameAttrs] = defineField('settingRunName')
 const [selectedProducts, setSelectedProducts] = defineField('selectedProducts')
 const [selectedModelPointYear, setSelectedModelPointYear] = defineField('selectedModelPointYear')
 
+const confirmDeleteAction = ref()
 const templateRun = ref(false)
 const snackbarText = ref('')
 const timeout = ref(0)
 const snackbar = ref(false)
 
 const dialog = ref(false)
+const saveTemplateDialog = ref(false)
 const newColumnValue = ref('')
 const oldColumnValue = ref('')
 const currentColumn = ref('')
@@ -588,7 +626,7 @@ const selectedShock: any = ref(null)
 const selectedYieldCurveBasis: any = ref(null)
 const selectedLapseMarginYear: any = ref(null)
 const aggPeriod: any = ref(null)
-const yearEndMonth: any = ref(null)
+const yearEndMonth: any = ref(12)
 const availableBases: any = ref([])
 const availableModelPointYears: any = ref([])
 const availableYieldYears: any = ref([])
@@ -601,17 +639,14 @@ const availableLapseMarginYears: any = ref([])
 const availableModelPointVersions: any = ref([])
 const availableYieldCurveMonths: any = ref([])
 
-const availableYieldCurveBases = [
-  { basis: 'N/A' },
-  { basis: 'Current' },
-  { basis: 'Locked in Rates' }
-]
+const availableYieldCurveBases = [{ basis: 'Current' }, { basis: 'Locked in Rates' }]
 
 const selectedBasis: any = ref(null)
 const productsList = ref([])
 const runDate = ref(null)
 const jobTemplates = ref([])
 const jobTemplate: any = ref(null)
+const jobTemplateName: any = ref('')
 const selectedTemplate: any = ref(null)
 const shockData: any = ref([])
 const runNameSuffix = ref('')
@@ -677,17 +712,23 @@ const openEditDialog = (column) => {
   dialog.value = true
 }
 
-const saveTemplate = () => {
+const saveTemplate = (value) => {
+  if (!value) {
+    saveTemplateDialog.value = false
+    return
+  }
+
   const payload: any = {}
 
   payload.jobs = runJobs.value
-  payload.name = settingRunName.value // Template name
+  payload.name = jobTemplateName.value // Template name
   payload.description = settingDescription.value
   console.log('Payload', payload)
   ValuationService.saveJobTemplate(payload).then((resp) => {
     timeout.value = 3000
     snackbar.value = true
     snackbarText.value = 'template successfully saved'
+    saveTemplateDialog.value = false
   })
 }
 
@@ -696,6 +737,26 @@ const loadTemplate = async () => {
   const jobstemplate = JSON.parse(resp.data.content)
   runJobs.value = jobstemplate.jobs
   templateRun.value = true
+}
+
+const deleteSelectedTemplate = async () => {
+  const res = await confirmDeleteAction.value.open(
+    'Delete Job Template',
+    'Are you sure you want to delete this template?'
+  )
+  if (!res) {
+    return
+  }
+  ValuationService.deleteJobTemplate(selectedTemplate.value.id).then((res) => {
+    if (res.status === 200) {
+      ValuationService.getJobTemplates().then((resp) => {
+        if (resp.data.length > 0) {
+          jobTemplates.value = resp.data
+          selectedTemplate.value = null
+        }
+      })
+    }
+  })
 }
 
 const displayFlow = () => {
