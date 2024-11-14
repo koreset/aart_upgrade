@@ -22,7 +22,7 @@
                   @update:modelValue="onVariableGroupChange"
                 ></v-select>
               </v-col>
-              <v-col cols="4">
+              <v-col cols="6">
                 <v-btn
                   v-if="selectedVariableGroup !== null"
                   rounded
@@ -237,7 +237,7 @@
       </base-card>
     </v-dialog>
     <v-dialog v-model="viewDialog" max-width="1000px">
-      <base-card>
+      <base-card :show-actions="false">
         <template #header>
           <span class="headline">{{ selectedVariableGroup.name }}</span>
         </template>
@@ -245,7 +245,12 @@
         <template #default>
           <v-container>
             <v-row>
-              <!-- Available Items List -->
+              <v-col class="text-right">
+                <v-btn color="primary" variant="plain" @click="viewDialog = false">Close</v-btn>
+              </v-col>
+            </v-row>
+
+            <v-row>
               <v-col>
                 <base-card :show-actions="false">
                   <template #header>
@@ -269,11 +274,6 @@
               </v-col>
             </v-row>
           </v-container>
-        </template>
-
-        <template #actions>
-          <v-spacer></v-spacer>
-          <v-btn color="secondary" @click="viewDialog = false">Close</v-btn>
         </template>
       </base-card>
     </v-dialog>
