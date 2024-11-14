@@ -94,8 +94,8 @@
                     </template>
                     <template #default>
                       <v-row class="borderline blue-grey lighten-5 mx-2 mt-3 mb-1 accent-4--text">
-                        <v-col cols="8"> <p>Pricing Parameters</p> </v-col>
-                        <v-col cols="4">
+                        <v-col cols="7"> <p>Pricing Parameters</p> </v-col>
+                        <v-col cols="5">
                           <v-btn
                             rounded
                             class="mr-3"
@@ -128,10 +128,10 @@
                         </v-col>
                       </v-row>
                       <v-row class="borderline blue-grey lighten-5 mx-2 mt-3 mb-1 accent-4--text">
-                        <v-col cols="8">
+                        <v-col cols="7">
                           <p>Pricing Policy Demographics</p>
                         </v-col>
-                        <v-col cols="4">
+                        <v-col cols="5">
                           <v-btn
                             depressed
                             class="mr-3"
