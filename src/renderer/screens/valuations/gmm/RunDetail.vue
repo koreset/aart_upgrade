@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col>
-        <base-card>
+        <base-card :show-actions="false">
           <template #header>
             <span class="headline">Valuation Result Detail</span>
           </template>
