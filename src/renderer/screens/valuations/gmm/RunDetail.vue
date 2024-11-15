@@ -459,6 +459,7 @@ onMounted(() => {
     }
 
     runSettings.value = resp.data.settings
+    console.log('Run Settings', runSettings.value)
     spCodes.value = resp.data.spcodes
     if (resp.data.errors) {
       runErrors.value = resp.data.errors

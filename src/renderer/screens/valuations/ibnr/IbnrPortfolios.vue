@@ -447,32 +447,6 @@ const getMpVersions = (year: number, versions: any, type: string) => {
   } else {
     availableVersions.value = filteredVersions
   }
-
-  // yearVersions.value = []
-  // selectedYearVersion.value = null
-  // const myVersions = versions.filter((elem: any) => {
-  //   return elem.year === id
-  // })
-  // yearVersions.value = versions.filter((elem: any) => {
-  //   return elem.year === id
-  // })
-  // console.log('Year Versions', myVersions)
-  // yearVersions.value = myVersions
-  // console.log('Year Versions', yearVersions.value)
-  // yearVersions.value = yearVersionsGroup.map((elem: any) => {
-  //   return elem.version_name
-  // })
-  // selectedYearVersion.value = null
-  // // get the portfolio with the id from portfolios
-  // const portfolio = portfolios.value.find((elem) => {
-  //   return elem.id === id
-  // })
-  // console.log('Portfolio', portfolio)
-  // // get the year_versions from the portfolio that match the year
-  // // versions.value = portfolio.year_versions.filter((elem) => {
-  // //   return elem.year === year
-  // // })
-  // console.log('Year Versions', versions.value)
 }
 
 const showCountData = () => {
