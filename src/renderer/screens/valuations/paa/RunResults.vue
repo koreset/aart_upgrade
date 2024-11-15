@@ -216,9 +216,17 @@ import ConfirmDialog from '@/renderer/components/ConfirmDialog.vue'
 
 import ModifiedGMMService from '../../../api/ModifiedGMMService'
 import { onMounted, ref, computed } from 'vue'
-import toMinutes from '../../../utils/helpers'
 import { DateTime } from 'luxon'
 import BaseCard from '../../../components/BaseCard.vue'
+
+const toMinutes = (number) => {
+  console.log('number', number)
+  number = number * 60
+  const minutes = Math.floor(number / 60) // 7
+  let seconds = ((number % 60) / 100) * 60 // 30
+  seconds = Math.round(seconds)
+  return minutes + ' m, ' + seconds + ' s'
+}
 
 // selection variables
 const selectedItems: any = ref([])
@@ -308,6 +316,7 @@ onMounted(async () => {
   const resv2 = await ModifiedGMMService.getProjectionJobsv2()
 
   runJobs.value = resv2.data
+  console.log(runJobs.value)
   totalPages.value = Math.ceil(runJobs.value.length / pageSize)
   loading.value = false
   if (

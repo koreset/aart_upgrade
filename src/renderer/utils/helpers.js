@@ -17,6 +17,7 @@ export const formatDateString = (dateString, getyear, getmonth, getday) => {
 }
 
 export const toMinutes = (number) => {
+  console.log('number', number)
   number = number * 60
   const minutes = Math.floor(number / 60) // 7
   let seconds = ((number % 60) / 100) * 60 // 30
