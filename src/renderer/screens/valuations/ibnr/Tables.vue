@@ -49,11 +49,13 @@
               <v-row v-if="tableData.length > 0 && !loadingData">
                 <v-col>
                   <data-grid
+                    :show-close-button="true"
                     :columnDefs="columnDefs"
                     :rowData="tableData"
                     :table-title="selectedTable"
                     :pagination="true"
                     :rowCount="rowCount"
+                    @update:clear-data="clearData"
                   />
                 </v-col>
               </v-row>
@@ -201,6 +203,11 @@ onMounted(() => {
 })
 
 // methods
+const clearData = () => {
+  tableData.value = []
+  columnDefs.value = []
+}
+
 const handleUpload = (payload: DataPayload) => {
   console.log(payload)
   uploadComplete.value = false

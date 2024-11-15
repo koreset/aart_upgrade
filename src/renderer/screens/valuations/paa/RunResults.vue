@@ -39,6 +39,8 @@
                 >
               </v-col></v-row
             >
+            <loading-indicator :loading-data="loading"></loading-indicator>
+
             <v-row v-if="runJobs.length > 0 && !loading">
               <v-col>
                 <v-expansion-panels>
@@ -218,6 +220,7 @@ import ModifiedGMMService from '../../../api/ModifiedGMMService'
 import { onMounted, ref, computed } from 'vue'
 import { DateTime } from 'luxon'
 import BaseCard from '../../../components/BaseCard.vue'
+import LoadingIndicator from '@/renderer/components/LoadingIndicator.vue'
 
 const toMinutes = (number) => {
   console.log('number', number)

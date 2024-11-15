@@ -14,7 +14,9 @@
                 </v-btn>
               </v-col>
             </v-row>
-            <base-card>
+            <loading-indicator :loading-data="loadingData"></loading-indicator>
+
+            <base-card v-if="!loadingData" :show-actions="false">
               <template #header>
                 <span class="headline">Aggregated Results</span>
               </template>
@@ -26,7 +28,7 @@
                 </v-row>
               </template>
             </base-card>
-            <base-card v-if="scopedRowData.length > 0">
+            <base-card v-if="scopedRowData.length > 0 && !loadingData" :show-actions="false">
               <template #header>
                 <span class="headline">Scoped Aggregated Results</span>
               </template>
@@ -38,7 +40,7 @@
                 </v-row>
               </template>
             </base-card>
-            <base-card v-if="runSettings !== null" :showActions="false">
+            <base-card v-if="runSettings !== null && !loadingData" :show-actions="false">
               <template #header>
                 <span class="headline">Run Settings</span>
               </template>
@@ -96,6 +98,7 @@ import { onMounted, ref } from 'vue'
 import ModifiedGMMService from '../../../api/ModifiedGMMService'
 import formatValues from '../../../utils/format_values.js'
 import DataGrid from '../../../components/tables/DataGrid.vue'
+import LoadingIndicator from '@/renderer/components/LoadingIndicator.vue'
 
 const runId: any = ref(null)
 const loadingComplete = ref(false)
@@ -108,6 +111,7 @@ const spCDefs: any = ref([])
 const gridOptions: any = ref(null)
 const backButtonTitle = 'Back to Projection Runs'
 const portfolioName = ref('')
+const loadingData = ref(false)
 
 onMounted(() => {
   console.log('mounted')
@@ -116,7 +120,7 @@ onMounted(() => {
   runId.value = route.params.id
   loadingComplete.value = false
   gridOptions.value = {}
-
+  loadingData.value = true
   ModifiedGMMService.getProjections(runId.value).then((res: any) => {
     console.log(res.data)
     rowData.value = res.data.results
@@ -138,6 +142,7 @@ onMounted(() => {
     }
 
     loadingComplete.value = true
+    loadingData.value = false
   })
 })
 

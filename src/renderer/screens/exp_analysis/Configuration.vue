@@ -155,7 +155,8 @@
                                   >
                                 </v-col>
                               </v-row>
-                              <v-row v-if="rowData.length > 0 && loadDataComplete">
+                              <loading-indicator :loading-data="loadingData"></loading-indicator>
+                              <v-row v-if="rowData.length > 0 && !loadingData">
                                 <data-grid
                                   :table-title="'Exposure Data'"
                                   :show-close-button="true"
@@ -241,8 +242,8 @@
                                   >
                                 </v-col>
                               </v-row>
-                              <loading-indicator v-if="loadingData"></loading-indicator>
-                              <v-row v-if="actualRowData.length > 0 && loadDataComplete">
+                              <loading-indicator :loading-data="loadingData"></loading-indicator>
+                              <v-row v-if="actualRowData.length > 0 && !loadingData">
                                 <data-grid
                                   :table-title="'Actual Data'"
                                   :show-close-button="true"
@@ -335,9 +336,10 @@ const getActualDataVersions = (id: number, year: number) => {
 }
 
 const clearData = () => {
+  actualRowData.value = []
   rowData.value = []
   columnDefs.value = []
-  loadDataComplete.value = false
+  loadingData.value = false
 }
 
 const checkClass = (item: any) => {
@@ -377,6 +379,7 @@ const deletePortfolio = async (id: number) => {
 }
 
 const loadConfigs = () => {
+  loadingData.value = true
   ExpService.getConfigurations().then((res) => {
     configurations.value = res.data
     console.log(configurations)
@@ -408,7 +411,6 @@ const showData = (id: number, name: string, year: number, version: number) => {
     }
     loadingData.value = false
   })
-  loadDataComplete.value = true
 }
 
 const deleteData = async (
@@ -435,7 +437,6 @@ const deleteData = async (
         field: item
       }
     })
-    loadDataComplete.value = true
     loadingData.value = false
   })
 }
