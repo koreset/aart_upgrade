@@ -428,7 +428,7 @@ const loadScenario = () => {
             color: 'black',
             formatter: function (params) {
               console.log(params)
-              return `${params.datum.label} - ${((params.datum.value / totalValue) * 100).toFixed(2)}%`
+              return `${params.datum.label}  ${((params.datum.value / totalValue) * 100).toFixed(2)}%`
               // return `${((params.datum.value / totalValue) * 100).toFixed(2)}%`
             }
           },
