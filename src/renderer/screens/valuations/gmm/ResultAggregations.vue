@@ -7,7 +7,7 @@
             <span class="headline">Result Aggregations</span>
           </template>
           <template #default>
-            <v-row>
+            <v-row class="mt-2">
               <v-col v-if="variableGroups.length > 0" cols="3">
                 <v-select
                   v-model="selectedVariableGroup"
@@ -26,6 +26,7 @@
                 <v-btn
                   v-if="selectedVariableGroup !== null"
                   rounded
+                  class="mt-1"
                   size="small"
                   variant="outlined"
                   color="primary"
@@ -34,6 +35,7 @@
                 >
                 <v-btn
                   rounded
+                  class="mt-1"
                   size="small"
                   variant="outlined"
                   color="primary"

@@ -55,7 +55,7 @@
                         />
                         {{ job.run_name }}
                       </v-col>
-                      <v-col class="text-grey d-flex align-center" cols="9">
+                      <v-col class="d-flex align-center" cols="9">
                         <v-fade-transition leave-absolute>
                           <span v-if="expanded" key="0">
                             <v-list-item-subtitle v-if="job.status == 'In Progress'">

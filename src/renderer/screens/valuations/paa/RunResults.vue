@@ -48,7 +48,7 @@
                     <v-expansion-panel-title class="custom-panel-title px-3">
                       <template #default="{ expanded }">
                         <v-row no-gutters>
-                          <v-col class="d-flex align-center justify-start" cols="4">
+                          <v-col class="d-flex align-center justify-start" cols="3">
                             <v-checkbox
                               v-if="showSelect"
                               density="compact"
@@ -60,7 +60,7 @@
                             {{ item.name }}
                           </v-col>
 
-                          <v-col cols="8" class="text--secondary pl-1">
+                          <v-col cols="9" class="text--secondary pl-1">
                             <v-fade-transition leave-absolute>
                               <span v-if="expanded" key="0">
                                 <v-list-item-subtitle v-if="item.processing_status == 'processing'">

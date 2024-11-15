@@ -134,6 +134,14 @@
                 <span class="headline"> Mortality Rates (Female) </span>
               </template>
               <template #default>
+                <v-row>
+                  <v-col>
+                    <v-select
+                      v-model="selectedMortalityYear"
+                      :items="availableMortalityYears"
+                    ></v-select>
+                  </v-col>
+                </v-row>
                 <Chart
                   class="chart"
                   :options="mortalityFemaleOptions"

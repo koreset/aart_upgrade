@@ -195,7 +195,9 @@ const handleUpload = (data: {
   formdata.append('file', data?.file as File)
   formdata.append('year', data.year?.toString() as string)
   formdata.append('table_id', selectedTableId.value)
-  formdata.append('product_code', props.product.product_code)
+  formdata.append('product_code', props.product.product.product_code)
+  console.log('formdata', formdata)
+  console.log('props.product.product_code', props.product)
 
   ProductService.uploadProductTable({
     formdata,
