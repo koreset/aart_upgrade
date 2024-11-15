@@ -14,7 +14,8 @@
                 </v-btn>
               </v-col>
             </v-row>
-            <base-card>
+            <loading-indicator class="mb-5" :loading-data="loadingData"></loading-indicator>
+            <base-card v-if="!loadingData">
               <template #header>
                 <span class="headline">Aggregated Results</span>
               </template>
@@ -35,7 +36,7 @@
                 <data-grid :showExport="true" :rowData="rowData" :columnDefs="cDefs"></data-grid>
               </template>
             </base-card>
-            <base-card v-if="sapRowData.length > 0">
+            <base-card v-if="sapRowData.length > 0 && !loadingData">
               <template #header>
                 <span class="headline">Scoped Aggregated Results</span>
               </template>
@@ -61,7 +62,7 @@
                 ></data-grid>
               </template>
             </base-card>
-            <base-card>
+            <base-card v-if="!loadingData">
               <template #header>
                 <span class="headline">Reserves</span>
               </template>
@@ -99,7 +100,7 @@
                 </v-row>
               </template>
             </base-card>
-            <base-card :showActions="false">
+            <base-card v-if="!loadingData" :showActions="false">
               <template #header>
                 <span class="headline">Model Point Stats</span>
               </template>
@@ -111,7 +112,7 @@
                 ></data-grid>
               </template>
             </base-card>
-            <base-card v-if="runSettings !== null" :showActions="false">
+            <base-card v-if="runSettings !== null && !loadingData" :showActions="false">
               <template #header>
                 <span class="headline">Run Settings</span>
               </template>
@@ -180,6 +181,7 @@ import { onMounted, ref, onBeforeMount } from 'vue'
 import { useRoute } from 'vue-router'
 import ProductService from '@/renderer/api/ProductService'
 import { Chart } from 'highcharts-vue'
+import LoadingIndicator from '@/renderer/components/LoadingIndicator.vue'
 
 const route = useRoute()
 
@@ -426,6 +428,9 @@ onMounted(() => {
     aggData.value = resp.data.projections
     spCodes.value = new Set(aggData.value.map((item) => item.sp_code))
     spCodes.value = Array.from(spCodes.value)
+
+    console.log('Agg Data', aggData.value)
+    console.log('SP Codes', spCodes.value)
 
     if (aggData.value.length > 5000) {
       showSpCodeSelect.value = true
