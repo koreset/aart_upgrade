@@ -21,7 +21,6 @@
                 <v-col cols="6">
                   <v-date-input
                     v-model="runDate.value.value"
-                    readonly
                     hide-actions
                     view-mode="month"
                     prepend-icon=""
@@ -137,7 +136,6 @@
                 <v-col v-if="showGMMBlocks || showPAARuns" cols="4">
                   <v-date-input
                     v-model="openingBalDate.value.value"
-                    readonly
                     hide-actions
                     view-mode="month"
                     prepend-icon=""

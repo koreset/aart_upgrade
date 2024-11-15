@@ -396,7 +396,18 @@
                             <v-icon>mdi-pencil</v-icon>
                           </v-btn></th
                         >
-                        <th class="text-left table-col">Yield Curve Month </th>
+                        <th class="text-left table-col"
+                          >Yield Curve Month
+                          <v-btn
+                            v-if="settingWorkflow === 'existing'"
+                            size="small"
+                            variant="plain"
+                            icon
+                            @click="openEditDialog('yieldcurve_month')"
+                          >
+                            <v-icon>mdi-pencil</v-icon>
+                          </v-btn>
+                        </th>
 
                         <th class="text-left table-col"
                           >Lapse

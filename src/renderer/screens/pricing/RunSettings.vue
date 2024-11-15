@@ -457,7 +457,7 @@ const runPricing = () => {
       feedBackMessage.value = 'Pricing run has been successfully initiated'
       snackbar.value = true
       setTimeout(() => {
-        $router.push({ name: 'pricing-run-settings' })
+        $router.push({ name: 'pricing-run-results' })
       }, 3000)
     })
   } catch (error) {

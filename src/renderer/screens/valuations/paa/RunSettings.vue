@@ -19,7 +19,6 @@
               <v-col cols="6">
                 <v-date-input
                   :v-model="runDate"
-                  readonly
                   view-mode="year"
                   hide-actions
                   prepend-icon=""
@@ -27,9 +26,7 @@
                   variant="outlined"
                   density="compact"
                   label="Run Date"
-                  :display-value="formattedDate"
-                  >{{ formattedDate }}</v-date-input
-                >
+                ></v-date-input>
               </v-col>
             </v-row>
             <v-row class="mx-9">
@@ -219,7 +216,7 @@
 <script setup lang="ts">
 import _ from 'lodash'
 import ModifiedGMMService from '../../../api/ModifiedGMMService'
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import BaseCard from '../../../components/BaseCard.vue'
 import { VDateInput } from 'vuetify/labs/VDateInput'
 import formatDateString from '@/renderer/utils/helpers'
@@ -265,13 +262,13 @@ const yearEndMonth = ref(12)
 //   return `${year}-${month}`
 // })
 
-const formattedDate = computed(() => {
-  if (!runDate.value) return ''
-  const date = new Date(runDate.value)
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0') // Ensure two digits
-  return `${year}-${month}`
-})
+// const formattedDate = computed(() => {
+//   if (!runDate.value) return ''
+//   const date = new Date(runDate.value)
+//   const year = date.getFullYear()
+//   const month = String(date.getMonth() + 1).padStart(2, '0') // Ensure two digits
+//   return `${year}-${month}`
+// })
 
 const removeFromRunJobs = (name: string) => {
   runJobs.value = runJobs.value.filter((item: any) => item.name !== name)

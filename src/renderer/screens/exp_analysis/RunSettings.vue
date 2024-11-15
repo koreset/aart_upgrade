@@ -20,7 +20,6 @@
                 <v-date-input
                   v-model="runDate"
                   hide-actions
-                  readonly
                   view-mode="month"
                   prepend-icon=""
                   prepend-inner-icon="$calendar"
@@ -48,7 +47,6 @@
               <v-col cols="3">
                 <v-date-input
                   v-model="periodStartDate"
-                  readonly
                   hide-actions
                   view-mode="month"
                   prepend-icon=""
@@ -61,7 +59,6 @@
               <v-col cols="3">
                 <v-date-input
                   v-model="periodEndDate"
-                  readonly
                   hide-actions
                   view-mode="month"
                   prepend-icon=""
