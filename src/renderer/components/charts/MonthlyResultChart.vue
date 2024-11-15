@@ -1,5 +1,5 @@
 <template>
-  <base-card>
+  <base-card :show-actions="false">
     <template #header>
       {{ title }}
     </template>

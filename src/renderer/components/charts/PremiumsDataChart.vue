@@ -1,5 +1,5 @@
 <template>
-  <base-card v-if="mainChartOptions">
+  <base-card v-if="mainChartOptions" :show-actions="false">
     <template #header>
       {{ mainChartTitle }}
     </template>

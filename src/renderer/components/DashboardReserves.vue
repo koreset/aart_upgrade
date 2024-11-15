@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/first-attribute-linebreak -->
 <!-- eslint-disable vue/attribute-hyphenation -->
 <template>
-  <base-card>
+  <base-card :show-actions="false">
     <template #header> {{ variableChartTitle }} Graph </template>
     <template #default>
       <v-row>

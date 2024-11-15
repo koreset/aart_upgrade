@@ -52,7 +52,7 @@
                     <v-expansion-panels v-model="activePanel">
                       <v-expansion-panel
                         v-for="item in paginatedPortfolios"
-                        :key="item.name"
+                        :key="item.id"
                         @group:selected="checkClass"
                       >
                         <v-expansion-panel-title :class="expansionColor">
@@ -103,46 +103,55 @@
                           <v-divider class="mb-5"></v-divider>
                           <v-row>
                             <v-col>
-                              <p class="mpc-border mb-5"><b>Model Point Counts</b></p>
+                              <p class="mpc-border mb-5"><b>Claims Data</b></p>
                               <v-row
-                                v-if="item.year_versions == null || item.year_versions.length == 0"
+                                v-if="
+                                  item.claims_year_version == null ||
+                                  item.claims_year_version.length == 0
+                                "
                               >
                                 <v-col>
-                                  There are no model points uploaded for this portfolio
+                                  There are no claim data files uploaded for this portfolio
                                 </v-col>
                               </v-row>
-                              <v-row>
+                              <v-row v-else>
                                 <v-col cols="3">
                                   <v-select
                                     v-model="selectedPortfolioMpYear"
                                     density="compact"
                                     variant="outlined"
-                                    :items="item.model_point_years"
+                                    :items="getUniqueYears(item.claims_year_version)"
+                                    item-title="year"
+                                    item-value="year"
                                     label="Model Point Year"
                                     @update:model-value="
-                                      getMpVersions(item.id, selectedPortfolioMpYear)
+                                      getMpVersions(
+                                        selectedPortfolioMpYear,
+                                        item.claims_year_version,
+                                        'claims_data'
+                                      )
                                     "
                                   ></v-select>
                                 </v-col>
-                                <v-col v-if="yearVersions.length > 0" cols="3">
+                                <v-col v-if="availableVersions.length > 0" cols="3">
                                   <v-select
                                     v-model="selectedYearVersion"
                                     density="compact"
                                     variant="outlined"
-                                    :items="yearVersions"
-                                    item-title="mp_version"
-                                    item-value="mp_version"
+                                    :items="availableVersions"
+                                    item-title="version_name"
+                                    item-value="version_name"
                                     label="Version"
                                     return-object
-                                    @update:model-value="showCountData(selectedYearVersion)"
+                                    @update:model-value="showCountData()"
                                   ></v-select>
                                 </v-col>
-                                <v-col v-if="selectedYearVersion" cols="2"
-                                  ><h4 class="mt-2"
+                                <v-col v-if="selectedYearVersion !== null" cols="2"
+                                  ><h4 v-if="selectedYearVersion !== null" class="mt-2"
                                     >Count: {{ selectedYearVersion.count }}</h4
                                   ></v-col
                                 >
-                                <v-col v-if="selectedYearVersion" cols="4">
+                                <v-col v-if="selectedYearVersion !== null" cols="4">
                                   <v-btn
                                     class="primary mr-5"
                                     rounded
@@ -150,10 +159,10 @@
                                     variant="outlined"
                                     @click="
                                       showData(
-                                        item.id,
                                         item.name,
+                                        'claims_data',
                                         selectedPortfolioMpYear,
-                                        selectedYearVersion.mp_version
+                                        selectedYearVersion.version_name
                                       )
                                     "
                                   >
@@ -179,35 +188,112 @@
                                 </v-col>
                               </v-row>
                               <v-row v-if="rowData.length > 0 && loadDataComplete">
-                                <data-grid :rowData="rowData" :columnDefs="columnDefs"></data-grid>
+                                <data-grid
+                                  :show-close-button="true"
+                                  :table-title="tableTitle"
+                                  :rowData="rowData"
+                                  :columnDefs="columnDefs"
+                                  @update:clear-data="clearData"
+                                ></data-grid>
                               </v-row>
-                              <!-- <v-row v-for="elem in item.year_versions" :key="elem.year">
-                                <v-col class="mt-2" cols="2">Year: {{ elem.year }}</v-col>
-                                <v-col class="mt-2" cols="5">Version: {{ elem.mp_version }}</v-col>
-                                <v-col class="mt-2" cols="2">Count: {{ elem.count }}</v-col>
-                                <v-col cols="1">
+                            </v-col>
+                          </v-row>
+                          <v-divider class="mb-5"></v-divider>
+                          <v-row>
+                            <v-col>
+                              <p class="mpc-border mb-5"><b>Earned Premium Data</b></p>
+                              <v-row
+                                v-if="
+                                  item.earned_premium_year_version == null ||
+                                  item.earned_premium_year_version.length == 0
+                                "
+                              >
+                                <v-col>
+                                  There are no earned premium data files uploaded for this portfolio
+                                </v-col>
+                              </v-row>
+                              <v-row v-else>
+                                <v-col cols="3">
+                                  <v-select
+                                    v-model="selectedEarnedPremiumYear"
+                                    density="compact"
+                                    variant="outlined"
+                                    :items="getUniqueYears(item.earned_premium_year_version)"
+                                    item-title="year"
+                                    item-value="year"
+                                    label="Model Point Year"
+                                    @update:model-value="
+                                      getMpVersions(
+                                        selectedEarnedPremiumYear,
+                                        item.earned_premium_year_version,
+                                        'earned_premium'
+                                      )
+                                    "
+                                  ></v-select>
+                                </v-col>
+                                <v-col v-if="availableEarnedPremiumVersions.length > 0" cols="3">
+                                  <v-select
+                                    v-model="selectedEarnedPremiumYearVersion"
+                                    density="compact"
+                                    variant="outlined"
+                                    :items="availableEarnedPremiumVersions"
+                                    item-title="version_name"
+                                    item-value="version_name"
+                                    label="Version"
+                                    return-object
+                                    @update:model-value="showCountData()"
+                                  ></v-select>
+                                </v-col>
+                                <v-col v-if="selectedEarnedPremiumYearVersion !== null" cols="2"
+                                  ><h4 v-if="selectedEarnedPremiumYearVersion !== null" class="mt-2"
+                                    >Count: {{ selectedEarnedPremiumYearVersion.count }}</h4
+                                  ></v-col
+                                >
+                                <v-col v-if="selectedEarnedPremiumYearVersion !== null" cols="4">
                                   <v-btn
-                                    variant="plain"
-                                    icon
-                                    small
+                                    class="primary mr-5"
+                                    rounded
+                                    size="small"
+                                    variant="outlined"
                                     @click="
-                                      showData(item.id, item.name, elem.year, elem.mp_version)
+                                      showData(
+                                        item.name,
+                                        'earned_premium',
+                                        selectedEarnedPremiumYear,
+                                        selectedEarnedPremiumYearVersion.version_name
+                                      )
                                     "
                                   >
-                                    <v-icon color="accent">mdi-information</v-icon></v-btn
+                                    <v-icon left color="primary">mdi-information</v-icon>
+                                    <span>Info</span></v-btn
                                   >
-                                </v-col>
-                                <v-col cols="1">
                                   <v-btn
-                                    variant="plain"
-                                    icon
-                                    small
-                                    @click="deleteData(item.id, elem.year, elem.mp_version)"
+                                    class="red"
+                                    rounded
+                                    size="small"
+                                    variant="outlined"
+                                    @click="
+                                      deleteData(
+                                        item.id,
+                                        selectedEarnedPremiumYear,
+                                        selectedEarnedPremiumYearVersion.version_name
+                                      )
+                                    "
                                   >
-                                    <v-icon color="red">mdi-delete</v-icon></v-btn
+                                    <v-icon color="error">mdi-delete</v-icon>
+                                    <span>Delete</span></v-btn
                                   >
                                 </v-col>
-                              </v-row> -->
+                              </v-row>
+                              <v-row v-if="rowData.length > 0 && loadDataComplete">
+                                <data-grid
+                                  :show-close-button="true"
+                                  :table-title="tableTitle"
+                                  :rowData="rowData"
+                                  :columnDefs="columnDefs"
+                                  @update:clear-data="clearData"
+                                ></data-grid>
+                              </v-row>
                             </v-col>
                           </v-row>
                         </v-expansion-panel-text>
@@ -256,9 +342,14 @@ const selectedInsuranceType: any = ref('')
 const loadDataComplete: any = ref(false)
 const selectedPortfolioMpYear: any = ref('')
 const yearVersions: any = ref([])
+const availableVersions: any = ref([])
+const availableEarnedPremiumVersions: any = ref([])
 const selectedYearVersion: any = ref(null)
+const selectedEarnedPremiumYearVersion: any = ref(null)
+const selectedEarnedPremiumYear: any = ref(null)
 const rowData: any = ref([])
 const columnDefs: any = ref([])
+const tableTitle: any = ref('')
 
 const portfolios: any = ref([])
 
@@ -294,6 +385,11 @@ const createPortfolio = () => {
   })
 }
 
+const clearData = () => {
+  rowData.value = []
+  columnDefs.value = []
+}
+
 const handleUpload = (event: any, item: any) => {
   console.log('Handling Upload', event, item)
   const formData = new FormData()
@@ -321,26 +417,68 @@ const handleUpload = (event: any, item: any) => {
     })
 }
 
-const getMpVersions = (id: number, year: number) => {
-  console.log('Getting MP Versions', id, year)
-  yearVersions.value = []
-  selectedYearVersion.value = null
-  // get the portfolio with the id from portfolios
-  const portfolio = portfolios.value.find((elem) => {
-    return elem.id === id
-  })
-  console.log('Portfolio', portfolio)
+const getUniqueYears = (items: any) => {
+  console.log('Getting Unique Years', items)
 
-  // get the year_versions from the portfolio that match the year
-  yearVersions.value = portfolio.year_versions.filter((elem) => {
+  //   // clear versions
+  // yearVersions.value = []
+  //   selectedYearVersion.value = null
+  const years = items.map((elem: any) => {
+    return elem.year
+  })
+  return Array.from(new Set(years))
+}
+
+const getMpVersions = (year: number, versions: any, type: string) => {
+  console.log('Getting MP Versions Year', year, ' | versions', versions)
+
+  const filteredVersions = versions.filter((elem: any) => {
     return elem.year === year
   })
 
-  console.log('Year Versions', yearVersions.value)
+  // availableEarnedPremiumVersions.value = []
+  // availableVersions.value = []
+  // selectedYearVersion.value = null
+  // selectedEarnedPremiumYearVersion.value = null
+
+  console.log('Filtered Versions', filteredVersions)
+  if (type === 'earned_premium') {
+    availableEarnedPremiumVersions.value = filteredVersions
+  } else {
+    availableVersions.value = filteredVersions
+  }
+
+  // yearVersions.value = []
+  // selectedYearVersion.value = null
+  // const myVersions = versions.filter((elem: any) => {
+  //   return elem.year === id
+  // })
+  // yearVersions.value = versions.filter((elem: any) => {
+  //   return elem.year === id
+  // })
+  // console.log('Year Versions', myVersions)
+  // yearVersions.value = myVersions
+  // console.log('Year Versions', yearVersions.value)
+  // yearVersions.value = yearVersionsGroup.map((elem: any) => {
+  //   return elem.version_name
+  // })
+  // selectedYearVersion.value = null
+  // // get the portfolio with the id from portfolios
+  // const portfolio = portfolios.value.find((elem) => {
+  //   return elem.id === id
+  // })
+  // console.log('Portfolio', portfolio)
+  // // get the year_versions from the portfolio that match the year
+  // // versions.value = portfolio.year_versions.filter((elem) => {
+  // //   return elem.year === year
+  // // })
+  // console.log('Year Versions', versions.value)
 }
 
-const showCountData = (version: any) => {
-  console.log('Showing Count Data', version)
+const showCountData = () => {
+  console.log('Showing Count Data', selectedYearVersion.value)
+  rowData.value = []
+  columnDefs.value = []
 }
 
 const deletePortfolio = async (id: number) => {
@@ -369,13 +507,22 @@ const deleteData = (id: number, year: number, version: number) => {
   console.log('Deleting Data', id, year, version)
 }
 
-const showData = async (id: number, name: string, year: number, version: number) => {
-  console.log('Showing Data', id, name, year, version)
+const showData = async (name: string, type: string, year: number, version: number) => {
+  console.log('Showing Data', name, type, year, version)
+
+  if (type === 'claims_data') {
+    tableTitle.value = 'Claims Data'
+  }
+  if (type === 'earned_premium') {
+    tableTitle.value = 'Earned Premium Data'
+  }
+
   rowData.value = []
   columnDefs.value = []
   loadDataComplete.value = false
-  const res = await ModifiedGMMService.getPortfolioModelPoints(id, year, version)
-  rowData.value = res.data
+  // const res = await ModifiedGMMService.getPortfolioModelPoints(id, year, version)
+  const res = await IbnrService.getLicClaimsData(name, type, year, version)
+  rowData.value = res.data.data
 
   if (rowData.value !== null) {
     createColumnDefs(rowData.value)
@@ -401,14 +548,14 @@ const createColumnDefs = (data: any) => {
 
 const checkClass = (item: any) => {
   console.log('Checking Class', item)
-  if (item) {
-    console.log('activePanel', activePanel.value)
-    expansionColor.value = 'expanded'
-  } else {
-    console.log('activePanel', activePanel.value)
-    expansionColor.value = ''
-  }
-  selectedPortfolioMpYear.value = ''
+  // if (item) {
+  //   console.log('activePanel', activePanel.value)
+  //   expansionColor.value = 'expanded'
+  // } else {
+  //   console.log('activePanel', activePanel.value)
+  //   expansionColor.value = ''
+  // }
+  selectedPortfolioMpYear.value = null
   yearVersions.value = []
   selectedYearVersion.value = null
   rowData.value = []
@@ -430,8 +577,4 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
-.v-expansion-panel-title--active {
-  background-color: rgb(243, 243, 243) !important;
-}
-</style>
+<style scoped></style>
