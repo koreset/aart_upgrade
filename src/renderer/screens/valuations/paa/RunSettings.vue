@@ -18,9 +18,9 @@
               </v-col>
               <v-col cols="6">
                 <v-date-input
-                  :v-model="runDate"
-                  view-mode="year"
+                  v-model="runDate"
                   hide-actions
+                  view-mode="month"
                   prepend-icon=""
                   prepend-inner-icon="$calendar"
                   variant="outlined"
@@ -430,7 +430,7 @@ const addToRunJobs = () => {
       job.individual_results = useIndividualResults.value
       job.portfolio_name = portfolio.name
       job.portfolio_id = portfolio.id
-      job.run_date = runDate.value
+      job.run_date = formatDateString(runDate.value, true, true, false)
       job.model_point = selectedYear.value
       job.model_point_version = selectedMpVersion.value
       job.parameter_year = selectedParameterYear.value
