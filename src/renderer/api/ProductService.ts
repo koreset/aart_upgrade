@@ -202,6 +202,10 @@ export default {
   deleteGlobalTableData(tableName) {
     return Api.delete('global-tables/' + tableName)
   },
+  deleteGlobalTableDataWithKey(tableName, key) {
+    return Api.delete('global-tables/' + tableName + '/key/' + key)
+  },
+
   deleteProductModelPoints(productId, year) {
     return Api.delete('products/' + productId + '/modelpoints/' + year)
   },

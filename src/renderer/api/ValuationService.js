@@ -23,6 +23,13 @@ export default {
   getAvailableYieldYears() {
     return Api.get('tables/yield-curve')
   },
+
+  getAvailableYears(tableType) {
+    return Api.get('tables/' + tableType)
+  },
+  getAvailableMarginYears() {
+    return Api.get('tables/margins')
+  },
   getAvailableParameterYears(prodCode) {
     return Api.get('tables/parameters/' + prodCode)
   },

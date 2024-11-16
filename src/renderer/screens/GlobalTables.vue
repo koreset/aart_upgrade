@@ -143,6 +143,62 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog v-model="shocksDialog" persistent max-width="600">
+      <base-card>
+        <template #header><span class="headline">Available Shock Bases</span></template>
+        <template #default>
+          <v-row v-if="availableShockBases.length > 0" class="mt-5">
+            <v-col>
+              <v-select
+                v-model="selectedShockBasis"
+                variant="outlined"
+                density="compact"
+                label="Shock Basis"
+                placeholder="Select an existing Shock Basis"
+                :items="availableShockBases"
+                item-title="name"
+                return-object
+              ></v-select>
+            </v-col>
+          </v-row>
+        </template>
+        <template #actions>
+          <v-btn color="primary darken-1" variant="text" @click="deleteShockData()">Proceed</v-btn>
+          <v-btn color="primary darken-1" variant="text" @click="cancelShockDialog()">Cancel</v-btn>
+        </template>
+      </base-card>
+    </v-dialog>
+    <v-dialog v-model="otherTableDialog" persistent max-width="600">
+      <base-card>
+        <template #header
+          ><span class="headline">Available years for {{ otherTable }}</span></template
+        >
+        <template #default>
+          <v-row v-if="availableTableYears.length > 0" class="mt-5">
+            <v-col>
+              <v-select
+                v-model="selectedTableYear"
+                variant="outlined"
+                density="compact"
+                label="Year Data"
+                placeholder="Select an existing Year"
+                :items="availableTableYears"
+                item-title="Year"
+                item-value="Year"
+              ></v-select>
+            </v-col>
+          </v-row>
+        </template>
+        <template #actions>
+          <v-btn color="primary darken-1" variant="text" @click="deleteOtherTableData()"
+            >Proceed</v-btn
+          >
+          <v-btn color="primary darken-1" variant="text" @click="cancelOtherTableDialog()"
+            >Cancel</v-btn
+          >
+        </template>
+      </base-card>
+    </v-dialog>
     <v-snackbar v-model="snackbar" centered :timeout="timeout" :multi-line="true">
       {{ snackbarText }}
       <v-btn rounded color="red" variant="text" @click="snackbar = false">Close</v-btn>
@@ -164,6 +220,12 @@ import { ref } from 'vue'
 import { DataPayload } from '@/renderer/components/types'
 
 // data
+const availableTableYears: any = ref([])
+const selectedTableYear: any = ref(null)
+
+const shocksDialog: any = ref(false)
+const availableShockBases: any = ref([])
+const selectedShockBasis: any = ref(null)
 const viewHeader: string = 'Global Assumption Tables'
 const confirmDeleteDialog: any = ref()
 const selectedYieldCurveYear: any = ref(null)
@@ -176,6 +238,8 @@ const loadingData: any = ref(false)
 const rowCount: any = ref(0)
 const tableData: any = ref([])
 const selectedTable: any = ref('')
+const otherTableDialog: any = ref(false)
+const otherTable: any = ref('')
 const tables: any = ref([
   { name: 'Parameters' },
   { name: 'Yield Curve' },
@@ -186,7 +250,7 @@ const tables: any = ref([
 const text: any = ref('')
 const yieldCurveDataDialog: any = ref(false)
 const columnDefs: any = ref([])
-const dialog: any = ref(false)
+// const dialog: any = ref(false)
 
 const uploadComplete = ref(false)
 const snackbarText: any = ref(null)
@@ -197,6 +261,50 @@ const snackbar: any = ref(false)
 const clearData = () => {
   tableData.value = []
   selectedTable.value = ''
+}
+
+const cancelOtherTableDialog = () => {
+  otherTableDialog.value = false
+  selectedTableYear.value = null
+}
+
+const deleteOtherTableData = async () => {
+  try {
+    const result = await confirmDeleteDialog.value.open(
+      'Deleting Data for ' + otherTable.value + ' table',
+      'Are you sure you want to delete this data?'
+    )
+    console.log(result)
+    if (result) {
+      console.log('Deleting data')
+      ProductService.deleteGlobalTableDataWithKey(otherTable.value, selectedTableYear.value).then(
+        (response) => {
+          text.value = response.data
+          snackbar.value = true
+          otherTableDialog.value = false
+          tableData.value = []
+          selectedTable.value = ''
+          selectedTableYear.value = null
+        }
+      )
+    }
+  } catch (error) {
+    console.log(error)
+    otherTableDialog.value = false
+  }
+}
+
+const cancelShockDialog = () => {
+  shocksDialog.value = false
+  selectedShockBasis.value = null
+}
+
+const deleteShockData = () => {
+  ProductService.deleteGlobalTableDataWithKey('Shocks', selectedShockBasis.value.Basis).then(() => {
+    text.value = 'Shock data deleted successfully'
+    snackbar.value = true
+    shocksDialog.value = false
+  })
 }
 
 const handleUpload = (payload: DataPayload) => {
@@ -227,43 +335,29 @@ const handleUpload = (payload: DataPayload) => {
 
 const deleteTableData = async (table: any) => {
   try {
-    if (table.name === 'Yield Curve') {
-      ValuationService.getAvailableYieldYears().then((response) => {
-        yieldCurveYears.value = response.data
-        if (yieldCurveYears.value === null) {
-          yieldCurveYears.value = []
-        }
+    let tableName = table.name.toLowerCase()
+    tableName = tableName.replace(/\s/g, '-')
+    console.log(tableName)
+
+    let resp: any = null
+    if (tableName === 'shocks') {
+      resp = await ValuationService.getAvailableShockBases()
+      console.log(resp.data)
+      availableShockBases.value = resp.data
+      shocksDialog.value = true
+    } else {
+      resp = await ValuationService.getAvailableYears(tableName)
+      console.log(resp)
+
+      if (table.name === 'Yield Curve') {
+        yieldCurveYears.value = resp.data
         if (yieldCurveYears.value.length > 0) {
           yieldCurveDataDialog.value = true
         }
-      })
-    }
-
-    const result = await confirmDeleteDialog.value.open(
-      'Deleting Data for ' + table.name + ' table',
-      'Are you sure you want to delete this data?'
-    )
-    console.log(result)
-    if (result) {
-      console.log('Deleting data')
-      if (table.name === 'Yield Curve') {
-        ValuationService.getAvailableYieldYears().then((response) => {
-          yieldCurveYears.value = response.data
-          if (yieldCurveYears.value === null) {
-            yieldCurveYears.value = []
-          }
-          if (yieldCurveYears.value.length > 0) {
-            yieldCurveDataDialog.value = true
-          }
-        })
       } else {
-        ProductService.deleteGlobalTableData(table.name).then((response) => {
-          text.value = response.data
-          snackbar.value = true
-          dialog.value = false
-          tableData.value = []
-          selectedTable.value = ''
-        })
+        otherTable.value = table.name
+        availableTableYears.value = resp.data
+        otherTableDialog.value = true
       }
     }
   } catch (error) {
@@ -299,16 +393,29 @@ const viewTable = (item: any) => {
 
 // Yield curve specfic methods
 
-const deleteYieldCurveData = () => {
-  ProductService.deleteYieldCurveData(
-    selectedYieldCurveYear.value,
-    selectedYieldCurveCode.value,
-    selectedYieldCurveMonth.value
-  ).then(() => {
-    text.value = 'yield curve data deleted successfully'
-    snackbar.value = true
+const deleteYieldCurveData = async () => {
+  try {
+    const result = await confirmDeleteDialog.value.open(
+      'Deleting Data for Yield Curve table',
+      'Are you sure you want to delete this data?'
+    )
+    console.log(result)
+    if (result) {
+      console.log('Deleting data')
+      ProductService.deleteYieldCurveData(
+        selectedYieldCurveYear.value,
+        selectedYieldCurveCode.value,
+        selectedYieldCurveMonth.value
+      ).then(() => {
+        text.value = 'yield curve data deleted successfully'
+        snackbar.value = true
+        clearYieldDialog()
+      })
+    }
+  } catch (error) {
+    console.log(error)
     clearYieldDialog()
-  })
+  }
 }
 
 const clearYieldDialog = () => {
