@@ -111,7 +111,7 @@ export default class IPCs {
 
     // save the base url to the store
     ipcMain.on('msgSaveBaseUrl', (event: IpcMainEvent, baseUrl: string) => {
-      store.set('baseUrl', baseUrl)
+      store.set('baseUrl', baseUrl + '/')
       event.returnValue = 'success'
     })
 

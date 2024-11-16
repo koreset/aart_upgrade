@@ -72,6 +72,12 @@
         </base-card>
       </v-col>
     </v-row>
+    <v-snackbar v-model="snackbar" :timeout="timeout">
+      {{ snackbarMessage }}
+      <template #actions>
+        <v-btn color="white" variant="text" @click="snackbar = false"> Close </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -85,6 +91,11 @@ const license: any = ref(null)
 const apiServerUrl: any = ref('')
 const apiServerUrlErrors = ref([])
 const baseApiHint = ref('')
+const snackbar = ref(false)
+const snackbarMessage = ref('')
+const timeout = ref(3000)
+
+// const editMode = ref(false)
 
 onMounted(async () => {
   apiServerUrl.value = await window.mainApi?.sendSync('msgGetBaseUrl')
@@ -99,6 +110,12 @@ const getLicenseDetails = () => {
 }
 
 const updateApiUrl = () => {
+  console.log('updateApiUrl', apiServerUrl.value)
+  window.mainApi?.send('msgSaveBaseUrl', apiServerUrl.value)
+  snackbarMessage.value = 'API Server URL updated. This will initiate an application restart.'
+  snackbar.value = true
+  timeout.value = 5000
+  window.mainApi?.send('msgRestartApplication')
   // ipcRenderer.invoke('update-api-url', apiServerUrl.value).then(() => {
   //   window.mainApi?.send('msgGetProducts')
   //   baseApiHint.value = 'you will need to restart the application for this to take effect'
