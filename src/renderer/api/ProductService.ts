@@ -117,6 +117,10 @@ export default {
   getValuationJob(id) {
     return Api.get('valuations/jobs/' + id)
   },
+
+  getValuationJobWithSpCode(id, spCode) {
+    return Api.get('valuations/jobs/' + id + '/sp-code/' + spCode)
+  },
   getValuationJobControl(id) {
     return Api.get('valuations/jobs/' + id + '/control')
   },

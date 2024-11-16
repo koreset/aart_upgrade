@@ -33,6 +33,7 @@
                     ></v-select>
                   </v-col>
                 </v-row>
+                <loadingData :loadingData="loadingSpCodeData"></loadingData>
                 <data-grid :showExport="true" :rowData="rowData" :columnDefs="cDefs"></data-grid>
               </template>
             </base-card>
@@ -208,6 +209,7 @@ const showSpCodeSelect = ref(false)
 const showSapSpCodeSelect = ref(false)
 const selectedIfrs17Group = ref(null)
 const ifrs17groups: any = ref([])
+const loadingSpCodeData = ref(false)
 const variableItems = [
   'reserves',
   'death_outgo',
@@ -310,8 +312,15 @@ const reduceDecimal = (number) => {
 
 const displayAggDataForSpCode = () => {
   rowData.value = []
-  rowData.value = aggData.value.filter((item: any) => item.sp_code === spCodes.value[0])
-  cDefs.value = createColumnDefs(rowData.value)
+  cDefs.value = []
+  loadingSpCodeData.value = true
+  ProductService.getValuationJobWithSpCode(runId.value, selectedSpCode.value).then((resp) => {
+    rowData.value = resp.data.projections
+    cDefs.value = createColumnDefs(rowData.value)
+    loadingSpCodeData.value = false
+  })
+  // rowData.value = aggData.value.filter((item: any) => item.sp_code === spCodes.value[0])
+  // cDefs.value = createColumnDefs(rowData.value)
 }
 
 const displaySapAggDataForIFRS17Group = () => {
@@ -425,16 +434,18 @@ onMounted(() => {
   loadingData.value = true
   gridOptions.value = {}
   ProductService.getValuationJob(runId.value).then((resp) => {
+    console.log('resp.data', resp.data)
     aggData.value = resp.data.projections
-    spCodes.value = new Set(aggData.value.map((item) => item.sp_code))
-    spCodes.value = Array.from(spCodes.value)
+    spCodes.value = resp.data.spcodes
+    // spCodes.value = Array.from(spCodes.value)
 
     console.log('Agg Data', aggData.value)
     console.log('SP Codes', spCodes.value)
 
-    if (aggData.value.length > 5000) {
+    if (spCodes.value.length > 1) {
       showSpCodeSelect.value = true
-      rowData.value = aggData.value.filter((item: any) => item.sp_code === spCodes.value[0])
+      selectedSpCode.value = spCodes.value[0]
+      rowData.value = aggData.value
     } else {
       showSpCodeSelect.value = false
       rowData.value = aggData.value

@@ -39,7 +39,8 @@
                 >
               </v-col></v-row
             >
-            <v-expansion-panels>
+            <loading-indicator :loadingData="loadingData" />
+            <v-expansion-panels v-if="!loadingData">
               <v-expansion-panel v-for="job in paginatedJobs" :key="job.id">
                 <v-expansion-panel-title class="custom-panel-title px-3">
                   <template #default="{ expanded }">
@@ -140,7 +141,7 @@
             </v-expansion-panels>
           </template>
           <template #actions>
-            <v-row>
+            <v-row v-if="!loadingData">
               <v-col>
                 <v-pagination
                   v-if="totalPages > 1"
@@ -178,6 +179,7 @@ import ValuationService from '../../../api/ValuationService'
 import { DateTime } from 'luxon'
 import formatValues from '@/renderer/utils/format_values'
 import FileInfo from '@/renderer/components/FileInfo.vue'
+import LoadingIndicator from '@/renderer/components/LoadingIndicator.vue'
 
 let pollTimer: any = null
 
@@ -187,6 +189,7 @@ const selectBtnText = ref('Show Selection')
 const showSelect = ref(false)
 
 const infoDialog = ref(false)
+const loadingData = ref(false)
 
 const tableTitle = ref('')
 const rowData: any = ref([])
@@ -320,6 +323,7 @@ const createColumnDefs = (data) => {
 
 onMounted(async () => {
   loading.value = true
+  loadingData.value = true
   const res = await ProductService.getValuationJobs()
   runJobs.value = res.data
   console.log('run jobs: ', runJobs.value)
@@ -327,6 +331,7 @@ onMounted(async () => {
     runJobs.value = []
   }
   loading.value = false
+  loadingData.value = false
   console.log(runJobs.value)
   totalPages.value = Math.ceil(runJobs.value.length / pageSize)
   console.log(totalPages.value)
