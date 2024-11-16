@@ -160,6 +160,14 @@
           @click="openDialog"
           >Upload Model Points</v-btn
         >
+        <v-progress-circular
+          v-if="uploadingData"
+          :width="2"
+          :size="20"
+          class="mb-3"
+          color="primary"
+          indeterminate
+        ></v-progress-circular>
         <v-btn
           :disabled="selectedProduct.product_state == 'pending'"
           class="ml-9 mb-3"
@@ -216,6 +224,12 @@
         </template>
       </base-card>
     </v-dialog>
+    <v-snackbar v-model="snackbar" :timeout="timeout">
+      {{ snackbarMessage }}
+      <template #actions>
+        <v-btn color="white" variant="text" @click="snackbar = false"> Close </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -239,6 +253,10 @@ import ActivityService from '../api/ActivityService'
 // const route = useRoute()
 const router = useRouter()
 // const appStore = useAppStore()
+
+const snackbar = ref(false)
+const snackbarMessage = ref('')
+const timeout = 3000
 
 const remarks = ref('')
 const allProducts: any = ref([])
@@ -265,6 +283,9 @@ const mpVersions: any = ref([])
 const selectedVersion: any = ref(null)
 const confirmAction: any = ref()
 const activateDialog = ref(false)
+const progress = ref(0)
+const uploadMessage = ref('')
+const uploadingData = ref(false)
 
 const openDialog = () => {
   console.log('Open Dialog')
@@ -396,14 +417,53 @@ const activateProduct = async (value) => {
   ActivityService.createActivity(activityPayload)
 }
 
-const handleUpload = (data: {
+const handleUploadProgress = (progressEvent) => {
+  console.log('handling upload progress')
+  progress.value = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+  console.log(progress)
+  uploadMessage.value = 'Uploading ' + progress.value + '%'
+  if (progress.value === 100) {
+    uploadMessage.value = 'Processing file...'
+  }
+}
+
+const handleUpload = async (data: {
   file: File | null
   fileName: string
   productCode: string
   year: number | null
+  version: string
 }) => {
   // Handle the uploaded data here
   console.log(data)
+  const formData = new FormData()
+  formData.append('file', data.file as Blob)
+  formData.append('year', data.year as any)
+  formData.append('mp_version', data.fileName as any)
+  console.log('Selected Product:', selectedProduct.value)
+
+  uploadingData.value = true
+  try {
+    const resp = await ProductService.postProductModelPoints(
+      formData,
+      selectedProduct.value.id,
+      handleUploadProgress
+    )
+
+    console.log('Response:', resp)
+    if (resp.status === 201) {
+      console.log('Model points uploaded')
+      uploadMessage.value = 'Model points uploaded successfully'
+      uploadingData.value = false
+      snackbarMessage.value = 'Model points uploaded successfully'
+      snackbar.value = true
+      isDialogOpen.value = false
+      getProduct()
+    }
+  } catch (error) {
+    console.log(error)
+  }
+
   isDialogOpen.value = false
 }
 
