@@ -432,7 +432,6 @@ const handleUpload = async (data: {
   fileName: string
   productCode: string
   year: number | null
-  version: string
 }) => {
   // Handle the uploaded data here
   console.log(data)
