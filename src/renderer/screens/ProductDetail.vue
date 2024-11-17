@@ -218,7 +218,7 @@
           <v-btn rounded color="accent" variant="plain" @click="activateProduct(false)"
             >Decline</v-btn
           >
-          <v-btn rounded color="accent" variant="plain" click="activateProduct(true)"
+          <v-btn rounded color="accent" variant="plain" @click="activateProduct(true)"
             >Activate</v-btn
           >
         </template>

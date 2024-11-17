@@ -57,7 +57,13 @@
       <loading-indicator :loading-data="loadingData" />
       <v-row v-if="reportData.length > 0 && !loadingData">
         <v-col>
-          <data-grid :column-defs="columnDefs" :row-data="reportData" />
+          <data-grid
+            :show-close-button="true"
+            :table-title="'Reserves Summary'"
+            :column-defs="columnDefs"
+            :row-data="reportData"
+            @update:clear-data="clearData"
+          />
         </v-col>
       </v-row>
       <v-row v-if="validateReportData()">
@@ -94,6 +100,10 @@ onMounted(() => {
     runList.value = response.data.runlist
   })
 })
+
+const clearData = () => {
+  reportData.value = []
+}
 
 const validateReportData = () => {
   if (

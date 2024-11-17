@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 import { onMounted, ref } from 'vue'
 import { useAppStore } from '@/renderer/store/app'
 import ProductService from '@/renderer/api/ProductService'
+import ServerUnavailable from '../ServerUnavailable.vue'
 import log from 'electron-log'
 // import { ipcRenderer } from 'electron'
 import ConfirmDialog from '../ConfirmDialog.vue'
@@ -58,6 +59,8 @@ onMounted(async () => {
     </v-app-bar>
     <NavigationDrawer :drawer="drawer" />
     <v-main>
+      <server-unavailable />
+
       <slot />
     </v-main>
     <confirm-dialog ref="confirmationDialog" />

@@ -57,7 +57,13 @@
       <loading-indicator :loading-data="loadingData" />
       <v-row v-if="validatePorfolioData()">
         <v-col>
-          <data-grid :columnDefs="columnDefs" :rowData="reportData" />
+          <data-grid
+            :show-close-button="true"
+            :table-title="'PAA Reserves Summary'"
+            :columnDefs="columnDefs"
+            :rowData="reportData"
+            @update:clear-data="clearData"
+          />
         </v-col>
       </v-row>
       <v-row v-if="validateReportData()">
@@ -96,6 +102,14 @@ onMounted(() => {
 })
 
 // methods
+
+const clearData = () => {
+  reportData.value = []
+  prodlist.value = []
+  groupList.value = []
+  selectedProduct.value = null
+  selectedGroup.value = null
+}
 const validatePorfolioData = () => {
   if (reportData.value !== null && reportData.value.length > 0 && loadingData.value === false) {
     return true

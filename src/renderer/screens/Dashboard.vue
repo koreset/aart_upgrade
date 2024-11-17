@@ -1,7 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <v-container>
-    <server-unavailable />
     <v-row v-if="!productsAvailable && !loading">
       <v-col>
         <v-card>
@@ -42,7 +41,6 @@
 </template>
 
 <script setup lang="ts">
-import ServerUnavailable from '../components/ServerUnavailable.vue'
 import PremiumsDataChart from '../components/charts/PremiumsDataChart.vue'
 import MonthlyResultChart from '../components/charts/MonthlyResultChart.vue'
 import ReservesSummary from '../components/ReservesSummary.vue'
