@@ -139,7 +139,7 @@ const doForgotPassword = () => {
 </script>
 
 <style scoped>
-.v-application__wrap {
+.v-main {
   background-color: rgba(97, 136, 162, 0.7) !important;
   /* flex: 1 1 auto;
   max-width: 100%;

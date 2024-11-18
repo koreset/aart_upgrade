@@ -52,9 +52,6 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="4">
-                      <v-btn variant="outlined" size="small" class="primary mr-2" rounded
-                        >Edit</v-btn
-                      >
                       <v-btn
                         class="primary"
                         variant="outlined"
