@@ -2,7 +2,7 @@
 const dotenv = require('dotenv')
 
 const baseConfig = {
-  productName: 'AARTv2',
+  productName: 'AART',
   appId: 'za.co.adsolutions.aart',
   asar: true,
   extends: null,

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, RenderProcessGoneDetails } from 'electron'
+import { app, BrowserWindow, RenderProcessGoneDetails, Menu } from 'electron'
 import Constants from './utils/Constants'
 import IPCs from './IPCs'
 const { autoUpdater } = require('electron-updater')
@@ -16,6 +16,9 @@ const exitApp = (mainWindow: BrowserWindow): void => {
   app.exit()
 }
 
+const isMac = Constants.IS_MAC
+const isProduction = !Constants.IS_DEV_ENV
+
 export const createMainWindow = async (mainWindow: BrowserWindow): Promise<BrowserWindow> => {
   mainWindow = new BrowserWindow({
     title: Constants.APP_NAME,
@@ -27,6 +30,103 @@ export const createMainWindow = async (mainWindow: BrowserWindow): Promise<Brows
   })
 
   // mainWindow.setMenu(null)
+  // Get the existing application menu or create a default one
+
+  const template: any = [
+    // { role: 'appMenu' }
+    ...(isMac
+      ? [
+          {
+            label: app.name,
+            submenu: [
+              { role: 'about' },
+              { type: 'separator' },
+              { role: 'services' },
+              { type: 'separator' },
+              { role: 'hide' },
+              { role: 'hideOthers' },
+              { role: 'unhide' },
+              { type: 'separator' },
+              { role: 'quit' }
+            ]
+          }
+        ]
+      : []),
+    // { role: 'fileMenu' }
+    {
+      label: 'File',
+      submenu: [isMac ? { role: 'close' } : { role: 'quit' }]
+    },
+    // { role: 'editMenu' }
+    {
+      label: 'Edit',
+      submenu: [
+        { role: 'undo' },
+        { role: 'redo' },
+        { type: 'separator' },
+        { role: 'cut' },
+        { role: 'copy' },
+        { role: 'paste' },
+        ...(isMac
+          ? [
+              { role: 'pasteAndMatchStyle' },
+              { role: 'delete' },
+              { role: 'selectAll' },
+              { type: 'separator' },
+              {
+                label: 'Speech',
+                submenu: [{ role: 'startSpeaking' }, { role: 'stopSpeaking' }]
+              }
+            ]
+          : [{ role: 'delete' }, { type: 'separator' }, { role: 'selectAll' }])
+      ]
+    },
+    // { role: 'viewMenu' }
+    {
+      label: 'View',
+      submenu: [
+        { role: 'reload' },
+        { role: 'forceReload' },
+        ...(isProduction ? [] : [{ role: 'toggleDevTools' }]),
+        { type: 'separator' },
+        { role: 'resetZoom' },
+        { role: 'zoomIn' },
+        { role: 'zoomOut' },
+        { type: 'separator' },
+        { role: 'togglefullscreen' }
+      ]
+    },
+    // { role: 'windowMenu' }
+    {
+      label: 'Window',
+      submenu: [
+        { role: 'minimize' },
+        { role: 'zoom' },
+        ...(isMac
+          ? [{ type: 'separator' }, { role: 'front' }, { type: 'separator' }, { role: 'window' }]
+          : [{ role: 'close' }])
+      ]
+    },
+    ...(isProduction
+      ? []
+      : [
+          {
+            role: 'help',
+            submenu: [
+              {
+                label: 'Learn More',
+                click: async () => {
+                  const { shell } = require('electron')
+                  await shell.openExternal('https://electronjs.org')
+                }
+              }
+            ]
+          }
+        ])
+  ]
+
+  const menu = Menu.buildFromTemplate(template)
+  Menu.setApplicationMenu(menu)
 
   mainWindow.maximize()
 
@@ -62,12 +162,10 @@ export const createMainWindow = async (mainWindow: BrowserWindow): Promise<Brows
 
   // Listen for update events
   autoUpdater.on('update-available', () => {
-    console.log('Update available')
     mainWindow.webContents.send('update_available')
   })
 
   autoUpdater.on('update-not-available', () => {
-    console.log('Update not available')
     mainWindow.webContents.send('update_not_available')
   })
 

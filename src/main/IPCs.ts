@@ -60,7 +60,6 @@ export default class IPCs {
     // store authenticated user by decoding the passed token. If the token is invalid or null, then remove the authenticated user
     ipcMain.on('msgStoreAuthenticatedUser', (event: IpcMainEvent, token: string) => {
       try {
-        console.log('token', token)
         if (!token) {
           store.delete('authenticatedUser')
           event.returnValue = null
@@ -124,7 +123,6 @@ export default class IPCs {
 
     // get the license server url from environment
     ipcMain.on('msgGetLicenseServerUrl', (event: IpcMainEvent) => {
-      console.log('LICENSE SERVER URL BACK: ', process.env)
       event.returnValue = 'This is the requested URL'
     })
 
@@ -137,7 +135,6 @@ export default class IPCs {
     ipcMain.on('msgGetMachineFingerprint', (event: IpcMainEvent) => {
       // console.log(await machineId())
       machine().then((id) => {
-        console.log('MACHINE ID: ', id)
         event.returnValue = id
       })
     })

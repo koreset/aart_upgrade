@@ -139,7 +139,30 @@ const doForgotPassword = () => {
 </script>
 
 <style scoped>
-body {
-  background-color: grey !important;
+.v-application__wrap {
+  background-color: rgba(97, 136, 162, 0.7) !important;
+  /* flex: 1 1 auto;
+  max-width: 100%;
+  position: relative;
+  width: 100vw;
+  height: calc(100vh - 10px);
+  flex-direction: column;
+  overflow-y: auto;
+  margin-top: 0px;
+  margin-bottom: 20px !important;
+  padding-top: 0 !important;
+  padding-bottom: 20px !important; */
 }
+
+/* .v-application__wrap {
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  max-width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  position: relative;
+  background-color: green;
+} */
 </style>
