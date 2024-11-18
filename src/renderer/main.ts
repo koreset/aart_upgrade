@@ -4,6 +4,7 @@ import { createPinia } from 'pinia'
 import App from '@/renderer/App.vue'
 import AppLogin from '@/renderer/AppLogin.vue'
 import AppSetup from '@/renderer/AppSetup.vue'
+import LicenseWindow from '@/renderer/LicenseWindow.vue'
 import router from '@/renderer/router'
 import vuetify from '@/renderer/plugins/vuetify'
 import i18n from '@/renderer/plugins/i18n'
@@ -24,6 +25,9 @@ declare global {
   }
 }
 
+// save the license server url to the store. temp fix for now. This should be done in setup.
+window.mainApi?.sendSync('msgSetLicenseServerUrl', import.meta.env.VITE_APP_LICENSE_SERVER)
+
 const activated = window.mainApi?.sendSync('msgGetAppStatus')
 
 console.log('activated', activated)
@@ -31,11 +35,36 @@ console.log('activated', activated)
 let activeApp: any
 
 if (activated) {
-  const authenticatedUser = window.mainApi?.sendSync('msgGetAuthenticatedUser')
-  if (authenticatedUser) {
-    activeApp = App
-  } else {
-    activeApp = AppLogin
+  const validLicense = window.mainApi?.sendSync('msgCheckLicenseValidity')
+  console.log('validLicense', validLicense)
+
+  switch (validLicense) {
+    case 'VALID':
+      activeApp = App
+      break
+    case 'SUSPENDED':
+      activeApp = LicenseWindow
+      break
+    case 'EXPIRED':
+      activeApp = LicenseWindow
+      break
+    case 'OVERDUE':
+      // We need to execute a check in the background to see if the license is still valid
+      activeApp = LicenseWindow
+      break
+
+    default:
+      activeApp = LicenseWindow
+  }
+
+  if (activeApp === App) {
+    const authenticatedUser = window.mainApi?.sendSync('msgGetAuthenticatedUser')
+    console.log('authenticatedUser', authenticatedUser)
+    if (authenticatedUser) {
+      activeApp = App
+    } else {
+      activeApp = AppLogin
+    }
   }
 } else {
   activeApp = AppSetup

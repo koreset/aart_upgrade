@@ -2,8 +2,9 @@ import { ipcMain, shell, IpcMainEvent, BrowserWindow, app } from 'electron'
 import Constants from './utils/Constants'
 import Store from 'electron-store'
 import _ from 'lodash'
-import { encrypt } from './utils/encryption'
+import { encrypt, decrypt } from './utils/encryption'
 import { machine } from 'node-unique-machine-id'
+import axios from 'axios'
 const { autoUpdater } = require('electron-updater')
 
 // import { generateMachineFingerprint } from './utils/fingerprint'
@@ -123,7 +124,45 @@ export default class IPCs {
 
     // get the license server url from environment
     ipcMain.on('msgGetLicenseServerUrl', (event: IpcMainEvent) => {
-      event.returnValue = 'This is the requested URL'
+      const licenseServer = JSON.parse(decrypt(store.get('license_server', null)))
+      event.returnValue = licenseServer
+    })
+
+    ipcMain.on('msgSetLicenseServerUrl', (event: IpcMainEvent, url: string) => {
+      store.set('license_server', encrypt(JSON.stringify(url)))
+      event.returnValue = 'success'
+    })
+
+    ipcMain.on('msgCheckLicenseValidity', async (event: IpcMainEvent) => {
+      let licenseStatus = 'NO_LICENSE'
+
+      if (store.get('license', null) === null) {
+        event.returnValue = licenseStatus
+        return
+      }
+      const license = JSON.parse(decrypt(store.get('license')))
+      const payload: any = {}
+      payload.key = license.data.attributes.key
+      payload.fingerprint = await machine()
+      const licenseServer = JSON.parse(decrypt(store.get('license_server', null)))
+
+      const validationResult = await axios.post(licenseServer + '/validate-license', payload)
+      console.log('validationResult', validationResult.data.constant)
+
+      switch (validationResult.data.constant) {
+        case 'VALID':
+          licenseStatus = 'VALID'
+          break
+        case 'EXPIRED':
+          licenseStatus = 'EXPIRED'
+          break
+        case 'SUSPENDED':
+          licenseStatus = 'SUSPENDED'
+          break
+        default:
+          licenseStatus = 'INVALID'
+      }
+      event.returnValue = licenseStatus
     })
 
     // get the user access token
@@ -141,13 +180,44 @@ export default class IPCs {
 
     // set the user license
     ipcMain.on('msgSetUserLicense', (event: IpcMainEvent, license: object) => {
-      store.set('license', license)
+      store.set('license', encrypt(JSON.stringify(license)))
       store.set('activated', true)
+      machine().then((id) => {
+        store.set('finger_print', id)
+      })
       event.returnValue = 'success'
     })
 
     ipcMain.on('msgGetUserLicense', (event: IpcMainEvent) => {
-      event.returnValue = store.get('license', null)
+      event.returnValue = JSON.parse(decrypt(store.get('license', null)))
+    })
+
+    // activate license
+    ipcMain.on('msgActivateLicense', async (event: IpcMainEvent, licenseKey: string) => {
+      const fingerprint = await machine()
+      const licenseServer = JSON.parse(decrypt(store.get('license_server', null)))
+      const payload: any = {}
+      payload.key = licenseKey
+      payload.fingerprint = fingerprint
+
+      console.log('payload', payload)
+
+      const validation = await fetch(licenseServer + '/activate-key', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        body: JSON.stringify({
+          key: licenseKey,
+          fingerprint
+        })
+      })
+
+      const rs = await validation.json()
+
+      console.log('======validation', rs)
+      event.returnValue = rs
     })
   }
 }

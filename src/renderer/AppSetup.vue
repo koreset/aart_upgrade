@@ -19,6 +19,7 @@
 import { onBeforeMount, onMounted } from 'vue'
 import Activation from '@/renderer/components/setup/Activation.vue'
 // import Database from '@/renderer/components/setup/Database.vue'
+window.mainApi?.sendSync('msgSetLicenseServerUrl', import.meta.env.VITE_APP_LICENSE_SERVER)
 
 onBeforeMount(() => {
   console.log('Login component before mount')
