@@ -45,7 +45,6 @@ export const useProductStore = defineStore({
       }
     },
     setProductState(payload) {
-      console.log('Store Payload:', payload)
       this.product.product_name = payload.product_name
       this.product.product_code = payload.product_code
       this.product.product_family_id = payload.product_family_id
@@ -68,7 +67,6 @@ export const useProductStore = defineStore({
       this.product.product_transitions.push(transitions)
     },
     removeFromTransitions(item) {
-      console.log('Item:', item)
       this.product.product_transitions = this.product.product_transitions.filter(
         (transition) => transition !== item
       )
@@ -77,7 +75,6 @@ export const useProductStore = defineStore({
       this.product_features = features
     },
     addToProductRatingFactors(ratingFactor) {
-      console.log('Rating Factor:', ratingFactor)
       this.product.product_rating_factors.push(ratingFactor)
     },
     addToProductTables(table) {

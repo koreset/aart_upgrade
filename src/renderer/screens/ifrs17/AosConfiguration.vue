@@ -236,7 +236,6 @@ const aosVars: any = ref([])
 
 onMounted(() => {
   CsmService.getAosVariables().then((response) => {
-    console.log(response.data)
     aosVars.value = response.data
     aosVars.value.forEach((item) => {
       item.run_name = null
@@ -244,7 +243,6 @@ onMounted(() => {
   })
 
   CsmService.getExistingConfigs().then((res) => {
-    console.log(res.data)
     existingConfigs.value = res.data
     uniqueRuns()
   })
@@ -257,7 +255,6 @@ const closeInfoBox = (value) => {
 }
 
 const getTitle = (item) => {
-  console.log('Item: ', item)
   return `${item.run_name} - [ Run date: ${item.run_date} ] `
 }
 const toggleSap = () => {

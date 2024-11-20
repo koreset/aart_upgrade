@@ -46,6 +46,7 @@
           :isDialogOpen="isDialogOpen"
           :showModelPoint="showModelPoint"
           :mpLabel="mpLabel"
+          :table="'undefined'"
           :uploadTitle="uploadTitle"
           :years="years"
           @upload="handleUpload"
@@ -81,7 +82,6 @@ const props = defineProps({
 })
 
 const product = ref(props.product)
-console.log('pricing product', product.value)
 
 // data
 const infoDialog = ref(false)
@@ -113,7 +113,6 @@ const openDialog = (item: any) => {
 }
 
 const handleUpload = async (file: any) => {
-  console.log(file)
   const formdata = new FormData()
   formdata.append('file', file.file)
   formdata.append('table_id', selectedTableId.value)
@@ -165,27 +164,6 @@ const updateUnpopulatedTables = (itemId: number) => {
 const closeInfoBox = (value: boolean) => {
   infoDialog.value = value
 }
-
-// const confirmDelete = (item: any) => {
-//   console.log(item)
-//   console.log('confirmDelete')
-// }
-
-// const dismissTableDialog = (value: boolean) => {
-//   tableDialog.value = value
-// }
-
-// const checkItemTable = (item) => {
-//   if (
-//     item.table === 'Margins' ||
-//     item.table === 'Yield_Curve' ||
-//     item.table === 'Parameters' ||
-//     item.table === 'Shocks'
-//   ) {
-//     return false
-//   }
-//   return true
-// }
 
 const createColumnDefs = (data: any) => {
   columnDefs.value = []

@@ -283,7 +283,6 @@ const apiVersion: any = ref('')
 
 onMounted(async () => {
   appVersion.value = await window.mainApi?.sendSync('msgGetAppVersion')
-  console.log('App Version:', appVersion.value)
   TaskService.getApiVersion().then((response) => {
     apiVersion.value = response.data
   })

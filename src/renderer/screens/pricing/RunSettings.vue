@@ -236,12 +236,10 @@ const selectedMpVersionErrors = ref([])
 
 // lifecycle hooks
 onMounted(async () => {
-  console.log('Mounted')
   const prodResponse = await ProductService.getProducts()
   allProducts.value = prodResponse.data
   // allProducts.value = appStore.getAllProducts
 
-  console.log('All Products', allProducts.value)
 
   allProducts.value.forEach((family: any) => {
     family.products.forEach((product: any) => {
@@ -277,8 +275,7 @@ const addToScenarios = () => {
     snackbar.value = true
     return
   }
-  console.log(clonedPricingConfig.value)
-  console.log(clonedDescription.value)
+
   const scenario = {
     description: clonedDescription.value,
     ...clonedPricingConfig.value
@@ -320,7 +317,6 @@ const setProductType = async () => {
   // Will figure out how to get out this hard coding.
   pricingConfig.value = []
   mpVersions.value = []
-  console.log('selected_product:', selectedProduct)
   // Funeral
   if (selectedProduct.value.product_features.funeral_cover) {
     pricingConfig.value = funeralConfig
@@ -345,7 +341,6 @@ const setProductType = async () => {
     infoText.value = ''
   }
 
-  console.log('selected_product:', selectedProduct)
 
   let res = await PricingService.getPricingParams(selectedProduct.value.product_code)
   if (res.data.error === null && res.data.data.length > 0) {
@@ -386,7 +381,6 @@ const setProductType = async () => {
   // need pricing product parameter bases and shock bases
 
   PricingService.getProductPricingParams(selectedProduct.value.product_code).then((res) => {
-    console.log('product pricing params:', res.data)
     if (res.data.error === null) {
       paramsBases.value = res.data.bases
       // add an N/A option at the beginning of the array
@@ -441,7 +435,6 @@ const runPricing = () => {
       return
     }
 
-    console.log('pricing scenarios:', pricingScenarios.value)
     payload.pricing_config = pricingScenarios.value
     payload.product_id = selectedProduct.value.id
     payload.run_single = runSingle.value
@@ -461,7 +454,6 @@ const runPricing = () => {
       }, 3000)
     })
   } catch (error) {
-    console.log('Error:', error)
     feedBackMessage.value = 'An error occurred while running pricing'
     snackbar.value = true
   }

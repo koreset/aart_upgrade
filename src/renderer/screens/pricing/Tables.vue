@@ -292,21 +292,16 @@ const pricingProduct: any = ref(null)
 const items: any = []
 
 const closeDialog = (value) => {
-  console.log('closing dialog', value)
   showDialog.value = value
   tableDialog.value = value
-  console.log('closing table dialog', tableDialog.value)
 }
 
 const getModelPointsCount = async () => {
-  console.log('getting model points count', selectedProduct.value)
   pricingProduct.value = null
   const resp = await ProductService.getProductById(selectedProduct.value.id)
-  console.log('getting model points count', resp.data)
   pricingProduct.value = resp.data
 
   PricingService.getModelPointCount(selectedProduct.value.product_code).then((res) => {
-    console.log(res.data)
     modelPointCount.value = res.data.count
     modelPoints.value = res.data.model_points
     modelPointSets.value = res.data.model_point_sets
@@ -314,8 +309,6 @@ const getModelPointsCount = async () => {
 }
 
 const getModelPoints = (modelPoints) => {
-  console.log('getting model points')
-  console.log(modelPoints)
   loadingComplete.value = true
   if (modelPoints !== null && modelPoints.length > 0) {
     items.value = []
@@ -352,12 +345,10 @@ const dismissModelPointsDialog = () => {
 }
 
 onMounted(async () => {
-  console.log('Mounted')
   const prodResponse = await ProductService.getProducts()
   allProducts.value = prodResponse.data
   // allProducts.value = appStore.getAllProducts
 
-  console.log('All Products', allProducts.value)
 
   allProducts.value.forEach((family: any) => {
     family.products.forEach((product: any) => {
@@ -396,7 +387,6 @@ const handleFileUpload = (event, tableType) => {
 }
 
 const deleteModelPoints = (mp: any) => {
-  console.log(mp)
   PricingService.deleteModelPoints(selectedProduct.value.product_code, mp.version).then(
     (response) => {
       text.value = response.data
@@ -405,7 +395,6 @@ const deleteModelPoints = (mp: any) => {
       modelPoints.value = []
     }
   )
-  console.log('delete model points')
 }
 
 const uploadModelPoints = () => {
@@ -490,7 +479,6 @@ const deletePricingParameters = async () => {
   )
 
   if (!res) return
-  console.log('delete pricing parameters')
 
   PricingService.deletePricingParameters(selectedProduct.value.product_code)
     .then((response) => {
@@ -508,7 +496,6 @@ const getPricingPolicyDemographics = () => {
   rowData.value = []
   PricingService.getPricingDemographics(selectedProduct.value.product_code)
     .then((res) => {
-      console.log(res.data)
       const demographics = res.data.data
       if (demographics !== null && demographics.length > 0) {
         items.value = []
@@ -557,7 +544,6 @@ const deletePricingPolicyDemographics = async () => {
       snackbar.value = true
     })
 
-  console.log('delete pricing demographics')
 }
 
 const createColumnDefs = (data) => {

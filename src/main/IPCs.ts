@@ -147,7 +147,6 @@ export default class IPCs {
       const licenseServer = JSON.parse(decrypt(store.get('license_server', null)))
 
       const validationResult = await axios.post(licenseServer + '/validate-license', payload)
-      console.log('validationResult', validationResult.data.constant)
 
       switch (validationResult.data.constant) {
         case 'VALID':
@@ -172,7 +171,6 @@ export default class IPCs {
 
     // get machine fingerprint
     ipcMain.on('msgGetMachineFingerprint', (event: IpcMainEvent) => {
-      // console.log(await machineId())
       machine().then((id) => {
         event.returnValue = id
       })
@@ -200,7 +198,6 @@ export default class IPCs {
       payload.key = licenseKey
       payload.fingerprint = fingerprint
 
-      console.log('payload', payload)
 
       const validation = await fetch(licenseServer + '/activate-key', {
         method: 'POST',
@@ -216,7 +213,6 @@ export default class IPCs {
 
       const rs = await validation.json()
 
-      console.log('======validation', rs)
       event.returnValue = rs
     })
   }

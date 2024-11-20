@@ -46,6 +46,7 @@
       :isDialogOpen="isDialogOpen"
       :showModelPoint="showModelPoint"
       :mpLabel="mpLabel"
+      :table="selectedTableName"
       :uploadTitle="uploadTitle"
       :years="years"
       @upload="handleUpload"
@@ -81,7 +82,7 @@
         </template>
         <template #actions>
           <v-spacer></v-spacer>
-          <v-btn rounded variant="text" @click="closeDialog">Close</v-btn>
+          <v-btn rounded variant="text" @click="closeDialog">Ok</v-btn>
         </template>
       </base-card>
     </v-dialog>
@@ -106,10 +107,12 @@ import BaseCard from './BaseCard.vue'
 
 const props = defineProps({
   product: {
-    type: Object,
+    type: Object as () => any | null,
     required: true
   }
 })
+
+
 
 const snackbar = ref(false)
 const snackbarMessage = ref('')
@@ -125,6 +128,8 @@ const selectedYear: any = ref(null)
 const availableDataYears = ref([])
 
 const selectedTableId: any = ref(0)
+const selectedTable: any = ref(null)
+const selectedTableName: any = ref('')
 const selectedItem: any = ref({})
 // file upload dialog props
 const showModelPoint = ref(false)
@@ -147,6 +152,8 @@ const closeDialog = () => {
 }
 
 const openDialog = (item: any) => {
+  selectedTable.value = item
+  selectedTableName.value = item.table
   selectedTableId.value = item.id
   yearLabel.value = 'Select a year'
   uploadTitle.value = 'Upload File Data for ' + item.table + ' Table (csv)'
@@ -196,36 +203,48 @@ const handleUpload = (data: {
   formdata.append('year', data.year?.toString() as string)
   formdata.append('table_id', selectedTableId.value)
   formdata.append('product_code', props.product.product.product_code)
-  console.log('formdata', formdata)
-  console.log('props.product.product_code', props.product)
+
 
   ProductService.uploadProductTable({
     formdata,
     productId: props.product.id
+  }).then((response) => {
+    if (response.status === 200) {
+      // update populated status
+      const index = associatedTables.value.findIndex((table) => table.id === selectedTableId.value)
+      associatedTables.value[index].populated = true
+
+      snackbarMessage.value = 'Data uploaded successfully'
+      snackbar.value = true
+    } else {
+      snackbarMessage.value = 'Error uploading data'
+      snackbar.value = true
+    }
   })
 }
 
+associatedTables.value = props.product.product.product_tables
+
 // watch for changes in the props.product.product_tables
 watch(
-  () => props.product.product_tables,
+  () => props.product.product.product_tables,
   (newValue) => {
-    associatedTables.value = newValue
-      .map((table) => ({
-        ...table,
-        readonly: !!(
-          table.table === 'Margins' ||
-          table.table === 'Yield_Curve' ||
-          table.table === 'Parameters' ||
-          table.table === 'Shocks'
-        )
-      }))
-      .filter((table) => table.table !== 'Shocks' && table.table !== 'Yield_Curve')
-      .sort((a, b) => a.readonly - b.readonly)
+    // console.log('Updating associated tables', newValue)
+    // associatedTables.value = []
+    // associatedTables.value = newValue
+    //   .map((table) => ({
+    //     ...table,
+    //     readonly: !!(
+    //       table.table === 'Margins' ||
+    //       table.table === 'Yield_Curve' ||
+    //       table.table === 'Parameters' ||
+    //       table.table === 'Shocks'
+    //     )
+    //   }))
+    //   .filter((table) => table.table !== 'Shocks' && table.table !== 'Yield_Curve')
+    //   .sort((a, b) => a.readonly - b.readonly)
   }
 )
-
-associatedTables.value = props.product.product.product_tables
-console.log('associatedTables', associatedTables.value)
 
 associatedTables.value = associatedTables.value
   .map((table) => ({
@@ -241,41 +260,59 @@ associatedTables.value = associatedTables.value
   .sort((a, b) => a.readonly - b.readonly)
 
 const chooseYear = (item: any) => {
-  console.log('item choose year', item)
-  console.log('props.product.id', props.product.product.id)
-  availableDataYears.value = []
-  selectedYear.value = null
-  ProductService.getProductTableYears(
-    props.product.product.id,
-    item.table,
-    'valuations',
-    item.table_class
-  ).then((response) => {
-    availableDataYears.value = response.data
-  })
+  if (
+    item.table === 'Accidental_Mortality' ||
+    item.table === 'Mortality' ||
+    item.table === 'Lapse' ||
+    item.table === 'Lapse_Margins'
+  ) {
 
-  selectedItem.value = item
+    availableDataYears.value = []
+    selectedYear.value = null
+    ProductService.getProductTableYears(
+      props.product.product.id,
+      item.table,
+      'valuations',
+      item.table_class
+    ).then((response) => {
+      availableDataYears.value = response.data
+    })
 
-  yearsDialog.value = true
-}
+    selectedItem.value = item
 
-const confirmDelete = async (item: any) => {
-  console.log('item', item)
-  const result = await confirmAction.value.open(
-    'Deleting Data for ' + item.table + ' table',
-    'Are you sure you want to delete this data?'
-  )
-  if (result) {
-    deleteTable(item)
+    yearsDialog.value = true
+  } else {
+    selectedYear.value = 0
+    confirmDelete(item)
   }
 }
 
-const deleteTable = (item: any) => {
-  ProductService.deleteProductTablev2(props.product.product.id, item.id, selectedYear.value).then(
-    (response) => {
-      console.log('response', response)
+const confirmDelete = async (item: any) => {
+  try {
+    const result = await confirmAction.value.open(
+      'Deleting Data for ' + item.table + ' table',
+      'Are you sure you want to delete this data?'
+    )
+    if (result) {
+      deleteTable(item, selectedYear.value)
     }
-  )
+  } catch (error) {
+    console.log('error', error)
+  }
+}
+
+const deleteTable = (item: any, year: any) => {
+  ProductService.deleteProductTablev2(props.product.product.id, item.id, year).then((response) => {
+    if (response.status === 200) {
+      const index = associatedTables.value.findIndex((table) => table.id === item.id)
+      associatedTables.value[index].populated = false
+      snackbarMessage.value = 'Data deleted successfully'
+      snackbar.value = true
+    } else {
+      snackbarMessage.value = 'Error deleting data'
+      snackbar.value = true
+    }
+  })
 }
 
 const viewTable = (item: any) => {
@@ -284,7 +321,6 @@ const viewTable = (item: any) => {
 }
 
 const loadData = (item) => {
-  console.log('item', item)
   try {
     ProductService.getProductTable({
       product_code: props.product.product.product_code,

@@ -223,7 +223,6 @@ import BaseCard from '../../../components/BaseCard.vue'
 import LoadingIndicator from '@/renderer/components/LoadingIndicator.vue'
 
 const toMinutes = (number) => {
-  console.log('number', number)
   number = number * 60
   const minutes = Math.floor(number / 60) // 7
   let seconds = ((number % 60) / 100) * 60 // 30
@@ -264,7 +263,6 @@ const toggleSelect = (id: any) => {
   } else {
     selectedItems.value.push(id)
   }
-  console.log(selectedItems.value)
 }
 
 const getSelectStatus = () => {
@@ -319,7 +317,6 @@ onMounted(async () => {
   const resv2 = await ModifiedGMMService.getProjectionJobsv2()
 
   runJobs.value = resv2.data
-  console.log(runJobs.value)
   totalPages.value = Math.ceil(runJobs.value.length / pageSize)
   loading.value = false
   if (

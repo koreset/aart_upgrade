@@ -135,11 +135,9 @@ const classifications = ref([{ name: 'Transition Rates', value: 'TransitionRates
 // lifecycle
 onMounted(() => {
   try {
-    console.log('Organization:', appStore.getLicenseData)
-    console.log('Organization:', organization.value)
+
     ProductService.getOrgUsers({ name: organization.value }).then((res) => {
       orgUsers.value = res.data
-      console.log('Org Users:', orgUsers.value)
     })
   } catch (error) {
     console.log('Error:', error)

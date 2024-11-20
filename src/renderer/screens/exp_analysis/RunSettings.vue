@@ -331,7 +331,6 @@ const getAvailableExposureVersions = () => {
     selectedConfiguration.value.id,
     selectedExposureYear.value
   ).then((res) => {
-    console.log(res.data)
     availableExposureVersions.value = res.data
   })
 }

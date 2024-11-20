@@ -137,10 +137,8 @@ const deleteShockSetting = async (scenario: any) => {
     )
 
     if (result) {
-      console.log('confirming delete', scenario)
       const response = ModifiedGMMService.deleteShockSetting(scenario.id)
       if (response.status === 204) {
-        console.log('deleted')
         shockScenarios.value = shockScenarios.value.filter((item) => {
           return item.id !== scenario.id
         })
@@ -152,7 +150,6 @@ const deleteShockSetting = async (scenario: any) => {
 }
 
 const createColumnDefs = (data: any, tableName: string) => {
-  console.log(tableName)
   const cDefs: any = []
   if (typeof data !== 'undefined') {
     Object.keys(data[0]).forEach((element) => {

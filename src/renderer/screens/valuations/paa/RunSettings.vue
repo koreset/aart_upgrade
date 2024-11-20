@@ -254,11 +254,9 @@ const yearEndMonth = ref(12)
 
 // const formattedDate = computed(() => {
 //   if (!runDate.value) return ''
-//   console.log('Run Date', runDate.value)
 //   const date = new Date(runDate.value)
 //   const year = date.getFullYear()
 //   const month = String(date.getMonth() + 1).padStart(2, '0') // Ensure two digits
-//   console.log('Year', `${year}-${month}`)
 //   return `${year}-${month}`
 // })
 
@@ -588,7 +586,6 @@ const addToRunJobs = () => {
 //   },
 //   methods: {
 //     async checkPaaFinanceYear() {
-//       console.log(this.selectedPortfolios[0].name, this.selectedYear);
 //       if (this.selectedPortfolios.length > 0 && this.selectedYear !== null) {
 //         const res = await ModifiedGMMService.checkPaaFinanceYear(
 //           this.selectedPortfolios[0].name,
@@ -777,7 +774,6 @@ const addToRunJobs = () => {
 
 //       // this.$v.$touch();
 //       // if (this.$v.$invalid) {
-//       //   console.log(this.$v)
 //       //   return;
 //       // }
 //       if (this.runName !== null && this.selectedParameterYear !== null) {

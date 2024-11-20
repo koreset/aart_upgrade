@@ -114,30 +114,24 @@ const portfolioName = ref('')
 const loadingData = ref(false)
 
 onMounted(() => {
-  console.log('mounted')
   const route = useRoute()
-  console.log(route)
   runId.value = route.params.id
   loadingComplete.value = false
   gridOptions.value = {}
   loadingData.value = true
   ModifiedGMMService.getProjections(runId.value).then((res: any) => {
-    console.log(res.data)
     rowData.value = res.data.results
     scopedRowData.value = res.data.scoped_results
     groupList.value = res.data.groups
     runSettings.value = res.data.run_settings
     portfolioName.value = runSettings.value.name
-    console.log('runSettings.value', runSettings.value)
-    console.log('portfolioName.value', portfolioName.value)
+
 
     if (rowData.value.length > 0) {
-      console.log('rowData.value', rowData.value)
       cDefs.value = createColumnDefs(rowData.value)
     }
 
     if (scopedRowData.value.length > 0) {
-      console.log('scopedRowData.value', scopedRowData.value)
       spCDefs.value = createScopedColumnDefs(scopedRowData.value)
     }
 

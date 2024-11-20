@@ -16,18 +16,15 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, onMounted } from 'vue'
+import { onBeforeMount } from 'vue'
 import Activation from '@/renderer/components/setup/Activation.vue'
 // import Database from '@/renderer/components/setup/Database.vue'
 window.mainApi?.sendSync('msgSetLicenseServerUrl', import.meta.env.VITE_APP_LICENSE_SERVER)
 
 onBeforeMount(() => {
-  console.log('Login component before mount')
   window.mainApi?.send('msgResizeWindow', 1024, 600, false)
 })
-onMounted(() => {
-  console.log('Login component mounted')
-})
+
 </script>
 
 <style scoped>

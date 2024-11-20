@@ -121,7 +121,6 @@ const dialog: any = ref(false)
 const selectedYear: any = ref(null)
 const selectedMonth: any = ref(null)
 const yieldCurveCode: any = ref(null)
-const selectedType: any = ref(null)
 const fileName: any = ref(null)
 
 // computed
@@ -157,10 +156,7 @@ const closeDialog = () => {
 
 // processing of the captured data will be delegated to the parent caller
 const uploadFile = () => {
-  console.log('uploading file')
-  console.log(selectedType.value)
-  console.log(newprops.tableType)
-  console.log(file.value)
+
   if (file.value !== null) {
     const payload: DataPayload = {
       file: file.value,

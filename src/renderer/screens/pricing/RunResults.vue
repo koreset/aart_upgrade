@@ -155,7 +155,6 @@ onMounted(async () => {
   loading.value = true
   const res = await ProductService.getPricingJobs()
   runJobs.value = res.data
-  console.log(runJobs.value)
   if (runJobs.value === undefined || runJobs.value === null) {
     runJobs.value = []
   }
@@ -198,86 +197,7 @@ const downloadResults = (jobId) => {
   })
 }
 
-// export default {
-//   filters: {
-//     reduceDecimal(number) {
-//       return number.toFixed(2)
-//     },
-//     moment: function (date) {
-//       return moment(date).format('MMMM Do YYYY, h:mm:ss a')
-//     },
-//     toMinutes: function (number) {
-//       // number = number
-//       const minutes = Math.floor(number / 60) // 7
-//       let seconds = ((number % 60) / 100) * 60 // 30
-//       seconds = Math.round(seconds)
-//       return minutes + ' minutes, ' + seconds + ' seconds'
-//     }
-//   },
-//   data: () => {
-//     return {
-//       dialog: false,
-//       selectedJobId: null,
-//       runJobs: [],
-//       value: 30,
-//       loading: false
-//     }
-//   },
-//   computed: {
-//     networkAvailable: function () {
-//       return this.$store.state.backendAvailable
-//     }
-//   },
-//   beforeUnmount() {
-//     clearInterval(pollTimer)
-//   },
-//   async mounted() {
-//     this.loading = true
-//     const res = await ProductService.getPricingJobs()
-//     this.runJobs = res.data
-//     console.log(this.runJobs)
-//     if (this.runJobs === undefined || this.runJobs === null) {
-//       this.runJobs = []
-//     }
-//     if (this.runJobs.length > 0 && this.runJobs.some((job) => job.status === 'in progress')) {
-//       pollTimer = setInterval(() => {
-//         if (this.runJobs.some((job) => job.status === 'in progress')) {
-//           ProductService.getPricingJobs().then((response) => {
-//             this.runJobs = response.data
-//           })
-//         } else {
-//           clearInterval(pollTimer)
-//         }
-//       }, 3000)
-//     }
-//   },
-//   methods: {
-//     confirmDelete(jobId) {
-//       this.dialog = true
-//       this.selectedJobId = jobId
-//     },
-//     deletePricingJob(id) {
-//       PricingService.deletePricing(id)
-//       this.runJobs = this.runJobs.filter(function (elem) {
-//         return elem.id !== id
-//       })
-//       this.dialog = false
-//     },
-//     downloadResults(jobId) {
-//       PricingService.getPricingExcelResults(jobId).then((response) => {
-//         this.excelLoading = false
-//         const fileURL = window.URL.createObjectURL(new Blob([response.data]))
-//         const fileLink = document.createElement('a')
 
-//         fileLink.href = fileURL
-//         fileLink.setAttribute('download', 'pricing-results-' + jobId + '.xlsx')
-//         document.body.appendChild(fileLink)
-
-//         fileLink.click()
-//       })
-//     }
-//   }
-// }
 </script>
 
 <style scoped>

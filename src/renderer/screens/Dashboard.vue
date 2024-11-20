@@ -57,7 +57,6 @@ onBeforeMount(() => {
   loading.value = true
   ProductService.getProducts()
     .then((products: any) => {
-      console.log(products)
       productsAvailable.value = products.data.length > 0
       loading.value = false
     })

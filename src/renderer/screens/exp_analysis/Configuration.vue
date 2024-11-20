@@ -310,29 +310,23 @@ const createConfiguration = () => {
 }
 
 const getExpDataVersions = (id: number, year: number) => {
-  console.log('Getting Exp Data Versions', id, year)
   yearVersions.value = []
 
   const configData = configurations.value.filter((item) => item.id === id)
-  console.log('configData', configData[0].exp_data_year_versions)
 
   yearVersions.value = configData[0].exp_data_year_versions.filter(
     (item: any) => item.year === year
   )
-  console.log('yearVersions', yearVersions.value)
 }
 
 const getActualDataVersions = (id: number, year: number) => {
-  console.log('Getting Actual Data Versions', id, year)
   actualYearVersions.value = []
 
   const configData = configurations.value.filter((item) => item.id === id)
-  console.log('configData', configData[0].actual_data_year_versions)
 
   actualYearVersions.value = configData[0].actual_data_year_versions.filter(
     (item: any) => item.year === year
   )
-  console.log('yearVersions', actualYearVersions.value)
 }
 
 const clearData = () => {
@@ -343,12 +337,9 @@ const clearData = () => {
 }
 
 const checkClass = (item: any) => {
-  console.log('Checking Class', item)
   if (item) {
-    console.log('activePanel', activePanel.value)
     expansionColor.value = 'expanded'
   } else {
-    console.log('activePanel', activePanel.value)
     expansionColor.value = ''
   }
   selectedExpDataYear.value = null
@@ -369,7 +360,6 @@ const deletePortfolio = async (id: number) => {
 
   if (!res) return
 
-  console.log('Deleting Portfolio', id)
   loadingData.value = true
   ExpService.deleteConfiguration(id).then((res) => {
     configurations.value = res.data
@@ -382,13 +372,11 @@ const loadConfigs = () => {
   loadingData.value = true
   ExpService.getConfigurations().then((res) => {
     configurations.value = res.data
-    console.log(configurations)
     loadingData.value = false
   })
 }
 
 const showData = (id: number, name: string, year: number, version: number) => {
-  console.log('Showing Data', id, name, year, version)
   loadingData.value = true
   rowData.value = []
   actualRowData.value = []
@@ -396,7 +384,6 @@ const showData = (id: number, name: string, year: number, version: number) => {
   ExpService.getTableData(id, name, year, version).then((res) => {
     if (name === 'actual_data') {
       actualRowData.value = res.data
-      console.log('Actual Data', res.data)
       if (actualRowData.value !== null) {
         createColumnDefs(actualRowData.value)
       }
@@ -404,7 +391,6 @@ const showData = (id: number, name: string, year: number, version: number) => {
 
     if (name === 'exposure_data') {
       rowData.value = res.data
-      console.log('Data', res.data)
       if (rowData.value !== null) {
         createColumnDefs(rowData.value)
       }
@@ -426,10 +412,8 @@ const deleteData = async (
 
   if (!res) return
 
-  console.log('Deleting Data', tableType, portfolioId, year, version)
   loadingData.value = true
   ExpService.deleteConfigData(tableType, portfolioId, year, version).then((res) => {
-    console.log('Data', res.data)
     rowData.value = res.data
     columnDefs.value = Object.keys(res.data[0]).map((item) => {
       return {
@@ -442,7 +426,6 @@ const deleteData = async (
 }
 
 onMounted(() => {
-  console.log('Configuration')
   loadingData.value = true
   loadConfigs()
   IbnrService.getPortfolios().then((res) => {
@@ -467,9 +450,7 @@ const createColumnDefs = (data: any) => {
 }
 
 const handleUpload = (payload: any, config: any) => {
-  console.log('Handling Upload', payload, config)
-  console.log('Loading Data', loadingData.value)
-  console.log('Load Data Complete', loadDataComplete.value)
+
   loadingData.value = true
   loadDataComplete.value = false
 
@@ -482,7 +463,6 @@ const handleUpload = (payload: any, config: any) => {
 
   if (payload.dataTableType === 'actual_data') {
     ExpService.uploadExpActualData(formdata).then((res) => {
-      console.log('Upload Data', res.data)
       configurations.value = res.data
       loadingData.value = false
       loadDataComplete.value = true
@@ -492,7 +472,6 @@ const handleUpload = (payload: any, config: any) => {
 
   if (payload.dataTableType === 'exposure_data') {
     ExpService.uploadExpData(formdata).then((res) => {
-      console.log('Upload Data', res.data)
       configurations.value = res.data
       loadingData.value = false
       loadDataComplete.value = true

@@ -229,10 +229,7 @@ const closeDialog = () => {
 
 // processing of the captured data will be delegated to the parent caller
 const uploadFile = () => {
-  console.log('uploading file')
-  console.log(selectedTableType.value)
-  console.log(props.tableType)
-  console.log(file.value)
+
   if (file.value !== null) {
     const payload: DataPayload = {
       file: file.value,

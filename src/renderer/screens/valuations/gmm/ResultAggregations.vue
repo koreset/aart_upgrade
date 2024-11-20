@@ -325,7 +325,6 @@ const warnEmptyVariables = () => {
 }
 
 const onVariableGroupChange = () => {
-  console.log(selectedVariableGroup.value)
   if (selectedVariableGroup.value === null) {
     return
   }

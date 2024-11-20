@@ -177,10 +177,8 @@ const chartOptions: any = ref({
 
 // lifecycle
 onMounted(async () => {
-  console.log('Mounted')
   const prodResponse = await ProductService.getProducts()
 
-  console.log('Response', prodResponse.data)
 
   prodResponse.data.forEach((family) => {
     family.products.forEach((product) => {
@@ -188,7 +186,6 @@ onMounted(async () => {
     })
   })
 
-  console.log('All Products', allProducts.value)
 
   // productCategories.value = allProducts.value.map((item: any) => ({
   //   id: item.id,
@@ -207,7 +204,6 @@ const combineArrays = (array1, array2) => {
     const correspondingItem = array2.find(
       (item2) => item2.projection_month === item1.projection_month
     )
-    console.log(item1, correspondingItem)
 
     if (correspondingItem) {
       return {
@@ -219,7 +215,6 @@ const combineArrays = (array1, array2) => {
 
     return null // Handle cases where a matching projectionMonth is not found in array2
   })
-  console.log(combinedArray)
   // sort array on the projection_month
   combinedArray.sort((a, b) => {
     return a.projection_month - b.projection_month
@@ -239,7 +234,6 @@ const startComparison = () => {
     variable = variable.substring(1)
   }
 
-  console.log('Variable', variable)
 
   getAggregatedVariable({ variable })
 }
@@ -271,7 +265,6 @@ const getAggregatedVariable = (payload) => {
         }
         chartSeries.data.push(elem.reserves)
       })
-      console.log('chart series: ', chartSeries.data)
       chartSeries.name = reserves.projection_job.product_code + ' [' + (index + 1) + ']'
       chartSeries.color = '#' + Math.floor(Math.random() * 16777215).toString(16)
       chartOptions.value.series.push(chartSeries)

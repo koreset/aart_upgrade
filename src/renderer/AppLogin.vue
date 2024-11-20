@@ -70,12 +70,9 @@
 import { onBeforeMount, onMounted, ref } from 'vue'
 
 onBeforeMount(() => {
-  console.log('Login component before mount')
   window.mainApi?.send('msgResizeWindow', 1024, 600, false)
 })
-onMounted(() => {
-  console.log('Login component mounted')
-})
+onMounted(() => {})
 
 const authUrl = import.meta.env.VITE_APP_AUTH_URL
 const forgotPasswordFlow = ref(false)
@@ -84,11 +81,8 @@ const password = ref('')
 const errors = ref('')
 const userEmail = ref('')
 
-console.log(typeof errors.value)
-
 const login = async () => {
   errors.value = ''
-  console.log('AuthURL: ', authUrl)
   try {
     const response = await fetch(authUrl + '/login', {
       method: 'POST',
@@ -101,9 +95,7 @@ const login = async () => {
         username: username.value
       })
     })
-    console.log('Response: ', response)
     if (response.status === 401) {
-      console.log('Unauthorized')
       errors.value = 'the username, email or password is invalid'
     }
     if (response.status === 201 || response.status === 200) {
@@ -115,8 +107,7 @@ const login = async () => {
         window.mainApi?.send('msgRestartApplication')
       }
     } else {
-      const result = await window.mainApi?.sendSync('msgStoreAuthenticatedUser', null)
-      console.log(result)
+      await window.mainApi?.sendSync('msgStoreAuthenticatedUser', null)
     }
   } catch (error) {
     console.log('Error:', error)
@@ -124,7 +115,6 @@ const login = async () => {
 }
 
 const doForgotPassword = () => {
-  console.log('Forgot Password')
   forgotPasswordFlow.value = false
   const email = userEmail.value
   fetch(authUrl + '/forgotPassword', {
@@ -134,7 +124,7 @@ const doForgotPassword = () => {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({ recipient: email })
-  }).then((response) => console.log(response))
+  })
 }
 </script>
 

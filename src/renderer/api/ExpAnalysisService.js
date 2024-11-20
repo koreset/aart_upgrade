@@ -71,7 +71,6 @@ export default {
     return Api.post(`exp-analysis/check-run-name/${runName}`)
   },
   runAnalysis(runData) {
-    console.log('runData', runData)
     return Api.post('exp-analysis/run-exp-analysis', runData)
   },
   getRunResults() {

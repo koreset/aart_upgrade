@@ -135,7 +135,6 @@ const getModelPointVersions = () => {
       selectedPortfolio.value.name,
       selectedModelPointYear.value
     ).then((res) => {
-      console.log(res.data)
       modelPointVersions.value = res.data
     })
   }

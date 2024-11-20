@@ -30,13 +30,11 @@ window.mainApi?.sendSync('msgSetLicenseServerUrl', import.meta.env.VITE_APP_LICE
 
 const activated = window.mainApi?.sendSync('msgGetAppStatus')
 
-console.log('activated', activated)
 
 let activeApp: any
 
 if (activated) {
   const validLicense = window.mainApi?.sendSync('msgCheckLicenseValidity')
-  console.log('validLicense', validLicense)
 
   switch (validLicense) {
     case 'VALID':
@@ -59,7 +57,6 @@ if (activated) {
 
   if (activeApp === App) {
     const authenticatedUser = window.mainApi?.sendSync('msgGetAuthenticatedUser')
-    console.log('authenticatedUser', authenticatedUser)
     if (authenticatedUser) {
       activeApp = App
     } else {

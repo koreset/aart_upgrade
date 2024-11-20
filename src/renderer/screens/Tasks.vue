@@ -100,7 +100,6 @@ const deleteTask = (id) => {
 
 const getTasks = async () => {
   const licensedUser = await window.mainApi?.sendSync('msgGetAuthenticatedUser')
-  console.log('Licensed User:', licensedUser)
 
   const user: any = {}
 
@@ -109,49 +108,12 @@ const getTasks = async () => {
 
   TaskService.getTasks(user).then((res) => {
     tasks.value = res.data
-    console.log('Tasks:', tasks.value)
   })
 
-  // ipcRenderer.invoke('get-current-user').then((user) => {
-  //   console.log('User:::', user)
-  //   TaskService.getTasks(user).then((res) => {
-  //     tasks.value = res.data
-  //   })
-  // })
+
 }
 
-// export default {
-//   data: () => {
-//     return {
-//       dialog: false,
-//       tasks: null,
-//       deleteTaskId: null
-//     }
-//   },
-//   created() {
-//     this.getTasks()
-//   },
-//   methods: {
-//     confirmDelete(taskId) {
-//       this.dialog = true
-//       this.deleteTaskId = taskId
-//     },
 
-//     deleteTask(id) {
-//       TaskService.deleteTask(id).then(() => {
-//         this.getTasks()
-//       })
-//     },
-//     getTasks() {
-//       ipcRenderer.invoke('get-current-user').then((user) => {
-//         console.log('User:::', user)
-//         TaskService.getTasks(user).then((res) => {
-//           this.tasks = res.data
-//         })
-//       })
-//     }
-//   }
-// }
 </script>
 
 <style></style>

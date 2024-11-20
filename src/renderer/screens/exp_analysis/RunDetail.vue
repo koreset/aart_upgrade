@@ -312,7 +312,6 @@ const getResultsByProduct = () => {
   loadingResults.value = true
   IbnrService.getProjectionRunResults($route.params.id, resultType, selectedProduct).then((res) => {
     runSettings.value = res.data.run_settings
-    console.log('getting results by product')
     if (res.data.table_data.length > 0) {
       res.data.table_data.forEach((item) => {
         const tableDef: any = {}
@@ -388,7 +387,6 @@ const getResults = () => {
     loadingResults.value = true
     if (resultType.value === 'exp_modelpoints') {
       ExpService.getExpModelPointsByRunId($route.params.id).then((res) => {
-        console.log(res.data.table_data)
         if (res.data.table_data.length > 0) {
           res.data.table_data.forEach((item) => {
             const tableDef: any = {}
@@ -403,7 +401,6 @@ const getResults = () => {
     }
     if (resultType.value === 'exp_crude_results') {
       ExpService.getExpCrudeResultsByRunId($route.params.id).then((res) => {
-        console.log(res.data)
         if (res.data.table_data.length > 0) {
           res.data.table_data.forEach((item) => {
             const tableDef: any = {}
@@ -418,7 +415,6 @@ const getResults = () => {
     }
     if (resultType.value === 'exp_lapse_crude_results') {
       ExpService.getExpLapseCrudeResultsByRunId($route.params.id).then((res) => {
-        console.log(res.data)
         if (res.data.table_data.length > 0) {
           res.data.table_data.forEach((item) => {
             const tableDef: any = {}
@@ -433,7 +429,6 @@ const getResults = () => {
     }
     if (resultType.value === 'exp_actuals_expected') {
       ExpService.getExpActualsVsExpectedByRunId($route.params.id).then((res) => {
-        console.log(res.data)
         if (res.data.table_data.length > 0) {
           res.data.table_data.forEach((item) => {
             const tableDef: any = {}
@@ -451,9 +446,7 @@ const getResults = () => {
     loadingResults.value = false
     otherResultTypes.value = true
     getProductsForPortfolio()
-    if (resultType.value === 'ibnr_results') {
-      console.log('ibnr results')
-    }
+
   }
 }
 const createColumnGroupDefs = (data) => {
@@ -536,7 +529,6 @@ const createColumnGroupDefs = (data) => {
   return cDefs
 }
 const createColumnDefs = (data, tableName) => {
-  console.log(tableName)
   const cDefs: any = []
   if (typeof data !== 'undefined') {
     Object.keys(data).forEach((element) => {
@@ -604,411 +596,7 @@ const createColumnDefs = (data, tableName) => {
   return cDefs
 }
 
-// export default {
-//   components: {
-//     AgChartsVue
-//   },
-//   props: ['id'],
-//   data() {
-//     return {
-//       tab: null,
-//       otherResultTypes: false,
-//       rerunDialog: false,
-//       error_message: [],
-//       loadingResults: false,
-//       selectedProduct: null,
-//       productList: [],
-//       columnDefs: [],
-//       tableData: [],
-//       developmentFactorGraph: '',
-//       resultType: null,
-//       runSettings: null,
-//       rerunFile: null,
-//       resultList: [
-//         { text: 'Model Points', value: 'exp_modelpoints' },
-//         { text: 'Crude Results', value: 'exp_crude_results' },
-//         { text: 'Lapse Crude Results', value: 'exp_lapse_crude_results' },
-//         { text: 'Actuals vs Expected', value: 'exp_actuals_expected' }
-//       ],
-//       chartOptions: {
-//         credits: {
-//           enabled: false
-//         },
-//         lang: {
-//           thousandsSep: ','
-//         },
-//         chart: { type: 'column' },
-//         title: { text: 'My Chart' },
-//         xAxis: { categories: [], title: { text: 'Reserves' } },
-//         yAxis: { title: { text: 'Count' } },
-//         series: []
-//       },
 
-//       updateArgs: [true, true, { duration: 1000 }],
-//       options: {
-//         data: [],
-//         title: {
-//           text: 'Weighted Succession Average Ratio'
-//         },
-//         series: [
-//           {
-//             type: 'line',
-//             xKey: 'reporting_delay',
-//             yKey: 'value',
-//             yName: 'Reporting Delay'
-//           }
-//         ]
-//       }
-//     }
-//   },
-//   methods: {
-//     digit9Formatter(params) {
-//       if (params.value > 0) {
-//         return params.value.toFixed(9)
-//       } else {
-//         return params.value
-//       }
-//     },
-//     digit6Formatter(params) {
-//       return params.value.toFixed(6)
-//     },
-//     digit3Formatter(params) {
-//       if (params.value > 0) {
-//         return params.value.toFixed(3)
-//       } else {
-//         return params.value
-//       }
-//     },
-
-//     checkDataSummaries(e) {
-//       console.log(e)
-//       console.log(tableData[e].table_name)
-//     },
-//     convertSnakeCaseToSpace(str) {
-//       return str.replace(/_/g, ' ')
-//     },
-//     checkCandidateGraphTable(tableName) {
-//       if (
-//         tableName === 'IBNR Frequency' ||
-//         tableName === 'Mack Model Frequency Results' ||
-//         tableName === 'Development Factors'
-//       ) {
-//         return true
-//       } else {
-//         return false
-//       }
-//     },
-//     getProductsForPortfolio() {
-//       this.productList = []
-//       this.selectedProduct = null
-//       IbnrService.getProductsForPortfolio(this.$route.params.id).then((response) => {
-//         // this.runSettings = response.data.run_settings;
-//         this.productList = response.data
-//         if (this.resultType === 'ibnr_results') {
-//           this.selectedProduct = null
-//           this.productList.unshift({ product_name: 'All Products', product_code: 'All Products' })
-//         }
-//       })
-//     },
-//     getResultsByProduct() {
-//       this.tableData = []
-//       this.error_message = []
-//       this.loadingResults = true
-//       IbnrService.getProjectionRunResults(
-//         this.$route.params.id,
-//         this.resultType,
-//         this.selectedProduct
-//       ).then((res) => {
-//         this.runSettings = res.data.run_settings
-//         console.log('getting results by product')
-//         if (res.data.table_data.length > 0) {
-//           res.data.table_data.forEach((item) => {
-//             const tableDef = {}
-//             tableDef.row_data = item.data
-//             tableDef.column_defs = this.createColumnDefs(item.data[0], item.table_name)
-//             tableDef.table_name = item.table_name
-//             this.tableData.push(tableDef)
-//             // Weighted factors
-//             if (item.graphData !== undefined && item.table_name === 'Development Factors') {
-//               this.options.data = []
-//               const entries = Object.entries(item.graphData).map(function ([key, value]) {
-//                 return { reporting_delay: key, value }
-//               })
-//               entries.shift() // this removes the first variable
-//               const options = { ...this.options }
-//               options.data = entries.slice(0, 30)
-//               options.title.text =
-//                 'Weighted Succession Average Ratio' + ' - ' + this.selectedProduct
-
-//               this.options = options
-//             }
-
-//             // IBNR Frequencies
-//             if (
-//               item.table_name === 'IBNR Frequency' ||
-//               (item.table_name === 'Mack Model Frequency Results' && this.selectedProduct !== null)
-//             ) {
-//               // ------ We are working in this section --------
-//               const options = { ...this.chartOptions }
-//               if (item.table_name === 'Mack Model Frequency Results') {
-//                 options.title.text = 'Mack Model Frequencies' + ' - ' + this.selectedProduct
-//               } else {
-//                 options.title.text = 'IBNR Frequencies' + ' - ' + this.selectedProduct
-//               }
-//               options.xAxis.categories = item.data.map((item) => Math.round(item.reserve))
-
-//               // make the Axis labels to comma separated
-//               options.xAxis.labels = {
-//                 formatter: function () {
-//                   return this.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-//                 }
-//               }
-
-//               options.series = [
-//                 {
-//                   name: 'Frequency',
-//                   data: item.data.map((item) => item.frequency)
-//                 }
-//               ]
-//               this.chartOptions = options
-//             }
-//           })
-//           this.loadingResults = false
-//         } else {
-//           this.loadingResults = false
-//           this.error_message = ['No results found for the selected product and result type']
-//         }
-//       })
-//     },
-//     rerunManualDevelopmentFactors() {
-//       this.rerunDialog = true
-//     },
-//     getResults() {
-//       this.tableData = []
-//       if (
-//         this.resultType === 'exp_modelpoints' ||
-//         this.resultType === 'exp_crude_results' ||
-//         this.resultType === 'exp_lapse_crude_results' ||
-//         this.resultType === 'exp_actuals_expected'
-//       ) {
-//         this.otherResultTypes = false
-//         this.loadingResults = true
-//         if (this.resultType === 'exp_modelpoints') {
-//           ExpService.getExpModelPointsByRunId(this.$route.params.id).then((res) => {
-//             console.log(res.data.table_data)
-//             if (res.data.table_data.length > 0) {
-//               res.data.table_data.forEach((item) => {
-//                 const tableDef = {}
-//                 tableDef.row_data = item.data
-//                 tableDef.column_defs = this.createColumnDefs(item.data[0], item.table_name)
-//                 tableDef.table_name = item.table_name
-//                 this.tableData.push(tableDef)
-//               })
-//             }
-//             this.loadingResults = false
-//           })
-//         }
-//         if (this.resultType === 'exp_crude_results') {
-//           ExpService.getExpCrudeResultsByRunId(this.$route.params.id).then((res) => {
-//             console.log(res.data)
-//             if (res.data.table_data.length > 0) {
-//               res.data.table_data.forEach((item) => {
-//                 const tableDef = {}
-//                 tableDef.row_data = item.data
-//                 tableDef.column_defs = this.createColumnDefs(item.data[0], item.table_name)
-//                 tableDef.table_name = item.table_name
-//                 this.tableData.push(tableDef)
-//               })
-//             }
-//             this.loadingResults = false
-//           })
-//         }
-//         if (this.resultType === 'exp_lapse_crude_results') {
-//           ExpService.getExpLapseCrudeResultsByRunId(this.$route.params.id).then((res) => {
-//             console.log(res.data)
-//             if (res.data.table_data.length > 0) {
-//               res.data.table_data.forEach((item) => {
-//                 const tableDef = {}
-//                 tableDef.row_data = item.data
-//                 tableDef.column_defs = this.createColumnDefs(item.data[0], item.table_name)
-//                 tableDef.table_name = item.table_name
-//                 this.tableData.push(tableDef)
-//               })
-//             }
-//             this.loadingResults = false
-//           })
-//         }
-//         if (this.resultType === 'exp_actuals_expected') {
-//           ExpService.getExpActualsVsExpectedByRunId(this.$route.params.id).then((res) => {
-//             console.log(res.data)
-//             if (res.data.table_data.length > 0) {
-//               res.data.table_data.forEach((item) => {
-//                 const tableDef = {}
-//                 tableDef.row_data = item.data
-//                 tableDef.column_defs = this.createColumnGroupDefs(item.data[0], item.table_name)
-//                 tableDef.table_name = item.table_name
-//                 this.tableData.push(tableDef)
-//               })
-//             }
-
-//             // this.runSettings = res.data.run_settings;
-//             // let tableDef = {};
-//             // tableDef.row_data = res.data;
-//             // tableDef.column_defs = this.createColumnGroupDefs(tableDef.row_data[0]);
-//             // tableDef.table_name = "Actuals vs Expected";
-//             // this.tableData.push(tableDef);
-//             this.loadingResults = false
-//           })
-//         }
-//       } else {
-//         this.loadingResults = false
-//         this.otherResultTypes = true
-//         this.getProductsForPortfolio()
-//         if (this.resultType === 'ibnr_results') {
-//           console.log('ibnr results')
-//         }
-//       }
-//     },
-//     createColumnGroupDefs(data) {
-//       console.log(data)
-//       const cDefs = [
-//         {
-//           headerName: 'Male',
-//           children: [
-//             { headerName: 'Age Next Birthday', field: 'age_next' },
-//             { headerName: '#Deaths', field: 'num_deaths_male' },
-//             { headerName: 'Expected Num Deaths', field: 'expected_num_deaths_male' },
-//             {
-//               headerName: 'Lives Exposure',
-//               field: 'lives_exposure_male',
-//               valueFormatter: this.digit9Formatter
-//             },
-//             {
-//               headerName: 'Crude Rate',
-//               field: 'crude_rate_male',
-//               valueFormatter: this.digit9Formatter
-//             },
-//             {
-//               headerName: 'Expected Rate',
-//               field: 'expected_rate_male',
-//               valueFormatter: this.digit9Formatter
-//             },
-//             { headerName: 'AvE', field: 'ave_male', valueFormatter: this.digit3Formatter }
-//           ]
-//         },
-//         {
-//           headerName: 'Female',
-//           children: [
-//             { headerName: 'Age Next Birthday', field: 'age_next' },
-//             { headerName: '#Deaths', field: 'num_deaths_female' },
-//             { headerName: 'Expected Num Deaths', field: 'expected_num_deaths_female' },
-//             {
-//               headerName: 'Lives Exposure',
-//               field: 'lives_exposure_female',
-//               valueFormatter: this.digit9Formatter
-//             },
-//             {
-//               headerName: 'Crude Rate',
-//               field: 'crude_rate_female',
-//               valueFormatter: this.digit9Formatter
-//             },
-//             {
-//               headerName: 'Expected Rate',
-//               field: 'expected_rate_female',
-//               valueFormatter: this.digit9Formatter
-//             },
-//             { headerName: 'AvE', field: 'ave_female', valueFormatter: this.digit3Formatter }
-//           ]
-//         },
-//         {
-//           headerName: 'Total',
-//           children: [
-//             { headerName: 'Age Next Birthday', field: 'age_next' },
-//             { headerName: '#Deaths', field: 'num_deaths_total' },
-//             { headerName: 'Expected Num Deaths', field: 'expected_num_deaths_total' },
-//             {
-//               headerName: 'Lives Exposure',
-//               field: 'lives_exposure_total',
-//               valueFormatter: this.digit9Formatter
-//             },
-//             {
-//               headerName: 'Crude Rate',
-//               field: 'crude_rate_total',
-//               valueFormatter: this.digit9Formatter
-//             },
-//             {
-//               headerName: 'Expected Rate',
-//               field: 'expected_rate_total',
-//               valueFormatter: this.digit9Formatter
-//             },
-
-//             { headerName: 'AvE', field: 'ave_total', valueFormatter: this.digit3Formatter }
-//           ]
-//         }
-//       ]
-//       return cDefs
-//     },
-//     createColumnDefs(data, tableName) {
-//       console.log(tableName)
-//       const cDefs = []
-//       if (typeof data !== 'undefined') {
-//         Object.keys(data).forEach((element) => {
-//           // for the given table name, we process the columns for categories and series data
-//           // for the graph
-//           const column = {}
-
-//           switch (tableName) {
-//             case 'Incurred Claims':
-//               if (element == 'accident_year') {
-//                 column.headerName = element
-//                 column.field = element
-//                 column.width = 200
-//                 column.chartDataType = 'category'
-//                 // column.valueFormatter = formatValues;
-//                 cDefs.push(column)
-//               } else {
-//                 column.headerName = element
-//                 column.field = element
-//                 column.chartDataType = 'series'
-//                 column.valueFormatter = formatValues
-//                 column.width = 150
-//                 cDefs.push(column)
-//               }
-//               break
-//             default:
-//               column.headerName = element
-//               column.field = element
-//               if (element.includes('rd') || element.includes('earned')) {
-//                 if (element.includes('rd')) {
-//                   column.width = 100
-//                   column.cellClass = 'triangulation-rd-cell'
-//                 } else {
-//                   column.cellClass = 'triangulation-cell'
-//                   column.width = 175
-//                 }
-//                 column.valueFormatter = formatValues
-//               } else {
-//                 if (element.includes('product_code') || element.includes('accident')) {
-//                   column.cellClass = 'triangulation-cell'
-//                   column.width = 175
-//                 } else {
-//                   column.cellClass = 'triangulation-cell'
-//                   column.width = 175
-//                   column.valueFormatter = formatValues
-//                 }
-//               }
-
-//               cDefs.push(column)
-//               break
-//           }
-
-//           // incurred claims
-//         })
-//       }
-//       return cDefs
-//     }
-//   }
-// }
 </script>
 
 <style>

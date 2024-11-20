@@ -145,18 +145,15 @@ export default {
   },
 
   getAnnualResults() {
-    console.log('getting annual results')
     return Api.get('reports/annual-consolidated')
   },
   getMonthlyResults() {
-    console.log('getting monthly results')
     return Api.get('reports/monthly-consolidated')
   },
   getDisclosures(id) {
     return Api.get('reports/disclosures/' + id)
   },
   getOrgUsers(organization) {
-    console.log('getting org users', licenseServerUrl)
     const json = JSON.stringify(organization)
     return Api.post('get-org-users', json, {
       baseURL: licenseServerUrl + '/',
@@ -233,7 +230,6 @@ export default {
   },
   deleteValuationJobs(runIds) {
     const payload = JSON.stringify(runIds)
-    console.log('payload', payload)
     return Api.delete('valuations/jobs', {
       data: payload,
       headers: { 'Content-Type': 'application/json' }

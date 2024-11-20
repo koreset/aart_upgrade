@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import { useProductStore } from '@/renderer/store/product_config'
-import { inject, onBeforeUnmount, onMounted, onUnmounted, Ref, ref, watch } from 'vue'
+import { inject, onMounted, Ref, ref, watch } from 'vue'
 import ProductService from '@/renderer/api/ProductService.js'
 
 const store = useProductStore()
@@ -34,7 +34,6 @@ const resetFields = inject<Ref<boolean>>('resetFields', ref(false))
 onMounted(() => {
   ProductService.getTransitionStates().then((resp) => {
     transitions.value = resp.data
-    console.log('transitions', transitions.value)
   })
   if (store.getProductTransitionStates.length > 0) {
     selectedTransitions.value = store.getProductTransitionStates
@@ -54,18 +53,12 @@ defineExpose({
   validateForm
 })
 
-onUnmounted(() => {
-  console.log('unmounting transition states')
-})
 
-onBeforeUnmount(() => {
-  console.log('before unmounting transition states')
-})
+
+
 
 watch(resetFields, (value) => {
-  console.log('resetting fields for transition states', value)
   if (value) {
-    console.log('resetting fields for transition states')
     selectedTransitions.value = null
   }
 })

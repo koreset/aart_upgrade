@@ -207,10 +207,8 @@ const allProducts: any = ref([])
 
 // lifecycle
 onMounted(async () => {
-  console.log('Mounted')
   const prodResponse = await ProductService.getProducts()
 
-  console.log('Response', prodResponse.data)
 
   prodResponse.data.forEach((family) => {
     family.products.forEach((product) => {
@@ -218,15 +216,12 @@ onMounted(async () => {
     })
   })
 
-  console.log('All Products', allProducts.value)
 })
 
 // methods
 const getModelPointVersions = () => {
-  console.log('selected year:', selectedYear.value)
   ProductService.getModelPointVersions(selectedProduct.value, selectedYear.value)
     .then((res) => {
-      console.log(res.data)
       availableModelPointVersions.value = res.data
     })
     .catch((err) => {
@@ -236,7 +231,6 @@ const getModelPointVersions = () => {
 }
 
 const getModelPointSumaryForYear = () => {
-  console.log('selected year:', selectedYear.value)
   modelPointSummary.value = []
   loadingMps.value = true
   if (selectedVersion.value === '' || selectedVersion.value == null) {
@@ -250,7 +244,6 @@ const getModelPointSumaryForYear = () => {
     selectedVersion.value
   )
     .then((res) => {
-      console.log(res.data)
       modelPointSummary.value = res.data
       loadingMps.value = false
     })
@@ -266,7 +259,6 @@ const getDisclosureForProduct = () => {
   loadingAll.value = true
   ProductService.getDisclosures(selectedProduct.value).then((res) => {
     reports.value = res.data
-    console.log(reports.value)
     availableModelPointYears.value = reports.value.model_point_years
     loadingAll.value = false
   })
@@ -533,19 +525,15 @@ const parameterHeaders = computed(() => {
 //   },
 //   methods: {
 //     getModelPointVersions() {
-//       console.log('selected year:', this.selectedYear)
 //       ProductService.getModelPointVersions(this.selectedProduct, this.selectedYear)
 //         .then((res) => {
-//           console.log(res.data)
 //           this.availableModelPointVersions = res.data
 //         })
 //         .catch((err) => {
-//           console.log(err)
 //           this.availableModelPointVersions = []
 //         })
 //     },
 //     getModelPointSumaryForYear() {
-//       console.log('selected year:', this.selectedYear)
 //       this.modelPointSummary = []
 //       this.loadingMps = true
 //       if (this.selectedVersion == '' || this.selectedVersion == null) {
@@ -559,12 +547,10 @@ const parameterHeaders = computed(() => {
 //         this.selectedVersion
 //       )
 //         .then((res) => {
-//           console.log(res.data)
 //           this.modelPointSummary = res.data
 //           this.loadingMps = false
 //         })
 //         .catch((err) => {
-//           console.log(err)
 //           this.modelPointSummary = []
 //           this.loadingMps = false
 //         })
@@ -575,7 +561,6 @@ const parameterHeaders = computed(() => {
 //       this.loadingAll = true
 //       ProductService.getDisclosures(this.selectedProduct).then((res) => {
 //         this.reports = res.data
-//         console.log(this.reports)
 //         this.availableModelPointYears = this.reports.model_point_years
 //         this.loadingAll = false
 //       })

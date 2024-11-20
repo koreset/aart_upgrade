@@ -26,6 +26,7 @@
           ></v-text-field>
 
           <v-select
+            v-if="showForTables()"
             v-model="year"
             variant="outlined"
             density="compact"
@@ -52,6 +53,7 @@ import BaseCard from './BaseCard.vue'
 interface Props {
   isDialogOpen: boolean
   yearLabel: string
+  table: string | undefined
   uploadTitle: string
   mpLabel: string
   showModelPoint: boolean
@@ -59,8 +61,19 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   yearLabel: 'Select a year',
-  uploadTitle: 'Upload File Data'
+  uploadTitle: 'Upload File Data',
+  table: undefined
 })
+
+const showForTables = () => {
+  return (
+    props.table === 'Accidental_Mortality' ||
+    props.table === 'Mortality' ||
+    props.table === 'Lapse' ||
+    props.table === 'Lapse_Margins'
+  )
+}
+
 
 // const props = defineProps<{
 //   showProductCode: boolean;

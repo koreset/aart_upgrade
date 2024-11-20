@@ -419,12 +419,9 @@ const createColumnDefs = (data: any) => {
 }
 
 const checkClass = (item: any) => {
-  console.log('Checking Class', item)
   if (item) {
-    console.log('activePanel', activePanel.value)
     expansionColor.value = 'expanded'
   } else {
-    console.log('activePanel', activePanel.value)
     expansionColor.value = ''
   }
   selectedPortfolioMpYear.value = ''
@@ -440,8 +437,6 @@ onMounted(() => {
     if (res.data.length > 0) {
       portfolios.value = res.data
       totalPages.value = Math.ceil(portfolios.value.length / pageSize)
-      console.log('Portfolios', portfolios.value)
-      console.log('Total Pages', totalPages.value)
     } else {
       portfolios.value = []
       loadDataComplete.value = true

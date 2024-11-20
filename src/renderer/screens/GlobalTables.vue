@@ -274,9 +274,7 @@ const deleteOtherTableData = async () => {
       'Deleting Data for ' + otherTable.value + ' table',
       'Are you sure you want to delete this data?'
     )
-    console.log(result)
     if (result) {
-      console.log('Deleting data')
       ProductService.deleteGlobalTableDataWithKey(otherTable.value, selectedTableYear.value).then(
         (response) => {
           text.value = response.data
@@ -308,7 +306,6 @@ const deleteShockData = () => {
 }
 
 const handleUpload = (payload: DataPayload) => {
-  console.log(payload)
   uploadComplete.value = false
   const formdata: any = new FormData()
   formdata.append('file', payload.file)
@@ -337,17 +334,14 @@ const deleteTableData = async (table: any) => {
   try {
     let tableName = table.name.toLowerCase()
     tableName = tableName.replace(/\s/g, '-')
-    console.log(tableName)
 
     let resp: any = null
     if (tableName === 'shocks') {
       resp = await ValuationService.getAvailableShockBases()
-      console.log(resp.data)
       availableShockBases.value = resp.data
       shocksDialog.value = true
     } else {
       resp = await ValuationService.getAvailableYears(tableName)
-      console.log(resp)
 
       if (table.name === 'Yield Curve') {
         yieldCurveYears.value = resp.data
@@ -370,7 +364,6 @@ const viewTable = (item: any) => {
   tableData.value = []
   ProductService.getGlobalTableData(item.name)
     .then((response) => {
-      console.log(response.data.data)
       if (response.data.data === null) {
         response.data.data = []
       }
@@ -399,9 +392,7 @@ const deleteYieldCurveData = async () => {
       'Deleting Data for Yield Curve table',
       'Are you sure you want to delete this data?'
     )
-    console.log(result)
     if (result) {
-      console.log('Deleting data')
       ProductService.deleteYieldCurveData(
         selectedYieldCurveYear.value,
         selectedYieldCurveCode.value,
@@ -428,7 +419,6 @@ const clearYieldDialog = () => {
 }
 
 const getYieldCurveCodes = () => {
-  console.log(selectedYieldCurveYear)
   ProductService.getYieldCurveCodes(selectedYieldCurveYear.value).then((response) => {
     yieldCurveCodes.value = response.data
   })

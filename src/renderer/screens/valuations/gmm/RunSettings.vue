@@ -596,11 +596,10 @@ const validationSchema = yup.object({
   selectedModelPointYear: yup.string().required('Model point year is required')
 })
 
-const { defineField, values, errors } = useForm({
+const { defineField,  errors } = useForm({
   validationSchema
 })
 
-console.log('Values', values)
 
 const [settingRunName, settingRunNameAttrs] = defineField('settingRunName')
 const [selectedProducts, setSelectedProducts] = defineField('selectedProducts')
@@ -682,7 +681,6 @@ const availableProducts = computed(() => {
 })
 
 const updateRunSuffix = () => {
-  console.log('Update Run Suffix', runNameSuffix.value)
   runJobs.value.forEach((item) => {
     if (runNameSuffix.value !== '') {
       item.run_name = item.run_name + '-' + runNameSuffix.value
@@ -734,7 +732,6 @@ const saveTemplate = (value) => {
   payload.jobs = runJobs.value
   payload.name = jobTemplateName.value // Template name
   payload.description = settingDescription.value
-  console.log('Payload', payload)
   ValuationService.saveJobTemplate(payload).then((resp) => {
     jobTemplate.value = resp.data
     runJobs.value.forEach((item) => {
@@ -750,7 +747,6 @@ const saveTemplate = (value) => {
 
 const loadTemplate = async () => {
   const resp = await ValuationService.getJobTemplate(selectedTemplate.value.id)
-  console.log('Template', resp.data)
   const jobstemplate = JSON.parse(resp.data.content)
   runJobs.value = jobstemplate.jobs
   templateRun.value = true

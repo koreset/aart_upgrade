@@ -201,7 +201,6 @@ onMounted(() => {
 
 // methods
 const handleUpload = (payload: DataPayload) => {
-  console.log(payload)
   uploadComplete.value = false
   const formdata: any = new FormData()
   formdata.append('file', payload.file)
@@ -244,9 +243,7 @@ const deleteTableData = async (table: any) => {
         'Deleting Data for ' + table.table_type + ' table',
         'Are you sure you want to delete this data?'
       )
-      console.log(result)
       if (result) {
-        console.log('Deleting data')
 
         ModifiedGMMService.deleteTable(table.table_type).then((response) => {
           text.value = response.data
@@ -313,7 +310,6 @@ const clearYieldDialog = () => {
 }
 
 const getYieldCurveCodes = () => {
-  console.log(selectedYieldCurveYear)
   ModifiedGMMService.getYieldCurveCodes(selectedYieldCurveYear.value).then((response) => {
     yieldCurveCodes.value = response.data
   })
@@ -555,7 +551,6 @@ onMounted(() => {
 })
 
 const handleUpload = (payload: DataPayload) => {
-  console.log(payload)
   uploadComplete.value = false
   const formdata: any = new FormData()
   formdata.append('file', payload.file)
@@ -601,7 +596,6 @@ const viewTableData = (item: any) => {
     }
 
     tableData.value = res.data
-    console.log('table data value', tableData.value)
     if (tableData.value.length > 0) {
       createColumnDefs(tableData.value)
     }

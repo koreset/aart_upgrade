@@ -67,7 +67,7 @@
           </v-expansion-panel>
           <v-expansion-panel title="Associated Tables">
             <v-expansion-panel-text>
-              <associated-table-display :product="product" />
+              <associated-table-display v-if="product != null" :product="product" />
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel
@@ -191,6 +191,7 @@
       :isDialogOpen="isDialogOpen"
       :showModelPoint="true"
       :mpLabel="mpLabel"
+      :table="'undefined'"
       :uploadTitle="uploadTitle"
       :years="years"
       @upload="handleUpload"
@@ -288,7 +289,6 @@ const uploadMessage = ref('')
 const uploadingData = ref(false)
 
 const openDialog = () => {
-  console.log('Open Dialog')
   isDialogOpen.value = true
 }
 
@@ -316,7 +316,6 @@ const getVersions = async () => {
   mpData.value = []
   const year = selectedYear.value
   mpVersions.value = modelPointCount.value.filter((item: { year: any }) => item.year === year)
-  console.log(mpVersions.value)
 }
 
 const editConfiguration = () => {
@@ -324,30 +323,23 @@ const editConfiguration = () => {
 }
 
 onMounted(async () => {
-  console.log('Mounted')
   user.value = await window.mainApi?.sendSync('msgGetAuthenticatedUser')
 
   const prodResponse = await ProductService.getProducts()
   allProducts.value = prodResponse.data
   // allProducts.value = await appStore.getAllProducts
-  console.log('All Products:', allProducts.value)
   productCategories.value = allProducts.value.map((item: any) => ({
     id: item.id,
     name: item.name
   }))
 
-  console.log('Product Categories:', productCategories.value)
-
   if (router.currentRoute.value.params.id && router.currentRoute.value.params.familyId) {
     const id = router.currentRoute.value.params.id
     const familyId = router.currentRoute.value.params.familyId
-    console.log('ID:', id)
-    console.log('Family ID:', familyId)
     selectedProductCategory.value = productCategories.value.find(
       (item: any) => item.id === Number(familyId)
     )
 
-    console.log('Selected Product Category:', selectedProductCategory.value)
     getProducts()
     if (products.value.length > 0) {
       selectedProduct.value = products.value.find((item: any) => item.id === Number(id))
@@ -367,8 +359,6 @@ const runValuations = () => {
 }
 
 const activateProduct = async (value) => {
-  console.log('Activate Product:', selectedProduct.value)
-  console.log('User Value:', user.value)
   const task: any = {}
   if (value) {
     const payload: any = {}
@@ -377,9 +367,7 @@ const activateProduct = async (value) => {
     payload.description = remarks.value
 
     const res = await ProductService.activateProduct(payload)
-    console.log('Response:', res)
     if (res.status === 200) {
-      console.log('Product activated')
       selectedProduct.value.product_state = 'approved'
     }
     activateDialog.value = false
@@ -401,7 +389,6 @@ const activateProduct = async (value) => {
     task.status = 'active'
   }
 
-  console.log('Task:', task)
   TaskService.createTask(task).then(() => {})
 
   const activityPayload: any = {}
@@ -418,9 +405,7 @@ const activateProduct = async (value) => {
 }
 
 const handleUploadProgress = (progressEvent) => {
-  console.log('handling upload progress')
   progress.value = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-  console.log(progress)
   uploadMessage.value = 'Uploading ' + progress.value + '%'
   if (progress.value === 100) {
     uploadMessage.value = 'Processing file...'
@@ -434,12 +419,10 @@ const handleUpload = async (data: {
   year: number | null
 }) => {
   // Handle the uploaded data here
-  console.log(data)
   const formData = new FormData()
   formData.append('file', data.file as Blob)
   formData.append('year', data.year as any)
   formData.append('mp_version', data.fileName as any)
-  console.log('Selected Product:', selectedProduct.value)
 
   uploadingData.value = true
   try {
@@ -449,9 +432,7 @@ const handleUpload = async (data: {
       handleUploadProgress
     )
 
-    console.log('Response:', resp)
     if (resp.status === 201) {
-      console.log('Model points uploaded')
       uploadMessage.value = 'Model points uploaded successfully'
       uploadingData.value = false
       snackbarMessage.value = 'Model points uploaded successfully'
@@ -475,17 +456,14 @@ const getProducts = async () => {
   if (matchedCategory) {
     products.value = matchedCategory.products
   } else {
-    console.log('No matching category found')
     products.value = [] // or any default value you see fit
   }
 }
 
 const getProduct = async () => {
   product.value = null
-  console.log('Selected product', selectedProduct.value)
   const response = await ProductService.getProductById(selectedProduct.value.id)
   product.value = response.data
-  console.log('Get product tables', product.value.product.product_tables)
   try {
     const resp = await ProductService.getModelPointCountForProduct(selectedProduct.value.id)
     if (resp.data.results.length > 0) {
@@ -530,22 +508,18 @@ const deleteProduct = async () => {
     'Delete Product',
     'Are you sure you want to delete this product?'
   )
-  console.log(result)
   if (result) {
     ProductService.deleteProduct(product.value.product.id).then(() => {
-      console.log('Product deleted')
       router.push({ name: 'dashboard' })
     })
   }
 }
 
 const getModelPoints = (item) => {
-  console.log(product.value)
   mpData.value = []
   loadingData.value = true
   ProductService.getModelPointsForProduct(product.value.product.id, item.year, item.version).then(
     (res) => {
-      console.log(res.data)
       if (res.data !== null) {
         // items = [];
         columnDefs.value = []
@@ -571,7 +545,6 @@ const getModelPoints = (item) => {
 }
 
 const deleteModelPoints = async (item) => {
-  console.log('Delete Model Points:', item)
   const res = await confirmAction.value.open(
     'Delete Model Points',
     'Are you sure you want to delete the model points for this version?'
@@ -582,7 +555,6 @@ const deleteModelPoints = async (item) => {
     item.year,
     item.version
   ).then((res) => {
-    console.log(res)
     mpVersions.value = mpVersions.value.filter((i) => i.version !== item.version)
   })
 }

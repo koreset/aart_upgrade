@@ -97,7 +97,6 @@ const timeout = ref(3000)
 onMounted(async () => {
   apiServerUrl.value = await window.mainApi?.sendSync('msgGetBaseUrl')
   license.value = await window.mainApi?.sendSync('msgGetUserLicense')
-  console.log(license.value)
 })
 
 const getLicenseDetails = () => {
@@ -107,7 +106,6 @@ const getLicenseDetails = () => {
 }
 
 const updateApiUrl = () => {
-  console.log('updateApiUrl', apiServerUrl.value)
   window.mainApi?.send('msgSaveBaseUrl', apiServerUrl.value)
   snackbarMessage.value = 'API Server URL updated. This will initiate an application restart.'
   snackbar.value = true

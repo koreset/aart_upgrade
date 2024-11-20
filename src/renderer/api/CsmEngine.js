@@ -119,7 +119,6 @@ export default {
     return Api.get('csm-engine/groups-report-list/' + group)
   },
   getGroupStepsWithRunDate(runDate, group) {
-    console.log(runDate, group)
     return Api.get('csm-engine/groups-report-list/run-date/' + runDate + '/group/' + group)
   },
   getCsmProductList(runDate) {
@@ -420,7 +419,6 @@ export default {
   },
 
   getBelProductList(runDate) {
-    console.log('runDate', runDate)
     return Api.get('csm-engine/bel-buildups/run/' + runDate)
   },
   getBelForProduct(runDate, productCode) {

@@ -18,7 +18,6 @@ export const useNetworkStatusStore = defineStore('networkStatus', {
       }
     },
     async checkServiceAvailability() {
-      console.log('Checking service availability')
       try {
         const apiServerUrl = await window.mainApi?.sendSync('msgGetBaseUrl')
 

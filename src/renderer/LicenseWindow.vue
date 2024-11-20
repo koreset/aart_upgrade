@@ -77,7 +77,6 @@ const addDashes = () => {
 }
 
 onBeforeMount(() => {
-  console.log('Login component before mount')
   window.mainApi?.send('msgResizeWindow', 1024, 600, false)
 })
 
@@ -85,14 +84,12 @@ const activateLicense = async () => {
   keyErrors.value = []
   successMessages.value = []
   const result = window.mainApi?.sendSync('msgActivateLicense', license.value)
-  console.log('License Activation:', result.license_data)
 
   if (result.license_data.meta.valid) {
     window.mainApi?.send('msgSetUserLicense', result.license_data)
     successMessages.value = ['License activated successfully']
     validFlow.value = true
   } else {
-    console.log('License Activation Error:', result.license_data.meta)
     switch (result.meta.constant) {
       case 'SUSPENDED':
         keyErrors.value.push('This license has been suspended. Please provide a valid license')

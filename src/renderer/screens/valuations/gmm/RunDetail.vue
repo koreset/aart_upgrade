@@ -306,7 +306,6 @@ const transformText = (text: string) => {
 }
 
 const reduceDecimal = (number) => {
-  console.log('number', number.value)
   return Math.round(number.value)
 }
 
@@ -383,7 +382,6 @@ const createSapColumnDefs = (rowData: any) => {
 const getModelPointStats = () => {
   ProductService.getProductModelPointStats(prodId.value, runId.value).then((resp) => {
     modelpointStats.value = resp.data
-    console.log('Model Point Stats', modelpointStats.value)
   })
 }
 
@@ -434,13 +432,10 @@ onMounted(() => {
   loadingData.value = true
   gridOptions.value = {}
   ProductService.getValuationJob(runId.value).then((resp) => {
-    console.log('resp.data', resp.data)
     aggData.value = resp.data.projections
     spCodes.value = resp.data.spcodes
     // spCodes.value = Array.from(spCodes.value)
 
-    console.log('Agg Data', aggData.value)
-    console.log('SP Codes', spCodes.value)
 
     if (spCodes.value.length > 1) {
       showSpCodeSelect.value = true
@@ -475,7 +470,6 @@ onMounted(() => {
     }
 
     runSettings.value = resp.data.settings
-    console.log('Run Settings', runSettings.value)
     spCodes.value = resp.data.spcodes
     if (resp.data.errors) {
       runErrors.value = resp.data.errors

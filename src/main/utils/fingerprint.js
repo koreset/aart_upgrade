@@ -27,4 +27,3 @@ export const generateMachineFingerprint = () => {
 
 // Example usage
 // const machineFingerprint = generateMachineFingerprint()
-// console.log('Machine Fingerprint:', machineFingerprint)

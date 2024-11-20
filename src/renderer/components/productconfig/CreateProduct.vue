@@ -118,7 +118,6 @@ watch(resetFields, (newVal) => {
 })
 
 onMounted(async () => {
-  console.log('create product mounted')
   const response = await ProductService.getProductFamilies()
   if (response.status !== 200) {
     productFamilyErrorMessage.value = 'Error retrieving product families'

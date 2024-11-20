@@ -29,7 +29,6 @@ const emits = defineEmits<{
 const selectedDate = ref<Date | null>(props.modelValue)
 
 const updateDate = (newDate: Date | null) => {
-  console.log('newDate', newDate)
   selectedDate.value = newDate
   emits('update:modelValue', newDate)
 }

@@ -27,18 +27,15 @@ window.mainApi?.on('update_available', async () => {
     'A new version of the application is available. Do you want to update now? This will restart the application.'
   )
   if (res) {
-    console.log('Update Now')
     window.mainApi?.send('msgRestartApplication', true)
   }
 })
 
 onMounted(async () => {
   const response = await ProductService.getProducts()
-  console.log('App Products:', response)
   appStore.setProducts(response.data)
 
   const result = await window.mainApi?.sendSync('msgGetUserLicense')
-  console.log('License:', result)
   if (result) {
     appStore.setLicense(result)
   }

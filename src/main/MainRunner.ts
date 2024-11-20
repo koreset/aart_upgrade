@@ -131,7 +131,6 @@ export const createMainWindow = async (mainWindow: BrowserWindow): Promise<Brows
   mainWindow.maximize()
 
   mainWindow.on('close', (event: Event): void => {
-    console.log('====Quitting Application====')
     event.preventDefault()
     exitApp(mainWindow)
   })

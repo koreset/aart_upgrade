@@ -136,8 +136,7 @@ const clearData = () => {
 }
 
 const handleUpload = (event, payload: DataPayload) => {
-  console.log('Event:', event)
-  console.log('Payload:', payload)
+
   uploadComplete.value = false
   const formdata: any = new FormData()
   formdata.append('file', event.file)
@@ -191,7 +190,6 @@ const viewTable = (item: any) => {
       snackbar.value = true
     } else {
       tableData.value = res.data
-      console.log('table data value', tableData.value)
       if (tableData.value.length > 0) {
         createColumnDefs(tableData.value)
       }

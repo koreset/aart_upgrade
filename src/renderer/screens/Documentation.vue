@@ -112,7 +112,6 @@ onMounted(() => {
 
 // methods
 const getHelp = () => {
-  console.log('selectedTopic.value: ', selectedTopic.value)
   docfile.value = []
   libraryFile.value = []
   if (selectedTopic.value === 'PAA Library') {
