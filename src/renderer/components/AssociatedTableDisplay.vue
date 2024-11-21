@@ -112,8 +112,6 @@ const props = defineProps({
   }
 })
 
-
-
 const snackbar = ref(false)
 const snackbarMessage = ref('')
 const timeout = 3000
@@ -204,13 +202,13 @@ const handleUpload = (data: {
   formdata.append('table_id', selectedTableId.value)
   formdata.append('product_code', props.product.product.product_code)
 
-
   ProductService.uploadProductTable({
     formdata,
     productId: props.product.id
   }).then((response) => {
     if (response.status === 200) {
       // update populated status
+      console.log('response', response)
       const index = associatedTables.value.findIndex((table) => table.id === selectedTableId.value)
       associatedTables.value[index].populated = true
 
@@ -266,7 +264,6 @@ const chooseYear = (item: any) => {
     item.table === 'Lapse' ||
     item.table === 'Lapse_Margins'
   ) {
-
     availableDataYears.value = []
     selectedYear.value = null
     ProductService.getProductTableYears(
