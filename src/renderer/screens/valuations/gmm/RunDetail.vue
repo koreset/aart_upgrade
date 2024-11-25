@@ -34,7 +34,16 @@
                   </v-col>
                 </v-row>
                 <loadingData :loadingData="loadingSpCodeData"></loadingData>
-                <data-grid :showExport="true" :rowData="rowData" :columnDefs="cDefs"></data-grid>
+                <data-grid
+                  v-if="rowData.length > 0"
+                  :product-code="rowData[0].product_code"
+                  :run-name="runName"
+                  :run-id="runId"
+                  :show-full-export="true"
+                  :showExport="true"
+                  :rowData="rowData"
+                  :columnDefs="cDefs"
+                ></data-grid>
               </template>
             </base-card>
             <base-card v-if="sapRowData.length > 0 && !loadingData">
@@ -186,6 +195,7 @@ import LoadingIndicator from '@/renderer/components/LoadingIndicator.vue'
 
 const route = useRoute()
 
+const runName: any = ref(null)
 const showExport = ref(true)
 const backButtonTitle = '<  Back to Valuation Run List'
 const runId: any = ref(null)
@@ -428,6 +438,12 @@ onMounted(() => {
   runId.value = route.params.id
   prodId.value = route.params.prodId
   prodName.value = route.params.prod_name
+  runName.value = route.params.run_name
+
+  console.log('runId', runId.value)
+  console.log('prodId', prodId.value)
+  console.log('prodName', prodName.value)
+  console.log('runName', runName.value)
 
   loadingData.value = true
   gridOptions.value = {}
@@ -435,7 +451,6 @@ onMounted(() => {
     aggData.value = resp.data.projections
     spCodes.value = resp.data.spcodes
     // spCodes.value = Array.from(spCodes.value)
-
 
     if (spCodes.value.length > 1) {
       showSpCodeSelect.value = true

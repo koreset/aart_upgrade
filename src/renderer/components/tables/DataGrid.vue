@@ -12,7 +12,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="3">
+      <v-col cols="6">
         <v-btn
           v-if="showExport"
           size="small"
@@ -22,6 +22,17 @@
           @click="exportDataCsv"
           >Export to Csv</v-btn
         >
+        <v-btn
+          v-if="showFullExport"
+          size="small"
+          color="primary"
+          rounded
+          :loading="exportLoader"
+          class="custom-btn ml-4 primary white--text mt-4"
+          @click="exportDataExcel"
+          >Export All</v-btn
+        >
+
         <v-btn
           v-if="showDeleteButton"
           size="small"
@@ -59,6 +70,7 @@ import 'ag-grid-community/styles/ag-grid.css' // Core CSS
 import 'ag-grid-community/styles/ag-theme-quartz.css' // Theme
 import { AgGridVue } from 'ag-grid-vue3' // Vue Grid Logic
 import { ref, watch, computed } from 'vue'
+import ValuationService from '@/renderer/api/ValuationService'
 
 const props = defineProps([
   'rowData',
@@ -73,7 +85,11 @@ const props = defineProps([
   'chartXAxisTitle',
   'chartYAxisTitle',
   'showExport',
-  'showCloseButton'
+  'showCloseButton',
+  'showFullExport',
+  'runId',
+  'productCode',
+  'runName'
 ])
 
 // const emit = defineEmits(['delete-row'])
@@ -86,6 +102,7 @@ const emit = defineEmits<{
 // Grid variables
 const showDeleteButton = ref(false)
 const selectedRow = ref(null)
+const exportLoader = ref(false)
 
 // const localRowData = ref(props.rowData)
 // const localColumnDefs = ref(props.columnDefs)
@@ -146,6 +163,43 @@ const exportDataCsv = () => {
     suppressQuotes: true,
     allColumns: true
   })
+}
+
+const exportDataExcel = async () => {
+  console.log('exportDataExcel', props.runId, props.productCode)
+  exportLoader.value = true
+  const response = await ValuationService.getExcelResults(props.runId, null)
+  exportLoader.value = false
+
+  const fileURL = window.URL.createObjectURL(new Blob([response.data]))
+  const fileLink = document.createElement('a')
+
+  fileLink.href = fileURL
+  fileLink.setAttribute(
+    'download',
+    'agg-results_' + props.runName + '_' + props.productCode + '.xlsx'
+  )
+  document.body.appendChild(fileLink)
+
+  fileLink.click()
+
+  // PricingService.getPricingExcelControlResults(
+  //   runId.value,
+  //   selectedScenario.value.id,
+  //   product.value.product_code
+  // ).then((response) => {
+  //   const fileURL = window.URL.createObjectURL(new Blob([response.data]))
+  //   const fileLink = document.createElement('a')
+
+  //   fileLink.href = fileURL
+  //   fileLink.setAttribute(
+  //     'download',
+  //     'pricing-control-' + runId.value + '-' + selectedScenario.value.description + '.xlsx'
+  //   )
+  //   document.body.appendChild(fileLink)
+
+  //   fileLink.click()
+  // })
 }
 
 const onRowSelected = (event) => {
