@@ -70,10 +70,10 @@ const showForTables = () => {
     props.table === 'Accidental_Mortality' ||
     props.table === 'Mortality' ||
     props.table === 'Lapse' ||
-    props.table === 'Lapse_Margins'
+    props.table === 'Lapse_Margins' ||
+    props.table === 'Model Points'
   )
 }
-
 
 // const props = defineProps<{
 //   showProductCode: boolean;

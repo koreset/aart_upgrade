@@ -191,7 +191,7 @@
       :isDialogOpen="isDialogOpen"
       :showModelPoint="true"
       :mpLabel="mpLabel"
-      :table="'undefined'"
+      :table="'Model Points'"
       :uploadTitle="uploadTitle"
       :years="years"
       @upload="handleUpload"
