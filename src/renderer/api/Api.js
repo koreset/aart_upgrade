@@ -6,7 +6,7 @@ const accessToken = window.mainApi.sendSync('msgGetAccessToken')
 const instance = axios.create({
   baseURL: baseUrl,
   withCredentials: false,
-  timeout: 3000000,
+  timeout: 300000,
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json'

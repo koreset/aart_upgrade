@@ -16,7 +16,9 @@ export default {
     if (control) {
       return Api.get('valuations/jobs/' + jobId + '/excel/control', { responseType: 'blob' })
     } else {
-      return Api.get('valuations/jobs/' + jobId + '/excel', { responseType: 'blob' })
+      return Api.get('valuations/jobs/' + jobId + '/excel', {
+        responseType: 'blob'
+      })
     }
   },
 

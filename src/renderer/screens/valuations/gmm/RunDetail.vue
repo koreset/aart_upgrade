@@ -33,7 +33,7 @@
                     ></v-select>
                   </v-col>
                 </v-row>
-                <loadingData :loadingData="loadingSpCodeData"></loadingData>
+                <loading-indicator :loadingData="loadingSpCodeData"></loading-indicator>
                 <data-grid
                   v-if="rowData.length > 0"
                   :product-code="rowData[0].product_code"

@@ -32,6 +32,7 @@
           @click="exportDataExcel"
           >Export All</v-btn
         >
+        <p v-if="exportLoader" class="mt-4">processing data. this will take a while...</p>
 
         <v-btn
           v-if="showDeleteButton"
