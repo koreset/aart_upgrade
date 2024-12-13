@@ -289,6 +289,7 @@ import ValuationService from '@/renderer/api/ValuationService'
 import DataGrid from '@/renderer/components/tables/DataGrid.vue'
 import formatValues from '@/renderer/utils/format_values'
 import LoadingIndicator from '@/renderer/components/LoadingIndicator.vue'
+import _ from 'lodash'
 
 const loadingData = ref(false)
 const varMessage = ref('')
@@ -403,8 +404,30 @@ const getAggregatedResultsForProduct = () => {
     selectedJobProduct.value.product_code,
     selectedVariableGroup.value.variables
   ).then((res) => {
+    console.log(res.data)
+
+    // attempting to preserve the order of the columns
+    // Define the desired key order
+
+    // Sort the keys for each object in the array
+    const sortedData = res.data.map((item) => {
+      const orderedItem = {}
+      selectedVariableGroup.value.variables.forEach((key) => {
+        if (Object.prototype.hasOwnProperty.call(item, key)) {
+          console.log('Key: ', key)
+          orderedItem[key] = item[key]
+        }
+      })
+      console.log('Ordered item: ', orderedItem)
+      return orderedItem
+    })
+
+    console.log('Sorted data: ', sortedData)
+
     rowData.value = res.data
+    console.log(rowData.value)
     createColumnDefs(rowData.value)
+    console.log(columnDefs.value)
     loadingData.value = false
     ValuationService.getSpCodesForProduct(
       selectedValuationJob.value.id,
@@ -430,7 +453,16 @@ const getAggregatedResults = async () => {
     selectedValuationJob.value.id,
     selectedVariableGroup.value.variables
   )
-  rowData.value = result.data
+
+  console.log('returned results;', result.data)
+
+  // Use lodash to reorder keys
+  const orderedData = result.data.map((item) =>
+    _.fromPairs(selectedVariableGroup.value.variables.map((key) => [key, item[key]]))
+  )
+
+  console.log(orderedData)
+  rowData.value = orderedData
   createColumnDefs(rowData.value)
   loadingData.value = false
 }

@@ -5,6 +5,7 @@ import _ from 'lodash'
 import { encrypt, decrypt } from './utils/encryption'
 import { machine } from 'node-unique-machine-id'
 import axios from 'axios'
+import https from 'https'
 const { autoUpdater } = require('electron-updater')
 
 // import { generateMachineFingerprint } from './utils/fingerprint'
@@ -38,6 +39,31 @@ const decode = (token) => {
  * */
 export default class IPCs {
   static initialize(): void {
+    // get axios instance
+    ipcMain.handle('msgGetAxiosInstance', async (event: IpcMainEvent) => {
+      const baseUrl: any = store.get('baseUrl', null)
+      const isDevelopment = process.env.NODE_ENV === 'development'
+
+      const httpsAgent = isDevelopment
+        ? new https.Agent({
+            rejectUnauthorized: false
+          })
+        : null
+
+      const instance = await axios.create({
+        baseURL: baseUrl,
+        httpsAgent,
+        withCredentials: false,
+        timeout: 300000,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        }
+      })
+
+      return instance
+    })
+
     // Get application version
     ipcMain.on('msgGetAppVersion', (event: IpcMainEvent) => {
       event.returnValue = Constants.APP_VERSION
@@ -186,6 +212,12 @@ export default class IPCs {
       event.returnValue = 'success'
     })
 
+    // get the current enviroment
+
+    ipcMain.on('msgGetEnvironment', (event: IpcMainEvent) => {
+      event.returnValue = process.env.NODE_ENV
+    })
+
     ipcMain.on('msgGetUserLicense', (event: IpcMainEvent) => {
       event.returnValue = JSON.parse(decrypt(store.get('license', null)))
     })
@@ -197,7 +229,6 @@ export default class IPCs {
       const payload: any = {}
       payload.key = licenseKey
       payload.fingerprint = fingerprint
-
 
       const validation = await fetch(licenseServer + '/activate-key', {
         method: 'POST',
