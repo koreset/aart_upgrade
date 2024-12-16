@@ -360,6 +360,17 @@ export default createRouter({
       component: () => import('../screens/ifrs17/reports/CsmProjectionReports.vue')
     },
     {
+      path: '/group-pricing/quote-generation',
+      name: 'group-pricing-quote-generation',
+      component: () => import('../screens/group_pricing/QuoteGeneration.vue')
+    },
+    {
+      path: '/group-pricing/brokers',
+      name: 'group-pricing-brokers',
+      component: () => import('../screens/group_pricing/BrokerList.vue')
+    },
+
+    {
       path: '/tasks',
       name: 'tasks',
       component: () => import('../screens/Tasks.vue')

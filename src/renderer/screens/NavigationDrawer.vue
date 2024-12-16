@@ -38,6 +38,22 @@
       <v-list-item :to="{ name: 'reporting' }" :prepend-icon="'mdi-chart-box-multiple'">
         <v-list-item-title>Reports</v-list-item-title>
       </v-list-item>
+      <v-list-group value="Group Pricing">
+        <template #activator="{ props }">
+          <v-list-item
+            v-bind="props"
+            prepend-icon="mdi-file-table-box-multiple-outline"
+            title="Group Pricing"
+          ></v-list-item>
+        </template>
+        <v-list-item :to="{ name: 'group-pricing-quote-generation' }">
+          <v-list-item-title>Generate Quote</v-list-item-title>
+        </v-list-item>
+        <v-list-item :to="{ name: 'group-pricing-brokers' }">
+          <v-list-item-title>Brokers</v-list-item-title>
+        </v-list-item>
+      </v-list-group>
+
       <v-list-group value="Valuations">
         <template #activator="{ props }">
           <v-list-item
