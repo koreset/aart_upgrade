@@ -79,6 +79,7 @@ export const useProductStore = defineStore({
     },
     addToProductTables(table) {
       this.product.product_tables.push(table)
+      this.product.product_pricing_tables.push(table)
     },
     setProductModelPoints(points) {
       this.product.product_modelpoint_variables = points

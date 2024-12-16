@@ -301,6 +301,8 @@ const getModelPointsCount = async () => {
   const resp = await ProductService.getProductById(selectedProduct.value.id)
   pricingProduct.value = resp.data
 
+  console.log('pricingProduct', pricingProduct)
+
   PricingService.getModelPointCount(selectedProduct.value.product_code).then((res) => {
     modelPointCount.value = res.data.count
     modelPoints.value = res.data.model_points
@@ -348,7 +350,6 @@ onMounted(async () => {
   const prodResponse = await ProductService.getProducts()
   allProducts.value = prodResponse.data
   // allProducts.value = appStore.getAllProducts
-
 
   allProducts.value.forEach((family: any) => {
     family.products.forEach((product: any) => {
@@ -543,7 +544,6 @@ const deletePricingPolicyDemographics = async () => {
       text.value = err.data.error
       snackbar.value = true
     })
-
 }
 
 const createColumnDefs = (data) => {
