@@ -438,29 +438,16 @@ const uploadModelPoints = () => {
 const getPricingParams = () => {
   loadingComplete.value = false
   rowData.value = []
+  items.value = []
+  columnDefs.value = []
 
   PricingService.getPricingParams(selectedProduct.value.product_code)
     .then((res) => {
       const params = res.data.data
+      console.log('params', params)
       if (params !== null) {
-        items.value = []
-        columnDefs.value = []
-        rowData.value = []
         createColumnDefs(params)
-
-        const transformed = {}
-        params.forEach((item) => {
-          const keys = Object.keys(item)
-          keys.forEach((i) => {
-            if (isNaN(item[i])) {
-              transformed[i] = item[i]
-            } else {
-              const value = Number(item[i])
-              transformed[i] = value
-            }
-          })
-          rowData.value.push(transformed)
-        })
+        rowData.value = params
       }
 
       selectedTableName.value = 'Pricing Parameters'
