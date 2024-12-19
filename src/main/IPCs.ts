@@ -38,31 +38,6 @@ const decode = (token) => {
  * */
 export default class IPCs {
   static initialize(): void {
-    // get axios instance
-    // ipcMain.handle('msgGetAxiosInstance', async (event: IpcMainEvent) => {
-    //   const baseUrl: any = store.get('baseUrl', null)
-    //   const isDevelopment = process.env.NODE_ENV === 'development'
-
-    //   const httpsAgent = isDevelopment
-    //     ? new https.Agent({
-    //         rejectUnauthorized: false
-    //       })
-    //     : null
-
-    //   const instance = await axios.create({
-    //     baseURL: baseUrl,
-    //     httpsAgent,
-    //     withCredentials: false,
-    //     timeout: 300000,
-    //     headers: {
-    //       Accept: 'application/json',
-    //       'Content-Type': 'application/json'
-    //     }
-    //   })
-
-    //   return instance
-    // })
-
     // Get application version
     ipcMain.on('msgGetAppVersion', (event: IpcMainEvent) => {
       event.returnValue = Constants.APP_VERSION

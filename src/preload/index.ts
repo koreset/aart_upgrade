@@ -19,8 +19,7 @@ const mainAvailChannels: string[] = [
   'msgSetLicenseServerUrl',
   'msgCheckLicenseValidity',
   'msgActivateLicense',
-  'msgGetEnvironment',
-  'msgGetAxiosInstance'
+  'msgGetEnvironment'
 ]
 const rendererAvailChannels: string[] = [
   'update_available',
