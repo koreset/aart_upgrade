@@ -43,7 +43,7 @@
           cols="3"
         >
           <v-select
-            v-model="groupStore.groupPricingQuote.broker"
+            v-model="groupStore.groupPricingQuote.quoteBroker"
             variant="outlined"
             density="compact"
             placeholder="Choose a broker"

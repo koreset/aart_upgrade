@@ -105,11 +105,16 @@ const generateQuote = () => {
   console.log(groupStore.groupPricingQuote)
   const formData = new FormData()
   if (groupStore.groupPricingQuote.uploadData.memberDataFile) {
-    formData.append('file', groupStore.groupPricingQuote.uploadData.memberDataFile)
+    formData.append('memberDataFile', groupStore.groupPricingQuote.uploadData.memberDataFile)
   }
   if (groupStore.groupPricingQuote.uploadData.claimsExperienceFile) {
-    formData.append('file', groupStore.groupPricingQuote.uploadData.claimsExperienceFile)
+    formData.append(
+      'claimsExperienceFile',
+      groupStore.groupPricingQuote.uploadData.claimsExperienceFile
+    )
   }
+  console.log(groupStore.groupPricingQuote)
+  console.log(JSON.stringify(groupStore.groupPricingQuote))
 
   formData.append('groupPricingQuote', JSON.stringify(groupStore.groupPricingQuote))
 

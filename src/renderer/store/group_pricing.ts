@@ -20,7 +20,7 @@ export const useGroupPricingStore = defineStore('groupPricing', {
       creationDate: null,
       quoteType: '',
       schemeName: '',
-      broker: { id: 0, name: '' },
+      quoteBroker: { id: 0, name: '' },
       obligationType: '',
       commencementDate: null,
       industry: '',
