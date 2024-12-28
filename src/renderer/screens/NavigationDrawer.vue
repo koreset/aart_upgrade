@@ -287,7 +287,7 @@
 import TaskService from '@/renderer/api/TaskService'
 import { watchEffect, defineProps, ref, onMounted } from 'vue'
 // import ProductService from '@/renderer/api/ProductService' // Assuming the 'ProductService' module is located in the 'api' folder at the root of your project
-const props = defineProps({
+const navProps = defineProps({
   drawer: {
     type: Boolean,
     required: true
@@ -306,10 +306,10 @@ onMounted(async () => {
 
 // const products: any = ref([])
 
-const internalDrawer = ref(props.drawer)
+const internalDrawer = ref(navProps.drawer)
 
 watchEffect(() => {
-  internalDrawer.value = props.drawer
+  internalDrawer.value = navProps.drawer
 })
 </script>
 

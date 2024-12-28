@@ -73,25 +73,25 @@ import { AgGridVue } from 'ag-grid-vue3' // Vue Grid Logic
 import { ref, watch, computed } from 'vue'
 import ValuationService from '@/renderer/api/ValuationService'
 
-const props = defineProps([
-  'rowData',
-  'columnDefs',
-  'rowModel',
-  'pagination',
-  'rowSelection',
-  'tableTitle',
-  'rowCount',
-  'tableName',
-  'chartTitle',
-  'chartXAxisTitle',
-  'chartYAxisTitle',
-  'showExport',
-  'showCloseButton',
-  'showFullExport',
-  'runId',
-  'productCode',
-  'runName'
-])
+const props = defineProps<{
+  rowData?: any[]
+  columnDefs: any[]
+  rowModel?: string
+  pagination?: boolean
+  rowSelection?: string
+  tableTitle?: string
+  rowCount?: number
+  tableName?: string
+  chartTitle?: string
+  chartXAxisTitle?: string
+  chartYAxisTitle?: string
+  showExport?: boolean
+  showCloseButton?: boolean
+  showFullExport?: boolean
+  runId?: string
+  productCode?: string
+  runName?: string
+}>()
 
 // const emit = defineEmits(['delete-row'])
 
