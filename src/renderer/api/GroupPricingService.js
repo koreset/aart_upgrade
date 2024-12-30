@@ -8,5 +8,22 @@ export default {
         Accept: 'multipart/form-data'
       }
     })
+  },
+  getTableMetaData() {
+    return Api.get('/group-pricing/rate-tables')
+  },
+  uploadTables(formdata) {
+    return Api.post('group-pricing/rate-tables', formdata, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Accept: 'multipart/form-data'
+      }
+    })
+  },
+  deleteTable(tableType) {
+    return Api.delete('group-pricing/rate-tables/' + tableType)
+  },
+  getDataForTable(tableType) {
+    return Api.get('/group-pricing/rate-tables/' + tableType.toLowerCase())
   }
 }

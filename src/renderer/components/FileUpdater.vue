@@ -145,14 +145,6 @@
 import { computed, defineProps, ref, watch } from 'vue'
 import { DataPayload } from './types'
 import BaseCard from './BaseCard.vue'
-// const newprops = defineProps([
-//   'tableType',
-//   'showYieldCurve',
-//   'showVersionField',
-//   'showYieldCurveCode',
-//   'assumptionType',
-//   'uploadComplete'
-// ])
 
 const props = defineProps({
   tableType: { type: String, default: '' },
@@ -229,7 +221,6 @@ const closeDialog = () => {
 
 // processing of the captured data will be delegated to the parent caller
 const uploadFile = () => {
-
   if (file.value !== null) {
     const payload: DataPayload = {
       file: file.value,

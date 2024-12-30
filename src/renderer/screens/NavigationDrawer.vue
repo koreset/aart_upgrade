@@ -52,8 +52,10 @@
         <v-list-item :to="{ name: 'group-pricing-brokers' }">
           <v-list-item-title>Brokers</v-list-item-title>
         </v-list-item>
+        <v-list-item :to="{ name: 'group-pricing-tables' }">
+          <v-list-item-title>Tables</v-list-item-title>
+        </v-list-item>
       </v-list-group>
-
       <v-list-group value="Valuations">
         <template #activator="{ props }">
           <v-list-item

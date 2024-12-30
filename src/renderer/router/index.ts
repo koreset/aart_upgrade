@@ -369,6 +369,11 @@ export default createRouter({
       name: 'group-pricing-brokers',
       component: () => import('../screens/group_pricing/BrokerList.vue')
     },
+    {
+      path: '/group-pricing/tables',
+      name: 'group-pricing-tables',
+      component: () => import('../screens/group_pricing/Tables.vue')
+    },
 
     {
       path: '/tasks',
