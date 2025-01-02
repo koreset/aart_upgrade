@@ -196,8 +196,6 @@ const downloadResults = (jobId) => {
     fileLink.click()
   })
 }
-
-
 </script>
 
 <style scoped>

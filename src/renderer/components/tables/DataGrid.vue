@@ -78,13 +78,13 @@ const props = defineProps<{
   columnDefs: any[]
   rowModel?: string
   pagination?: boolean
-  rowSelection?: string
-  tableTitle?: string
+  rowSelection?: string | null
+  tableTitle?: string | null
   rowCount?: number
-  tableName?: string
-  chartTitle?: string
-  chartXAxisTitle?: string
-  chartYAxisTitle?: string
+  tableName?: string | null
+  chartTitle?: string | null
+  chartXAxisTitle?: string | null
+  chartYAxisTitle?: string | null
   showExport?: boolean
   showCloseButton?: boolean
   showFullExport?: boolean

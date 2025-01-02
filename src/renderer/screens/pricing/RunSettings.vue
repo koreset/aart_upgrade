@@ -240,7 +240,6 @@ onMounted(async () => {
   allProducts.value = prodResponse.data
   // allProducts.value = appStore.getAllProducts
 
-
   allProducts.value.forEach((family: any) => {
     family.products.forEach((product: any) => {
       if (product.product_state !== 'pending') {
@@ -340,7 +339,6 @@ const setProductType = async () => {
     delete clonedPricingConfig.value.run
     infoText.value = ''
   }
-
 
   let res = await PricingService.getPricingParams(selectedProduct.value.product_code)
   if (res.data.error === null && res.data.data.length > 0) {

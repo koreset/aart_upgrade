@@ -107,7 +107,6 @@ const isPrevDisabled = computed(() => position.value <= 1)
 const isNextDisabled = computed(() => position.value >= steps.value.length)
 
 const moveNext = async () => {
-
   const isValid = currentStep.value
     ? await currentStep.value[position.value - 1].validateForm()
     : false
@@ -153,4 +152,3 @@ const resetForm = () => {
 </style>
 
 ///////////////////////// ProductConfiguration.vue /////////////////////////
-

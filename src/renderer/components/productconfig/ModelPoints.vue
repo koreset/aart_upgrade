@@ -57,7 +57,6 @@ onMounted(async () => {
     headers.value.push({ text: item.code, width: 150 })
   })
 
-
   store.setProductModelPoints(selectVariables.value)
 })
 

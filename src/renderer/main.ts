@@ -30,7 +30,6 @@ window.mainApi?.sendSync('msgSetLicenseServerUrl', import.meta.env.VITE_APP_LICE
 
 const activated = window.mainApi?.sendSync('msgGetAppStatus')
 
-
 let activeApp: any
 
 if (activated) {

@@ -109,11 +109,7 @@ const getTasks = async () => {
   TaskService.getTasks(user).then((res) => {
     tasks.value = res.data
   })
-
-
 }
-
-
 </script>
 
 <style></style>

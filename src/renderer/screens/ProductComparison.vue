@@ -179,13 +179,11 @@ const chartOptions: any = ref({
 onMounted(async () => {
   const prodResponse = await ProductService.getProducts()
 
-
   prodResponse.data.forEach((family) => {
     family.products.forEach((product) => {
       allProducts.value.push(product)
     })
   })
-
 
   // productCategories.value = allProducts.value.map((item: any) => ({
   //   id: item.id,
@@ -233,7 +231,6 @@ const startComparison = () => {
   if (variable[0] === '_') {
     variable = variable.substring(1)
   }
-
 
   getAggregatedVariable({ variable })
 }

@@ -596,10 +596,9 @@ const validationSchema = yup.object({
   selectedModelPointYear: yup.string().required('Model point year is required')
 })
 
-const { defineField,  errors } = useForm({
+const { defineField, errors } = useForm({
   validationSchema
 })
-
 
 const [settingRunName, settingRunNameAttrs] = defineField('settingRunName')
 const [selectedProducts, setSelectedProducts] = defineField('selectedProducts')

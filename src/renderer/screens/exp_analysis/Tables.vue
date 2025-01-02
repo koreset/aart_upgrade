@@ -136,7 +136,6 @@ const clearData = () => {
 }
 
 const handleUpload = (event, payload: DataPayload) => {
-
   uploadComplete.value = false
   const formdata: any = new FormData()
   formdata.append('file', event.file)

@@ -450,7 +450,6 @@ const createColumnDefs = (data: any) => {
 }
 
 const handleUpload = (payload: any, config: any) => {
-
   loadingData.value = true
   loadDataComplete.value = false
 

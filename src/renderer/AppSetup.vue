@@ -24,7 +24,6 @@ window.mainApi?.sendSync('msgSetLicenseServerUrl', import.meta.env.VITE_APP_LICE
 onBeforeMount(() => {
   window.mainApi?.send('msgResizeWindow', 1024, 600, false)
 })
-
 </script>
 
 <style scoped>

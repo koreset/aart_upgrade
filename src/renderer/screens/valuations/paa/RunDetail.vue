@@ -126,7 +126,6 @@ onMounted(() => {
     runSettings.value = res.data.run_settings
     portfolioName.value = runSettings.value.name
 
-
     if (rowData.value.length > 0) {
       cDefs.value = createColumnDefs(rowData.value)
     }

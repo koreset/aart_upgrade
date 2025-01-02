@@ -156,7 +156,6 @@ const closeDialog = () => {
 
 // processing of the captured data will be delegated to the parent caller
 const uploadFile = () => {
-
   if (file.value !== null) {
     const payload: DataPayload = {
       file: file.value,

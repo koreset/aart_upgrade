@@ -446,7 +446,6 @@ const getResults = () => {
     loadingResults.value = false
     otherResultTypes.value = true
     getProductsForPortfolio()
-
   }
 }
 const createColumnGroupDefs = (data) => {
@@ -595,8 +594,6 @@ const createColumnDefs = (data, tableName) => {
   }
   return cDefs
 }
-
-
 </script>
 
 <style>

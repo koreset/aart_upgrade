@@ -244,7 +244,6 @@ const deleteTableData = async (table: any) => {
         'Are you sure you want to delete this data?'
       )
       if (result) {
-
         ModifiedGMMService.deleteTable(table.table_type).then((response) => {
           text.value = response.data
           snackbar.value = true

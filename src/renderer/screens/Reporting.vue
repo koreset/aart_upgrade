@@ -209,13 +209,11 @@ const allProducts: any = ref([])
 onMounted(async () => {
   const prodResponse = await ProductService.getProducts()
 
-
   prodResponse.data.forEach((family) => {
     family.products.forEach((product) => {
       allProducts.value.push(product)
     })
   })
-
 })
 
 // methods
