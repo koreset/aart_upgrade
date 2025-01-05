@@ -71,7 +71,9 @@ const showForTables = () => {
     props.table === 'Mortality' ||
     props.table === 'Lapse' ||
     props.table === 'Lapse_Margins' ||
-    props.table === 'Model Points'
+    props.table === 'Model Points' ||
+    props.table === 'Disability' ||
+    props.table === 'Retrenchment'
   )
 }
 

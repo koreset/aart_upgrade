@@ -263,7 +263,9 @@ const chooseYear = (item: any) => {
     item.table === 'Accidental_Mortality' ||
     item.table === 'Mortality' ||
     item.table === 'Lapse' ||
-    item.table === 'Lapse_Margins'
+    item.table === 'Lapse_Margins' ||
+    item.table === 'Disability' ||
+    item.table === 'Retrenchment'
   ) {
     availableDataYears.value = []
     selectedYear.value = null
