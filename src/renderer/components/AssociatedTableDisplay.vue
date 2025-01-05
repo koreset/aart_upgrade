@@ -201,10 +201,11 @@ const handleUpload = (data: {
   formdata.append('year', data.year?.toString() as string)
   formdata.append('table_id', selectedTableId.value)
   formdata.append('product_code', props.product.product.product_code)
+  console.log(selectedTableId)
 
   ProductService.uploadProductTable({
     formdata,
-    productId: props.product.id
+    productId: props.product.product.id
   }).then((response) => {
     if (response.status === 200) {
       // update populated status
