@@ -201,10 +201,11 @@ const handleUpload = (data: {
   formdata.append('year', data.year?.toString() as string)
   formdata.append('table_id', selectedTableId.value)
   formdata.append('product_code', props.product.product.product_code)
+  console.log(selectedTableId)
 
   ProductService.uploadProductTable({
     formdata,
-    productId: props.product.id
+    productId: props.product.product.id
   }).then((response) => {
     if (response.status === 200) {
       // update populated status
@@ -262,7 +263,9 @@ const chooseYear = (item: any) => {
     item.table === 'Accidental_Mortality' ||
     item.table === 'Mortality' ||
     item.table === 'Lapse' ||
-    item.table === 'Lapse_Margins'
+    item.table === 'Lapse_Margins' ||
+    item.table === 'Disability' ||
+    item.table === 'Retrenchment'
   ) {
     availableDataYears.value = []
     selectedYear.value = null
