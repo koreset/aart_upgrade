@@ -4,16 +4,16 @@
       <v-col>
         <base-card :show-actions="true">
           <template #header>
-            <span class="headline">Group Pricing Brokers</span>
+            <span class="headline">Group Pricing Schemes</span>
           </template>
           <template #default>
             <v-row class="mt-9 mx-5">
               <v-col cols="3">
                 <v-text-field
-                  v-model="brokerName"
+                  v-model="schemeName"
                   class="mr-9"
-                  placeholder="Broker Name"
-                  label="Broker Name"
+                  placeholder="Scheme Name"
+                  label="Scheme Name"
                   variant="outlined"
                   density="compact"
                 ></v-text-field>
@@ -24,20 +24,20 @@
                   class="primary mt-1"
                   size="small"
                   variant="outlined"
-                  @click="createBroker"
-                  >Add Broker</v-btn
+                  @click="createScheme"
+                  >Add Group Scheme</v-btn
                 >
               </v-col>
             </v-row>
-            <v-row v-if="brokers.length > 0" class="mx-5">
+            <v-row v-if="schemes.length > 0" class="mx-5">
               <v-col>
                 <base-card :showActions="false">
                   <template #header>
-                    <span class="headline">Broker List</span>
+                    <span class="headline">Scheme List</span>
                   </template>
                   <template #default>
                     <v-row>
-                      <v-col> Broker Table Here </v-col>
+                      <v-col> Scheme Table Here </v-col>
                     </v-row>
                   </template>
                 </base-card>
@@ -59,17 +59,17 @@ import ConfirmationDialog from '../../components/ConfirmDialog.vue'
 import GroupPricingService from '../../api/GroupPricingService'
 
 const confirmDialog = ref()
-const brokerName: any = ref('')
-const brokers: any = ref([])
+const schemeName: any = ref('')
+const schemes: any = ref([])
 
-const createBroker = () => {
+const createScheme = () => {
   console.log('Creating Portfolio')
-  const brokerPayload = {
-    name: brokerName.value
+  const schemPayload = {
+    name: schemeName.value
   }
-  GroupPricingService.createBroker(brokerPayload).then((res) => {
-    brokers.value.push(res.data)
-    brokerName.value = null
+  GroupPricingService.createScheme(schemPayload).then((res) => {
+    schemes.value.push(res.data)
+    schemeName.value = null
   })
 }
 
@@ -80,9 +80,9 @@ const createBroker = () => {
 onMounted(() => {
   GroupPricingService.getBrokers().then((res) => {
     if (res.data.length > 0) {
-      brokers.value = res.data
+      schemes.value = res.data
     } else {
-      brokers.value = []
+      schemes.value = []
     }
   })
 })

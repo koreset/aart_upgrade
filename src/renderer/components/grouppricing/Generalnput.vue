@@ -32,7 +32,9 @@
             density="compact"
             label="Scheme Name"
             placeholder="Choose a scheme name"
-            :items="schemes"
+            :items="groupStore.groupSchemes"
+            item-title="name"
+            item-value="name"
           ></v-select>
         </v-col>
         <v-col
@@ -48,7 +50,7 @@
             density="compact"
             placeholder="Choose a broker"
             label="Broker"
-            :items="brokers"
+            :items="groupStore.brokers"
             item-title="name"
             item-value="id"
             return-object
@@ -78,12 +80,6 @@
 import { useGroupPricingStore } from '@/renderer/store/group_pricing'
 
 const groupStore = useGroupPricingStore()
-const schemes = ['Scheme 1', 'Scheme 2', 'Scheme 3']
-const brokers = [
-  { id: 1, name: 'Broker 1' },
-  { id: 2, name: 'Broker 2' },
-  { id: 3, name: 'Broker 3' }
-]
 
 // methods
 const chooseQuoteFlow = (value: string | null) => {

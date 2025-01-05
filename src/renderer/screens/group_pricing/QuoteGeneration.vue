@@ -61,7 +61,7 @@
   </v-container>
 </template>
 <script setup lang="ts">
-import { ref, shallowRef, computed } from 'vue'
+import { ref, shallowRef, computed, onMounted } from 'vue'
 import { useGroupPricingStore } from '@/renderer/store/group_pricing'
 import GroupPricingService from '@/renderer/api/GroupPricingService'
 import Generalnput from '@/renderer/components/grouppricing/Generalnput.vue'
@@ -100,6 +100,15 @@ const movePrev = () => {
   position.value--
 }
 
+onMounted(() => {
+  GroupPricingService.getBrokers().then((res) => {
+    groupStore.brokers = res.data
+  })
+  GroupPricingService.getSchemes().then((res) => {
+    groupStore.groupSchemes = res.data
+  })
+})
+
 const generateQuote = () => {
   console.log('Generating quote')
   console.log(groupStore.groupPricingQuote)
@@ -114,6 +123,7 @@ const generateQuote = () => {
     )
   }
   console.log(groupStore.groupPricingQuote)
+  groupStore.groupPricingQuote.occupationClass = 0
   console.log(JSON.stringify(groupStore.groupPricingQuote))
 
   formData.append('groupPricingQuote', JSON.stringify(groupStore.groupPricingQuote))
