@@ -32,7 +32,7 @@
       <v-col cols="4">
         <v-select
           key="user"
-          v-model="groupStore.groupPricingQuote.reviewedBy"
+          v-model="groupStore.groupPricingQuote.reviewer"
           label="Choose a reviewer in your organisation"
           variant="outlined"
           density="compact"
@@ -41,11 +41,21 @@
           item-value="user"
         ></v-select>
       </v-col>
+      <v-col cols="4">
+        <v-select
+          v-model="groupStore.groupPricingQuote.basis"
+          label="Choose a parameter basis"
+          variant="outlined"
+          density="compact"
+          :items="parameterBases"
+        ></v-select>
+      </v-col>
     </v-row>
   </v-container>
 </template>
 <script setup lang="ts">
 import ProductService from '@/renderer/api/ProductService'
+import GroupPricingService from '@/renderer/api/GroupPricingService'
 import { useGroupPricingStore } from '@/renderer/store/group_pricing'
 import { useAppStore } from '@/renderer/store/app'
 import { computed, onMounted, ref } from 'vue'
@@ -54,6 +64,7 @@ const appStore = useAppStore()
 const groupStore = useGroupPricingStore()
 const orgUsers: any = ref([])
 const organization = computed(() => appStore.getLicenseData.data.attributes.metadata.organization)
+const parameterBases = ref([])
 
 onMounted(() => {
   try {
@@ -61,6 +72,9 @@ onMounted(() => {
       const uniqueData = Array.from(new Map(res.data.map((entry) => [entry.user, entry])).values())
       orgUsers.value = uniqueData
       console.log('Org Users:', orgUsers.value)
+    })
+    GroupPricingService.getParameterBases().then((res) => {
+      parameterBases.value = res.data
     })
   } catch (error) {
     console.log('Error:', error)

@@ -17,8 +17,9 @@ export const useGroupPricingStore = defineStore('groupPricing', {
     benefitStructures: ['Standalone', 'Accelerated'],
     brokers: [],
     groupSchemes: [],
+    selectedQuote: null,
     groupPricingQuote: {
-      reviewedBy: null,
+      reviewer: null,
       quoteId: 0,
       creationDate: null,
       quoteType: '',
@@ -42,6 +43,7 @@ export const useGroupPricingStore = defineStore('groupPricing', {
       normalRetirementAge: '',
       coverTerminationAge: '',
       claimsExperience: '',
+      basis: null,
       ptdBenefit: false,
       ciBenefit: false,
       sglaBenefit: false,

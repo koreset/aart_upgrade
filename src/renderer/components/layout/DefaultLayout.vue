@@ -1,15 +1,12 @@
 <script setup lang="tsx">
 import NavigationDrawer from '@/renderer/screens/NavigationDrawer.vue'
 import { useRoute } from 'vue-router'
-import { onMounted, ref } from 'vue'
-import { useAppStore } from '@/renderer/store/app'
-import ProductService from '@/renderer/api/ProductService'
+import { ref } from 'vue'
 import ServerUnavailable from '../ServerUnavailable.vue'
 import log from 'electron-log'
 // import { ipcRenderer } from 'electron'
 import ConfirmDialog from '../ConfirmDialog.vue'
 
-const appStore = useAppStore()
 const drawer = ref(true)
 const confirmationDialog = ref()
 
@@ -28,16 +25,6 @@ window.mainApi?.on('update_available', async () => {
   )
   if (res) {
     window.mainApi?.send('msgRestartApplication', true)
-  }
-})
-
-onMounted(async () => {
-  const response = await ProductService.getProducts()
-  appStore.setProducts(response.data)
-
-  const result = await window.mainApi?.sendSync('msgGetUserLicense')
-  if (result) {
-    appStore.setLicense(result)
   }
 })
 </script>

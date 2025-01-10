@@ -49,5 +49,23 @@ export default {
   },
   deleteScheme(id) {
     return Api.delete('/group-pricing/schemes/' + id)
+  },
+  getParameterBases() {
+    return Api.get('/group-pricing/parameter-bases')
+  },
+  getQuotes(filter) {
+    return Api.get('/group-pricing/get-quotes/filter/' + filter)
+  },
+  getAllQuotes() {
+    return Api.get('/group-pricing/get-quotes')
+  },
+  changeQuoteStatus(quoteId, status) {
+    return Api.put('/group-pricing/quotes/' + quoteId + '/update-status/' + status)
+  },
+  getQuote(quoteId) {
+    return Api.get('/group-pricing/get-quote/' + quoteId)
+  },
+  getQuoteTable(quoteId, tableType) {
+    return Api.get('/group-pricing/get-quote/' + quoteId + '/table-type/' + tableType)
   }
 }

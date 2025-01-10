@@ -4,6 +4,7 @@ export const useAppStore = defineStore('app', {
   state: () => ({
     user: null,
     licenseData: null,
+    organization: null,
     allProducts: []
   }),
   actions: {

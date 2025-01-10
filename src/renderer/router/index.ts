@@ -375,11 +375,16 @@ export default createRouter({
       component: () => import('../screens/group_pricing/GroupSchemeList.vue')
     },
     {
+      path: '/group-pricing/scheme-details/:id',
+      name: 'group-pricing-scheme-details',
+      props: true,
+      component: () => import('../screens/group_pricing/ViewQuoteDetail.vue')
+    },
+    {
       path: '/group-pricing/quotes',
       name: 'group-pricing-quotes',
       component: () => import('../screens/group_pricing/GroupSchemeQuotes.vue')
     },
-
 
     {
       path: '/group-pricing/tables',

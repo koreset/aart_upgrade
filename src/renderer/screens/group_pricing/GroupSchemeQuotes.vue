@@ -1,9 +1,259 @@
 <template>
   <v-container>
     <v-row>
-      <v-col>Group Quotes </v-col>
+      <v-col>
+        <base-card :show-actions="false">
+          <template #header>
+            <span class="headline">Scheme List</span>
+          </template>
+          <template #default>
+            <v-row>
+              <v-col>
+                <v-text-field
+                  v-model="search"
+                  class="search-box mb-2"
+                  label="Search"
+                  prepend-inner-icon="mdi-magnify"
+                  variant="outlined"
+                  density="compact"
+                  hide-details
+                  single-line
+                ></v-text-field>
+
+                <v-data-table
+                  class="table-row"
+                  density="compact"
+                  :headers="headers"
+                  :items="quotes"
+                  :search="search"
+                >
+                  <!-- Slot for Actions Column -->
+                  <template #[`item.actions`]="{ item }">
+                    <v-btn
+                      icon
+                      size="small"
+                      variant="plain"
+                      color="primary"
+                      @click="editItem(item)"
+                    >
+                      <v-icon>mdi-pencil</v-icon>
+                    </v-btn>
+                    <v-btn
+                      icon
+                      variant="plain"
+                      size="small"
+                      color="error"
+                      @click="deleteItem(item)"
+                    >
+                      <v-icon>mdi-delete</v-icon>
+                    </v-btn>
+                    <v-tooltip>
+                      <template #activator="{ props }">
+                        <v-btn
+                          icon
+                          color="primary"
+                          variant="plain"
+                          size="small"
+                          v-bind="props"
+                          @click="viewItem(item)"
+                        >
+                          <v-icon>mdi-eye</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>View Item</span>
+                    </v-tooltip>
+                    <v-tooltip>
+                      <template #activator="{ props }">
+                        <v-btn
+                          icon
+                          color="primary"
+                          variant="plain"
+                          size="small"
+                          v-bind="props"
+                          @click="submitReview(item)"
+                        >
+                          <v-icon>mdi-file-eye-outline</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>Submit for Review</span>
+                    </v-tooltip>
+                    <v-tooltip>
+                      <template #activator="{ props }">
+                        <v-btn
+                          icon
+                          color="primary"
+                          variant="plain"
+                          size="small"
+                          v-bind="props"
+                          @click="submitQuoteGeneration(item)"
+                        >
+                          <v-icon>mdi-file-send-outline</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>Generate Quote</span>
+                    </v-tooltip>
+                  </template>
+                </v-data-table>
+              </v-col>
+            </v-row>
+          </template>
+        </base-card>
+      </v-col>
     </v-row>
+    <v-dialog v-model="dialog" max-width="400">
+      <base-card>
+        <template #header>
+          <span class="headline">Submit for Review</span>
+        </template>
+        <template #default>
+          <!-- Select Field -->
+          <v-select
+            v-model="selectedReviewer"
+            variant="outlined"
+            density="compact"
+            :items="reviewers"
+            item-title="user"
+            item-value="user"
+            label="Select Reviewer"
+          ></v-select>
+        </template>
+        <template #actions>
+          <!-- Cancel Button -->
+          <v-btn variant="plain" @click="dialog = false">Cancel</v-btn>
+          <!-- Ok Button -->
+          <v-btn color="primary" @click="submitForReview">Ok</v-btn>
+        </template>
+      </base-card>
+    </v-dialog>
   </v-container>
 </template>
-<script setup lang="ts"></script>
-<style lang="css" scoped></style>
+<script setup lang="ts">
+import BaseCard from '@/renderer/components/BaseCard.vue'
+import GroupPricingService from '@/renderer/api/GroupPricingService'
+import { useAppStore } from '@/renderer/store/app'
+import { useRouter } from 'vue-router'
+import { computed, onMounted, ref } from 'vue'
+import ProductService from '@/renderer/api/ProductService'
+import { useGroupPricingStore } from '@/renderer/store/group_pricing'
+
+const groupStore = useGroupPricingStore()
+const router = useRouter()
+const appStore = useAppStore()
+const quotes = ref([])
+const search = ref('')
+const selectedReviewer = ref('')
+const reviewers: any = ref([])
+const dialog = ref(false)
+const selectedQuote: any = ref({})
+const organization = computed(() => appStore.getLicenseData.data.attributes.metadata.organization)
+
+const headers = [
+  { title: 'Scheme Name', value: 'schemeName', key: 'schemeName', width: '120px' },
+  { title: 'In Force', value: 'quoteType', key: 'quoteType', width: '20%' },
+  {
+    title: 'Start Date',
+    key: 'startDate',
+    width: '20%',
+    value: (item: any) => parseDateString(item.commencementDate)
+  },
+  { title: 'Broker', value: 'quoteBroker.name', key: 'quoteBroker', width: '20%' },
+  { title: 'Type', value: 'obligationType' },
+  { title: 'GLA', value: 'sglaBenefit' },
+  { title: 'PHI/TTD', value: 'phiTtdBenefit' },
+  { title: 'PTD', value: 'ptdBenefit' },
+  { title: 'CI', value: 'ciBenefit' },
+  { title: 'Funeral', value: 'familyFuneralBenefit' },
+  { title: 'Basis', value: 'basis' },
+  { title: 'Status', value: 'status' },
+  { title: 'Submitted By', value: 'createdBy' },
+  { title: 'Reviewer', value: 'reviewer' },
+  { title: 'Actions', value: 'actions', align: 'center' as 'center', sortable: false }
+]
+
+const parseDateString = (dateString) => {
+  const date = new Date(dateString)
+  console.log('Date:', date)
+  const formattedDate = date.toISOString().split('T')[0]
+  return formattedDate
+}
+
+const editItem = (item) => {
+  console.log('Editing:', item)
+}
+
+const deleteItem = (item) => {
+  console.log('Deleting:', item)
+}
+
+const viewItem = (item) => {
+  console.log('Viewing:', item)
+  groupStore.selectedQuote = item
+  router.push({ name: 'group-pricing-scheme-details', params: { id: item.id } })
+}
+const submitReview = (item) => {
+  selectedQuote.value = item
+  console.log('Submitting for Review:', item)
+  dialog.value = true
+}
+
+const submitForReview = () => {
+  console.log('Submitting for Review:', selectedQuote.value)
+  GroupPricingService.changeQuoteStatus(selectedQuote.value.id, 'Pending Review')
+  dialog.value = false
+}
+
+const submitQuoteGeneration = (item) => {
+  console.log('Submitting for Quote Generation:', item)
+}
+
+onMounted(() => {
+  console.log('Organization:', organization.value)
+  try {
+    ProductService.getOrgUsers({ name: organization.value }).then((res) => {
+      const uniqueData = Array.from(new Map(res.data.map((entry) => [entry.user, entry])).values())
+      reviewers.value = uniqueData
+      console.log('Org Users:', reviewers.value)
+    })
+    GroupPricingService.getAllQuotes().then((res) => {
+      if (res.data.length > 0) {
+        quotes.value = res.data
+        console.log('Quotes:', quotes.value)
+      } else {
+        quotes.value = []
+      }
+    })
+  } catch (error) {
+    console.log('Error:', error)
+  }
+
+  console.log('Organization:', appStore.getLicenseData)
+
+  // ProductService.getOrgUsers({ name: organization.value }).then((res) => {
+  //   const uniqueData = Array.from(new Map(res.data.map((entry) => [entry.user, entry])).values())
+  //   reviewers.value = uniqueData
+  // })
+})
+</script>
+<style lang="css" scoped>
+.table-row {
+  white-space: nowrap;
+}
+
+::v-deep(.v-data-table thead th) {
+  background-color: #223f54 !important;
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  white-space: nowrap;
+  min-width: 150px;
+}
+
+.search-box {
+  width: 33%;
+}
+.v-table__wrapper > table > thead {
+  background-color: #223f54 !important;
+  color: white;
+  white-space: nowrap;
+}
+</style>

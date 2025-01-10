@@ -1,5 +1,20 @@
 <script setup lang="tsx">
 import { DefaultLayout } from '@/renderer/components/layout'
+import { useAppStore } from '@/renderer/store/app'
+import { onMounted } from 'vue'
+import ProductService from '@/renderer/api/ProductService'
+
+const appStore = useAppStore()
+
+onMounted(async () => {
+  const response = await ProductService.getProducts()
+  appStore.setProducts(response.data)
+
+  const result = await window.mainApi?.sendSync('msgGetUserLicense')
+  if (result) {
+    appStore.setLicense(result)
+  }
+})
 </script>
 
 <template>
