@@ -447,6 +447,18 @@
                 ><p class="text-right content-bg">{{ quote.reviewer }}</p></v-col
               >
             </v-row>
+            <v-divider class="my-4"></v-divider>
+            <v-row>
+              <v-col cols="3">
+                <v-btn size="small" rounded color="primary" @click="goBack">Back</v-btn>
+              </v-col>
+              <v-col cols="9" class="text-right">
+                <v-btn class="mr-3" size="small" rounded color="primary" @click="goBack"
+                  >Edit</v-btn
+                >
+                <v-btn size="small" rounded color="primary" @click="goBack">Approve</v-btn>
+              </v-col>
+            </v-row>
             <v-snackbar v-model="snackbar" centered :timeout="timeout" :multi-line="true">
               {{ snackbarText }}
               <v-btn rounded color="red" variant="text" @click="snackbar = false">Close</v-btn>
@@ -463,7 +475,9 @@ import { onMounted, ref } from 'vue'
 import GroupPricingService from '@/renderer/api/GroupPricingService'
 import formatValues from '@/renderer/utils/format_values'
 import DataGrid from '@/renderer/components/tables/DataGrid.vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const props = defineProps({
   id: {
     type: String,
@@ -496,6 +510,10 @@ const clearData = () => {
 
 const dashIfEmpty = (value: any) => {
   return value || '-'
+}
+
+const goBack = () => {
+  router.push({ name: 'group-pricing-quotes' })
 }
 
 const viewTable = async (item: any) => {
