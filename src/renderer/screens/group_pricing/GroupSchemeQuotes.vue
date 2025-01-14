@@ -204,6 +204,7 @@ const submitForReview = () => {
 
 const submitQuoteGeneration = (item) => {
   console.log('Submitting for Quote Generation:', item)
+  router.push({ name: 'group-pricing-quotes-generation', params: { quoteId: item.id } })
 }
 
 onMounted(() => {

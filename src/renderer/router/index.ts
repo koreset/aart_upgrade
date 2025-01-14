@@ -385,6 +385,12 @@ export default createRouter({
       name: 'group-pricing-quotes',
       component: () => import('../screens/group_pricing/GroupSchemeQuotes.vue')
     },
+    {
+      path: '/group-pricing/quotes/output/:quoteId',
+      name: 'group-pricing-quotes-generation',
+      component: () => import('../screens/group_pricing/QuoteOutput.vue'),
+      props: true
+    },
 
     {
       path: '/group-pricing/tables',
