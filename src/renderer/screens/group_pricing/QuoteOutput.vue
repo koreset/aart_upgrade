@@ -23,9 +23,10 @@
 
 <script setup lang="ts">
 import BaseCard from '@/renderer/components/BaseCard.vue'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib'
 import { saveAs } from 'file-saver'
+import GroupPricingService from '@/renderer/api/GroupPricingService'
 
 const props = defineProps({
   quoteId: {
@@ -34,6 +35,8 @@ const props = defineProps({
   }
 })
 
+const quote: any = ref(null)
+
 const addressLines = [
   '534, Amberley Crescent',
   'Cedar Creek Estate',
@@ -41,6 +44,14 @@ const addressLines = [
   'Tel: +27719166815',
   'Email: jome.akpoduado@gmail.com'
 ]
+
+onMounted(() => {
+  console.log('quoteId', props.quoteId)
+  GroupPricingService.getQuote(props.quoteId).then((res) => {
+    console.log('Quote:', res.data)
+    quote.value = res.data
+  })
+})
 
 const wrapText = (text, font, fontSize, maxWidth) => {
   const words = text.split(' ')
@@ -124,10 +135,13 @@ const createQuotePdf = async () => {
 
   const quoteDetails = [
     { label: 'Type of Policy:', value: 'Group Life Assurance' },
-    { label: 'Quote Date:', value: '2021-09-01' },
-    { label: 'Prepared For:', value: 'Scheme 1' },
-    { label: 'Scheme Name:', value: 'Group Life Assurance' },
-    { label: 'Commencement Date:', value: '2021-09-01' },
+    {
+      label: 'Quote Date:',
+      value: quote.value.creationDate ? quote.value.creationDate : '2021-09-01'
+    },
+    { label: 'Prepared For:', value: quote.value.schemeName },
+    { label: 'Scheme Name:', value: quote.value.schemeName },
+    { label: 'Commencement Date:', value: quote.value.commencementDate },
     { label: 'Period of Assurance:', value: '2022-09-01' },
     { label: 'Number of Lives Covered', value: '100' },
     { label: 'Total Annual Salary:', value: 'R 100,000.00' },
@@ -720,9 +734,5 @@ const createQuotePdf = async () => {
   const blob = new Blob([pdfBytes], { type: 'application/pdf' })
   saveAs(blob, 'quotation.pdf')
 }
-
-onMounted(() => {
-  console.log('quoteId', props.quoteId)
-})
 </script>
 <style lang="css" scoped></style>
