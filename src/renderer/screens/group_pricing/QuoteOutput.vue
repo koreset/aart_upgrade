@@ -142,7 +142,7 @@ const createQuotePdf = async () => {
     { label: 'Prepared For:', value: quote.value.schemeName },
     { label: 'Scheme Name:', value: quote.value.schemeName },
     { label: 'Commencement Date:', value: quote.value.commencementDate },
-    { label: 'Period of Assurance:', value: '2022-09-01' },
+    { label: 'Period of Assurance:', value: '1 year' },
     { label: 'Number of Lives Covered', value: '100' },
     { label: 'Total Annual Salary:', value: 'R 100,000.00' },
     { label: 'Total Annual Premium:', value: 'R 100,000.00' }
@@ -386,23 +386,23 @@ const createQuotePdf = async () => {
   const groupLifeAssurance = [
     {
       label: 'Sum Assured',
-      value: '3 times annual salary'
+      value: quote.value.salaryMultiple + ' times annual salary'
     },
     {
       label: 'GLA Free Cover Limit (FCL)',
-      value: 'R 35,000.00'
+      value: quote.value.currentFcl
     },
     {
       label: 'Terminal Illness Benefit',
-      value: 'No'
+      value: quote.value.terminalIllnessBenefit
     },
     {
       label: 'Number of members above FCL',
-      value: '5'
+      value: 'data from rating result'
     },
     {
       label: 'Cover Termination Age',
-      value: '65'
+      value: quote.value.coverTerminationAge
     }
   ]
 
@@ -439,23 +439,23 @@ const createQuotePdf = async () => {
   const permanentTotalDisability = [
     {
       label: 'Sum Assured',
-      value: '3 times annual salary'
+      value: quote.value.ptd.salaryMultiple + ' times annual salary'
     },
     {
       label: 'PTD Free Cover Limit (FCL)',
-      value: 'R 35,000.00'
+      value: quote.value.currentFcl
     },
     {
       label: 'Benefit Structure',
-      value: 'Standalone'
+      value: quote.value.ptd.benefitType
     },
     {
       label: 'Waiting Period',
-      value: '1 month'
+      value: quote.value.ptd.deferredPeriod + ' month(s)'
     },
     {
       label: 'Cover Termination Age',
-      value: '65'
+      value: quote.value.ptd.coverTerminationAge
     }
   ]
 
@@ -503,15 +503,15 @@ const createQuotePdf = async () => {
   const spouseGroupLifeAssurance = [
     {
       label: 'Sum Assured',
-      value: '3 times annual salary'
+      value: 'data from rating result'
     },
     {
       label: 'Maximum Sum Assured',
-      value: 'R 35,000.00'
+      value: quote.value.sgla.maxBenefit
     },
     {
       label: 'Cover Termination Age',
-      value: '65'
+      value: quote.value.sgla.coverTerminationAge
     }
   ]
 
@@ -536,7 +536,16 @@ const createQuotePdf = async () => {
   })
   y -= fontSize * 2
 
-  currentPage.drawText('Total and Temporary Disability', {
+  const phiTitle = () => {
+    if (quote.value.phi.productType === 'PHI') {
+      return 'Permanent Health Insurance'
+    }
+    if (quote.value.phi.productType === 'TTD') {
+      return 'Total and Temporary Disability'
+    }
+    return 'Permanent Health Insurance and Total and Temporary Disability'
+  }
+  currentPage.drawText(phiTitle(), {
     x: margin,
     y,
     size: fontSize - 2,
@@ -548,24 +557,75 @@ const createQuotePdf = async () => {
 
   const totalAndTemporaryDisability = [
     {
+      label: 'Product Type',
+      value: quote.value.phi.productType
+    },
+    {
       label: 'Monthly benefit as a percentage of monthly salary',
-      value: '75%'
+      value: quote.value.phi.monthlyBenefitProportion + '%'
     },
     {
       label: 'Maximum number of monthly payments to be made',
-      value: '12'
+      value: quote.value.phi.numberAnnualPayments * 12
     },
     {
       label: 'Waiting Period',
-      value: '1 month'
+      value: quote.value.phi.waitingPeriodMonths + ' month(s)'
     },
     {
       label: 'Cover Termination Age',
-      value: '65'
+      value: quote.value.phi.coverTerminationAge
     }
   ]
 
   totalAndTemporaryDisability.forEach((detail) => {
+    currentPage.drawText(detail.label, {
+      x: margin,
+      y,
+      size: fontSize - 2,
+      font,
+      color: rgb(0, 0, 0)
+    })
+
+    currentPage.drawText(' :         ' + detail.value, {
+      x: margin + 200,
+      y,
+      size: fontSize - 2,
+      font,
+      color: rgb(0, 0, 0)
+    })
+
+    y -= fontSize
+  })
+
+  y -= fontSize * 2
+
+  currentPage.drawText('Critical Illness', {
+    x: margin,
+    y,
+    size: fontSize - 2,
+    font: boldFont,
+    color: rgb(0, 0, 0)
+  })
+
+  y -= fontSize
+
+  const criticalIllness = [
+    {
+      label: 'Benefit Structure',
+      value: quote.value.ci.benefitStructure
+    },
+    {
+      label: 'Critical Illness Percentage',
+      value: quote.value.ci.criticalIllnessPercentage + '%'
+    },
+    {
+      label: 'Cover Termination Age',
+      value: quote.value.ci.coverTerminationAge
+    }
+  ]
+
+  criticalIllness.forEach((detail) => {
     currentPage.drawText(detail.label, {
       x: margin,
       y,
@@ -600,31 +660,27 @@ const createQuotePdf = async () => {
   const groupFuneralDetails = [
     {
       label: 'Main Member Sum Assured',
-      value: 'R 17.60'
+      value: quote.value.groupFamilyFuneral.main_member_group_funeral_sum_assured
     },
     {
       label: 'Spouse Sum Assured',
-      value: 'R 211.00'
+      value: quote.value.groupFamilyFuneral.spouse_group_funeral_sum_assured
     },
     {
       label: 'Adult Dependant Sum Assured',
-      value: 'R 21,100.00'
+      value: quote.value.groupFamilyFuneral.adultDependantSumAssured
     },
     {
       label: 'Child Sum Assured',
-      value: 'R 21,100.00'
+      value: quote.value.groupFamilyFuneral.child_group_funeral_sum_assured
     },
     {
       label: 'Maximum number of children covered',
-      value: '4'
+      value: quote.value.groupFamilyFuneral.maxChildrenCovered
     },
     {
       label: 'Maximum number of dependants covered',
-      value: '4'
-    },
-    {
-      label: 'Cover Termination Age',
-      value: '65'
+      value: quote.value.groupFamilyFuneral.numberAdultDependants
     }
   ]
 
