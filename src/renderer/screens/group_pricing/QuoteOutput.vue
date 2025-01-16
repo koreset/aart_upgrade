@@ -58,6 +58,9 @@ onMounted(() => {
   })
 })
 
+const roundUpToTwoDecimals = (num) => { return Math.ceil(num * 100) / 100; }
+ 
+
 const wrapText = (text, font, fontSize, maxWidth) => {
   const words = text.split(' ')
   const lines: any = []
@@ -149,9 +152,9 @@ const createQuotePdf = async () => {
     { label: 'Commencement Date:', value: quote.value.commencementDate },
     { label: 'Period of Assurance:', value: '1 year' },
     { label: 'Number of Lives Covered', value: `${resultSummary.value.member_count}` },
-    { label: 'Total Sum Assured:', value: 'R 100,000.00' },
-    { label: 'Total Annual Salary:', value: `${resultSummary.value.total_annual_salary}` },
-    { label: 'Total Annual Premium:', value: `${resultSummary.value.total_annual_premium}` }
+    { label: 'Total Sum Assured:', value: `${ roundUpToTwoDecimals(resultSummary.value.total_sum_assured)}` },
+    { label: 'Total Annual Salary:', value: `${ roundUpToTwoDecimals(resultSummary.value.total_annual_salary)}` },
+    { label: 'Total Annual Premium:', value: `${ roundUpToTwoDecimals(resultSummary.value.total_annual_premium)}` }
   ]
 
   quoteDetails.forEach((detail) => {
@@ -195,33 +198,33 @@ const createQuotePdf = async () => {
   const benefitsStructure: any = [
     {
       benefit: 'Group Life Assurance',
-      sumAssured: 'R 100,000.00',
-      annualPremium: 'R 100,000.00',
-      percentage: '100%'
+      sumAssured: `${ roundUpToTwoDecimals(resultSummary.value.total_gla_capped_sum_assured)}`,
+      annualPremium: `${ roundUpToTwoDecimals(resultSummary.value.total_gla_premium)}`,
+      percentage: `${ roundUpToTwoDecimals(resultSummary.value.proportion_gla_premium_salary)}`
     },
     {
       benefit: 'Permanent Total Disability',
-      sumAssured: 'R 100,000.00',
-      annualPremium: 'R 100,000.00',
-      percentage: '100%'
+      sumAssured: `${ roundUpToTwoDecimals(resultSummary.value.total_ptd_capped_sum_assured)}`,
+      annualPremium: `${ roundUpToTwoDecimals(resultSummary.value.total_ptd_premium)}`,
+      percentage:  `${ roundUpToTwoDecimals(resultSummary.value.proportion_ptd_premium_salary)}`
     },
     {
       benefit: 'Spouses Group Life Assurance',
-      sumAssured: 'R 100,000.00',
-      annualPremium: 'R 100,000.00',
-      percentage: '100%'
+      sumAssured: `${roundUpToTwoDecimals(resultSummary.value.total_spouse_gla_capped_sum_assured)}`,
+      annualPremium: `${roundUpToTwoDecimals(resultSummary.value.total_spouse_gla_premium)}`,
+      percentage:  `${roundUpToTwoDecimals(resultSummary.value.proportion_spouse_gla_premium_salary)}`
     },
     {
       benefit: 'Total and Temporary Disability',
-      sumAssured: 'R 100,000.00',
-      annualPremium: 'R 100,000.00',
-      percentage: '100%'
+      sumAssured: `${roundUpToTwoDecimals(resultSummary.value.total_ttd_capped_income)}`,
+      annualPremium: `${roundUpToTwoDecimals(resultSummary.value.total_ttd_premium)}`,
+      percentage:  `${roundUpToTwoDecimals(resultSummary.value.proportion_ttd_premium_salary)}`
     },
     {
       benefit: 'Sub Total/Total Premiums',
-      sumAssured: 'R 100,000.00',
-      annualPremium: 'R 100,000.00',
-      percentage: '100%'
+      sumAssured: `${roundUpToTwoDecimals(resultSummary.value.total_gla_capped_sum_assured)}`,
+      annualPremium: `${roundUpToTwoDecimals(resultSummary.value.total_annual_premium_excluding_funeral)}`,
+      percentage:  `${roundUpToTwoDecimals(resultSummary.value.proportion_gla_premium_salary)}`
     }
   ]
 
