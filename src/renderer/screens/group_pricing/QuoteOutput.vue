@@ -148,10 +148,10 @@ const createQuotePdf = async () => {
     { label: 'Scheme Name:', value: quote.value.schemeName },
     { label: 'Commencement Date:', value: quote.value.commencementDate },
     { label: 'Period of Assurance:', value: '1 year' },
-    { label: 'Number of Lives Covered', value: resultSummary.value.member_count },
+    { label: 'Number of Lives Covered', value: `${resultSummary.value.member_count}` },
     { label: 'Total Sum Assured:', value: 'R 100,000.00' },
-    { label: 'Total Annual Salary:', value: resultSummary.value.total_annual_salary },
-    { label: 'Total Annual Premium:', value: resultSummary.value.total_annual_premium }
+    { label: 'Total Annual Salary:', value: `${resultSummary.value.total_annual_salary}` },
+    { label: 'Total Annual Premium:', value: `${resultSummary.value.total_annual_premium}` }
   ]
 
   quoteDetails.forEach((detail) => {
