@@ -36,6 +36,7 @@ const props = defineProps({
 })
 
 const quote: any = ref(null)
+const resultSummary: any = ref(null)
 
 const addressLines = [
   '534, Amberley Crescent',
@@ -50,6 +51,10 @@ onMounted(() => {
   GroupPricingService.getQuote(props.quoteId).then((res) => {
     console.log('Quote:', res.data)
     quote.value = res.data
+  })
+  GroupPricingService.getResultSummary(props.quoteId).then((res) => {
+    console.log('Result Summary:', res.data)
+    resultSummary.value = res.data
   })
 })
 
@@ -143,9 +148,10 @@ const createQuotePdf = async () => {
     { label: 'Scheme Name:', value: quote.value.schemeName },
     { label: 'Commencement Date:', value: quote.value.commencementDate },
     { label: 'Period of Assurance:', value: '1 year' },
-    { label: 'Number of Lives Covered', value: '100' },
-    { label: 'Total Annual Salary:', value: 'R 100,000.00' },
-    { label: 'Total Annual Premium:', value: 'R 100,000.00' }
+    { label: 'Number of Lives Covered', value: resultSummary.value.member_count },
+    { label: 'Total Sum Assured:', value: 'R 100,000.00' },
+    { label: 'Total Annual Salary:', value: resultSummary.value.total_annual_salary },
+    { label: 'Total Annual Premium:', value: resultSummary.value.total_annual_premium }
   ]
 
   quoteDetails.forEach((detail) => {

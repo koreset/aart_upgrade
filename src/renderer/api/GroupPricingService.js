@@ -67,5 +67,8 @@ export default {
   },
   getQuoteTable(quoteId, tableType) {
     return Api.get('/group-pricing/get-quote/' + quoteId + '/table-type/' + tableType)
+  },
+  getResultSummary(quoteId) {
+    return Api.get('/group-pricing/get-quote/' + quoteId + '/result-summary')
   }
 }
