@@ -58,8 +58,15 @@ onMounted(() => {
   })
 })
 
-const roundUpToTwoDecimals = (num) => { return Math.ceil(num * 100) / 100; }
- 
+const roundUpToTwoDecimals = (num) => {
+  const roundedNum = Math.ceil(num * 100) / 100 // Round up to two decimal places
+  return roundedNum
+    .toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    })
+    .replace(/,/g, ' ') // Replace commas with spaces for accounting format }
+}
 
 const wrapText = (text, font, fontSize, maxWidth) => {
   const words = text.split(' ')
@@ -152,9 +159,18 @@ const createQuotePdf = async () => {
     { label: 'Commencement Date:', value: quote.value.commencementDate },
     { label: 'Period of Assurance:', value: '1 year' },
     { label: 'Number of Lives Covered', value: `${resultSummary.value.member_count}` },
-    { label: 'Total Sum Assured:', value: `${ roundUpToTwoDecimals(resultSummary.value.total_sum_assured)}` },
-    { label: 'Total Annual Salary:', value: `${ roundUpToTwoDecimals(resultSummary.value.total_annual_salary)}` },
-    { label: 'Total Annual Premium:', value: `${ roundUpToTwoDecimals(resultSummary.value.total_annual_premium)}` }
+    {
+      label: 'Total Sum Assured:',
+      value: `${roundUpToTwoDecimals(resultSummary.value.total_sum_assured)}`
+    },
+    {
+      label: 'Total Annual Salary:',
+      value: `${roundUpToTwoDecimals(resultSummary.value.total_annual_salary)}`
+    },
+    {
+      label: 'Total Annual Premium:',
+      value: `${roundUpToTwoDecimals(resultSummary.value.total_annual_premium)}`
+    }
   ]
 
   quoteDetails.forEach((detail) => {
@@ -198,33 +214,33 @@ const createQuotePdf = async () => {
   const benefitsStructure: any = [
     {
       benefit: 'Group Life Assurance',
-      sumAssured: `${ roundUpToTwoDecimals(resultSummary.value.total_gla_capped_sum_assured)}`,
-      annualPremium: `${ roundUpToTwoDecimals(resultSummary.value.total_gla_premium)}`,
-      percentage: `${ roundUpToTwoDecimals(resultSummary.value.proportion_gla_premium_salary)}`
+      sumAssured: `${roundUpToTwoDecimals(resultSummary.value.total_gla_capped_sum_assured)}`,
+      annualPremium: `${roundUpToTwoDecimals(resultSummary.value.total_gla_premium)}`,
+      percentage: `${roundUpToTwoDecimals(resultSummary.value.proportion_gla_premium_salary)}`
     },
     {
       benefit: 'Permanent Total Disability',
-      sumAssured: `${ roundUpToTwoDecimals(resultSummary.value.total_ptd_capped_sum_assured)}`,
-      annualPremium: `${ roundUpToTwoDecimals(resultSummary.value.total_ptd_premium)}`,
-      percentage:  `${ roundUpToTwoDecimals(resultSummary.value.proportion_ptd_premium_salary)}`
+      sumAssured: `${roundUpToTwoDecimals(resultSummary.value.total_ptd_capped_sum_assured)}`,
+      annualPremium: `${roundUpToTwoDecimals(resultSummary.value.total_ptd_premium)}`,
+      percentage: `${roundUpToTwoDecimals(resultSummary.value.proportion_ptd_premium_salary)}`
     },
     {
       benefit: 'Spouses Group Life Assurance',
       sumAssured: `${roundUpToTwoDecimals(resultSummary.value.total_spouse_gla_capped_sum_assured)}`,
       annualPremium: `${roundUpToTwoDecimals(resultSummary.value.total_spouse_gla_premium)}`,
-      percentage:  `${roundUpToTwoDecimals(resultSummary.value.proportion_spouse_gla_premium_salary)}`
+      percentage: `${roundUpToTwoDecimals(resultSummary.value.proportion_spouse_gla_premium_salary)}`
     },
     {
       benefit: 'Total and Temporary Disability',
       sumAssured: `${roundUpToTwoDecimals(resultSummary.value.total_ttd_capped_income)}`,
       annualPremium: `${roundUpToTwoDecimals(resultSummary.value.total_ttd_premium)}`,
-      percentage:  `${roundUpToTwoDecimals(resultSummary.value.proportion_ttd_premium_salary)}`
+      percentage: `${roundUpToTwoDecimals(resultSummary.value.proportion_ttd_premium_salary)}`
     },
     {
       benefit: 'Sub Total/Total Premiums',
       sumAssured: `${roundUpToTwoDecimals(resultSummary.value.total_gla_capped_sum_assured)}`,
       annualPremium: `${roundUpToTwoDecimals(resultSummary.value.total_annual_premium_excluding_funeral)}`,
-      percentage:  `${roundUpToTwoDecimals(resultSummary.value.proportion_gla_premium_salary)}`
+      percentage: `${roundUpToTwoDecimals(resultSummary.value.proportion_gla_premium_salary)}`
     }
   ]
 
