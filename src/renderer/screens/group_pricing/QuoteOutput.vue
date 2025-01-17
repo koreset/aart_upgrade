@@ -194,7 +194,7 @@ const createQuotePdf = async () => {
   })
 
   const quoteRemarks =
-    'We submit for your consideration the quotation you requested for the above scheme. Thank you for the opportunity to quote.'
+    'We are pleased to submit for your consideration the quotation you requested for the above scheme. Thank you for the opportunity to provide this quote.'
 
   y -= fontSize * 2
 
@@ -354,9 +354,9 @@ const createQuotePdf = async () => {
   y -= fontSize * 2
 
   const groupFuneral = [
-    { label: 'Monthly Premium per Member', value: '17.60' },
-    { label: 'Annual Premium per Member', value: '211.00' },
-    { label: 'Total Annual Premium', value: '21,100.00' }
+    { label: 'Monthly Premium per Member', value: `${roundUpToTwoDecimals(resultSummary.value.total_funeral_monthly_premium_per_member)}` },
+    { label: 'Annual Premium per Member', value: `${roundUpToTwoDecimals(resultSummary.value.total_funeral_annual_premium_per_member)}` },
+    { label: 'Total Annual Premium', value: `${roundUpToTwoDecimals(resultSummary.value.total_funeral_cost)}` }
   ]
 
   groupFuneral.forEach((detail) => {
@@ -415,11 +415,11 @@ const createQuotePdf = async () => {
     },
     {
       label: 'GLA Free Cover Limit (FCL)',
-      value: quote.value.currentFcl
+      value: `${roundUpToTwoDecimals(quote.value.currentFcl)}`
     },
     {
       label: 'Terminal Illness Benefit',
-      value: quote.value.terminalIllnessBenefit
+      value:  quote.value.terminalIllnessBenefit
     },
     {
       label: 'Number of members above FCL',
@@ -468,7 +468,7 @@ const createQuotePdf = async () => {
     },
     {
       label: 'PTD Free Cover Limit (FCL)',
-      value: quote.value.currentFcl
+      value: `${roundUpToTwoDecimals(quote.value.currentFcl)}`
     },
     {
       label: 'Benefit Structure',
@@ -532,7 +532,7 @@ const createQuotePdf = async () => {
     },
     {
       label: 'Maximum Sum Assured',
-      value: quote.value.sgla.maxBenefit
+      value: `${roundUpToTwoDecimals(quote.value.sgla.maxBenefit)}`
     },
     {
       label: 'Cover Termination Age',
@@ -685,19 +685,19 @@ const createQuotePdf = async () => {
   const groupFuneralDetails = [
     {
       label: 'Main Member Sum Assured',
-      value: quote.value.groupFamilyFuneral.main_member_group_funeral_sum_assured
+      value: `${roundUpToTwoDecimals(quote.value.groupFamilyFuneral.main_member_group_funeral_sum_assured)}`
     },
     {
       label: 'Spouse Sum Assured',
-      value: quote.value.groupFamilyFuneral.spouse_group_funeral_sum_assured
+      value: `${roundUpToTwoDecimals(quote.value.groupFamilyFuneral.spouse_group_funeral_sum_assured)}`
     },
     {
       label: 'Adult Dependant Sum Assured',
-      value: quote.value.groupFamilyFuneral.adultDependantSumAssured
+      value: `${roundUpToTwoDecimals(quote.value.groupFamilyFuneral.adultDependantSumAssured)}`
     },
     {
       label: 'Child Sum Assured',
-      value: quote.value.groupFamilyFuneral.child_group_funeral_sum_assured
+      value:  `${roundUpToTwoDecimals(quote.value.groupFamilyFuneral.child_group_funeral_sum_assured)}`
     },
     {
       label: 'Maximum number of children covered',
@@ -741,7 +741,7 @@ const createQuotePdf = async () => {
   y -= fontSize
 
   const underWritingText =
-    '1. The underwriting of the scheme is based on the information provided by the client. The scheme is subject to the underwriting rules of the insurer. There is no guarantee that the scheme will be accepted by the insurer.'
+    '1. The quoted premium rates are based on the risk profile, data provided by the client, benefit features, and assumptions. The scheme is subject to the insurer'+"'"+'s underwriting rules, and there is no guarantee of acceptance.'
 
   let lines = wrapText(underWritingText, font, fontSize - 2, maxWidth)
 
@@ -770,15 +770,15 @@ const createQuotePdf = async () => {
   y -= fontSize
 
   const gpNote1 =
-    '1. The premium rates are based on the information provided by the client. The rates are subject to change based on the underwriting rules of the insurer.'
+    '1. This quote is valid for'+ resultSummary.value.quote_validity_period_months +' month(s) from the date of issuance.'
 
   const gpNote2 =
-    '2. The premium rates are based on the information provided by the client. The rates are subject to change based on the underwriting rules of the insurer.'
+    '2. All rates provided are guaranteed for a period of '+ resultSummary.value.premium_rates_guaranteed_period_months +' month(s) from the inception date.'
 
   const gpNote3 =
-    '3. Note that members who are above the FCL are required to undergo medical underwriting otherwise their cover will be limited to the FCL.'
+    '3. Please note that members exceeding the FCL are required to undergo medical underwriting; otherwise, their coverage will be limited to the FCL.'
 
-  const gpNote4 = 'Please contact us for any further information or clarification.'
+  const gpNote4 = 'Please feel free to contact us if you require any further information or clarification.'
 
   const endNote = 'We look forward to your favourable response.'
 
