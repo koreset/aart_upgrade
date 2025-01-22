@@ -42,6 +42,7 @@ export const useGroupPricingStore = defineStore('groupPricing', {
       ci_benefit: false,
       sgla_benefit: false,
       phi_ttd_benefit: false,
+      gla_benefit: true,
       family_funeral_benefit: false,
       gla: {
         salary_multiple: 0,

@@ -156,24 +156,24 @@ const selectedQuote: any = ref({})
 const organization = computed(() => appStore.getLicenseData.data.attributes.metadata.organization)
 
 const headers = [
-  { title: 'Scheme Name', value: 'schemeName', key: 'schemeName', width: '120px' },
-  { title: 'In Force', value: 'quoteType', key: 'quoteType', width: '20%' },
+  { title: 'Scheme Name', value: 'scheme_name', key: 'scheme_name', width: '120px' },
+  { title: 'In Force', value: 'quote_type', key: 'quote_type', width: '20%' },
   {
-    title: 'Start Date',
-    key: 'startDate',
+    title: 'Commencement Date',
+    key: 'commencement_date',
     width: '20%',
-    value: (item: any) => parseDateString(item.commencementDate)
+    value: (item: any) => parseDateString(item.commencement_date)
   },
-  { title: 'Broker', value: 'quoteBroker.name', key: 'quoteBroker', width: '20%' },
+  { title: 'Broker', value: 'quote_broker.name', key: 'quote_broker', width: '20%' },
   { title: 'Type', value: 'obligationType' },
-  { title: 'GLA', value: 'sglaBenefit' },
-  { title: 'PHI/TTD', value: 'phiTtdBenefit' },
-  { title: 'PTD', value: 'ptdBenefit' },
-  { title: 'CI', value: 'ciBenefit' },
-  { title: 'Funeral', value: 'familyFuneralBenefit' },
+  { title: 'SGLA', value: 'sgla_benefit' },
+  { title: 'PHI/TTD', value: 'phi_ttd_benefit' },
+  { title: 'PTD', value: 'ptd_benefit' },
+  { title: 'CI', value: 'ci_benefit' },
+  { title: 'Funeral', value: 'family_funeral_benefit' },
   { title: 'Basis', value: 'basis' },
   { title: 'Status', value: 'status' },
-  { title: 'Submitted By', value: 'createdBy' },
+  { title: 'Submitted By', value: 'created_by' },
   { title: 'Reviewer', value: 'reviewer' },
   { title: 'Actions', value: 'actions', align: 'center' as 'center', sortable: false }
 ]

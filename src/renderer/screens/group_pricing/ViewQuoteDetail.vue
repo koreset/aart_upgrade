@@ -10,11 +10,11 @@
             <v-row>
               <v-col cols="3"><p>Scheme Name</p></v-col>
               <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.schemeName }}</p></v-col
+                ><p class="text-right content-bg">{{ quote.scheme_name }}</p></v-col
               >
               <v-col cols="3"><p>Start Date</p></v-col>
               <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.commencementDate }}</p></v-col
+                ><p class="text-right content-bg">{{ quote.commencement_date }}</p></v-col
               >
             </v-row>
             <v-row>
@@ -24,17 +24,17 @@
               >
               <v-col cols="3"><p>Renewal/New</p></v-col>
               <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.quoteType }}</p></v-col
+                ><p class="text-right content-bg">{{ quote.quote_type }}</p></v-col
               >
             </v-row>
             <v-row>
               <v-col cols="3"><p>Broker</p></v-col>
               <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.quoteBroker }}</p></v-col
+                ><p class="text-right content-bg">{{ quote.quote_broker }}</p></v-col
               >
               <v-col cols="3"><p>Voluntary/Compulsory</p></v-col>
               <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.obligationType }}</p></v-col
+                ><p class="text-right content-bg">{{ quote.obligation_type }}</p></v-col
               >
             </v-row>
             <v-row>
@@ -50,27 +50,27 @@
             <v-row>
               <v-col cols="3"><p>Expense Loading</p></v-col>
               <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.expenseLoading }}</p></v-col
+                ><p class="text-right content-bg">{{ quote.loadings }}</p></v-col
               >
               <v-col cols="3"><p>Commission Rate</p></v-col>
               <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.commissionRate }}</p></v-col
+                ><p class="text-right content-bg">{{ quote.loadings.commission_loading }}</p></v-col
               >
             </v-row>
             <v-row>
               <v-col cols="3"><p>Profit Loading</p></v-col>
               <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.profitLoading }}</p></v-col
+                ><p class="text-right content-bg">{{ quote.loadings.profit_loading }}</p></v-col
               >
               <v-col cols="3"><p>Normal Retirement Age</p></v-col>
               <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.normalRetirementAge }}</p></v-col
+                ><p class="text-right content-bg">{{ quote.normal_retirement_age }}</p></v-col
               >
             </v-row>
             <v-row>
               <v-col cols="3"><p>Cover Termination Age</p></v-col>
               <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.coverTerminationAge }}</p></v-col
+                ><p class="text-right content-bg">{{ quote.gla.cover_termination_age }}</p></v-col
               >
               <v-col cols="3"><p>Accelerated Benefit Discount</p></v-col>
               <v-col cols="3"
@@ -78,33 +78,35 @@
               >
             </v-row>
             <v-row>
-              <v-col cols="3"><p>Current Free Cover Limit</p></v-col>
+              <v-col cols="3"><p>Free Cover Limit</p></v-col>
               <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.currentFcl }}</p></v-col
+                ><p class="text-right content-bg">{{ quote.free_cover_limit }}</p></v-col
               >
               <v-col cols="3"><p>Experience Rating</p></v-col>
               <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.claimsExperience }}</p></v-col
+                ><p class="text-right content-bg">{{ quote.experience_rating }}</p></v-col
               >
             </v-row>
             <v-row>
               <v-col cols="3"><p>Overall Premium Discount</p></v-col>
               <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.overallPremiumDiscount }}</p></v-col
+                ><p class="text-right content-bg">{{ quote.loadings.discount }}</p></v-col
               >
               <v-col cols="3"><p>Occupation Class</p></v-col>
               <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.occupationClass }}</p></v-col
+                ><p class="text-right content-bg">{{ quote.occupation_class }}</p></v-col
               >
             </v-row>
             <v-row>
               <v-col cols="3"><p>Terminal Illness Benefit</p></v-col>
               <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.terminalIllnessBenefit }}</p></v-col
+                ><p class="text-right content-bg">{{
+                  quote.gla.terminal_illness_benefit
+                }}</p></v-col
               >
               <v-col cols="3"><p>Multiples of Salary</p></v-col>
               <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.salaryMultiple }}</p></v-col
+                ><p class="text-right content-bg">{{ quote.gla.salary_multiple }}</p></v-col
               >
             </v-row>
             <v-row>
@@ -118,9 +120,36 @@
               <v-expansion-panel elevation="1" tile>
                 <v-expansion-panel-title
                   ><v-row
+                    ><v-col cols="5"> <p>Group Life Assurance (GLA)</p> </v-col>
+                  </v-row></v-expansion-panel-title
+                >
+                <v-expansion-panel-text>
+                  <v-row>
+                    <v-col cols="3"><p>Cover Termination Age</p></v-col>
+                    <v-col cols="3"
+                      ><p class="text-right content-bg">{{
+                        quote.sgla.coverTerminationAge
+                      }}</p></v-col
+                    >
+                    <v-col cols="3"><p>Maximum Benefit</p></v-col>
+                    <v-col cols="3"
+                      ><p class="text-right content-bg">{{ quote.sgla.maximumBenefit }}</p></v-col
+                    >
+                  </v-row>
+                  <v-row>
+                    <v-col cols="3"><p>Spousal Percentage</p></v-col>
+                    <v-col cols="3"
+                      ><p class="text-right content-bg">{{ quote.sgla.sglaPercentage }}</p></v-col
+                    >
+                  </v-row>
+                </v-expansion-panel-text>
+              </v-expansion-panel>
+              <v-expansion-panel elevation="1" tile>
+                <v-expansion-panel-title
+                  ><v-row
                     ><v-col cols="5"> <p>Spouse Group Life Assurance (GLA)</p> </v-col>
                     <v-checkbox
-                      v-model:model-value="quote.sglaBenefit"
+                      v-model:model-value="quote.sgla_benefit"
                       density="compact"
                       hide-details
                       readonly
@@ -153,7 +182,7 @@
                   ><v-row
                     ><v-col cols="5"> <p>Permanent Total Disability</p> </v-col>
                     <v-checkbox
-                      v-model:model-value="quote.ptdBenefit"
+                      v-model:model-value="quote.ptd_benefit"
                       density="compact"
                       hide-details
                       readonly
@@ -202,7 +231,7 @@
                   ><v-row
                     ><v-col cols="5"> <p>Critical Illness</p> </v-col>
                     <v-checkbox
-                      v-model:model-value="quote.ciBenefit"
+                      v-model:model-value="quote.ci_benefit"
                       density="compact"
                       hide-details
                       readonly
@@ -245,7 +274,7 @@
                       <p>Personal Health Insurance / Temporary Total Disability</p>
                     </v-col>
                     <v-checkbox
-                      v-model:model-value="quote.phiTtdBenefit"
+                      v-model:model-value="quote.phi_ttd_benefit"
                       density="compact"
                       hide-details
                       readonly
@@ -256,7 +285,7 @@
                   <v-row>
                     <v-col cols="3"><p>Product Type</p></v-col>
                     <v-col cols="3"
-                      ><p class="text-right content-bg">{{ quote.phi.productType }}</p></v-col
+                      ><p class="text-right content-bg">{{ quote.phi.product_type }}</p></v-col
                     >
                     <v-col cols="3"><p>Risk Type</p></v-col>
                     <v-col cols="3"
@@ -332,9 +361,7 @@
                   <v-row>
                     <v-col cols="3"><p>Waiting Period (Months)</p></v-col>
                     <v-col cols="3"
-                      ><p class="text-right content-bg">{{
-                        quote.phi.waitingPeriodMonths
-                      }}</p></v-col
+                      ><p class="text-right content-bg">{{ quote.phi.waiting_period }}</p></v-col
                     >
                   </v-row>
                 </v-expansion-panel-text>
@@ -346,7 +373,7 @@
                       <p>Family Funeral</p>
                     </v-col>
                     <v-checkbox
-                      v-model:model-value="quote.familyFuneralBenefit"
+                      v-model:model-value="quote.family_funeral_benefit"
                       density="compact"
                       hide-details
                       readonly

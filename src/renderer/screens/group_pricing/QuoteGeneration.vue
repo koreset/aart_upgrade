@@ -44,10 +44,7 @@
                 >
 
                 <v-btn
-                  v-if="
-                    position === steps.length &&
-                    groupStore.group_pricing_quote.uploadData.member_data_file
-                  "
+                  v-if="position === steps.length"
                   class="ml-9 mb-3"
                   size="small"
                   rounded
@@ -72,7 +69,7 @@ import Generalnput from '@/renderer/components/grouppricing/Generalnput.vue'
 import AdditionalBenefits from '@/renderer/components/grouppricing/AdditionalBenefits.vue'
 import GlaInput from '@/renderer/components/grouppricing/GlaInput.vue'
 import LoadingInput from '@/renderer/components/grouppricing/LoadingInput.vue'
-import UploadData from '@/renderer/components/grouppricing/UploadData.vue'
+// import UploadData from '@/renderer/components/grouppricing/UploadData.vue'
 
 const groupStore = useGroupPricingStore()
 const router = useRouter()
@@ -82,8 +79,7 @@ const steps = shallowRef([
   { title: 'General', value: 1, component: Generalnput },
   { title: 'GLA', value: 2, component: GlaInput },
   { title: 'Additional Benefits', value: 3, component: AdditionalBenefits },
-  { title: 'Loading', value: 4, component: LoadingInput },
-  { title: 'Upload Data', value: 5, component: UploadData }
+  { title: 'Loading', value: 4, component: LoadingInput }
 ])
 const isPrevDisabled = computed(() => position.value <= 1)
 const isNextDisabled = computed(() => position.value >= steps.value.length)
@@ -120,15 +116,15 @@ const generateQuote = () => {
   console.log('Generating quote')
   console.log(groupStore.group_pricing_quote)
   const formData = new FormData()
-  if (groupStore.group_pricing_quote.uploadData.member_data_file) {
-    formData.append('memberDataFile', groupStore.group_pricing_quote.uploadData.member_data_file)
-  }
-  if (groupStore.group_pricing_quote.uploadData.claims_experience_file) {
-    formData.append(
-      'claimsExperienceFile',
-      groupStore.group_pricing_quote.uploadData.claims_experience_file
-    )
-  }
+  // if (groupStore.group_pricing_quote.uploadData.member_data_file) {
+  //   formData.append('memberDataFile', groupStore.group_pricing_quote.uploadData.member_data_file)
+  // }
+  // if (groupStore.group_pricing_quote.uploadData.claims_experience_file) {
+  //   formData.append(
+  //     'claimsExperienceFile',
+  //     groupStore.group_pricing_quote.uploadData.claims_experience_file
+  //   )
+  // }
   console.log(groupStore.group_pricing_quote)
   groupStore.group_pricing_quote.occupation_class = 0
   console.log(JSON.stringify(groupStore.group_pricing_quote))
