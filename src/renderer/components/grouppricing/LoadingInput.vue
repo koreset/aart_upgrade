@@ -4,7 +4,7 @@
       <v-row>
         <v-col cols="4"
           ><v-text-field
-            v-model="groupStore.groupPricingQuote.acceleratedBenefitDiscount"
+            v-model="groupStore.group_pricing_quote.loadings.accelerated_benefit_discount"
             variant="outlined"
             density="compact"
             type="number"
@@ -14,7 +14,7 @@
         </v-col>
         <v-col cols="4"
           ><v-text-field
-            v-model="groupStore.groupPricingQuote.commissionRate"
+            v-model="groupStore.group_pricing_quote.loadings.commission_loading"
             variant="outlined"
             density="compact"
             type="number"
@@ -24,7 +24,7 @@
         </v-col>
         <v-col cols="4"
           ><v-text-field
-            v-model="groupStore.groupPricingQuote.profitLoading"
+            v-model="groupStore.group_pricing_quote.loadings.profit_loading"
             variant="outlined"
             density="compact"
             type="number"
@@ -34,7 +34,7 @@
         </v-col>
         <v-col cols="4"
           ><v-text-field
-            v-model="groupStore.groupPricingQuote.expenseLoading"
+            v-model="groupStore.group_pricing_quote.loadings.expense_loading"
             variant="outlined"
             density="compact"
             type="number"
@@ -44,7 +44,7 @@
         </v-col>
         <v-col cols="4"
           ><v-text-field
-            v-model="groupStore.groupPricingQuote.overallPremiumDiscount"
+            v-model="groupStore.group_pricing_quote.loadings.discount"
             variant="outlined"
             density="compact"
             type="number"

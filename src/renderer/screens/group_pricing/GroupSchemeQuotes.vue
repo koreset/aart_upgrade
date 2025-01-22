@@ -8,7 +8,7 @@
           </template>
           <template #default>
             <v-row>
-              <v-col>
+              <v-col cols="4">
                 <v-text-field
                   v-model="search"
                   class="search-box mb-2"
@@ -19,7 +19,15 @@
                   hide-details
                   single-line
                 ></v-text-field>
-
+              </v-col>
+              <v-col cols="8">
+                <v-btn class="mt-1" color="primary" size="small" rounded @click="goToQuoteCreation"
+                  >New Quote</v-btn
+                >
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
                 <v-data-table
                   class="table-row"
                   density="compact"
@@ -177,6 +185,10 @@ const parseDateString = (dateString) => {
   return formattedDate
 }
 
+const goToQuoteCreation = () => {
+  router.push({ name: 'group-pricing-quote-generation' })
+}
+
 const editItem = (item) => {
   console.log('Editing:', item)
 }
@@ -250,7 +262,7 @@ onMounted(() => {
 }
 
 .search-box {
-  width: 33%;
+  width: 100%;
 }
 .v-table__wrapper > table > thead {
   background-color: #223f54 !important;

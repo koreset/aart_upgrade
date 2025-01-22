@@ -3,37 +3,37 @@
     <v-row>
       <v-col cols="2">
         <v-checkbox
-          v-model="groupStore.groupPricingQuote.ptdBenefit"
+          v-model="groupStore.group_pricing_quote.ptd_benefit"
           label="PTD Benefit"
         ></v-checkbox>
       </v-col>
       <v-col cols="2">
         <v-checkbox
-          v-model="groupStore.groupPricingQuote.ciBenefit"
+          v-model="groupStore.group_pricing_quote.ci_benefit"
           label="CI Benefit"
         ></v-checkbox>
       </v-col>
       <v-col cols="2">
         <v-checkbox
-          v-model="groupStore.groupPricingQuote.sglaBenefit"
+          v-model="groupStore.group_pricing_quote.sgla_benefit"
           label="SGLA Benefit"
         ></v-checkbox>
       </v-col>
       <v-col cols="2">
         <v-checkbox
-          v-model="groupStore.groupPricingQuote.phiTtdBenefit"
+          v-model="groupStore.group_pricing_quote.phi_ttd_benefit"
           label="PHI/TTD Benefit"
         ></v-checkbox>
       </v-col>
       <v-col cols="3">
         <v-checkbox
-          v-model="groupStore.groupPricingQuote.familyFuneralBenefit"
+          v-model="groupStore.group_pricing_quote.family_funeral_benefit"
           label="Family Funeral Benefit"
         ></v-checkbox>
       </v-col>
     </v-row>
     <v-divider v-if="anyBoxChecked" class="mb-7"></v-divider>
-    <v-row v-if="groupStore.groupPricingQuote.ptdBenefit" class="mb-5">
+    <v-row v-if="groupStore.group_pricing_quote.ptd_benefit" class="mb-5">
       <v-col>
         <base-card :show-actions="false">
           <template #header>
@@ -43,7 +43,7 @@
             <v-row>
               <v-col cols="4">
                 <v-select
-                  v-model="groupStore.groupPricingQuote.ptd.riskType"
+                  v-model="groupStore.group_pricing_quote.ptd.risk_type"
                   placeholder="Choose a Risk Type"
                   label="Risk Type"
                   variant="outlined"
@@ -53,7 +53,7 @@
               </v-col>
               <v-col cols="4">
                 <v-select
-                  v-model="groupStore.groupPricingQuote.ptd.benefitType"
+                  v-model="groupStore.group_pricing_quote.ptd.benefit_type"
                   placeholder="Choose a Benefit Type"
                   label="Benefit Type"
                   variant="outlined"
@@ -63,7 +63,7 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                  v-model:model-value="groupStore.groupPricingQuote.ptd.salaryMultiple"
+                  v-model:model-value="groupStore.group_pricing_quote.ptd.salary_multiple"
                   type="number"
                   variant="outlined"
                   density="compact"
@@ -73,7 +73,7 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                  v-model:model-value="groupStore.groupPricingQuote.ptd.coverTerminationAge"
+                  v-model:model-value="groupStore.group_pricing_quote.ptd.cover_termination_age"
                   type="number"
                   variant="outlined"
                   density="compact"
@@ -83,7 +83,7 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                  v-model:model-value="groupStore.groupPricingQuote.ptd.deferredPeriod"
+                  v-model:model-value="groupStore.group_pricing_quote.ptd.deferred_period"
                   type="number"
                   variant="outlined"
                   density="compact"
@@ -93,7 +93,7 @@
               </v-col>
               <v-col cols="4">
                 <v-select
-                  v-model="groupStore.groupPricingQuote.ptd.disabilityDefinition"
+                  v-model="groupStore.group_pricing_quote.ptd.disability_definition"
                   placeholder="Choose a Definition"
                   label="Disability Definition"
                   variant="outlined"
@@ -106,7 +106,7 @@
         </base-card>
       </v-col>
     </v-row>
-    <v-row v-if="groupStore.groupPricingQuote.ciBenefit" class="mb-5">
+    <v-row v-if="groupStore.group_pricing_quote.ci_benefit" class="mb-5">
       <v-col>
         <base-card :show-actions="false">
           <template #header>
@@ -116,7 +116,7 @@
             <v-row>
               <v-col cols="4">
                 <v-select
-                  v-model="groupStore.groupPricingQuote.ci.benefitStructure"
+                  v-model="groupStore.group_pricing_quote.ci.benefit_structure"
                   placeholder="Choose a Benefit Structure"
                   label="Benefit Structure"
                   variant="outlined"
@@ -126,7 +126,7 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                  v-model:model-value="groupStore.groupPricingQuote.ci.maxBenefit"
+                  v-model:model-value="groupStore.group_pricing_quote.ci.max_benefit"
                   placeholder="Enter a value"
                   label="Maximum Benefit"
                   variant="outlined"
@@ -136,29 +136,21 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                  v-model:model-value="groupStore.groupPricingQuote.ci.criticalIllnessPercentage"
+                  v-model:model-value="
+                    groupStore.group_pricing_quote.ci.critical_illness_percentage
+                  "
                   placeholder="Enter a value"
                   label="Critical Illness Percentage"
                   variant="outlined"
                   density="compact"
                   type="number"
                 ></v-text-field>
-              </v-col>
-              <v-col cols="4">
-                <v-text-field
-                  v-model:model-value="groupStore.groupPricingQuote.ci.coverTerminationAge"
-                  type="number"
-                  variant="outlined"
-                  density="compact"
-                  placeholder="Enter a value"
-                  label="Cover Termination Age"
-                ></v-text-field>
               </v-col> </v-row
           ></template>
         </base-card>
       </v-col>
     </v-row>
-    <v-row v-if="groupStore.groupPricingQuote.sglaBenefit" class="mb-5">
+    <v-row v-if="groupStore.group_pricing_quote.sgla_benefit" class="mb-5">
       <v-col>
         <base-card :show-actions="false">
           <template #header>
@@ -168,7 +160,7 @@
             <v-row>
               <v-col cols="4">
                 <v-text-field
-                  v-model:model-value="groupStore.groupPricingQuote.sgla.sglaPercentage"
+                  v-model:model-value="groupStore.group_pricing_quote.sgla.sglaPercentage"
                   placeholder="Enter a value"
                   label="SGLA Percentage of Annual Salary"
                   variant="outlined"
@@ -178,7 +170,7 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                  v-model:model-value="groupStore.groupPricingQuote.sgla.maxBenefit"
+                  v-model:model-value="groupStore.group_pricing_quote.sgla.maxBenefit"
                   placeholder="Enter a value"
                   label="Maximum Benefit"
                   variant="outlined"
@@ -188,7 +180,7 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                  v-model:model-value="groupStore.groupPricingQuote.sgla.coverTerminationAge"
+                  v-model:model-value="groupStore.group_pricing_quote.sgla.coverTerminationAge"
                   placeholder="Enter a value"
                   label="Cover Termination Age"
                   variant="outlined"
@@ -201,7 +193,7 @@
         </base-card>
       </v-col>
     </v-row>
-    <v-row v-if="groupStore.groupPricingQuote.phiTtdBenefit" class="mb-5">
+    <v-row v-if="groupStore.group_pricing_quote.phi_ttd_benefit" class="mb-5">
       <v-col>
         <base-card :show-actions="false">
           <template #header>
@@ -211,7 +203,7 @@
             <v-row>
               <v-col cols="4">
                 <v-select
-                  v-model:model-value="groupStore.groupPricingQuote.phi.productType"
+                  v-model:model-value="groupStore.group_pricing_quote.phi_ttd.benefit"
                   placeholder="Choose a Product Type"
                   label="Product Type"
                   variant="outlined"
@@ -223,7 +215,7 @@
             <v-row>
               <v-col cols="4">
                 <v-select
-                  v-model="groupStore.groupPricingQuote.phi.riskType"
+                  v-model="groupStore.group_pricing_quote.phi_ttd.risk_type"
                   placeholder="Choose a Risk Type"
                   label="Risk Type"
                   variant="outlined"
@@ -233,7 +225,7 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                  v-model:model-value="groupStore.groupPricingQuote.phi.maxBasicBenefit"
+                  v-model:model-value="groupStore.group_pricing_quote.phi_ttd.maximum_benefit"
                   placeholder="Enter a value"
                   label="Maximum Basic Benefit"
                   variant="outlined"
@@ -243,7 +235,9 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                  v-model:model-value="groupStore.groupPricingQuote.phi.monthlyBenefitPercentage"
+                  v-model:model-value="
+                    groupStore.group_pricing_quote.phi_ttd.monthly_benefit_percentage
+                  "
                   placeholder="Enter a value"
                   label="Monthly Benefit"
                   variant="outlined"
@@ -253,7 +247,7 @@
               </v-col>
               <v-col cols="4">
                 <v-select
-                  v-model:model-value="groupStore.groupPricingQuote.phi.premiuimWaiverBenefit"
+                  v-model:model-value="groupStore.group_pricing_quote.phi_ttd.premium_waiver"
                   placeholder="Enable Premium Waiver Benefit?"
                   label="Premium Waiver Benefit"
                   variant="outlined"
@@ -261,12 +255,11 @@
                   :items="groupStore.yesNoItems"
                 ></v-select>
               </v-col>
-              <v-col
-                v-if="groupStore.groupPricingQuote.phi.premiuimWaiverBenefit == 'Yes'"
-                cols="4"
-              >
+              <v-col v-if="groupStore.group_pricing_quote.phi_ttd.premium_waiver == 'Yes'" cols="4">
                 <v-text-field
-                  v-model:model-value="groupStore.groupPricingQuote.phi.premiumWaiverPercentage"
+                  v-model:model-value="
+                    groupStore.group_pricing_quote.phi_ttd.premium_waiver_percentage
+                  "
                   placeholder="Enter a value"
                   label="Premium Waiver Percentage"
                   variant="outlined"
@@ -276,7 +269,7 @@
               </v-col>
               <v-col cols="4">
                 <v-select
-                  v-model:model-value="groupStore.groupPricingQuote.phi.phiEscalationPercentage"
+                  v-model:model-value="groupStore.group_pricing_quote.phi_ttd.escalation_percentage"
                   placeholder="Choose an Escalation Percentage"
                   label="PHI Escalation Percentage"
                   variant="outlined"
@@ -286,7 +279,7 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                  v-model:model-value="groupStore.groupPricingQuote.phi.maxPremiumWaiver"
+                  v-model:model-value="groupStore.group_pricing_quote.phi_ttd.max_premium_waiver"
                   placeholder="Enter a value"
                   label="Maximum Premium Waiver"
                   variant="outlined"
@@ -296,7 +289,7 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                  v-model:model-value="groupStore.groupPricingQuote.phi.coverTerminationAge"
+                  v-model:model-value="groupStore.group_pricing_quote.phi_ttd.cover_termination_age"
                   placeholder="Enter a value"
                   label="Cover Termination Age"
                   variant="outlined"
@@ -306,13 +299,13 @@
               </v-col>
               <v-col
                 v-if="
-                  groupStore.groupPricingQuote.phi.productType === 'PHI' ||
-                  groupStore.groupPricingQuote.phi.productType === 'PHI & TTD'
+                  groupStore.group_pricing_quote.phi_ttd.benefit === 'PHI' ||
+                  groupStore.group_pricing_quote.phi_ttd.benefit === 'PHI & TTD'
                 "
                 cols="4"
               >
                 <v-text-field
-                  v-model:model-value="groupStore.groupPricingQuote.phi.waitingPeriodMonths"
+                  v-model:model-value="groupStore.group_pricing_quote.phi_ttd.waiting_period"
                   placeholder="Enter a value"
                   label="Waiting Period (Months)"
                   variant="outlined"
@@ -322,13 +315,15 @@
               </v-col>
               <v-col
                 v-if="
-                  groupStore.groupPricingQuote.phi.productType === 'TTD' ||
-                  groupStore.groupPricingQuote.phi.productType === 'PHI & TTD'
+                  groupStore.group_pricing_quote.phi_ttd.benefit === 'TTD' ||
+                  groupStore.group_pricing_quote.phi_ttd.benefit === 'PHI & TTD'
                 "
                 cols="4"
               >
                 <v-text-field
-                  v-model:model-value="groupStore.groupPricingQuote.phi.numberAnnualPayments"
+                  v-model:model-value="
+                    groupStore.group_pricing_quote.phi_ttd.number_monthly_payments
+                  "
                   placeholder="Enter a value"
                   label="Number of Annual Payments"
                   variant="outlined"
@@ -338,7 +333,7 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                  v-model:model-value="groupStore.groupPricingQuote.phi.deferredPeriodMonths"
+                  v-model:model-value="groupStore.group_pricing_quote.phi_ttd.deferred_period"
                   placeholder="Enter a value"
                   label="Deferred Period (Months)"
                   variant="outlined"
@@ -348,7 +343,7 @@
               </v-col>
               <v-col cols="4">
                 <v-select
-                  v-model="groupStore.groupPricingQuote.phi.disabilityDefinition"
+                  v-model="groupStore.group_pricing_quote.phi_ttd.disability_definition"
                   placeholder="Choose a Definition"
                   label="Disability Definition"
                   variant="outlined"
@@ -361,7 +356,7 @@
         </base-card>
       </v-col>
     </v-row>
-    <v-row v-if="groupStore.groupPricingQuote.familyFuneralBenefit" class="mb-5">
+    <v-row v-if="groupStore.group_pricing_quote.family_funeral_benefit" class="mb-5">
       <v-col>
         <base-card :show-actions="false">
           <template #header>
@@ -371,38 +366,45 @@
             <v-row>
               <v-col cols="4">
                 <v-text-field
-                  v-model:model-value="groupStore.groupPricingQuote.groupFamilyFuneral.member"
+                  v-model:model-value="
+                    groupStore.group_pricing_quote.group_family_funeral
+                      .main_member_funeral_sum_assured
+                  "
                   type="number"
                   variant="outlined"
                   density="compact"
                   placeholder="Enter a value"
-                  label="Member"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="4">
-                <v-text-field
-                  v-model:model-value="groupStore.groupPricingQuote.groupFamilyFuneral.spouse"
-                  type="number"
-                  variant="outlined"
-                  density="compact"
-                  placeholder="Enter a value"
-                  label="Spouse"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="4">
-                <v-text-field
-                  v-model:model-value="groupStore.groupPricingQuote.groupFamilyFuneral.children"
-                  type="number"
-                  variant="outlined"
-                  density="compact"
-                  placeholder="Enter a value"
-                  label="Children"
+                  label="Main Member Sum Assured"
                 ></v-text-field>
               </v-col>
               <v-col cols="4">
                 <v-text-field
                   v-model:model-value="
-                    groupStore.groupPricingQuote.groupFamilyFuneral.adultDependantSumAssured
+                    groupStore.group_pricing_quote.group_family_funeral.spouse_funeral_sum_assured
+                  "
+                  type="number"
+                  variant="outlined"
+                  density="compact"
+                  placeholder="Enter a value"
+                  label="Spouse Funeral Sum Assured"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="4">
+                <v-text-field
+                  v-model:model-value="
+                    groupStore.group_pricing_quote.group_family_funeral.children_funeral_sum_assured
+                  "
+                  type="number"
+                  variant="outlined"
+                  density="compact"
+                  placeholder="Enter a value"
+                  label="Children Funeral Sum Assured"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="4">
+                <v-text-field
+                  v-model:model-value="
+                    groupStore.group_pricing_quote.group_family_funeral.adult_dependant_sum_assured
                   "
                   type="number"
                   variant="outlined"
@@ -414,19 +416,32 @@
               <v-col cols="4">
                 <v-text-field
                   v-model:model-value="
-                    groupStore.groupPricingQuote.groupFamilyFuneral.maxChildrenCovered
+                    groupStore.group_pricing_quote.group_family_funeral.parent_funeral_sum_assured
                   "
                   type="number"
                   variant="outlined"
                   density="compact"
                   placeholder="Enter a value"
-                  label="Maximum Children Covered"
+                  label="Parent Funeral Sum Assured"
+                ></v-text-field>
+              </v-col>
+
+              <v-col cols="4">
+                <v-text-field
+                  v-model:model-value="
+                    groupStore.group_pricing_quote.group_family_funeral.number_children
+                  "
+                  type="number"
+                  variant="outlined"
+                  density="compact"
+                  placeholder="Enter a value"
+                  label="Number of Children"
                 ></v-text-field>
               </v-col>
               <v-col cols="4">
                 <v-text-field
                   v-model:model-value="
-                    groupStore.groupPricingQuote.groupFamilyFuneral.numberAdultDependants
+                    groupStore.group_pricing_quote.group_family_funeral.number_adult_dependants
                   "
                   type="number"
                   variant="outlined"
@@ -451,11 +466,11 @@ const groupStore = useGroupPricingStore()
 
 const anyBoxChecked = computed(() => {
   return (
-    groupStore.groupPricingQuote.ptdBenefit ||
-    groupStore.groupPricingQuote.ciBenefit ||
-    groupStore.groupPricingQuote.sglaBenefit ||
-    groupStore.groupPricingQuote.phiTtdBenefit ||
-    groupStore.groupPricingQuote.familyFuneralBenefit
+    groupStore.group_pricing_quote.ptd_benefit ||
+    groupStore.group_pricing_quote.ci_benefit ||
+    groupStore.group_pricing_quote.sgla_benefit ||
+    groupStore.group_pricing_quote.phi_ttd_benefit ||
+    groupStore.group_pricing_quote.family_funeral_benefit
   )
 })
 </script>

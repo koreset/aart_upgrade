@@ -3,28 +3,8 @@
     <v-container>
       <v-row>
         <v-col cols="4">
-          <v-select
-            v-model="groupStore.groupPricingQuote.currency"
-            placeholder="Choose a currency"
-            label="Currency"
-            variant="outlined"
-            density="compact"
-            :items="groupStore.currencies"
-          ></v-select>
-        </v-col>
-        <v-col v-if="groupStore.groupPricingQuote.currency === 'USD'" cols="4">
           <v-text-field
-            v-model:model-value="groupStore.groupPricingQuote.exchangeRate"
-            type="number"
-            variant="outlined"
-            density="compact"
-            placeholder="Enter a value"
-            label="Exchange Rate for USD"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="4">
-          <v-text-field
-            v-model:model-value="groupStore.groupPricingQuote.salaryMultiple"
+            v-model:model-value="groupStore.group_pricing_quote.gla.salary_multiple"
             type="number"
             variant="outlined"
             density="compact"
@@ -33,18 +13,8 @@
           ></v-text-field>
         </v-col>
         <v-col cols="4">
-          <v-text-field
-            v-model:model-value="groupStore.groupPricingQuote.currentFcl"
-            type="number"
-            variant="outlined"
-            density="compact"
-            placeholder="Enter a value"
-            label="Current FCL"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="4">
           <v-select
-            v-model="groupStore.groupPricingQuote.terminalIllnessBenefit"
+            v-model="groupStore.group_pricing_quote.gla.terminal_illness_benefit"
             variant="outlined"
             density="compact"
             label="Terminal Illness Benefit"
@@ -54,33 +24,23 @@
         </v-col>
         <v-col cols="4">
           <v-text-field
-            v-model:model-value="groupStore.groupPricingQuote.normalRetirementAge"
+            v-model:model-value="groupStore.group_pricing_quote.gla.waiting_period"
             type="number"
             variant="outlined"
             density="compact"
             placeholder="Enter a value"
-            label="Normal Retirement Age"
+            label="Waiting Period"
           ></v-text-field>
         </v-col>
         <v-col cols="4">
           <v-text-field
-            v-model:model-value="groupStore.groupPricingQuote.coverTerminationAge"
+            v-model:model-value="groupStore.group_pricing_quote.gla.cover_termination_age"
             type="number"
             variant="outlined"
             density="compact"
             placeholder="Enter a value"
             label="Cover Termination Age"
           ></v-text-field>
-        </v-col>
-        <v-col cols="4">
-          <v-select
-            v-model="groupStore.groupPricingQuote.claimsExperience"
-            variant="outlined"
-            density="compact"
-            label="Claims Experience"
-            placeholder="Choose a claims experience?"
-            :items="groupStore.claimsExperiences"
-          ></v-select>
         </v-col>
       </v-row>
     </v-container>

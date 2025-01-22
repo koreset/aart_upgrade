@@ -405,9 +405,12 @@
                 <v-table>
                   <tbody>
                     <tr v-for="item in relatedTables" :key="item.table_type">
-                      <td style="width: 70%">{{ item.table_type }}</td>
-                      <td style="text-align: center">
+                      <td :class="checkTableData(item)" style="width: 70%">{{
+                        item.table_type
+                      }}</td>
+                      <td style="text-align: left">
                         <v-btn
+                          class="mr-3"
                           variant="outlined"
                           rounded
                           size="small"
@@ -415,6 +418,28 @@
                         >
                           <v-icon left color="primary">mdi-information</v-icon>
                           <span>Info</span>
+                        </v-btn>
+                        <v-btn
+                          v-if="item.table_type !== 'Group Pricing Parameters'"
+                          class="mr-3"
+                          variant="outlined"
+                          rounded
+                          size="small"
+                          @click.stop="uploadTable(item)"
+                        >
+                          <v-icon left color="primary">mdi-upload</v-icon>
+                          <span>Upload</span>
+                        </v-btn>
+                        <v-btn
+                          v-if="item.table_type !== 'Group Pricing Parameters'"
+                          variant="outlined"
+                          rounded
+                          color="red"
+                          size="small"
+                          @click.stop="deleteTable(item)"
+                        >
+                          <v-icon left color="red">mdi-delete</v-icon>
+                          <span>Delete</span>
                         </v-btn>
                       </td>
                     </tr>
@@ -500,6 +525,7 @@ const broker = ref({})
 const relatedTables = ref([
   { table_type: 'Member Data', value: 'member_data' },
   { table_type: 'Claims Experience', value: 'claims_experience' },
+  { table_type: 'Group Pricing Parameters', value: 'group_pricing_parameters' },
   { table_type: 'Member Rating Results', value: 'member_rating_results' }
 ])
 
@@ -508,12 +534,27 @@ const clearData = () => {
   selectedTable.value = ''
 }
 
+const checkTableData = (item: any) => {
+  if (item.table_type === selectedTable.value) {
+    return 'bg-primary text-white'
+  }
+  return ''
+}
+
 const dashIfEmpty = (value: any) => {
   return value || '-'
 }
 
 const goBack = () => {
   router.push({ name: 'group-pricing-quotes' })
+}
+
+const uploadTable = async (item: any) => {
+  console.log('Upload Table:', item)
+}
+
+const deleteTable = async (item: any) => {
+  console.log('Delete Table:', item)
 }
 
 const viewTable = async (item: any) => {

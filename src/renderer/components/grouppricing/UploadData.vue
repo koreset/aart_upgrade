@@ -3,7 +3,7 @@
     <v-row>
       <v-col cols="6">
         <v-file-input
-          v-model:model-value="groupStore.groupPricingQuote.uploadData.memberDataFile"
+          v-model:model-value="groupStore.group_pricing_quote.uploadData.member_data_file"
           variant="outlined"
           density="compact"
           show-size
@@ -16,7 +16,7 @@
       </v-col>
       <v-col cols="6">
         <v-file-input
-          v-model:model-value="groupStore.groupPricingQuote.uploadData.claimsExperienceFile"
+          v-model:model-value="groupStore.group_pricing_quote.uploadData.claims_experience_file"
           variant="outlined"
           density="compact"
           show-size
@@ -32,7 +32,7 @@
       <v-col cols="4">
         <v-select
           key="user"
-          v-model="groupStore.groupPricingQuote.reviewer"
+          v-model="groupStore.group_pricing_quote.reviewer"
           label="Choose a reviewer in your organisation"
           variant="outlined"
           density="compact"
@@ -43,7 +43,7 @@
       </v-col>
       <v-col cols="4">
         <v-select
-          v-model="groupStore.groupPricingQuote.basis"
+          v-model="groupStore.group_pricing_quote.basis"
           label="Choose a parameter basis"
           variant="outlined"
           density="compact"

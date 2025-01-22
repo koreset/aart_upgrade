@@ -20,6 +20,9 @@
             <v-divider class="my-5"></v-divider>
             <v-row>
               <v-col class="d-flex">
+                <v-btn class="me-auto" rounded size="small" color="primary" @click="goToQuotes"
+                  >Back to Quotes</v-btn
+                >
                 <v-btn
                   class="ml-2 mb-3"
                   size="small"
@@ -31,7 +34,7 @@
                 >
 
                 <v-btn
-                  class="ml-4 me-auto"
+                  class="ml-4"
                   size="small"
                   rounded
                   color="primary"
@@ -43,7 +46,7 @@
                 <v-btn
                   v-if="
                     position === steps.length &&
-                    groupStore.groupPricingQuote.uploadData.memberDataFile
+                    groupStore.group_pricing_quote.uploadData.member_data_file
                   "
                   class="ml-9 mb-3"
                   size="small"
@@ -62,25 +65,25 @@
 </template>
 <script setup lang="ts">
 import { ref, shallowRef, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useGroupPricingStore } from '@/renderer/store/group_pricing'
 import GroupPricingService from '@/renderer/api/GroupPricingService'
 import Generalnput from '@/renderer/components/grouppricing/Generalnput.vue'
 import AdditionalBenefits from '@/renderer/components/grouppricing/AdditionalBenefits.vue'
 import GlaInput from '@/renderer/components/grouppricing/GlaInput.vue'
 import LoadingInput from '@/renderer/components/grouppricing/LoadingInput.vue'
-import GlobalInput from '@/renderer/components/grouppricing/GlobalInput.vue'
 import UploadData from '@/renderer/components/grouppricing/UploadData.vue'
 
 const groupStore = useGroupPricingStore()
+const router = useRouter()
 
 const position = ref(0)
 const steps = shallowRef([
   { title: 'General', value: 1, component: Generalnput },
-  { title: 'Global', value: 2, component: GlobalInput },
-  { title: 'Loading', value: 3, component: LoadingInput },
-  { title: 'GLA', value: 4, component: GlaInput },
-  { title: 'Additional Benefits', value: 5, component: AdditionalBenefits },
-  { title: 'Upload Data', value: 6, component: UploadData }
+  { title: 'GLA', value: 2, component: GlaInput },
+  { title: 'Additional Benefits', value: 3, component: AdditionalBenefits },
+  { title: 'Loading', value: 4, component: LoadingInput },
+  { title: 'Upload Data', value: 5, component: UploadData }
 ])
 const isPrevDisabled = computed(() => position.value <= 1)
 const isNextDisabled = computed(() => position.value >= steps.value.length)
@@ -100,6 +103,10 @@ const movePrev = () => {
   position.value--
 }
 
+const goToQuotes = () => {
+  router.push({ name: 'group-pricing-quotes' })
+}
+
 onMounted(() => {
   GroupPricingService.getBrokers().then((res) => {
     groupStore.brokers = res.data
@@ -111,22 +118,22 @@ onMounted(() => {
 
 const generateQuote = () => {
   console.log('Generating quote')
-  console.log(groupStore.groupPricingQuote)
+  console.log(groupStore.group_pricing_quote)
   const formData = new FormData()
-  if (groupStore.groupPricingQuote.uploadData.memberDataFile) {
-    formData.append('memberDataFile', groupStore.groupPricingQuote.uploadData.memberDataFile)
+  if (groupStore.group_pricing_quote.uploadData.member_data_file) {
+    formData.append('memberDataFile', groupStore.group_pricing_quote.uploadData.member_data_file)
   }
-  if (groupStore.groupPricingQuote.uploadData.claimsExperienceFile) {
+  if (groupStore.group_pricing_quote.uploadData.claims_experience_file) {
     formData.append(
       'claimsExperienceFile',
-      groupStore.groupPricingQuote.uploadData.claimsExperienceFile
+      groupStore.group_pricing_quote.uploadData.claims_experience_file
     )
   }
-  console.log(groupStore.groupPricingQuote)
-  groupStore.groupPricingQuote.occupationClass = 0
-  console.log(JSON.stringify(groupStore.groupPricingQuote))
+  console.log(groupStore.group_pricing_quote)
+  groupStore.group_pricing_quote.occupation_class = 0
+  console.log(JSON.stringify(groupStore.group_pricing_quote))
 
-  formData.append('groupPricingQuote', JSON.stringify(groupStore.groupPricingQuote))
+  formData.append('group_pricing_quote', JSON.stringify(groupStore.group_pricing_quote))
 
   GroupPricingService.generateQuote(formData)
 }
