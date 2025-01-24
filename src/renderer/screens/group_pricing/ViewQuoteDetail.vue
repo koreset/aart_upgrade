@@ -493,7 +493,22 @@
                 />
               </v-col>
             </v-row>
-
+            <v-divider class="my-4"></v-divider>
+            <v-row>
+              <v-col cols="3" offset="9">
+                <v-select
+                  v-model:model-value="quote.basis"
+                  clearable
+                  variant="outlined"
+                  density="compact"
+                  placeholder="Select a Basis"
+                  label="Basis"
+                  :items="parameterBases"
+                  item-title="basis"
+                  item-children="basis"
+                ></v-select>
+              </v-col>
+            </v-row>
             <v-divider class="my-4"></v-divider>
             <v-row>
               <v-col cols="3"><p>Created By</p></v-col>
@@ -581,6 +596,7 @@ const updateDialog = (value: boolean) => {
 
 const columnDefs: any = ref([])
 const rowCount: any = ref(0)
+const parameterBases = ref([])
 
 const snackbar = ref(false)
 const timeout = 2000
@@ -651,23 +667,6 @@ const handleUpload = async (payload: any) => {
       snackbarText.value = 'Upload Failed'
       snackbar.value = true
     })
-
-  // formdata.append('table_id', selectedTableId.value)
-  // formdata.append('product_id', product.value.id)
-  // formdata.append('product_code', product.value.product_code)
-  // loading.value = true
-  // PricingService.uploadProductPricingTable(formdata, product.value.id)
-  //   .then(() => {
-  //     // uploadSuccess.value = true
-  //     loading.value = false
-  //     updatePopulatedTables(selectedTableId.value)
-  //   })
-  //   .catch((err) => {
-  //     console.log(err)
-
-  //     // uploadSuccess = false
-  //     loading.value = false
-  //   })
 }
 
 onMounted(async () => {
@@ -679,6 +678,17 @@ onMounted(async () => {
     broker.value = quote.value.quoteBroker
     console.log('Broker:', quote.value)
     console.log(res)
+
+    const res1 = await GroupPricingService.getQuoteTable(quote.value.id, 'group_pricing_parameters')
+
+    if (res1.data !== null && res1.data.length > 0) {
+      parameterBases.value = res1.data.map((item: any) => {
+        return {
+          basis: item.basis
+        }
+      })
+    }
+    console.log('Parameter Bases:', parameterBases.value)
   } catch (error) {
     console.log('Error:', error)
   }
@@ -697,19 +707,24 @@ const goBack = () => {
   router.push({ name: 'group-pricing-quotes' })
 }
 
-const runQuoteCalculations = () => {
-  console.log('Running Quote Calculations')
-  GroupPricingService.runQuoteCalculations(quote.value.id)
-    .then((res) => {
-      console.log('Response:', res.data)
-      snackbarText.value = 'Calculations Successful'
-      snackbar.value = true
-    })
-    .catch((error) => {
-      console.log('Error:', error)
-      snackbarText.value = 'Calculations Failed'
-      snackbar.value = true
-    })
+const runQuoteCalculations = async () => {
+  if (quote.value.basis !== null && quote.value.basis !== '') {
+    console.log('Running Quote Calculations')
+    GroupPricingService.runQuoteCalculations(quote.value.id, quote.value.basis)
+      .then((res) => {
+        console.log('Response:', res.data)
+        snackbarText.value = 'Calculations Successful'
+        snackbar.value = true
+      })
+      .catch((error) => {
+        console.log('Error:', error)
+        snackbarText.value = 'Calculations Failed'
+        snackbar.value = true
+      })
+  } else {
+    snackbarText.value = 'Please select a basis before running calculations'
+    snackbar.value = true
+  }
 }
 
 const deleteTable = async (item: any) => {

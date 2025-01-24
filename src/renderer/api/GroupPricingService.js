@@ -9,8 +9,8 @@ export default {
       }
     })
   },
-  runQuoteCalculations(quoteId) {
-    return Api.post('/group-pricing/calculate-quote/' + quoteId)
+  runQuoteCalculations(quoteId, basis) {
+    return Api.post('/group-pricing/calculate-quote/' + quoteId + '/basis/' + basis)
   },
   getTableMetaData() {
     return Api.get('/group-pricing/rate-tables')
