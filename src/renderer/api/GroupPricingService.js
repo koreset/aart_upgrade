@@ -9,6 +9,9 @@ export default {
       }
     })
   },
+  runQuoteCalculations(quoteId) {
+    return Api.post('/group-pricing/calculate-quote/' + quoteId)
+  },
   getTableMetaData() {
     return Api.get('/group-pricing/rate-tables')
   },
@@ -20,6 +23,20 @@ export default {
       }
     })
   },
+
+  uploadQuoteTable(formdata) {
+    return Api.post('group-pricing/quote-tables', formdata, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Accept: 'multipart/form-data'
+      }
+    })
+  },
+
+  deleteQuoteTableData(quoteId, tableType) {
+    return Api.delete('group-pricing/quote-tables/' + tableType + '/' + quoteId)
+  },
+
   deleteTable(tableType) {
     return Api.delete('group-pricing/rate-tables/' + tableType)
   },

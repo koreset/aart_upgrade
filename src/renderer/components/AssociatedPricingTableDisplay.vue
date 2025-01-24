@@ -131,16 +131,6 @@ const handleUpload = async (file: any) => {
       // uploadSuccess = false
       loading.value = false
     })
-
-  // const formData = new FormData()
-  // formData.append('file', file)
-  // formData.append('table_id', selectedTableId.value)
-  // formData.append('product_code', product.value.product_code)
-  // const res = await ProductService.uploadPricingProductTable(formData)
-  // if (res.status === 200) {
-  //   infoDialog.value = false
-  //   // updatePopulatedTables(selectedTableId.value)
-  // }
 }
 // end file upload dialog props
 

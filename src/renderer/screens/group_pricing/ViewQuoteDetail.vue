@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col>
-        <base-card :show-actions="false">
+        <base-card v-if="quote !== null" :show-actions="false">
           <template #header>
             <span class="headline">Group Life Assurance Pricing</span>
           </template>
@@ -30,7 +30,7 @@
             <v-row>
               <v-col cols="3"><p>Broker</p></v-col>
               <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.quote_broker }}</p></v-col
+                ><p class="text-right content-bg">{{ quote.quote_broker.name }}</p></v-col
               >
               <v-col cols="3"><p>Voluntary/Compulsory</p></v-col>
               <v-col cols="3"
@@ -50,7 +50,7 @@
             <v-row>
               <v-col cols="3"><p>Expense Loading</p></v-col>
               <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.loadings }}</p></v-col
+                ><p class="text-right content-bg">{{ quote.loadings.expense_loading }}</p></v-col
               >
               <v-col cols="3"><p>Commission Rate</p></v-col>
               <v-col cols="3"
@@ -74,7 +74,9 @@
               >
               <v-col cols="3"><p>Accelerated Benefit Discount</p></v-col>
               <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.acceleratedBenefitDiscount }}</p></v-col
+                ><p class="text-right content-bg">{{
+                  quote.loadings.accelerated_benefit_discount
+                }}</p></v-col
               >
             </v-row>
             <v-row>
@@ -125,21 +127,21 @@
                 >
                 <v-expansion-panel-text>
                   <v-row>
-                    <v-col cols="3"><p>Cover Termination Age</p></v-col>
+                    <v-col cols="3"><p>Salary Multiple</p></v-col>
+                    <v-col cols="3"
+                      ><p class="text-right content-bg">{{ quote.gla.salary_multiple }}</p></v-col
+                    >
+                    <v-col cols="3"><p>Terminal Illness Benefit</p></v-col>
                     <v-col cols="3"
                       ><p class="text-right content-bg">{{
-                        quote.sgla.coverTerminationAge
+                        quote.gla.terminal_illness_benefit
                       }}</p></v-col
-                    >
-                    <v-col cols="3"><p>Maximum Benefit</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{ quote.sgla.maximumBenefit }}</p></v-col
                     >
                   </v-row>
                   <v-row>
-                    <v-col cols="3"><p>Spousal Percentage</p></v-col>
+                    <v-col cols="3"><p>Waiting Period</p></v-col>
                     <v-col cols="3"
-                      ><p class="text-right content-bg">{{ quote.sgla.sglaPercentage }}</p></v-col
+                      ><p class="text-right content-bg">{{ quote.gla.waiting_period }}</p></v-col
                     >
                   </v-row>
                 </v-expansion-panel-text>
@@ -432,7 +434,7 @@
                 <v-table>
                   <tbody>
                     <tr v-for="item in relatedTables" :key="item.table_type">
-                      <td :class="checkTableData(item)" style="width: 70%">{{
+                      <td :class="{ unpopulated: !item.populated }" style="width: 70%">{{
                         item.table_type
                       }}</td>
                       <td style="text-align: left">
@@ -446,13 +448,17 @@
                           <v-icon left color="primary">mdi-information</v-icon>
                           <span>Info</span>
                         </v-btn>
+
                         <v-btn
-                          v-if="item.table_type !== 'Group Pricing Parameters'"
+                          v-if="
+                            item.table_type !== 'Group Pricing Parameters' &&
+                            item.table_type !== 'Member Rating Results'
+                          "
                           class="mr-3"
                           variant="outlined"
                           rounded
                           size="small"
-                          @click.stop="uploadTable(item)"
+                          @click.stop="openDialog(item)"
                         >
                           <v-icon left color="primary">mdi-upload</v-icon>
                           <span>Upload</span>
@@ -508,6 +514,16 @@
                 <v-btn class="mr-3" size="small" rounded color="primary" @click="goBack"
                   >Edit</v-btn
                 >
+                <v-btn
+                  v-if="quote.memberDataCount > 0 && quote.claimsExperienceCount > 0"
+                  class="mr-3"
+                  size="small"
+                  rounded
+                  color="primary"
+                  @click="runQuoteCalculations"
+                  >Run Calculations</v-btn
+                >
+
                 <v-btn size="small" rounded color="primary" @click="goBack">Approve</v-btn>
               </v-col>
             </v-row>
@@ -519,15 +535,31 @@
         </base-card>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col>
+        <file-upload-dialog
+          :yearLabel="yearLabel"
+          :isDialogOpen="isDialogOpen"
+          :showModelPoint="showModelPoint"
+          :mpLabel="mpLabel"
+          :table="'undefined'"
+          :uploadTitle="uploadTitle"
+          :years="years"
+          @upload="handleUpload"
+          @update:isDialogOpen="updateDialog"
+        />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 <script setup lang="ts">
 import BaseCard from '@/renderer/components/BaseCard.vue'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import GroupPricingService from '@/renderer/api/GroupPricingService'
 import formatValues from '@/renderer/utils/format_values'
 import DataGrid from '@/renderer/components/tables/DataGrid.vue'
 import { useRouter } from 'vue-router'
+import FileUploadDialog from '@/renderer/components/FileUploadDialog.vue'
 
 const router = useRouter()
 const props = defineProps({
@@ -537,6 +569,16 @@ const props = defineProps({
   }
 })
 
+const showModelPoint = ref(false)
+const yearLabel = ref('') // 'Select a year'
+const uploadTitle = ref('')
+const mpLabel = ref('')
+const isDialogOpen = ref(false)
+const years = ref<number[]>(Array.from({ length: 10 }, (v, k) => new Date().getFullYear() - k))
+const updateDialog = (value: boolean) => {
+  isDialogOpen.value = value
+}
+
 const columnDefs: any = ref([])
 const rowCount: any = ref(0)
 
@@ -545,27 +587,106 @@ const timeout = 2000
 const snackbarText = ref('')
 
 const tableData = ref([])
-const selectedTable = ref('')
+const selectedTable: any = ref(null)
 const loadingData = ref(false)
-const quote: any = ref({})
-const broker = ref({})
-const relatedTables = ref([
-  { table_type: 'Member Data', value: 'member_data' },
-  { table_type: 'Claims Experience', value: 'claims_experience' },
-  { table_type: 'Group Pricing Parameters', value: 'group_pricing_parameters' },
-  { table_type: 'Member Rating Results', value: 'member_rating_results' }
-])
+const quote: any = ref(null)
+const broker = ref(null)
+
+const relatedTables = computed(() => {
+  const tables: any = []
+  if (quote.value.memberDataCount > 0) {
+    tables.push({ table_type: 'Member Data', value: 'member_data', populated: true })
+  } else {
+    tables.push({ table_type: 'Member Data', value: 'member_data', populated: false })
+  }
+  if (quote.value.claimsExperienceCount > 0) {
+    tables.push({ table_type: 'Claims Experience', value: 'claims_experience', populated: true })
+  } else {
+    tables.push({ table_type: 'Claims Experience', value: 'claims_experience', populated: false })
+  }
+
+  tables.push({
+    table_type: 'Group Pricing Parameters',
+    value: 'group_pricing_parameters',
+    populated: true
+  })
+
+  tables.push({
+    table_type: 'Member Rating Results',
+    value: 'member_rating_results',
+    populated: true
+  })
+
+  return tables
+})
+
+const openDialog = (item: any) => {
+  console.log('Open Dialog:', item)
+  selectedTable.value = item
+  yearLabel.value = 'Select a year'
+  uploadTitle.value = 'Upload Data for ' + item.table_type + ' Table (csv)'
+  isDialogOpen.value = true
+}
+
+const handleUpload = async (payload: any) => {
+  console.log('Handle Upload:', payload)
+  const formdata = new FormData()
+  formdata.append('file', payload.file)
+  formdata.append('quote_id', quote.value.id)
+  formdata.append('table_type', selectedTable.value.table_type)
+  GroupPricingService.uploadQuoteTable(formdata)
+    .then((res) => {
+      console.log('Response:', res.data)
+      const count = res.data
+      snackbarText.value = 'Upload Successful'
+      snackbar.value = true
+      if (selectedTable.value.table_type === 'Member Data') {
+        quote.value.memberDataCount = count
+      } else if (selectedTable.value.table_type === 'Claims Experience') {
+        quote.value.claimsExperienceCount = count
+      }
+    })
+    .catch((error) => {
+      console.log('Error:', error)
+      snackbarText.value = 'Upload Failed'
+      snackbar.value = true
+    })
+
+  // formdata.append('table_id', selectedTableId.value)
+  // formdata.append('product_id', product.value.id)
+  // formdata.append('product_code', product.value.product_code)
+  // loading.value = true
+  // PricingService.uploadProductPricingTable(formdata, product.value.id)
+  //   .then(() => {
+  //     // uploadSuccess.value = true
+  //     loading.value = false
+  //     updatePopulatedTables(selectedTableId.value)
+  //   })
+  //   .catch((err) => {
+  //     console.log(err)
+
+  //     // uploadSuccess = false
+  //     loading.value = false
+  //   })
+}
+
+onMounted(async () => {
+  try {
+    console.log('Group Life Assurance Pricing')
+    console.log(props.id)
+    const res = await GroupPricingService.getQuote(props.id)
+    quote.value = res.data
+    broker.value = quote.value.quoteBroker
+    console.log('Broker:', quote.value)
+    console.log(res)
+  } catch (error) {
+    console.log('Error:', error)
+  }
+})
 
 const clearData = () => {
   tableData.value = []
   selectedTable.value = ''
-}
-
-const checkTableData = (item: any) => {
-  if (item.table_type === selectedTable.value) {
-    return 'bg-primary text-white'
-  }
-  return ''
 }
 
 const dashIfEmpty = (value: any) => {
@@ -576,12 +697,33 @@ const goBack = () => {
   router.push({ name: 'group-pricing-quotes' })
 }
 
-const uploadTable = async (item: any) => {
-  console.log('Upload Table:', item)
+const runQuoteCalculations = () => {
+  console.log('Running Quote Calculations')
+  GroupPricingService.runQuoteCalculations(quote.value.id)
+    .then((res) => {
+      console.log('Response:', res.data)
+      snackbarText.value = 'Calculations Successful'
+      snackbar.value = true
+    })
+    .catch((error) => {
+      console.log('Error:', error)
+      snackbarText.value = 'Calculations Failed'
+      snackbar.value = true
+    })
 }
 
 const deleteTable = async (item: any) => {
   console.log('Delete Table:', item)
+  GroupPricingService.deleteQuoteTableData(quote.value.id, item.table_type).then((res) => {
+    console.log('Response:', res.data)
+    if (item.table_type === 'Member Data') {
+      quote.value.memberDataCount = 0
+    } else if (item.table_type === 'Claims Experience') {
+      quote.value.claimsExperienceCount = 0
+    }
+    snackbarText.value = 'Table Deleted Successfully'
+    snackbar.value = true
+  })
 }
 
 const viewTable = async (item: any) => {
@@ -618,24 +760,18 @@ const createColumnDefs = (data: any) => {
     columnDefs.value.push(header)
   })
 }
-
-onMounted(async () => {
-  try {
-    console.log('Group Life Assurance Pricing')
-    console.log(props.id)
-    const res = await GroupPricingService.getQuote(props.id)
-    quote.value = res.data
-    broker.value = quote.value.quoteBroker
-    console.log('Broker:', quote.value)
-    console.log(res)
-  } catch (error) {
-    console.log('Error:', error)
-  }
-})
 </script>
 <style lang="css" scoped>
 .content-bg {
   background-color: #c1def7;
   padding-right: 10px;
+}
+
+.text-red {
+  color: red;
+}
+
+.unpopulated {
+  color: red;
 }
 </style>
