@@ -152,11 +152,11 @@ const createQuotePdf = async () => {
     { label: 'Type of Policy:', value: 'Group Life Assurance' },
     {
       label: 'Quote Date:',
-      value: quote.value.creationDate ? quote.value.creationDate : '2021-09-01'
+      value: quote.value.creation_date ? quote.value.creation_date : '2021-09-01'
     },
-    { label: 'Prepared For:', value: quote.value.schemeName },
-    { label: 'Scheme Name:', value: quote.value.schemeName },
-    { label: 'Commencement Date:', value: quote.value.commencementDate },
+    { label: 'Prepared For:', value: quote.value.scheme_name },
+    { label: 'Scheme Name:', value: quote.value.scheme_name },
+    { label: 'Commencement Date:', value: quote.value.commencement_date },
     { label: 'Period of Assurance:', value: '1 year' },
     { label: 'Number of Lives Covered', value: `${resultSummary.value.member_count}` },
     {
@@ -297,17 +297,6 @@ const createQuotePdf = async () => {
     console.log('tableTopY', tableTopY)
     console.log('y', y)
 
-    // Draw the vertical lines
-    // table.tableColWidths.slice(0, -1).reduce((x, width) => {
-    //   page.drawLine({
-    //     start: { x, y: tableTopY },
-    //     end: { x, y: tableBottomY },
-    //     thickness: 0.5,
-    //     color: rgb(0, 0, 0)
-    //   })
-    //   return x + width
-    // }, tableLeftX)
-
     // Draw the table rows
     table.tableRows.forEach((row, i) => {
       Object.entries(row).forEach(([key, value], j) => {
@@ -354,9 +343,18 @@ const createQuotePdf = async () => {
   y -= fontSize * 2
 
   const groupFuneral = [
-    { label: 'Monthly Premium per Member', value: `${roundUpToTwoDecimals(resultSummary.value.total_funeral_monthly_premium_per_member)}` },
-    { label: 'Annual Premium per Member', value: `${roundUpToTwoDecimals(resultSummary.value.total_funeral_annual_premium_per_member)}` },
-    { label: 'Total Annual Premium', value: `${roundUpToTwoDecimals(resultSummary.value.total_funeral_cost)}` }
+    {
+      label: 'Monthly Premium per Member',
+      value: `${roundUpToTwoDecimals(resultSummary.value.total_funeral_monthly_premium_per_member)}`
+    },
+    {
+      label: 'Annual Premium per Member',
+      value: `${roundUpToTwoDecimals(resultSummary.value.total_funeral_annual_premium_per_member)}`
+    },
+    {
+      label: 'Total Annual Premium',
+      value: `${roundUpToTwoDecimals(resultSummary.value.total_funeral_cost)}`
+    }
   ]
 
   groupFuneral.forEach((detail) => {
@@ -411,23 +409,23 @@ const createQuotePdf = async () => {
   const groupLifeAssurance = [
     {
       label: 'Sum Assured',
-      value: quote.value.salaryMultiple + ' times annual salary'
+      value: quote.value.gla.salary_multiple + ' times annual salary'
     },
     {
       label: 'GLA Free Cover Limit (FCL)',
-      value: `${roundUpToTwoDecimals(quote.value.currentFcl)}`
+      value: `${roundUpToTwoDecimals(quote.value.free_cover_limit)}`
     },
     {
       label: 'Terminal Illness Benefit',
-      value:  quote.value.terminalIllnessBenefit
+      value: quote.value.gla.terminal_illness_benefit
     },
     {
       label: 'Number of members above FCL',
-      value: 'data from rating result'
+      value: resultSummary.value.exceeds_free_cover_limit_indicator
     },
     {
       label: 'Cover Termination Age',
-      value: quote.value.coverTerminationAge
+      value: quote.value.gla.cover_termination_age
     }
   ]
 
@@ -453,6 +451,11 @@ const createQuotePdf = async () => {
 
   y -= fontSize * 2
 
+  if (y < 70) {
+    currentPage = page2
+    y = height - topMargin
+  }
+
   currentPage.drawText('Permanent Total Disability', {
     x: margin,
     y,
@@ -464,23 +467,23 @@ const createQuotePdf = async () => {
   const permanentTotalDisability = [
     {
       label: 'Sum Assured',
-      value: quote.value.ptd.salaryMultiple + ' times annual salary'
+      value: quote.value.ptd.salary_multiple + ' times annual salary'
     },
     {
       label: 'PTD Free Cover Limit (FCL)',
-      value: `${roundUpToTwoDecimals(quote.value.currentFcl)}`
+      value: `${roundUpToTwoDecimals(quote.value.free_cover_limit)}`
     },
     {
       label: 'Benefit Structure',
-      value: quote.value.ptd.benefitType
+      value: quote.value.ptd.benefit_type
     },
     {
       label: 'Waiting Period',
-      value: quote.value.ptd.deferredPeriod + ' month(s)'
+      value: quote.value.ptd.deferred_period + ' month(s)'
     },
     {
       label: 'Cover Termination Age',
-      value: quote.value.ptd.coverTerminationAge
+      value: quote.value.ptd.cover_termination_age
     }
   ]
 
@@ -528,7 +531,7 @@ const createQuotePdf = async () => {
   const spouseGroupLifeAssurance = [
     {
       label: 'Sum Assured',
-      value: 'data from rating result'
+      value: resultSummary.value.total_spouse_gla_sum_assured
     },
     {
       label: 'Maximum Sum Assured',
@@ -562,10 +565,10 @@ const createQuotePdf = async () => {
   y -= fontSize * 2
 
   const phiTitle = () => {
-    if (quote.value.phi.productType === 'PHI') {
+    if (quote.value.phi_ttd.benefit === 'PHI') {
       return 'Permanent Health Insurance'
     }
-    if (quote.value.phi.productType === 'TTD') {
+    if (quote.value.phi_ttd.benefit === 'TTD') {
       return 'Total and Temporary Disability'
     }
     return 'Permanent Health Insurance and Total and Temporary Disability'
@@ -583,23 +586,23 @@ const createQuotePdf = async () => {
   const totalAndTemporaryDisability = [
     {
       label: 'Product Type',
-      value: quote.value.phi.productType
+      value: quote.value.phi_ttd.benefit
     },
     {
       label: 'Monthly benefit as a percentage of monthly salary',
-      value: quote.value.phi.monthlyBenefitProportion + '%'
+      value: quote.value.phi_ttd.monthly_benefit_percentage + '%'
     },
     {
       label: 'Maximum number of monthly payments to be made',
-      value: quote.value.phi.numberAnnualPayments * 12
+      value: quote.value.phi_ttd.number_monthly_payments * 12
     },
     {
       label: 'Waiting Period',
-      value: quote.value.phi.waitingPeriodMonths + ' month(s)'
+      value: quote.value.phi_ttd.waiting_period + ' month(s)'
     },
     {
       label: 'Cover Termination Age',
-      value: quote.value.phi.coverTerminationAge
+      value: quote.value.phi_ttd.cover_termination_age
     }
   ]
 
@@ -638,15 +641,15 @@ const createQuotePdf = async () => {
   const criticalIllness = [
     {
       label: 'Benefit Structure',
-      value: quote.value.ci.benefitStructure
+      value: quote.value.ci.benefit_structure
     },
     {
       label: 'Critical Illness Percentage',
-      value: quote.value.ci.criticalIllnessPercentage + '%'
+      value: quote.value.ci.critical_illness_percentage + '%'
     },
     {
-      label: 'Cover Termination Age',
-      value: quote.value.ci.coverTerminationAge
+      label: 'Maximum Benefit',
+      value: quote.value.ci.max_benefit
     }
   ]
 
@@ -685,27 +688,32 @@ const createQuotePdf = async () => {
   const groupFuneralDetails = [
     {
       label: 'Main Member Sum Assured',
-      value: `${roundUpToTwoDecimals(quote.value.groupFamilyFuneral.main_member_group_funeral_sum_assured)}`
+      value: `${roundUpToTwoDecimals(quote.value.group_family_funeral.main_member_funeral_sum_assured)}`
     },
     {
       label: 'Spouse Sum Assured',
-      value: `${roundUpToTwoDecimals(quote.value.groupFamilyFuneral.spouse_group_funeral_sum_assured)}`
+      value: `${roundUpToTwoDecimals(quote.value.group_family_funeral.spouse_funeral_sum_assured)}`
     },
     {
       label: 'Adult Dependant Sum Assured',
-      value: `${roundUpToTwoDecimals(quote.value.groupFamilyFuneral.adultDependantSumAssured)}`
+      value: `${roundUpToTwoDecimals(quote.value.group_family_funeral.adult_dependant_sum_assured)}`
     },
     {
       label: 'Child Sum Assured',
-      value:  `${roundUpToTwoDecimals(quote.value.groupFamilyFuneral.child_group_funeral_sum_assured)}`
+      value: `${roundUpToTwoDecimals(quote.value.group_family_funeral.children_funeral_sum_assured)}`
     },
     {
+      label: 'Parent Sum Assured',
+      value: `${roundUpToTwoDecimals(quote.value.group_family_funeral.parent_funeral_sum_assured)}`
+    },
+
+    {
       label: 'Maximum number of children covered',
-      value: quote.value.groupFamilyFuneral.maxChildrenCovered
+      value: quote.value.group_family_funeral.max_children_covered
     },
     {
       label: 'Maximum number of dependants covered',
-      value: quote.value.groupFamilyFuneral.numberAdultDependants
+      value: quote.value.group_family_funeral.number_adult_dependants
     }
   ]
 
@@ -741,7 +749,9 @@ const createQuotePdf = async () => {
   y -= fontSize
 
   const underWritingText =
-    '1. The quoted premium rates are based on the risk profile, data provided by the client, benefit features, and assumptions. The scheme is subject to the insurer'+"'"+'s underwriting rules, and there is no guarantee of acceptance.'
+    '1. The quoted premium rates are based on the risk profile, data provided by the client, benefit features, and assumptions. The scheme is subject to the insurer' +
+    "'" +
+    's underwriting rules, and there is no guarantee of acceptance.'
 
   let lines = wrapText(underWritingText, font, fontSize - 2, maxWidth)
 
@@ -770,15 +780,20 @@ const createQuotePdf = async () => {
   y -= fontSize
 
   const gpNote1 =
-    '1. This quote is valid for'+ resultSummary.value.quote_validity_period_months +' month(s) from the date of issuance.'
+    '1. This quote is valid for' +
+    resultSummary.value.quote_validity_period_months +
+    ' month(s) from the date of issuance.'
 
   const gpNote2 =
-    '2. All rates provided are guaranteed for a period of '+ resultSummary.value.premium_rates_guaranteed_period_months +' month(s) from the inception date.'
+    '2. All rates provided are guaranteed for a period of ' +
+    resultSummary.value.premium_rates_guaranteed_period_months +
+    ' month(s) from the inception date.'
 
   const gpNote3 =
     '3. Please note that members exceeding the FCL are required to undergo medical underwriting; otherwise, their coverage will be limited to the FCL.'
 
-  const gpNote4 = 'Please feel free to contact us if you require any further information or clarification.'
+  const gpNote4 =
+    'Please feel free to contact us if you require any further information or clarification.'
 
   const endNote = 'We look forward to your favourable response.'
 
