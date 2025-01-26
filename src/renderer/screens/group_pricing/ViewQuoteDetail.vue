@@ -8,6 +8,58 @@
           </template>
           <template #default>
             <v-row>
+              <v-col cols="3">
+                <v-btn size="small" rounded color="primary" @click="goBack">Back</v-btn>
+              </v-col>
+              <v-col cols="9" class="text-right">
+                <v-btn class="mr-3" size="small" rounded color="primary" @click="goBack"
+                  >Edit</v-btn
+                >
+                <v-btn
+                  v-if="quote.memberDataCount > 0 && quote.claimsExperienceCount > 0"
+                  class="mr-3"
+                  size="small"
+                  :loading="loading"
+                  rounded
+                  color="primary"
+                  @click="basisDialog = true"
+                  >Run Calculations</v-btn
+                >
+
+                <v-btn size="small" rounded color="primary" @click="goBack">Approve</v-btn>
+              </v-col>
+            </v-row>
+            <v-dialog v-model="basisDialog" persistent max-width="550px">
+              <base-card>
+                <template #header>
+                  <span class="headline">Choose a parameter basis</span>
+                </template>
+                <template #default>
+                  <v-row>
+                    <v-col>
+                      <v-select
+                        v-model:model-value="quote.basis"
+                        clearable
+                        variant="outlined"
+                        density="compact"
+                        placeholder="Select a Basis"
+                        label="Basis"
+                        :items="parameterBases"
+                        item-title="basis"
+                        item-children="basis"
+                      ></v-select>
+                    </v-col>
+                  </v-row>
+                </template>
+                <template #actions>
+                  <v-spacer></v-spacer>
+                  <v-btn rounded variant="text" @click="closeBasisDialog(true)">Ok</v-btn>
+                  <v-btn rounded variant="text" @click="closeBasisDialog(false)">Cancel</v-btn>
+                </template>
+              </base-card>
+            </v-dialog>
+            <v-divider class="my-4"></v-divider>
+            <v-row>
               <v-col cols="3"><p>Scheme Name</p></v-col>
               <v-col cols="3"
                 ><p class="text-right content-bg">{{ quote.scheme_name }}</p></v-col
@@ -495,22 +547,6 @@
             </v-row>
             <v-divider class="my-4"></v-divider>
             <v-row>
-              <v-col cols="3" offset="9">
-                <v-select
-                  v-model:model-value="quote.basis"
-                  clearable
-                  variant="outlined"
-                  density="compact"
-                  placeholder="Select a Basis"
-                  label="Basis"
-                  :items="parameterBases"
-                  item-title="basis"
-                  item-children="basis"
-                ></v-select>
-              </v-col>
-            </v-row>
-            <v-divider class="my-4"></v-divider>
-            <v-row>
               <v-col cols="3"><p>Created By</p></v-col>
               <v-col cols="3"
                 ><p class="text-right content-bg">{{ quote.createdBy }}</p></v-col
@@ -521,27 +557,6 @@
               >
             </v-row>
             <v-divider class="my-4"></v-divider>
-            <v-row>
-              <v-col cols="3">
-                <v-btn size="small" rounded color="primary" @click="goBack">Back</v-btn>
-              </v-col>
-              <v-col cols="9" class="text-right">
-                <v-btn class="mr-3" size="small" rounded color="primary" @click="goBack"
-                  >Edit</v-btn
-                >
-                <v-btn
-                  v-if="quote.memberDataCount > 0 && quote.claimsExperienceCount > 0"
-                  class="mr-3"
-                  size="small"
-                  rounded
-                  color="primary"
-                  @click="runQuoteCalculations"
-                  >Run Calculations</v-btn
-                >
-
-                <v-btn size="small" rounded color="primary" @click="goBack">Approve</v-btn>
-              </v-col>
-            </v-row>
             <v-snackbar v-model="snackbar" centered :timeout="timeout" :multi-line="true">
               {{ snackbarText }}
               <v-btn rounded color="red" variant="text" @click="snackbar = false">Close</v-btn>
@@ -594,6 +609,8 @@ const updateDialog = (value: boolean) => {
   isDialogOpen.value = value
 }
 
+const loading = ref(false)
+const basisDialog = ref(false)
 const columnDefs: any = ref([])
 const rowCount: any = ref(0)
 const parameterBases = ref([])
@@ -642,6 +659,14 @@ const openDialog = (item: any) => {
   yearLabel.value = 'Select a year'
   uploadTitle.value = 'Upload Data for ' + item.table_type + ' Table (csv)'
   isDialogOpen.value = true
+}
+
+const closeBasisDialog = (value) => {
+  if (value) {
+    console.log('Close Basis Dialog:', quote.value.basis)
+    runQuoteCalculations()
+  }
+  basisDialog.value = false
 }
 
 const handleUpload = async (payload: any) => {
@@ -710,19 +735,23 @@ const goBack = () => {
 const runQuoteCalculations = async () => {
   if (quote.value.basis !== null && quote.value.basis !== '') {
     console.log('Running Quote Calculations')
-    GroupPricingService.runQuoteCalculations(quote.value.id, quote.value.basis)
-      .then((res) => {
+    loading.value = true
+    try {
+      const res = await GroupPricingService.runQuoteCalculations(quote.value.id, quote.value.basis)
+      if (res.status === 201) {
         console.log('Response:', res.data)
         snackbarText.value = 'Calculations Successful'
         snackbar.value = true
-      })
-      .catch((error) => {
-        console.log('Error:', error)
-        snackbarText.value = 'Calculations Failed'
-        snackbar.value = true
-      })
+      }
+      loading.value = false
+    } catch (error) {
+      console.log('Error:', error)
+      snackbarText.value = 'Calculations Failed'
+      snackbar.value = true
+      loading.value = false
+    }
   } else {
-    snackbarText.value = 'Please select a basis before running calculations'
+    snackbarText.value = 'Please select a basis'
     snackbar.value = true
   }
 }
