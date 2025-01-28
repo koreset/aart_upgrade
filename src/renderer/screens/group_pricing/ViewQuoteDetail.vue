@@ -215,18 +215,18 @@
                     <v-col cols="3"><p>Cover Termination Age</p></v-col>
                     <v-col cols="3"
                       ><p class="text-right content-bg">{{
-                        quote.sgla.coverTerminationAge
+                        quote.sgla.cover_termination_age
                       }}</p></v-col
                     >
                     <v-col cols="3"><p>Maximum Benefit</p></v-col>
                     <v-col cols="3"
-                      ><p class="text-right content-bg">{{ quote.sgla.maximumBenefit }}</p></v-col
+                      ><p class="text-right content-bg">{{ quote.sgla.max_benefit }}</p></v-col
                     >
                   </v-row>
                   <v-row>
                     <v-col cols="3"><p>Spousal Percentage</p></v-col>
                     <v-col cols="3"
-                      ><p class="text-right content-bg">{{ quote.sgla.sglaPercentage }}</p></v-col
+                      ><p class="text-right content-bg">{{ quote.sgla.sgla_percentage }}</p></v-col
                     >
                   </v-row>
                 </v-expansion-panel-text>
@@ -247,35 +247,35 @@
                   <v-row>
                     <v-col cols="3"><p>Benefit Type</p></v-col>
                     <v-col cols="3"
-                      ><p class="text-right content-bg">{{ quote.ptd.benefitType }}</p></v-col
+                      ><p class="text-right content-bg">{{ quote.ptd.benefit_type }}</p></v-col
                     >
                     <v-col cols="3"><p>Cover Termination Age</p></v-col>
                     <v-col cols="3"
                       ><p class="text-right content-bg">{{
-                        quote.ptd.coverTerminationAge
+                        quote.ptd.cover_termination_age
                       }}</p></v-col
                     >
                   </v-row>
                   <v-row>
                     <v-col cols="3"><p>Deferred Period</p></v-col>
                     <v-col cols="3"
-                      ><p class="text-right content-bg">{{ quote.ptd.deferredPeriod }}</p></v-col
+                      ><p class="text-right content-bg">{{ quote.ptd.deferred_period }}</p></v-col
                     >
                     <v-col cols="3"><p>Disability Definition</p></v-col>
                     <v-col cols="3"
                       ><p class="text-right content-bg">{{
-                        quote.ptd.disabilityDefinition
+                        quote.ptd.disability_definition
                       }}</p></v-col
                     >
                   </v-row>
                   <v-row>
                     <v-col cols="3"><p>Risk Type</p></v-col>
                     <v-col cols="3"
-                      ><p class="text-right content-bg">{{ quote.ptd.riskType }}</p></v-col
+                      ><p class="text-right content-bg">{{ quote.ptd.risk_type }}</p></v-col
                     >
                     <v-col cols="3"><p>Multiples of Salary</p></v-col>
                     <v-col cols="3"
-                      ><p class="text-right content-bg">{{ quote.ptd.salaryMultiple }}</p></v-col
+                      ><p class="text-right content-bg">{{ quote.ptd.salary_multiple }}</p></v-col
                     >
                   </v-row>
                 </v-expansion-panel-text>
@@ -296,12 +296,12 @@
                   <v-row>
                     <v-col cols="3"><p>Benefit Structure</p></v-col>
                     <v-col cols="3"
-                      ><p class="text-right content-bg">{{ quote.ci.benefitStructure }}</p></v-col
+                      ><p class="text-right content-bg">{{ quote.ci.benefit_structure }}</p></v-col
                     >
                     <v-col cols="3"><p>Cover Termination Age</p></v-col>
                     <v-col cols="3"
                       ><p class="text-right content-bg">{{
-                        quote.ci.coverTerminationAge
+                        dashIfEmpty(quote.ci.cover_termination_age)
                       }}</p></v-col
                     >
                   </v-row>
@@ -309,13 +309,7 @@
                     <v-col cols="3"><p>Critical Illness Percentage</p></v-col>
                     <v-col cols="3"
                       ><p class="text-right content-bg">{{
-                        quote.ci.criticalIllnessPercentage
-                      }}</p></v-col
-                    >
-                    <v-col cols="3"><p>Cover Termination Age</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{
-                        quote.ci.coverTerminationAge
+                        quote.ci.critical_illness_percentage
                       }}</p></v-col
                     >
                   </v-row>
@@ -337,26 +331,26 @@
                 ></v-expansion-panel-title>
                 <v-expansion-panel-text>
                   <v-row>
-                    <v-col cols="3"><p>Product Type</p></v-col>
+                    <v-col cols="3"><p>Benefit</p></v-col>
                     <v-col cols="3"
-                      ><p class="text-right content-bg">{{ quote.phi.product_type }}</p></v-col
+                      ><p class="text-right content-bg">{{ quote.phi_ttd.benefit }}</p></v-col
                     >
                     <v-col cols="3"><p>Risk Type</p></v-col>
                     <v-col cols="3"
-                      ><p class="text-right content-bg">{{ quote.phi.riskType }}</p></v-col
+                      ><p class="text-right content-bg">{{ quote.phi_ttd.risk_type }}</p></v-col
                     >
                   </v-row>
                   <v-row>
                     <v-col cols="3"><p>Cover Termination Age</p></v-col>
                     <v-col cols="3"
                       ><p class="text-right content-bg">{{
-                        quote.phi.coverTerminationAge
+                        quote.phi_ttd.cover_termination_age
                       }}</p></v-col
                     >
                     <v-col cols="3"><p>Deferred Period (Months)</p></v-col>
                     <v-col cols="3"
                       ><p class="text-right content-bg">{{
-                        quote.phi.deferredPeriodMonths
+                        quote.phi_ttd.deferred_period
                       }}</p></v-col
                     >
                   </v-row>
@@ -364,37 +358,41 @@
                     <v-col cols="3"><p>Disability Definition</p></v-col>
                     <v-col cols="3"
                       ><p class="text-right content-bg">{{
-                        quote.phi.disabilityDefinition
+                        quote.phi_ttd.disability_definition
                       }}</p></v-col
                     >
                     <v-col cols="3"><p>Maximum Basic Benefit</p></v-col>
                     <v-col cols="3"
-                      ><p class="text-right content-bg">{{ quote.phi.maxBasicBenefit }}</p></v-col
+                      ><p class="text-right content-bg">{{
+                        quote.phi_ttd.maximum_benefit
+                      }}</p></v-col
                     >
                   </v-row>
                   <v-row>
                     <v-col cols="3"><p>Maximum Premium Waiver</p></v-col>
                     <v-col cols="3"
-                      ><p class="text-right content-bg">{{ quote.phi.maxPremiumWaiver }}</p></v-col
+                      ><p class="text-right content-bg">{{
+                        quote.phi_ttd.max_premium_waiver
+                      }}</p></v-col
                     >
-                    <v-col cols="3"><p>Monthly Benefit Proportion</p></v-col>
+                    <v-col cols="3"><p>Monthly Benefit Percentage</p></v-col>
                     <v-col cols="3"
                       ><p class="text-right content-bg">{{
-                        quote.phi.monthlyBenefitProportion
+                        quote.phi_ttd.monthly_benefit_percentage
                       }}</p></v-col
                     >
                   </v-row>
                   <v-row>
-                    <v-col cols="3"><p>Number of Annual Payments</p></v-col>
+                    <v-col cols="3"><p>Number of Monthly Payments</p></v-col>
                     <v-col cols="3"
                       ><p class="text-right content-bg">{{
-                        quote.phi.numberAnnualPayments
+                        quote.phi_ttd.number_monthly_payments
                       }}</p></v-col
                     >
                     <v-col cols="3"><p>PHI Escalation (%)</p></v-col>
                     <v-col cols="3"
                       ><p class="text-right content-bg">{{
-                        quote.phi.phiEscalationPercentage
+                        quote.phi_ttd.escalation_percentage
                       }}</p></v-col
                     >
                   </v-row>
@@ -402,20 +400,22 @@
                     <v-col cols="3"><p>Premium Waiver Benefit</p></v-col>
                     <v-col cols="3"
                       ><p class="text-right content-bg">{{
-                        quote.phi.premiumWaiverBenefit
+                        quote.phi_ttd.premium_waiver
                       }}</p></v-col
                     >
-                    <v-col cols="3"><p>Premium Waiver Proportion</p></v-col>
+                    <v-col cols="3"><p>Premium Waiver Percentage</p></v-col>
                     <v-col cols="3"
                       ><p class="text-right content-bg">{{
-                        quote.phi.premiumWaiverProportion
+                        quote.phi_ttd.premium_waiver_percentage
                       }}</p></v-col
                     >
                   </v-row>
                   <v-row>
                     <v-col cols="3"><p>Waiting Period (Months)</p></v-col>
                     <v-col cols="3"
-                      ><p class="text-right content-bg">{{ quote.phi.waiting_period }}</p></v-col
+                      ><p class="text-right content-bg">{{
+                        quote.phi_ttd.waiting_period
+                      }}</p></v-col
                     >
                   </v-row>
                 </v-expansion-panel-text>
@@ -439,13 +439,13 @@
                     <v-col cols="3"><p>Sum Assured (Main Member)</p></v-col>
                     <v-col cols="3"
                       ><p class="text-right content-bg">{{
-                        quote.groupFamilyFuneral.main_member_group_funeral_sum_assured
+                        quote.group_family_funeral.main_member_funeral_sum_assured
                       }}</p></v-col
                     >
                     <v-col cols="3"><p>Sum Assured (Spouse)</p></v-col>
                     <v-col cols="3"
                       ><p class="text-right content-bg">{{
-                        quote.groupFamilyFuneral.spouse_group_funeral_sum_assured
+                        quote.group_family_funeral.spouse_funeral_sum_assured
                       }}</p></v-col
                     >
                   </v-row>
@@ -453,13 +453,13 @@
                     <v-col cols="3"><p>Sum Assured (Children)</p></v-col>
                     <v-col cols="3"
                       ><p class="text-right content-bg">{{
-                        quote.groupFamilyFuneral.child_group_funeral_sum_assured
+                        quote.group_family_funeral.children_funeral_sum_assured
                       }}</p></v-col
                     >
                     <v-col cols="3"><p>Sum Assured (Adult Dependants)</p></v-col>
                     <v-col cols="3"
                       ><p class="text-right content-bg">{{
-                        quote.groupFamilyFuneral.adultDependantSumAssured
+                        quote.group_family_funeral.adult_dependant_sum_assured
                       }}</p></v-col
                     >
                   </v-row>
@@ -467,13 +467,13 @@
                     <v-col cols="3"><p>Maximum Children Covered</p></v-col>
                     <v-col cols="3"
                       ><p class="text-right content-bg">{{
-                        quote.groupFamilyFuneral.maxChildrenCovered
+                        quote.group_family_funeral.max_children_covered
                       }}</p></v-col
                     >
-                    <v-col cols="3"><p>Sum Assured (Adult Dependants)</p></v-col>
+                    <v-col cols="3"><p>Sum Assured (Parent)</p></v-col>
                     <v-col cols="3"
                       ><p class="text-right content-bg">{{
-                        quote.groupFamilyFuneral.adultDependantSumAssured
+                        quote.group_family_funeral.parent_funeral_sum_assured
                       }}</p></v-col
                     >
                   </v-row>

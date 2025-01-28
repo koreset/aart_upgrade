@@ -10,7 +10,7 @@ export const useGroupPricingStore = defineStore('groupPricing', {
     yesNoItems: ['Yes', 'No'],
     claimsExperiences: ['Yes', 'No'],
     riskTypes: ['All Causes', 'Accidental'],
-    benefitTypes: ['Standalone', 'Associated'],
+    benefitTypes: ['Standalone', 'Accelerated'],
     disabilityDefinitions: ['Own Occupation', 'Any Occupation'],
     phiEscalationPercentages: ['0%', '5%', '7.5%', '10%'],
     productTypes: ['PHI', 'TTD', 'PHI & TTD'],
