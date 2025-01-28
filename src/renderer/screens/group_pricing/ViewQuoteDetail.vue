@@ -16,7 +16,7 @@
                   >Edit</v-btn
                 >
                 <v-btn
-                  v-if="quote.memberDataCount > 0 && quote.claimsExperienceCount > 0"
+                  v-if="quote.member_data_count > 0 && quote.claims_experience_count > 0"
                   class="mr-3"
                   size="small"
                   :loading="loading"
@@ -627,12 +627,12 @@ const broker = ref(null)
 
 const relatedTables = computed(() => {
   const tables: any = []
-  if (quote.value.memberDataCount > 0) {
+  if (quote.value.member_data_count > 0) {
     tables.push({ table_type: 'Member Data', value: 'member_data', populated: true })
   } else {
     tables.push({ table_type: 'Member Data', value: 'member_data', populated: false })
   }
-  if (quote.value.claimsExperienceCount > 0) {
+  if (quote.value.claims_experience_count > 0) {
     tables.push({ table_type: 'Claims Experience', value: 'claims_experience', populated: true })
   } else {
     tables.push({ table_type: 'Claims Experience', value: 'claims_experience', populated: false })
@@ -682,9 +682,9 @@ const handleUpload = async (payload: any) => {
       snackbarText.value = 'Upload Successful'
       snackbar.value = true
       if (selectedTable.value.table_type === 'Member Data') {
-        quote.value.memberDataCount = count
+        quote.value.member_data_count = count
       } else if (selectedTable.value.table_type === 'Claims Experience') {
-        quote.value.claimsExperienceCount = count
+        quote.value.claims_experience_count = count
       }
     })
     .catch((error) => {
@@ -761,9 +761,9 @@ const deleteTable = async (item: any) => {
   GroupPricingService.deleteQuoteTableData(quote.value.id, item.table_type).then((res) => {
     console.log('Response:', res.data)
     if (item.table_type === 'Member Data') {
-      quote.value.memberDataCount = 0
+      quote.value.member_data_count = 0
     } else if (item.table_type === 'Claims Experience') {
-      quote.value.claimsExperienceCount = 0
+      quote.value.claims_experience_count = 0
     }
     snackbarText.value = 'Table Deleted Successfully'
     snackbar.value = true
