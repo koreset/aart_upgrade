@@ -639,14 +639,20 @@ const relatedTables = computed(() => {
   }
 
   tables.push({
-    table_type: 'Group Pricing Parameters',
-    value: 'group_pricing_parameters',
+    table_type: 'Member Rating Results',
+    value: 'member_rating_results',
     populated: true
   })
 
   tables.push({
-    table_type: 'Member Rating Results',
-    value: 'member_rating_results',
+    table_type: 'Member Premium Schedules',
+    value: 'member_premium_schedules',
+    populated: true
+  })
+
+  tables.push({
+    table_type: 'Group Pricing Parameters',
+    value: 'group_pricing_parameters',
     populated: true
   })
 
