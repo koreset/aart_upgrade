@@ -165,7 +165,7 @@ const headers = [
     value: (item: any) => parseDateString(item.commencement_date)
   },
   { title: 'Broker', value: 'quote_broker.name', key: 'quote_broker', width: '20%' },
-  { title: 'Type', value: 'obligationType' },
+  { title: 'Type', value: 'obligation_type' },
   { title: 'SGLA', value: 'sgla_benefit' },
   { title: 'PHI/TTD', value: 'phi_ttd_benefit' },
   { title: 'PTD', value: 'ptd_benefit' },
@@ -173,6 +173,12 @@ const headers = [
   { title: 'Funeral', value: 'family_funeral_benefit' },
   { title: 'Basis', value: 'basis' },
   { title: 'Status', value: 'status' },
+  {
+    title: 'Creation Date',
+    key: 'creation_date',
+    width: '20%',
+    value: (item: any) => parseDateString(item.creation_date)
+  },
   { title: 'Submitted By', value: 'created_by' },
   { title: 'Reviewer', value: 'reviewer' },
   { title: 'Actions', value: 'actions', align: 'center' as 'center', sortable: false }

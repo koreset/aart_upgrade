@@ -69,6 +69,7 @@
     "node-unique-machine-id": "^1.1.0",
     "papaparse": "^5.4.1",
     "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^4.10.38",
     "pinia": "^2.2.4",
     "prismjs": "^1.29.0",
     "vee-validate": "^4.13.2",

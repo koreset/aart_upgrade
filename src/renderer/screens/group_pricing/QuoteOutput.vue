@@ -14,6 +14,9 @@
                 >
               </v-col>
             </v-row>
+            <v-row>
+              <v-col> <canvas ref="canvasRef" style="border: 1px solid #ddd"></canvas> </v-col>
+            </v-row>
           </template>
         </base-card>
       </v-col>
@@ -25,7 +28,8 @@
 import BaseCard from '@/renderer/components/BaseCard.vue'
 import { onMounted, ref } from 'vue'
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib'
-import { saveAs } from 'file-saver'
+import * as pdfjsLib from 'pdfjs-dist'
+// import { saveAs } from 'file-saver'
 import GroupPricingService from '@/renderer/api/GroupPricingService'
 
 const props = defineProps({
@@ -46,6 +50,9 @@ const addressLines = [
   'Email: jome.akpoduado@gmail.com'
 ]
 
+const pdfSrc: any = ref(null)
+const canvasRef = ref<HTMLCanvasElement | null>(null)
+
 onMounted(() => {
   console.log('quoteId', props.quoteId)
   GroupPricingService.getQuote(props.quoteId).then((res) => {
@@ -57,6 +64,33 @@ onMounted(() => {
     resultSummary.value = res.data
   })
 })
+
+const loadPdf = async () => {
+  if (!pdfSrc.value || !canvasRef.value) return
+
+  console.log('Loading PDF', pdfSrc.value)
+
+  pdfjsLib.GlobalWorkerOptions.workerSrc = `/js/pdf.worker.min.mjs`
+
+  const pdf = await pdfjsLib.getDocument(pdfSrc.value).promise
+  const page = await pdf.getPage(1) // Load the first page
+
+  const viewport = page.getViewport({ scale: 1.8 })
+  const canvas = canvasRef.value
+  const context = canvas.getContext('2d')
+
+  if (!context) return
+
+  canvas.width = viewport.width
+  canvas.height = viewport.height
+
+  const renderContext = {
+    canvasContext: context,
+    viewport
+  }
+
+  await page.render(renderContext).promise
+}
 
 const roundUpToTwoDecimals = (num) => {
   const roundedNum = Math.ceil(num * 100) / 100 // Round up to two decimal places
@@ -828,7 +862,12 @@ const createQuotePdf = async () => {
   // Save the PDF
   const pdfBytes = await pdfDoc.save()
   const blob = new Blob([pdfBytes], { type: 'application/pdf' })
-  saveAs(blob, 'quotation.pdf')
+
+  const url = URL.createObjectURL(blob)
+
+  pdfSrc.value = url
+  loadPdf()
+  // saveAs(blob, 'quotation.pdf')
 }
 </script>
 <style lang="css" scoped></style>

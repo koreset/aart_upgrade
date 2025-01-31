@@ -486,7 +486,7 @@
                 <v-table>
                   <tbody>
                     <tr v-for="item in relatedTables" :key="item.table_type">
-                      <td :class="{ unpopulated: !item.populated }" style="width: 70%">{{
+                      <td :class="{ unpopulated: !item.populated }" style="width: 60%">{{
                         item.table_type
                       }}</td>
                       <td style="text-align: left">
@@ -504,7 +504,8 @@
                         <v-btn
                           v-if="
                             item.table_type !== 'Group Pricing Parameters' &&
-                            item.table_type !== 'Member Rating Results'
+                            item.table_type !== 'Member Rating Results' &&
+                            item.table_type !== 'Member Premium Schedules'
                           "
                           class="mr-3"
                           variant="outlined"
@@ -580,6 +581,7 @@
         />
       </v-col>
     </v-row>
+    <confirm-dialog ref="confirmAction" />
   </v-container>
 </template>
 <script setup lang="ts">
@@ -590,7 +592,9 @@ import formatValues from '@/renderer/utils/format_values'
 import DataGrid from '@/renderer/components/tables/DataGrid.vue'
 import { useRouter } from 'vue-router'
 import FileUploadDialog from '@/renderer/components/FileUploadDialog.vue'
+import ConfirmDialog from '@/renderer/components/ConfirmDialog.vue'
 
+const confirmAction = ref()
 const router = useRouter()
 const props = defineProps({
   id: {
@@ -638,17 +642,33 @@ const relatedTables = computed(() => {
     tables.push({ table_type: 'Claims Experience', value: 'claims_experience', populated: false })
   }
 
-  tables.push({
-    table_type: 'Member Rating Results',
-    value: 'member_rating_results',
-    populated: true
-  })
+  if (quote.value.member_rating_result_count > 0) {
+    tables.push({
+      table_type: 'Member Rating Results',
+      value: 'member_rating_results',
+      populated: true
+    })
+  } else {
+    tables.push({
+      table_type: 'Member Rating Results',
+      value: 'member_rating_results',
+      populated: false
+    })
+  }
 
-  tables.push({
-    table_type: 'Member Premium Schedules',
-    value: 'member_premium_schedules',
-    populated: true
-  })
+  if (quote.value.member_premium_schedule_count > 0) {
+    tables.push({
+      table_type: 'Member Premium Schedules',
+      value: 'member_premium_schedules',
+      populated: true
+    })
+  } else {
+    tables.push({
+      table_type: 'Member Premium Schedules',
+      value: 'member_premium_schedules',
+      populated: false
+    })
+  }
 
   tables.push({
     table_type: 'Group Pricing Parameters',
@@ -691,6 +711,10 @@ const handleUpload = async (payload: any) => {
         quote.value.member_data_count = count
       } else if (selectedTable.value.table_type === 'Claims Experience') {
         quote.value.claims_experience_count = count
+      } else if (selectedTable.value.table_type === 'Member Rating Results') {
+        quote.value.member_rating_result_count = count
+      } else if (selectedTable.value.table_type === 'Member Premium Schedules') {
+        quote.value.member_premium_schedule_count = count
       }
     })
     .catch((error) => {
@@ -763,17 +787,30 @@ const runQuoteCalculations = async () => {
 }
 
 const deleteTable = async (item: any) => {
-  console.log('Delete Table:', item)
-  GroupPricingService.deleteQuoteTableData(quote.value.id, item.table_type).then((res) => {
-    console.log('Response:', res.data)
-    if (item.table_type === 'Member Data') {
-      quote.value.member_data_count = 0
-    } else if (item.table_type === 'Claims Experience') {
-      quote.value.claims_experience_count = 0
+  try {
+    console.log('Delete Table:', item)
+    const result = await confirmAction.value.open(
+      'Deleting Data for ' + item.table_type + ' table',
+      'Are you sure you want to delete this data?'
+    )
+
+    if (!result) {
+      return
     }
-    snackbarText.value = 'Table Deleted Successfully'
-    snackbar.value = true
-  })
+
+    GroupPricingService.deleteQuoteTableData(quote.value.id, item.table_type).then((res) => {
+      console.log('Response:', res.data)
+      if (item.table_type === 'Member Data') {
+        quote.value.member_data_count = 0
+      } else if (item.table_type === 'Claims Experience') {
+        quote.value.claims_experience_count = 0
+      }
+      snackbarText.value = 'Table Deleted Successfully'
+      snackbar.value = true
+    })
+  } catch (error) {
+    console.log('Error:', error)
+  }
 }
 
 const viewTable = async (item: any) => {
