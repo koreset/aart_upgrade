@@ -140,7 +140,7 @@ import BaseCard from '@/renderer/components/BaseCard.vue'
 import GroupPricingService from '@/renderer/api/GroupPricingService'
 import { useAppStore } from '@/renderer/store/app'
 import { useRouter } from 'vue-router'
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import ProductService from '@/renderer/api/ProductService'
 import { useGroupPricingStore } from '@/renderer/store/group_pricing'
 
@@ -153,7 +153,7 @@ const selectedReviewer = ref('')
 const reviewers: any = ref([])
 const dialog = ref(false)
 const selectedQuote: any = ref({})
-const organization = computed(() => appStore.getLicenseData.data.attributes.metadata.organization)
+const organization: any = ref(null)
 
 const headers = [
   { title: 'Scheme Name', value: 'scheme_name', key: 'scheme_name', width: '120px' },
@@ -226,7 +226,6 @@ const submitQuoteGeneration = (item) => {
 }
 
 onMounted(() => {
-  console.log('Organization:', organization.value)
   try {
     ProductService.getOrgUsers({ name: organization.value }).then((res) => {
       const uniqueData = Array.from(new Map(res.data.map((entry) => [entry.user, entry])).values())
@@ -241,6 +240,8 @@ onMounted(() => {
         quotes.value = []
       }
     })
+    organization.value = appStore.getLicenseData.data.attributes.metadata.organization
+    console.log('Organization:', organization.value)
   } catch (error) {
     console.log('Error:', error)
   }

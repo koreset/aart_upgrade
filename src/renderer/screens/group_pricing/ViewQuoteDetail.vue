@@ -547,6 +547,8 @@
               </v-col>
             </v-row>
             <v-divider class="my-4"></v-divider>
+            <output-summary v-if="quote !== null" :quote="quote" :resultSummary="resultSummary" />
+            <v-divider class="my-4"></v-divider>
             <v-row>
               <v-col cols="3"><p>Created By</p></v-col>
               <v-col cols="3"
@@ -593,6 +595,7 @@ import DataGrid from '@/renderer/components/tables/DataGrid.vue'
 import { useRouter } from 'vue-router'
 import FileUploadDialog from '@/renderer/components/FileUploadDialog.vue'
 import ConfirmDialog from '@/renderer/components/ConfirmDialog.vue'
+import OutputSummary from './OutputSummary.vue'
 
 const confirmAction = ref()
 const router = useRouter()
@@ -618,6 +621,7 @@ const basisDialog = ref(false)
 const columnDefs: any = ref([])
 const rowCount: any = ref(0)
 const parameterBases = ref([])
+const resultSummary: any = ref([])
 
 const snackbar = ref(false)
 const timeout = 2000
@@ -744,6 +748,10 @@ onMounted(async () => {
       })
     }
     console.log('Parameter Bases:', parameterBases.value)
+    GroupPricingService.getResultSummary(props.id).then((res) => {
+      console.log('Result Summary:', res.data)
+      resultSummary.value = res.data
+    })
   } catch (error) {
     console.log('Error:', error)
   }
