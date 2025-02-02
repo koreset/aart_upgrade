@@ -602,10 +602,10 @@
                   ><v-row
                     ><v-col cols="4"> <p>Permanent Health Insurance (PHI)</p> </v-col>
                     <v-col cols="4"
-                      >Cover Termination Age : {{ quote.phi.cover_termination_age }}</v-col
+                      >Cover Termination Age : {{ quote.gla.cover_termination_age }}</v-col
                     >
                     <v-col cols="4"
-                      >Benefit Annual Salary Multiplier: {{ quote.phi.salary_multiple }}</v-col
+                      >Benefit Annual Salary Multiplier: {{ quote.gla.salary_multiple }}</v-col
                     >
                   </v-row></v-expansion-panel-title
                 >
@@ -623,7 +623,7 @@
                       >
                     </v-row>
                     <v-row class="mb-n8">
-                      <v-col cols="3"><p>Minimum Sum Assured</p></v-col>
+                      <v-col cols="3"><p> Sum Assured</p></v-col>
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(resultSummary.min_phi_sum_assured)
@@ -1385,102 +1385,6 @@
                       <v-col cols="3"><p class="text-center content-bg">Experience Rated</p></v-col>
                       <v-col cols="3"><p class="text-center content-bg">Discounted</p></v-col>
                     </v-row>
-                    <v-row class="mb-n9">
-                      <v-col cols="3"
-                        ><p><b>SUM ASSURED</b></p></v-col
-                      >
-                    </v-row>
-                    <v-row class="mb-n8">
-                      <v-col cols="3"><p>Minimum Sum Assured</p></v-col>
-                      <v-col cols="3"
-                        ><p class="text-center content-bg">{{
-                          dashIfEmpty(resultSummary.min_gla_sum_assured)
-                        }}</p></v-col
-                      >
-                      <v-col cols="3"
-                        ><p class="text-center content-bg">{{
-                          dashIfEmpty(resultSummary.min_gla_sum_assured)
-                        }}</p></v-col
-                      >
-                      <v-col cols="3"
-                        ><p class="text-center content-bg">{{
-                          dashIfEmpty(resultSummary.min_gla_sum_assured)
-                        }}</p></v-col
-                      >
-                    </v-row>
-                    <v-row class="mb-n8">
-                      <v-col cols="3"><p>Maximum Sum Assured</p></v-col>
-                      <v-col cols="3"
-                        ><p class="text-center content-bg">{{
-                          dashIfEmpty(resultSummary.max_gla_sum_assured)
-                        }}</p></v-col
-                      >
-                      <v-col cols="3"
-                        ><p class="text-center content-bg">{{
-                          dashIfEmpty(resultSummary.max_gla_sum_assured)
-                        }}</p></v-col
-                      >
-                      <v-col cols="3"
-                        ><p class="text-center content-bg">{{
-                          dashIfEmpty(resultSummary.max_gla_sum_assured)
-                        }}</p></v-col
-                      >
-                    </v-row>
-                    <v-row class="mb-n8">
-                      <v-col cols="3"><p>Maximum FCL Capped Sum Assured</p></v-col>
-                      <v-col cols="3"
-                        ><p class="text-center content-bg">{{
-                          dashIfEmpty(resultSummary.max_gla_capped_sum_assured)
-                        }}</p></v-col
-                      >
-                      <v-col cols="3"
-                        ><p class="text-center content-bg">{{
-                          dashIfEmpty(resultSummary.max_gla_capped_sum_assured)
-                        }}</p></v-col
-                      >
-                      <v-col cols="3"
-                        ><p class="text-center content-bg">{{
-                          dashIfEmpty(resultSummary.max_gla_capped_sum_assured)
-                        }}</p></v-col
-                      >
-                    </v-row>
-                    <v-row class="mb-n8">
-                      <v-col cols="3"><p>Total Capped Sum Assured</p></v-col>
-                      <v-col cols="3"
-                        ><p class="text-center content-bg">{{
-                          dashIfEmpty(resultSummary.total_gla_capped_sum_assured)
-                        }}</p></v-col
-                      >
-                      <v-col cols="3"
-                        ><p class="text-center content-bg">{{
-                          dashIfEmpty(resultSummary.total_gla_capped_sum_assured)
-                        }}</p></v-col
-                      >
-                      <v-col cols="3"
-                        ><p class="text-center content-bg">{{
-                          dashIfEmpty(resultSummary.total_gla_capped_sum_assured)
-                        }}</p></v-col
-                      >
-                    </v-row>
-                    <v-row class="mb-n8">
-                      <v-col cols="3"><p>Average Covered Sum Assured</p></v-col>
-                      <v-col cols="3"
-                        ><p class="text-center content-bg">{{
-                          dashIfEmpty(resultSummary.average_gla_capped_sum_assured)
-                        }}</p></v-col
-                      >
-                      <v-col cols="3"
-                        ><p class="text-center content-bg">{{
-                          dashIfEmpty(resultSummary.average_gla_capped_sum_assured)
-                        }}</p></v-col
-                      >
-                      <v-col cols="3"
-                        ><p class="text-center content-bg">{{
-                          dashIfEmpty(resultSummary.average_gla_capped_sum_assured)
-                        }}</p></v-col
-                      >
-                    </v-row>
-
                     <v-row class="mb-n9 mt-8">
                       <v-col cols="3"
                         ><p><b>RISK PREMIUM</b></p></v-col
