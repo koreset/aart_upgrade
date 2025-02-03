@@ -87,12 +87,6 @@
                 <v-expansion-panel-title
                   ><v-row
                     ><v-col cols="4"> <p>Group Life Assurance (GLA)</p> </v-col>
-                    <v-col cols="4"
-                      >Cover Termination Age : {{ quote.gla.cover_termination_age }}</v-col
-                    >
-                    <v-col cols="4"
-                      >Benefit Annual Salary Multiplier: {{ quote.gla.salary_multiple }}</v-col
-                    >
                   </v-row></v-expansion-panel-title
                 >
                 <v-expansion-panel-text>
@@ -344,12 +338,6 @@
                 <v-expansion-panel-title
                   ><v-row
                     ><v-col cols="4"> <p>Permanent Total Disability (PTD)</p> </v-col>
-                    <v-col cols="4"
-                      >Cover Termination Age : {{ quote.gla.cover_termination_age }}</v-col
-                    >
-                    <v-col cols="4"
-                      >Benefit Annual Salary Multiplier: {{ quote.gla.salary_multiple }}</v-col
-                    >
                   </v-row></v-expansion-panel-title
                 >
                 <v-expansion-panel-text>
@@ -601,12 +589,6 @@
                 <v-expansion-panel-title
                   ><v-row
                     ><v-col cols="4"> <p>Permanent Health Insurance (PHI)</p> </v-col>
-                    <v-col cols="4"
-                      >Cover Termination Age : {{ quote.phi_ttd.cover_termination_age }}</v-col
-                    >
-                    <v-col cols="4"
-                      >Benefit Annual Salary Multiplier: {{ quote.phi_ttd.salary_multiple }}</v-col
-                    >
                   </v-row></v-expansion-panel-title
                 >
                 <v-expansion-panel-text>
@@ -858,12 +840,6 @@
                 <v-expansion-panel-title
                   ><v-row
                     ><v-col cols="4"> <p>Temporary Total Disability (TTD)</p> </v-col>
-                    <v-col cols="4"
-                      >Cover Termination Age : {{ quote.phi_ttd.cover_termination_age }}</v-col
-                    >
-                    <v-col cols="4"
-                      >Benefit Annual Salary Multiplier: {{ quote.phi_ttd.salary_multiple }}</v-col
-                    >
                   </v-row></v-expansion-panel-title
                 >
                 <v-expansion-panel-text>
@@ -1115,12 +1091,6 @@
                 <v-expansion-panel-title
                   ><v-row
                     ><v-col cols="4"> <p>Temporary Total Disability (TTD)</p> </v-col>
-                    <v-col cols="4"
-                      >Cover Termination Age : {{ quote.phi_ttd.cover_termination_age }}</v-col
-                    >
-                    <v-col cols="4"
-                      >Benefit Annual Salary Multiplier: {{ quote.phi_ttd.salary_multiple }}</v-col
-                    >
                   </v-row></v-expansion-panel-title
                 >
                 <v-expansion-panel-text>
@@ -1372,12 +1342,6 @@
                 <v-expansion-panel-title
                   ><v-row
                     ><v-col cols="4"> <p>Critical Illness (CI)</p> </v-col>
-                    <v-col cols="4"
-                      >Cover Termination Age : {{ quote.ci.cover_termination_age }}</v-col
-                    >
-                    <v-col cols="4"
-                      >Benefit Annual Salary Multiplier: {{ quote.ci.salary_multiple }}</v-col
-                    >
                   </v-row></v-expansion-panel-title
                 >
                 <v-expansion-panel-text>
@@ -1629,12 +1593,6 @@
                 <v-expansion-panel-title
                   ><v-row
                     ><v-col cols="4"> <p>Spouse Group Life Assurance (SGLA)</p> </v-col>
-                    <v-col cols="4"
-                      >Cover Termination Age : {{ quote.sgla.cover_termination_age }}</v-col
-                    >
-                    <v-col cols="4"
-                      >Benefit Annual Salary Multiplier: {{ quote.sgla.salary_multiple }}</v-col
-                    >
                   </v-row></v-expansion-panel-title
                 >
                 <v-expansion-panel-text>
@@ -1886,9 +1844,6 @@
                 <v-expansion-panel-title
                   ><v-row
                     ><v-col cols="4"> <p>Group Family Funeral</p> </v-col>
-                    <v-col cols="4"
-                      >Cover Termination Age : {{ quote.gla.cover_termination_age }}</v-col
-                    >
                   </v-row></v-expansion-panel-title
                 >
                 <v-expansion-panel-text>
