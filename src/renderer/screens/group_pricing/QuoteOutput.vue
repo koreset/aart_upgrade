@@ -42,13 +42,14 @@ const props = defineProps({
 const quote: any = ref(null)
 const resultSummary: any = ref(null)
 
-const addressLines = [
-  '534, Amberley Crescent',
-  'Cedar Creek Estate',
-  'Needwood, 2021',
-  'Tel: +27719166815',
-  'Email: jome.akpoduado@gmail.com'
-]
+const insurer: any = ref(null)
+// const addressLines = [
+//   '534, Amberley Crescent',
+//   'Cedar Creek Estate',
+//   'Needwood, 2021',
+//   'Tel: +27719166815',
+//   'Email: jome.akpoduado@gmail.com'
+// ]
 
 const pdfSrc: any = ref(null)
 const canvasRef = ref<HTMLCanvasElement | null>(null)
@@ -62,6 +63,10 @@ onMounted(() => {
   GroupPricingService.getResultSummary(props.quoteId).then((res) => {
     console.log('Result Summary:', res.data)
     resultSummary.value = res.data
+  })
+  GroupPricingService.getInsurer().then((res) => {
+    console.log('Insurer:', res.data)
+    insurer.value = res.data
   })
 })
 
@@ -152,11 +157,36 @@ const createQuotePdf = async () => {
 
   // Draw each line right-justified
 
-  addressLines.forEach((line) => {
-    const x = margin // Calculate X position for right alignment
-    currentPage.drawText(line, { x, y, size: fontSize, font, color: rgb(0, 0, 0) })
-    y -= fontSize * 1.5 // Move down for the next line
-  })
+  // addressLines.forEach((line) => {
+  //   const x = margin // Calculate X position for right alignment
+  //   currentPage.drawText(line, { x, y, size: fontSize, font, color: rgb(0, 0, 0) })
+  //   y -= fontSize * 1.5 // Move down for the next line
+  // })
+
+  if (insurer.value) {
+    const insurerName = insurer.value.name
+    const insurerAddress = `${insurer.value.address_line_1}, ${insurer.value.address_line_2}`
+    const insurerAddress1 = `${insurer.value.city}, ${insurer.value.province}, ${insurer.value.post_code}`
+    const insurerCountry = `${insurer.value.country}`
+    const insurerContact = `Tel: ${insurer.value.phone}, Email: ${insurer.value.email}`
+
+    const insurerText = [
+      insurerName,
+      insurerAddress,
+      insurerAddress1,
+      insurerCountry,
+      insurerContact
+    ]
+
+    y = height - topMargin
+
+    insurerText.forEach((line) => {
+      const textWidth = font.widthOfTextAtSize(line, fontSize)
+      const x = width - margin - textWidth // Calculate X position for right alignment
+      currentPage.drawText(line, { x, y, size: fontSize, font, color: rgb(0, 0, 0) })
+      y -= fontSize * 1.5 // Move down for the next line
+    })
+  }
 
   const quoteHeader = 'Group Life Assurance Quotation Document'
   const textWidth = font.widthOfTextAtSize(quoteHeader, fontSize)

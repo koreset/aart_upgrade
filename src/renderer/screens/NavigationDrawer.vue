@@ -46,20 +46,17 @@
             title="Group Pricing"
           ></v-list-item>
         </template>
-        <v-list-item :to="{ name: 'group-pricing-quote-generation' }">
-          <v-list-item-title>Generate Quote</v-list-item-title>
-        </v-list-item>
-        <v-list-item :to="{ name: 'group-pricing-brokers' }">
-          <v-list-item-title>Brokers</v-list-item-title>
-        </v-list-item>
-        <v-list-item :to="{ name: 'group-pricing-schemes' }">
-          <v-list-item-title>Schemes</v-list-item-title>
-        </v-list-item>
         <v-list-item :to="{ name: 'group-pricing-quotes' }">
           <v-list-item-title>Quotes</v-list-item-title>
         </v-list-item>
         <v-list-item :to="{ name: 'group-pricing-tables' }">
           <v-list-item-title>Tables</v-list-item-title>
+        </v-list-item>
+        <v-list-item :to="{ name: 'group-pricing-brokers' }">
+          <v-list-item-title>Metadata</v-list-item-title>
+        </v-list-item>
+        <v-list-item :to="{ name: 'group-pricing-schemes' }">
+          <v-list-item-title>Schemes</v-list-item-title>
         </v-list-item>
       </v-list-group>
       <v-list-group value="Valuations">

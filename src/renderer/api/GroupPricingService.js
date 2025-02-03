@@ -87,5 +87,16 @@ export default {
   },
   getResultSummary(quoteId) {
     return Api.get('/group-pricing/get-quote/' + quoteId + '/result-summary')
+  },
+  createInsurer(formData) {
+    return Api.post('/group-pricing/insurers', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Accept: 'multipart/form-data'
+      }
+    })
+  },
+  getInsurer() {
+    return Api.get('/group-pricing/insurers')
   }
 }
