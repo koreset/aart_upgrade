@@ -168,7 +168,7 @@ const createQuotePdf = async () => {
     const insurerAddress = `${insurer.value.address_line_1}, ${insurer.value.address_line_2}`
     const insurerAddress1 = `${insurer.value.city}, ${insurer.value.province}, ${insurer.value.post_code}`
     const insurerCountry = `${insurer.value.country}`
-    const insurerContact = `Tel: ${insurer.value.phone}, Email: ${insurer.value.email}`
+    const insurerContact = `Tel: ${insurer.value.telephone}, Email: ${insurer.value.email}`
 
     const insurerText = [
       insurerName,

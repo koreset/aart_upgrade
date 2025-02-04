@@ -80,7 +80,7 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                  v-model="insurerData.phone"
+                  v-model="insurerData.telephone"
                   variant="outlined"
                   density="compact"
                   label="Telephone"
@@ -197,7 +197,7 @@ const insurerData: any = ref({
   province: '',
   post_code: '',
   country: '',
-  phone: '',
+  telephone: '',
   email: ''
 })
 
@@ -257,6 +257,13 @@ onMounted(() => {
       brokers.value = []
     }
   })
+  GroupPricingService.getInsurer().then((res) => {
+    if (res.data) {
+      insurerData.value = res.data
+      console.log('Insurer Data', res.data)
+      imagePreview.value = `data:image/*;base64,${insurerData.value.logo}`
+    }
+  })
 })
 
 const onFileChange = (e: any) => {
@@ -268,6 +275,7 @@ const onFileChange = (e: any) => {
     reader.onload = (e) => {
       if (e.target) {
         imagePreview.value = e.target.result
+        console.log('Image Preview', imagePreview.value)
       }
     }
     reader.readAsDataURL(file)

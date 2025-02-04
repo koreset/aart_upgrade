@@ -59,495 +59,581 @@
               </base-card>
             </v-dialog>
             <v-divider class="my-4"></v-divider>
-            <v-row>
-              <v-col cols="3"><p>Scheme Name</p></v-col>
-              <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.scheme_name }}</p></v-col
-              >
-              <v-col cols="3"><p>Start Date</p></v-col>
-              <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.commencement_date }}</p></v-col
-              >
-            </v-row>
-            <v-row>
-              <v-col cols="3"><p>Industry</p></v-col>
-              <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.industry }}</p></v-col
-              >
-              <v-col cols="3"><p>Renewal/New</p></v-col>
-              <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.quote_type }}</p></v-col
-              >
-            </v-row>
-            <v-row>
-              <v-col cols="3"><p>Broker</p></v-col>
-              <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.quote_broker.name }}</p></v-col
-              >
-              <v-col cols="3"><p>Voluntary/Compulsory</p></v-col>
-              <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.obligation_type }}</p></v-col
-              >
-            </v-row>
-            <v-row>
-              <v-col cols="3"><p>Currency</p></v-col>
-              <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.currency }}</p></v-col
-              >
-              <v-col cols="3"><p>Exchange Rate</p></v-col>
-              <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.exchangeRate }}</p></v-col
-              >
-            </v-row>
-            <v-row>
-              <v-col cols="3"><p>Expense Loading</p></v-col>
-              <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.loadings.expense_loading }}</p></v-col
-              >
-              <v-col cols="3"><p>Commission Rate</p></v-col>
-              <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.loadings.commission_loading }}</p></v-col
-              >
-            </v-row>
-            <v-row>
-              <v-col cols="3"><p>Profit Loading</p></v-col>
-              <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.loadings.profit_loading }}</p></v-col
-              >
-              <v-col cols="3"><p>Normal Retirement Age</p></v-col>
-              <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.normal_retirement_age }}</p></v-col
-              >
-            </v-row>
-            <v-row>
-              <v-col cols="3"><p>Cover Termination Age</p></v-col>
-              <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.gla.cover_termination_age }}</p></v-col
-              >
-              <v-col cols="3"><p>Accelerated Benefit Discount</p></v-col>
-              <v-col cols="3"
-                ><p class="text-right content-bg">{{
-                  quote.loadings.accelerated_benefit_discount
-                }}</p></v-col
-              >
-            </v-row>
-            <v-row>
-              <v-col cols="3"><p>Free Cover Limit</p></v-col>
-              <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.free_cover_limit }}</p></v-col
-              >
-              <v-col cols="3"><p>Experience Rating</p></v-col>
-              <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.experience_rating }}</p></v-col
-              >
-            </v-row>
-            <v-row>
-              <v-col cols="3"><p>Overall Premium Discount</p></v-col>
-              <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.loadings.discount }}</p></v-col
-              >
-              <v-col cols="3"><p>Occupation Class</p></v-col>
-              <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.occupation_class }}</p></v-col
-              >
-            </v-row>
-            <v-row>
-              <v-col cols="3"><p>Terminal Illness Benefit</p></v-col>
-              <v-col cols="3"
-                ><p class="text-right content-bg">{{
-                  quote.gla.terminal_illness_benefit
-                }}</p></v-col
-              >
-              <v-col cols="3"><p>Multiples of Salary</p></v-col>
-              <v-col cols="3"
-                ><p class="text-right content-bg">{{ quote.gla.salary_multiple }}</p></v-col
-              >
-            </v-row>
-            <v-row>
-              <v-col cols="3"><p>Basis</p></v-col>
-              <v-col cols="3"
-                ><p class="text-right content-bg">{{ dashIfEmpty(quote.basis) }}</p></v-col
-              >
-            </v-row>
-            <v-divider class="my-4"></v-divider>
-            <v-expansion-panels>
-              <v-expansion-panel elevation="1" tile>
-                <v-expansion-panel-title
-                  ><v-row
-                    ><v-col cols="5"> <p>Group Life Assurance (GLA)</p> </v-col>
-                  </v-row></v-expansion-panel-title
+            <h3>Quote Input Data</h3>
+            <v-container>
+              <v-row>
+                <v-col cols="3"><p>Scheme Name</p></v-col>
+                <v-col cols="3"
+                  ><p class="text-right content-bg">{{ quote.scheme_name }}</p></v-col
                 >
-                <v-expansion-panel-text>
-                  <v-row>
-                    <v-col cols="3"><p>Salary Multiple</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{ quote.gla.salary_multiple }}</p></v-col
-                    >
-                    <v-col cols="3"><p>Terminal Illness Benefit</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{
-                        quote.gla.terminal_illness_benefit
-                      }}</p></v-col
-                    >
-                  </v-row>
-                  <v-row>
-                    <v-col cols="3"><p>Waiting Period</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{ quote.gla.waiting_period }}</p></v-col
-                    >
-                  </v-row>
-                </v-expansion-panel-text>
-              </v-expansion-panel>
-              <v-expansion-panel elevation="1" tile>
-                <v-expansion-panel-title
-                  ><v-row
-                    ><v-col cols="5"> <p>Spouse Group Life Assurance (GLA)</p> </v-col>
-                    <v-checkbox
-                      v-model:model-value="quote.sgla_benefit"
-                      density="compact"
-                      hide-details
-                      readonly
-                      disabled
-                    ></v-checkbox> </v-row
-                ></v-expansion-panel-title>
-                <v-expansion-panel-text>
-                  <v-row>
-                    <v-col cols="3"><p>Cover Termination Age</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{
-                        quote.sgla.cover_termination_age
-                      }}</p></v-col
-                    >
-                    <v-col cols="3"><p>Maximum Benefit</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{ quote.sgla.max_benefit }}</p></v-col
-                    >
-                  </v-row>
-                  <v-row>
-                    <v-col cols="3"><p>Spousal Percentage</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{ quote.sgla.sgla_percentage }}</p></v-col
-                    >
-                  </v-row>
-                </v-expansion-panel-text>
-              </v-expansion-panel>
-              <v-expansion-panel elevation="1" tile>
-                <v-expansion-panel-title
-                  ><v-row
-                    ><v-col cols="5"> <p>Permanent Total Disability</p> </v-col>
-                    <v-checkbox
-                      v-model:model-value="quote.ptd_benefit"
-                      density="compact"
-                      hide-details
-                      readonly
-                      disabled
-                    ></v-checkbox> </v-row
-                ></v-expansion-panel-title>
-                <v-expansion-panel-text>
-                  <v-row>
-                    <v-col cols="3"><p>Benefit Type</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{ quote.ptd.benefit_type }}</p></v-col
-                    >
-                    <v-col cols="3"><p>Cover Termination Age</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{
-                        quote.ptd.cover_termination_age
-                      }}</p></v-col
-                    >
-                  </v-row>
-                  <v-row>
-                    <v-col cols="3"><p>Deferred Period</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{ quote.ptd.deferred_period }}</p></v-col
-                    >
-                    <v-col cols="3"><p>Disability Definition</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{
-                        quote.ptd.disability_definition
-                      }}</p></v-col
-                    >
-                  </v-row>
-                  <v-row>
-                    <v-col cols="3"><p>Risk Type</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{ quote.ptd.risk_type }}</p></v-col
-                    >
-                    <v-col cols="3"><p>Multiples of Salary</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{ quote.ptd.salary_multiple }}</p></v-col
-                    >
-                  </v-row>
-                </v-expansion-panel-text>
-              </v-expansion-panel>
-              <v-expansion-panel elevation="1" tile>
-                <v-expansion-panel-title
-                  ><v-row
-                    ><v-col cols="5"> <p>Critical Illness</p> </v-col>
-                    <v-checkbox
-                      v-model:model-value="quote.ci_benefit"
-                      density="compact"
-                      hide-details
-                      readonly
-                      disabled
-                    ></v-checkbox> </v-row
-                ></v-expansion-panel-title>
-                <v-expansion-panel-text>
-                  <v-row>
-                    <v-col cols="3"><p>Benefit Structure</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{ quote.ci.benefit_structure }}</p></v-col
-                    >
-                    <v-col cols="3"><p>Cover Termination Age</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{
-                        dashIfEmpty(quote.ci.cover_termination_age)
-                      }}</p></v-col
-                    >
-                  </v-row>
-                  <v-row>
-                    <v-col cols="3"><p>Critical Illness Percentage</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{
-                        quote.ci.critical_illness_percentage
-                      }}</p></v-col
-                    >
-                  </v-row>
-                </v-expansion-panel-text>
-              </v-expansion-panel>
-              <v-expansion-panel elevation="1" tile>
-                <v-expansion-panel-title
-                  ><v-row
-                    ><v-col cols="5">
-                      <p>Personal Health Insurance / Temporary Total Disability</p>
-                    </v-col>
-                    <v-checkbox
-                      v-model:model-value="quote.phi_ttd_benefit"
-                      density="compact"
-                      hide-details
-                      readonly
-                      disabled
-                    ></v-checkbox> </v-row
-                ></v-expansion-panel-title>
-                <v-expansion-panel-text>
-                  <v-row>
-                    <v-col cols="3"><p>Benefit</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{ quote.phi_ttd.benefit }}</p></v-col
-                    >
-                    <v-col cols="3"><p>Risk Type</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{ quote.phi_ttd.risk_type }}</p></v-col
-                    >
-                  </v-row>
-                  <v-row>
-                    <v-col cols="3"><p>Cover Termination Age</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{
-                        quote.phi_ttd.cover_termination_age
-                      }}</p></v-col
-                    >
-                    <v-col cols="3"><p>Deferred Period (Months)</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{
-                        quote.phi_ttd.deferred_period
-                      }}</p></v-col
-                    >
-                  </v-row>
-                  <v-row>
-                    <v-col cols="3"><p>Disability Definition</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{
-                        quote.phi_ttd.disability_definition
-                      }}</p></v-col
-                    >
-                    <v-col cols="3"><p>Maximum Basic Benefit</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{
-                        quote.phi_ttd.maximum_benefit
-                      }}</p></v-col
-                    >
-                  </v-row>
-                  <v-row>
-                    <v-col cols="3"><p>Maximum Premium Waiver</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{
-                        quote.phi_ttd.max_premium_waiver
-                      }}</p></v-col
-                    >
-                    <v-col cols="3"><p>Monthly Benefit Percentage</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{
-                        quote.phi_ttd.monthly_benefit_percentage
-                      }}</p></v-col
-                    >
-                  </v-row>
-                  <v-row>
-                    <v-col cols="3"><p>Number of Monthly Payments</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{
-                        quote.phi_ttd.number_monthly_payments
-                      }}</p></v-col
-                    >
-                    <v-col cols="3"><p>PHI Escalation (%)</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{
-                        quote.phi_ttd.escalation_percentage
-                      }}</p></v-col
-                    >
-                  </v-row>
-                  <v-row>
-                    <v-col cols="3"><p>Premium Waiver Benefit</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{
-                        quote.phi_ttd.premium_waiver
-                      }}</p></v-col
-                    >
-                    <v-col cols="3"><p>Premium Waiver Percentage</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{
-                        quote.phi_ttd.premium_waiver_percentage
-                      }}</p></v-col
-                    >
-                  </v-row>
-                  <v-row>
-                    <v-col cols="3"><p>Waiting Period (Months)</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{
-                        quote.phi_ttd.waiting_period
-                      }}</p></v-col
-                    >
-                  </v-row>
-                </v-expansion-panel-text>
-              </v-expansion-panel>
-              <v-expansion-panel elevation="1" tile>
-                <v-expansion-panel-title
-                  ><v-row
-                    ><v-col cols="5">
-                      <p>Family Funeral</p>
-                    </v-col>
-                    <v-checkbox
-                      v-model:model-value="quote.family_funeral_benefit"
-                      density="compact"
-                      hide-details
-                      readonly
-                      disabled
-                    ></v-checkbox> </v-row
-                ></v-expansion-panel-title>
-                <v-expansion-panel-text>
-                  <v-row>
-                    <v-col cols="3"><p>Sum Assured (Main Member)</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{
-                        quote.group_family_funeral.main_member_funeral_sum_assured
-                      }}</p></v-col
-                    >
-                    <v-col cols="3"><p>Sum Assured (Spouse)</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{
-                        quote.group_family_funeral.spouse_funeral_sum_assured
-                      }}</p></v-col
-                    >
-                  </v-row>
-                  <v-row>
-                    <v-col cols="3"><p>Sum Assured (Children)</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{
-                        quote.group_family_funeral.children_funeral_sum_assured
-                      }}</p></v-col
-                    >
-                    <v-col cols="3"><p>Sum Assured (Adult Dependants)</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{
-                        quote.group_family_funeral.adult_dependant_sum_assured
-                      }}</p></v-col
-                    >
-                  </v-row>
-                  <v-row>
-                    <v-col cols="3"><p>Maximum Children Covered</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{
-                        quote.group_family_funeral.max_children_covered
-                      }}</p></v-col
-                    >
-                    <v-col cols="3"><p>Sum Assured (Parent)</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{
-                        quote.group_family_funeral.parent_funeral_sum_assured
-                      }}</p></v-col
-                    >
-                  </v-row>
-                </v-expansion-panel-text>
-              </v-expansion-panel>
-            </v-expansion-panels>
-            <v-divider class="my-4"></v-divider>
-            <v-row>
-              <v-col>
-                <v-table>
-                  <tbody>
-                    <tr v-for="item in relatedTables" :key="item.table_type">
-                      <td :class="{ unpopulated: !item.populated }" style="width: 60%">{{
-                        item.table_type
-                      }}</td>
-                      <td style="text-align: left">
-                        <v-btn
-                          class="mr-3"
-                          variant="outlined"
-                          rounded
-                          size="small"
-                          @click.stop="viewTable(item)"
-                        >
-                          <v-icon left color="primary">mdi-information</v-icon>
-                          <span>Info</span>
-                        </v-btn>
+                <v-col cols="3"><p>Start Date</p></v-col>
+                <v-col cols="3"
+                  ><p class="text-right content-bg">{{ quote.commencement_date }}</p></v-col
+                >
+              </v-row>
+              <v-row>
+                <v-col cols="3"><p>Industry</p></v-col>
+                <v-col cols="3"
+                  ><p class="text-right content-bg">{{ quote.industry }}</p></v-col
+                >
+                <v-col cols="3"><p>Renewal/New</p></v-col>
+                <v-col cols="3"
+                  ><p class="text-right content-bg">{{ quote.quote_type }}</p></v-col
+                >
+              </v-row>
+              <v-row>
+                <v-col cols="3"><p>Broker</p></v-col>
+                <v-col cols="3"
+                  ><p class="text-right content-bg">{{ quote.quote_broker.name }}</p></v-col
+                >
+                <v-col cols="3"><p>Voluntary/Compulsory</p></v-col>
+                <v-col cols="3"
+                  ><p class="text-right content-bg">{{ quote.obligation_type }}</p></v-col
+                >
+              </v-row>
+              <v-row>
+                <v-col cols="3"><p>Currency</p></v-col>
+                <v-col cols="3"
+                  ><p class="text-right content-bg">{{ quote.currency }}</p></v-col
+                >
+                <v-col cols="3"><p>Exchange Rate</p></v-col>
+                <v-col cols="3"
+                  ><p class="text-right content-bg">{{ quote.exchangeRate }}</p></v-col
+                >
+              </v-row>
+              <v-row>
+                <v-col cols="3"><p>Expense Loading</p></v-col>
+                <v-col cols="3"
+                  ><p class="text-right content-bg">{{ quote.loadings.expense_loading }}</p></v-col
+                >
+                <v-col cols="3"><p>Commission Rate</p></v-col>
+                <v-col cols="3"
+                  ><p class="text-right content-bg">{{
+                    quote.loadings.commission_loading
+                  }}</p></v-col
+                >
+              </v-row>
+              <v-row>
+                <v-col cols="3"><p>Profit Loading</p></v-col>
+                <v-col cols="3"
+                  ><p class="text-right content-bg">{{ quote.loadings.profit_loading }}</p></v-col
+                >
+                <v-col cols="3"><p>Normal Retirement Age</p></v-col>
+                <v-col cols="3"
+                  ><p class="text-right content-bg">{{ quote.normal_retirement_age }}</p></v-col
+                >
+              </v-row>
+              <v-row>
+                <v-col cols="3"><p>Cover Termination Age</p></v-col>
+                <v-col cols="3"
+                  ><p class="text-right content-bg">{{ quote.gla.cover_termination_age }}</p></v-col
+                >
+                <v-col cols="3"><p>Accelerated Benefit Discount</p></v-col>
+                <v-col cols="3"
+                  ><p class="text-right content-bg">{{
+                    quote.loadings.accelerated_benefit_discount
+                  }}</p></v-col
+                >
+              </v-row>
+              <v-row>
+                <v-col cols="3"><p>Free Cover Limit</p></v-col>
+                <v-col cols="3"
+                  ><p class="text-right content-bg">{{ quote.free_cover_limit }}</p></v-col
+                >
+                <v-col cols="3"><p>Experience Rating</p></v-col>
+                <v-col cols="3"
+                  ><p class="text-right content-bg">{{ quote.experience_rating }}</p></v-col
+                >
+              </v-row>
+              <v-row>
+                <v-col cols="3"><p>Overall Premium Discount</p></v-col>
+                <v-col cols="3"
+                  ><p class="text-right content-bg">{{ quote.loadings.discount }}</p></v-col
+                >
+                <v-col cols="3"><p>Occupation Class</p></v-col>
+                <v-col cols="3"
+                  ><p class="text-right content-bg">{{ quote.occupation_class }}</p></v-col
+                >
+              </v-row>
+              <v-row>
+                <v-col cols="3"><p>Terminal Illness Benefit</p></v-col>
+                <v-col cols="3"
+                  ><p class="text-right content-bg">{{
+                    quote.gla.terminal_illness_benefit
+                  }}</p></v-col
+                >
+                <v-col cols="3"><p>Multiples of Salary</p></v-col>
+                <v-col cols="3"
+                  ><p class="text-right content-bg">{{ quote.gla.salary_multiple }}</p></v-col
+                >
+              </v-row>
+              <v-row>
+                <v-col cols="3"><p>Basis</p></v-col>
+                <v-col cols="3"
+                  ><p class="text-right content-bg">{{ dashIfEmpty(quote.basis) }}</p></v-col
+                >
+              </v-row>
+              <v-divider class="my-4"></v-divider>
+              <h4>Benefits</h4>
+              <v-expansion-panels>
+                <v-expansion-panel elevation="1" tile>
+                  <v-expansion-panel-title
+                    ><v-row
+                      ><v-col cols="5"> <p>Group Life Assurance (GLA)</p> </v-col>
+                    </v-row></v-expansion-panel-title
+                  >
+                  <v-expansion-panel-text>
+                    <v-row>
+                      <v-col cols="3"><p>Salary Multiple</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{ quote.gla.salary_multiple }}</p></v-col
+                      >
+                      <v-col cols="3"><p>Terminal Illness Benefit</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{
+                          quote.gla.terminal_illness_benefit
+                        }}</p></v-col
+                      >
+                    </v-row>
+                    <v-row>
+                      <v-col cols="3"><p>Waiting Period</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{ quote.gla.waiting_period }}</p></v-col
+                      >
+                    </v-row>
+                  </v-expansion-panel-text>
+                </v-expansion-panel>
+                <v-expansion-panel elevation="1" tile>
+                  <v-expansion-panel-title
+                    ><v-row
+                      ><v-col cols="5"> <p>Spouse Group Life Assurance (GLA)</p> </v-col>
+                      <v-checkbox
+                        v-model:model-value="quote.sgla_benefit"
+                        density="compact"
+                        hide-details
+                        readonly
+                        disabled
+                      ></v-checkbox> </v-row
+                  ></v-expansion-panel-title>
+                  <v-expansion-panel-text>
+                    <v-row>
+                      <v-col cols="3"><p>Cover Termination Age</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{
+                          quote.sgla.cover_termination_age
+                        }}</p></v-col
+                      >
+                      <v-col cols="3"><p>Maximum Benefit</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{ quote.sgla.max_benefit }}</p></v-col
+                      >
+                    </v-row>
+                    <v-row>
+                      <v-col cols="3"><p>Spousal Percentage</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{
+                          quote.sgla.sgla_percentage
+                        }}</p></v-col
+                      >
+                    </v-row>
+                  </v-expansion-panel-text>
+                </v-expansion-panel>
+                <v-expansion-panel elevation="1" tile>
+                  <v-expansion-panel-title
+                    ><v-row
+                      ><v-col cols="5"> <p>Permanent Total Disability</p> </v-col>
+                      <v-checkbox
+                        v-model:model-value="quote.ptd_benefit"
+                        density="compact"
+                        hide-details
+                        readonly
+                        disabled
+                      ></v-checkbox> </v-row
+                  ></v-expansion-panel-title>
+                  <v-expansion-panel-text>
+                    <v-row>
+                      <v-col cols="3"><p>Benefit Type</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{ quote.ptd.benefit_type }}</p></v-col
+                      >
+                      <v-col cols="3"><p>Cover Termination Age</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{
+                          quote.ptd.cover_termination_age
+                        }}</p></v-col
+                      >
+                    </v-row>
+                    <v-row>
+                      <v-col cols="3"><p>Deferred Period</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{ quote.ptd.deferred_period }}</p></v-col
+                      >
+                      <v-col cols="3"><p>Disability Definition</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{
+                          quote.ptd.disability_definition
+                        }}</p></v-col
+                      >
+                    </v-row>
+                    <v-row>
+                      <v-col cols="3"><p>Risk Type</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{ quote.ptd.risk_type }}</p></v-col
+                      >
+                      <v-col cols="3"><p>Multiples of Salary</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{ quote.ptd.salary_multiple }}</p></v-col
+                      >
+                    </v-row>
+                  </v-expansion-panel-text>
+                </v-expansion-panel>
+                <v-expansion-panel elevation="1" tile>
+                  <v-expansion-panel-title
+                    ><v-row
+                      ><v-col cols="5"> <p>Critical Illness</p> </v-col>
+                      <v-checkbox
+                        v-model:model-value="quote.ci_benefit"
+                        density="compact"
+                        hide-details
+                        readonly
+                        disabled
+                      ></v-checkbox> </v-row
+                  ></v-expansion-panel-title>
+                  <v-expansion-panel-text>
+                    <v-row>
+                      <v-col cols="3"><p>Benefit Structure</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{
+                          quote.ci.benefit_structure
+                        }}</p></v-col
+                      >
+                      <v-col cols="3"><p>Cover Termination Age</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{
+                          dashIfEmpty(quote.ci.cover_termination_age)
+                        }}</p></v-col
+                      >
+                    </v-row>
+                    <v-row>
+                      <v-col cols="3"><p>Critical Illness Percentage</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{
+                          quote.ci.critical_illness_percentage
+                        }}</p></v-col
+                      >
+                    </v-row>
+                  </v-expansion-panel-text>
+                </v-expansion-panel>
+                <v-expansion-panel elevation="1" tile>
+                  <v-expansion-panel-title
+                    ><v-row
+                      ><v-col cols="5">
+                        <p>Personal Health Insurance / Temporary Total Disability</p>
+                      </v-col>
+                      <v-checkbox
+                        v-model:model-value="quote.phi_ttd_benefit"
+                        density="compact"
+                        hide-details
+                        readonly
+                        disabled
+                      ></v-checkbox> </v-row
+                  ></v-expansion-panel-title>
+                  <v-expansion-panel-text>
+                    <v-row>
+                      <v-col cols="3"><p>Benefit</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{ quote.phi_ttd.benefit }}</p></v-col
+                      >
+                      <v-col cols="3"><p>Risk Type</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{ quote.phi_ttd.risk_type }}</p></v-col
+                      >
+                    </v-row>
+                    <v-row>
+                      <v-col cols="3"><p>Cover Termination Age</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{
+                          quote.phi_ttd.cover_termination_age
+                        }}</p></v-col
+                      >
+                      <v-col cols="3"><p>Deferred Period (Months)</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{
+                          quote.phi_ttd.deferred_period
+                        }}</p></v-col
+                      >
+                    </v-row>
+                    <v-row>
+                      <v-col cols="3"><p>Disability Definition</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{
+                          quote.phi_ttd.disability_definition
+                        }}</p></v-col
+                      >
+                      <v-col cols="3"><p>Maximum Basic Benefit</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{
+                          quote.phi_ttd.maximum_benefit
+                        }}</p></v-col
+                      >
+                    </v-row>
+                    <v-row>
+                      <v-col cols="3"><p>Maximum Premium Waiver</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{
+                          quote.phi_ttd.max_premium_waiver
+                        }}</p></v-col
+                      >
+                      <v-col cols="3"><p>Monthly Benefit Percentage</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{
+                          quote.phi_ttd.monthly_benefit_percentage
+                        }}</p></v-col
+                      >
+                    </v-row>
+                    <v-row>
+                      <v-col cols="3"><p>Number of Monthly Payments</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{
+                          quote.phi_ttd.number_monthly_payments
+                        }}</p></v-col
+                      >
+                      <v-col cols="3"><p>PHI Escalation (%)</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{
+                          quote.phi_ttd.escalation_percentage
+                        }}</p></v-col
+                      >
+                    </v-row>
+                    <v-row>
+                      <v-col cols="3"><p>Premium Waiver Benefit</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{
+                          quote.phi_ttd.premium_waiver
+                        }}</p></v-col
+                      >
+                      <v-col cols="3"><p>Premium Waiver Percentage</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{
+                          quote.phi_ttd.premium_waiver_percentage
+                        }}</p></v-col
+                      >
+                    </v-row>
+                    <v-row>
+                      <v-col cols="3"><p>Waiting Period (Months)</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{
+                          quote.phi_ttd.waiting_period
+                        }}</p></v-col
+                      >
+                    </v-row>
+                  </v-expansion-panel-text>
+                </v-expansion-panel>
+                <v-expansion-panel elevation="1" tile>
+                  <v-expansion-panel-title
+                    ><v-row
+                      ><v-col cols="5">
+                        <p>Family Funeral</p>
+                      </v-col>
+                      <v-checkbox
+                        v-model:model-value="quote.family_funeral_benefit"
+                        density="compact"
+                        hide-details
+                        readonly
+                        disabled
+                      ></v-checkbox> </v-row
+                  ></v-expansion-panel-title>
+                  <v-expansion-panel-text>
+                    <v-row>
+                      <v-col cols="3"><p>Sum Assured (Main Member)</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{
+                          quote.group_family_funeral.main_member_funeral_sum_assured
+                        }}</p></v-col
+                      >
+                      <v-col cols="3"><p>Sum Assured (Spouse)</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{
+                          quote.group_family_funeral.spouse_funeral_sum_assured
+                        }}</p></v-col
+                      >
+                    </v-row>
+                    <v-row>
+                      <v-col cols="3"><p>Sum Assured (Children)</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{
+                          quote.group_family_funeral.children_funeral_sum_assured
+                        }}</p></v-col
+                      >
+                      <v-col cols="3"><p>Sum Assured (Adult Dependants)</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{
+                          quote.group_family_funeral.adult_dependant_sum_assured
+                        }}</p></v-col
+                      >
+                    </v-row>
+                    <v-row>
+                      <v-col cols="3"><p>Maximum Children Covered</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{
+                          quote.group_family_funeral.max_children_covered
+                        }}</p></v-col
+                      >
+                      <v-col cols="3"><p>Sum Assured (Parent)</p></v-col>
+                      <v-col cols="3"
+                        ><p class="text-right content-bg">{{
+                          quote.group_family_funeral.parent_funeral_sum_assured
+                        }}</p></v-col
+                      >
+                    </v-row>
+                  </v-expansion-panel-text>
+                </v-expansion-panel>
+              </v-expansion-panels>
+              <v-divider class="my-4"></v-divider>
+              <h4>Quote Tables</h4>
+              <v-row>
+                <v-col>
+                  <v-table>
+                    <tbody>
+                      <tr v-for="item in relatedTables" :key="item.table_type">
+                        <td :class="{ unpopulated: !item.populated }" style="width: 60%">{{
+                          item.table_type
+                        }}</td>
+                        <td style="text-align: left">
+                          <v-btn
+                            class="mr-3"
+                            variant="outlined"
+                            rounded
+                            size="small"
+                            @click.stop="viewTable(item)"
+                          >
+                            <v-icon left color="primary">mdi-information</v-icon>
+                            <span>Info</span>
+                          </v-btn>
 
-                        <v-btn
-                          v-if="
-                            item.table_type !== 'Group Pricing Parameters' &&
-                            item.table_type !== 'Member Rating Results' &&
-                            item.table_type !== 'Member Premium Schedules'
-                          "
-                          class="mr-3"
-                          variant="outlined"
-                          rounded
-                          size="small"
-                          @click.stop="openDialog(item)"
-                        >
-                          <v-icon left color="primary">mdi-upload</v-icon>
-                          <span>Upload</span>
-                        </v-btn>
-                        <v-btn
-                          v-if="item.table_type !== 'Group Pricing Parameters'"
-                          variant="outlined"
-                          rounded
-                          color="red"
-                          size="small"
-                          @click.stop="deleteTable(item)"
-                        >
-                          <v-icon left color="red">mdi-delete</v-icon>
-                          <span>Delete</span>
-                        </v-btn>
-                      </td>
-                    </tr>
-                  </tbody>
-                </v-table>
-              </v-col>
-            </v-row>
-            <v-row v-if="tableData.length > 0 && !loadingData">
-              <v-col>
-                <data-grid
-                  :columnDefs="columnDefs"
-                  :show-close-button="true"
-                  :rowData="tableData"
-                  :table-title="selectedTable"
-                  :pagination="true"
-                  :rowCount="rowCount"
-                  @update:clear-data="clearData"
-                />
-              </v-col>
-            </v-row>
+                          <v-btn
+                            v-if="
+                              item.table_type !== 'Group Pricing Parameters' &&
+                              item.table_type !== 'Member Rating Results' &&
+                              item.table_type !== 'Member Premium Schedules'
+                            "
+                            class="mr-3"
+                            variant="outlined"
+                            rounded
+                            size="small"
+                            @click.stop="openDialog(item)"
+                          >
+                            <v-icon left color="primary">mdi-upload</v-icon>
+                            <span>Upload</span>
+                          </v-btn>
+                          <v-btn
+                            v-if="item.table_type !== 'Group Pricing Parameters'"
+                            variant="outlined"
+                            rounded
+                            color="red"
+                            size="small"
+                            @click.stop="deleteTable(item)"
+                          >
+                            <v-icon left color="red">mdi-delete</v-icon>
+                            <span>Delete</span>
+                          </v-btn>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </v-table>
+                </v-col>
+              </v-row>
+              <v-row v-if="tableData.length > 0 && !loadingData">
+                <v-col>
+                  <data-grid
+                    :columnDefs="columnDefs"
+                    :show-close-button="true"
+                    :rowData="tableData"
+                    :table-title="selectedTable"
+                    :pagination="true"
+                    :rowCount="rowCount"
+                    @update:clear-data="clearData"
+                  />
+                </v-col>
+              </v-row>
+            </v-container>
             <v-divider class="my-4"></v-divider>
-            <output-summary v-if="quote !== null" :quote="quote" :resultSummary="resultSummary" />
+            <h3>Quote Run Results</h3>
+            <v-container>
+              <v-row>
+                <v-col>
+                  <v-table>
+                    <tbody>
+                      <tr v-for="item in relatedResultTables" :key="item.table_type">
+                        <td :class="{ unpopulated: !item.populated }" style="width: 60%">{{
+                          item.table_type
+                        }}</td>
+                        <td style="text-align: left">
+                          <v-btn
+                            class="mr-3"
+                            variant="outlined"
+                            rounded
+                            size="small"
+                            @click.stop="viewTable(item)"
+                          >
+                            <v-icon left color="primary">mdi-information</v-icon>
+                            <span>Info</span>
+                          </v-btn>
+
+                          <v-btn
+                            v-if="
+                              item.table_type !== 'Group Pricing Parameters' &&
+                              item.table_type !== 'Member Rating Results' &&
+                              item.table_type !== 'Member Premium Schedules'
+                            "
+                            class="mr-3"
+                            variant="outlined"
+                            rounded
+                            size="small"
+                            @click.stop="openDialog(item)"
+                          >
+                            <v-icon left color="primary">mdi-upload</v-icon>
+                            <span>Upload</span>
+                          </v-btn>
+                          <v-btn
+                            v-if="item.table_type !== 'Group Pricing Parameters'"
+                            variant="outlined"
+                            rounded
+                            color="red"
+                            size="small"
+                            @click.stop="deleteTable(item)"
+                          >
+                            <v-icon left color="red">mdi-delete</v-icon>
+                            <span>Delete</span>
+                          </v-btn>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </v-table>
+                </v-col>
+              </v-row>
+              <v-row v-if="resultTableData.length > 0 && !loadingData">
+                <v-col>
+                  <data-grid
+                    :columnDefs="columnDefs"
+                    :show-close-button="true"
+                    :rowData="resultTableData"
+                    :table-title="selectedTable"
+                    :pagination="true"
+                    :rowCount="rowCount"
+                    @update:clear-data="clearData"
+                  />
+                </v-col>
+              </v-row>
+            </v-container>
+            <p v-if="displaySummary" class="text-right mb-n5"
+              ><v-btn variant="plain" @click="displaySummary = false">close</v-btn></p
+            >
+            <output-summary
+              v-if="quote !== null && displaySummary"
+              :quote="quote"
+              :resultSummary="resultSummary"
+            />
             <v-divider class="my-4"></v-divider>
             <v-row>
               <v-col cols="3"><p>Created By</p></v-col>
@@ -622,29 +708,21 @@ const columnDefs: any = ref([])
 const rowCount: any = ref(0)
 const parameterBases = ref([])
 const resultSummary: any = ref([])
+const displaySummary = ref(false)
 
 const snackbar = ref(false)
 const timeout = 2000
 const snackbarText = ref('')
 
 const tableData = ref([])
+const resultTableData = ref([])
 const selectedTable: any = ref(null)
 const loadingData = ref(false)
 const quote: any = ref(null)
 const broker = ref(null)
 
-const relatedTables = computed(() => {
+const relatedResultTables = computed(() => {
   const tables: any = []
-  if (quote.value.member_data_count > 0) {
-    tables.push({ table_type: 'Member Data', value: 'member_data', populated: true })
-  } else {
-    tables.push({ table_type: 'Member Data', value: 'member_data', populated: false })
-  }
-  if (quote.value.claims_experience_count > 0) {
-    tables.push({ table_type: 'Claims Experience', value: 'claims_experience', populated: true })
-  } else {
-    tables.push({ table_type: 'Claims Experience', value: 'claims_experience', populated: false })
-  }
 
   if (quote.value.member_rating_result_count > 0) {
     tables.push({
@@ -672,6 +750,28 @@ const relatedTables = computed(() => {
       value: 'member_premium_schedules',
       populated: false
     })
+  }
+
+  tables.push({
+    table_type: 'Output Summary',
+    value: 'output_summary',
+    populated: true
+  })
+
+  return tables
+})
+
+const relatedTables = computed(() => {
+  const tables: any = []
+  if (quote.value.member_data_count > 0) {
+    tables.push({ table_type: 'Member Data', value: 'member_data', populated: true })
+  } else {
+    tables.push({ table_type: 'Member Data', value: 'member_data', populated: false })
+  }
+  if (quote.value.claims_experience_count > 0) {
+    tables.push({ table_type: 'Claims Experience', value: 'claims_experience', populated: true })
+  } else {
+    tables.push({ table_type: 'Claims Experience', value: 'claims_experience', populated: false })
   }
 
   tables.push({
@@ -759,6 +859,7 @@ onMounted(async () => {
 
 const clearData = () => {
   tableData.value = []
+  resultTableData.value = []
   selectedTable.value = ''
 }
 
@@ -822,16 +923,27 @@ const deleteTable = async (item: any) => {
 }
 
 const viewTable = async (item: any) => {
+  // special case for output summary
+  if (item.table_type === 'Output Summary') {
+    displaySummary.value = true
+    return
+  }
   try {
     console.log('View Table:', item)
     const res = await GroupPricingService.getQuoteTable(quote.value.id, item.value)
     console.log(res.data)
     if (res.data !== null && res.data.length > 0) {
-      tableData.value = res.data
+      if (item.value === 'member_rating_results' || item.value === 'member_premium_schedules') {
+        resultTableData.value = res.data
+      } else {
+        tableData.value = res.data
+      }
+
       selectedTable.value = item.table_type
       createColumnDefs(res.data)
     } else {
       tableData.value = []
+      resultTableData.value = []
       selectedTable.value = ''
       snackbarText.value = 'No data found for this table'
       snackbar.value = true
