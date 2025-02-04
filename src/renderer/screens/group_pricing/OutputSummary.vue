@@ -681,7 +681,7 @@
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(resultSummary.exp_proportion_ptd_office_premium_salary)
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_proportion_ptd_office_premium_salary))
                         }}</p></v-col
                       >
                       <v-col cols="3"
@@ -2220,7 +2220,7 @@
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(resultSummary.exp_proportion_sgla_office_premium_salary)
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_proportion_sgla_office_premium_salary))
                         }}</p></v-col
                       >
                       <v-col cols="3"
