@@ -246,14 +246,14 @@
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.total_gla_annual_risk_premium)
+                            roundUpToTwoDecimals(resultSummary.exp_total_gla_annual_risk_premium)
                           )
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.total_gla_annual_risk_premium)
+                            roundUpToTwoDecimals(resultSummary.exp_total_gla_annual_risk_premium)
                           )
                         }}</p></v-col
                       >
@@ -555,14 +555,14 @@
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.total_ptd_annual_risk_premium)
+                            roundUpToTwoDecimals(resultSummary.exp_total_ptd_annual_risk_premium)
                           )
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.total_ptd_annual_risk_premium)
+                            roundUpToTwoDecimals(resultSummary.exp_total_ptd_annual_risk_premium)
                           )
                         }}</p></v-col
                       >
@@ -681,7 +681,11 @@
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_proportion_ptd_office_premium_salary))
+                          dashIfEmpty(
+                            roundUpToTwoDecimals(
+                              resultSummary.exp_proportion_ptd_office_premium_salary
+                            )
+                          )
                         }}</p></v-col
                       >
                       <v-col cols="3"
@@ -860,14 +864,14 @@
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.total_phi_annual_risk_premium)
+                            roundUpToTwoDecimals(resultSummary.exp_total_phi_annual_risk_premium)
                           )
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.total_phi_annual_risk_premium)
+                            roundUpToTwoDecimals(resultSummary.exp_total_phi_annual_risk_premium)
                           )
                         }}</p></v-col
                       >
@@ -1169,14 +1173,14 @@
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.total_phi_annual_risk_premium)
+                            roundUpToTwoDecimals(resultSummary.exp_total_phi_annual_risk_premium)
                           )
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.total_phi_annual_risk_premium)
+                            roundUpToTwoDecimals(resultSummary.exp_total_phi_annual_risk_premium)
                           )
                         }}</p></v-col
                       >
@@ -1478,14 +1482,14 @@
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.total_phi_annual_risk_premium)
+                            roundUpToTwoDecimals(resultSummary.exp_total_phi_annual_risk_premium)
                           )
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.total_phi_annual_risk_premium)
+                            roundUpToTwoDecimals(resultSummary.exp_total_phi_annual_risk_premium)
                           )
                         }}</p></v-col
                       >
@@ -1781,14 +1785,14 @@
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.total_ci_annual_risk_premium)
+                            roundUpToTwoDecimals(resultSummary.exp_total_ci_annual_risk_premium)
                           )
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.total_ci_annual_risk_premium)
+                            roundUpToTwoDecimals(resultSummary.exp_total_ci_annual_risk_premium)
                           )
                         }}</p></v-col
                       >
@@ -2090,14 +2094,14 @@
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.total_sgla_annual_risk_premium)
+                            roundUpToTwoDecimals(resultSummary.exp_total_sgla_annual_risk_premium)
                           )
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.total_sgla_annual_risk_premium)
+                            roundUpToTwoDecimals(resultSummary.exp_total_sgla_annual_risk_premium)
                           )
                         }}</p></v-col
                       >
@@ -2220,7 +2224,11 @@
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_proportion_sgla_office_premium_salary))
+                          dashIfEmpty(
+                            roundUpToTwoDecimals(
+                              resultSummary.exp_proportion_sgla_office_premium_salary
+                            )
+                          )
                         }}</p></v-col
                       >
                       <v-col cols="3"
@@ -2285,14 +2293,14 @@
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.total_fun_annual_risk_premium)
+                            roundUpToTwoDecimals(resultSummary.exp_total_fun_annual_risk_premium)
                           )
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.total_fun_annual_risk_premium)
+                            roundUpToTwoDecimals(resultSummary.exp_total_fun_annual_risk_premium)
                           )
                         }}</p></v-col
                       >
