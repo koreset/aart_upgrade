@@ -267,12 +267,16 @@
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_gla_risk_rate_per_1000_sa))
+                          dashIfEmpty(
+                            roundUpToTwoDecimals(resultSummary.exp_gla_risk_rate_per_1000_sa)
+                          )
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_gla_risk_rate_per_1000_sa))
+                          dashIfEmpty(
+                            roundUpToTwoDecimals(resultSummary.exp_gla_risk_rate_per_1000_sa)
+                          )
                         }}</p></v-col
                       >
                     </v-row>
@@ -282,27 +286,27 @@
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.proportion_gla_annual_risk_premium_salary*100
+                              resultSummary.proportion_gla_annual_risk_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_gla_annual_risk_premium_salary*100
+                              resultSummary.exp_proportion_gla_annual_risk_premium_salary * 100
                             )
-                          ) + "%"
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_gla_annual_risk_premium_salary*100
+                              resultSummary.exp_proportion_gla_annual_risk_premium_salary * 100
                             )
-                          ) + "%"
+                          ) + '%'
                         }}</p></v-col
                       >
                     </v-row>
@@ -366,26 +370,28 @@
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.proportion_gla_office_premium_salary*100)
-                          )+"%"
+                            roundUpToTwoDecimals(
+                              resultSummary.proportion_gla_office_premium_salary * 100
+                            )
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_gla_office_premium_salary*100
+                              resultSummary.exp_proportion_gla_office_premium_salary * 100
                             )
-                          )+ "%"
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_gla_office_premium_salary*100
+                              resultSummary.exp_proportion_gla_office_premium_salary * 100
                             )
-                          ) + "%"
+                          ) + '%'
                         }}</p></v-col
                       >
                     </v-row>
@@ -591,27 +597,27 @@
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.proportion_ptd_annual_risk_premium_salary*100
+                              resultSummary.proportion_ptd_annual_risk_premium_salary * 100
                             )
-                          )+ "%"
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_ptd_annual_risk_premium_salary*100
+                              resultSummary.exp_proportion_ptd_annual_risk_premium_salary * 100
                             )
-                          )+ "%"
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_ptd_annual_risk_premium_salary*100
+                              resultSummary.exp_proportion_ptd_annual_risk_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                     </v-row>
@@ -675,26 +681,28 @@
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.proportion_ptd_office_premium_salary*100)
-                          )+"%"
+                            roundUpToTwoDecimals(
+                              resultSummary.proportion_ptd_office_premium_salary * 100
+                            )
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_ptd_office_premium_salary*100
+                              resultSummary.exp_proportion_ptd_office_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_ptd_office_premium_salary*100
+                              resultSummary.exp_proportion_ptd_office_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                     </v-row>
@@ -894,27 +902,27 @@
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.proportion_ci_annual_risk_premium_salary*100
+                              resultSummary.proportion_ci_annual_risk_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_ci_annual_risk_premium_salary*100
+                              resultSummary.exp_proportion_ci_annual_risk_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_ci_annual_risk_premium_salary*100
+                              resultSummary.exp_proportion_ci_annual_risk_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                     </v-row>
@@ -978,26 +986,28 @@
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.proportion_ci_office_premium_salary*100)
-                          )+"%"
+                            roundUpToTwoDecimals(
+                              resultSummary.proportion_ci_office_premium_salary * 100
+                            )
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_ci_office_premium_salary*100
+                              resultSummary.exp_proportion_ci_office_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_ci_office_premium_salary*100
+                              resultSummary.exp_proportion_ci_office_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                     </v-row>
@@ -1081,23 +1091,17 @@
                       <v-col cols="3"><p>Total Capped Income</p></v-col>
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.total_phi_capped_income)
-                          )
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.total_phi_capped_income))
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.total_phi_capped_income)
-                          )
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.total_phi_capped_income))
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.total_phi_capped_income)
-                          )
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.total_phi_capped_income))
                         }}</p></v-col
                       >
                     </v-row>
@@ -1105,23 +1109,17 @@
                       <v-col cols="3"><p>Average Covered Sum Assured</p></v-col>
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.average_phi_capped_income)
-                          )
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.average_phi_capped_income))
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.average_phi_capped_income)
-                          )
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.average_phi_capped_income))
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.average_phi_capped_income)
-                          )
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.average_phi_capped_income))
                         }}</p></v-col
                       >
                     </v-row>
@@ -1197,27 +1195,27 @@
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.proportion_phi_annual_risk_premium_salary*100
+                              resultSummary.proportion_phi_annual_risk_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_phi_annual_risk_premium_salary*100
+                              resultSummary.exp_proportion_phi_annual_risk_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_phi_annual_risk_premium_salary*100
+                              resultSummary.exp_proportion_phi_annual_risk_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                     </v-row>
@@ -1281,26 +1279,28 @@
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.proportion_phi_office_premium_salary*100)
-                          )+"%"
+                            roundUpToTwoDecimals(
+                              resultSummary.proportion_phi_office_premium_salary * 100
+                            )
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_phi_office_premium_salary*100
+                              resultSummary.exp_proportion_phi_office_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_phi_office_premium_salary*100
+                              resultSummary.exp_proportion_phi_office_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                     </v-row>
@@ -1384,23 +1384,17 @@
                       <v-col cols="3"><p>Total Capped Income</p></v-col>
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.total_ttd_capped_income)
-                          )
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.total_ttd_capped_income))
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.total_ttd_capped_income)
-                          )
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.total_ttd_capped_income))
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.total_ttd_capped_income)
-                          )
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.total_ttd_capped_income))
                         }}</p></v-col
                       >
                     </v-row>
@@ -1408,23 +1402,17 @@
                       <v-col cols="3"><p>Average Capped Income</p></v-col>
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.average_ttd_capped_income)
-                          )
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.average_ttd_capped_income))
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.average_ttd_capped_income)
-                          )
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.average_ttd_capped_income))
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.average_ttd_capped_income)
-                          )
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.average_ttd_capped_income))
                         }}</p></v-col
                       >
                     </v-row>
@@ -1500,27 +1488,27 @@
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.proportion_phi_annual_risk_premium_salary*100
+                              resultSummary.proportion_phi_annual_risk_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_phi_annual_risk_premium_salary*100
+                              resultSummary.exp_proportion_phi_annual_risk_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_phi_annual_risk_premium_salary*100
+                              resultSummary.exp_proportion_phi_annual_risk_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                     </v-row>
@@ -1584,26 +1572,28 @@
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.proportion_phi_office_premium_salary*100)
-                          )+"%"
+                            roundUpToTwoDecimals(
+                              resultSummary.proportion_phi_office_premium_salary * 100
+                            )
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_phi_office_premium_salary*100
+                              resultSummary.exp_proportion_phi_office_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_phi_office_premium_salary*100
+                              resultSummary.exp_proportion_phi_office_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                     </v-row>
@@ -1811,27 +1801,27 @@
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.proportion_sgla_annual_risk_premium_salary*100
+                              resultSummary.proportion_sgla_annual_risk_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_sgla_annual_risk_premium_salary*100
+                              resultSummary.exp_proportion_sgla_annual_risk_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_sgla_annual_risk_premium_salary*100
+                              resultSummary.exp_proportion_sgla_annual_risk_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                     </v-row>
@@ -1896,27 +1886,27 @@
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.proportion_sgla_office_premium_salary*100
+                              resultSummary.proportion_sgla_office_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_sgla_office_premium_salary*100
+                              resultSummary.exp_proportion_sgla_office_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_sgla_office_premium_salary*100
+                              resultSummary.exp_proportion_sgla_office_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                     </v-row>
@@ -1970,17 +1960,27 @@
                       <v-col cols="3"><p>Risk Premium per Member per Month</p></v-col>
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.total_fun_annual_risk_premium/12))
+                          dashIfEmpty(
+                            roundUpToTwoDecimals(resultSummary.total_fun_annual_risk_premium / 12)
+                          )
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_total_fun_annual_risk_premium/12))
+                          dashIfEmpty(
+                            roundUpToTwoDecimals(
+                              resultSummary.exp_total_fun_annual_risk_premium / 12
+                            )
+                          )
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_total_fun_annual_risk_premium/12))
+                          dashIfEmpty(
+                            roundUpToTwoDecimals(
+                              resultSummary.exp_total_fun_annual_risk_premium / 12
+                            )
+                          )
                         }}</p></v-col
                       >
                     </v-row>
@@ -1990,27 +1990,27 @@
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.proportion_fun_annual_risk_premium_salary*100
+                              resultSummary.proportion_fun_annual_risk_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_fun_annual_risk_premium_salary*100
+                              resultSummary.exp_proportion_fun_annual_risk_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_fun_annual_risk_premium_salary*100
+                              resultSummary.exp_proportion_fun_annual_risk_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                     </v-row>
@@ -2047,17 +2047,27 @@
                       <v-col cols="3"><p>Office Premium per Member per Month</p></v-col>
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.total_fun_annual_office_premium/12))
+                          dashIfEmpty(
+                            roundUpToTwoDecimals(resultSummary.total_fun_annual_office_premium / 12)
+                          )
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_total_fun_annual_office_premium/12))
+                          dashIfEmpty(
+                            roundUpToTwoDecimals(
+                              resultSummary.exp_total_fun_annual_office_premium / 12
+                            )
+                          )
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_total_fun_annual_office_premium/12))
+                          dashIfEmpty(
+                            roundUpToTwoDecimals(
+                              resultSummary.exp_total_fun_annual_office_premium / 12
+                            )
+                          )
                         }}</p></v-col
                       >
                     </v-row>
@@ -2066,26 +2076,28 @@
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.proportion_fun_office_premium_salary*100)
-                          )+"%"
+                            roundUpToTwoDecimals(
+                              resultSummary.proportion_fun_office_premium_salary * 100
+                            )
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_fun_office_premium_salary*100
+                              resultSummary.exp_proportion_fun_office_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
                             roundUpToTwoDecimals(
-                              resultSummary.exp_proportion_fun_office_premium_salary*100
+                              resultSummary.exp_proportion_fun_office_premium_salary * 100
                             )
-                          )+"%"
+                          ) + '%'
                         }}</p></v-col
                       >
                     </v-row>

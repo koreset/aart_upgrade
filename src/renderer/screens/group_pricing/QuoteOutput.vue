@@ -75,7 +75,7 @@ const loadPdf = async () => {
 
   console.log('Loading PDF', pdfSrc.value)
 
-  pdfjsLib.GlobalWorkerOptions.workerSrc = `/js/pdf.worker.min.mjs`
+  pdfjsLib.GlobalWorkerOptions.workerSrc = `./js/pdf.worker.min.mjs`
 
   const pdf = await pdfjsLib.getDocument(pdfSrc.value).promise
   const page = await pdf.getPage(1) // Load the first page

@@ -23,11 +23,11 @@ const baseConfig = {
       {
         target: 'dmg',
         arch: ['arm64']
-      },
-      {
-        target: 'zip',
-        arch: ['arm64']
       }
+      // {
+      //   target: 'zip',
+      //   arch: ['arm64']
+      // }
       // {
       //   target: 'dmg',
       //   arch: ['x64', 'arm64', 'universal']
