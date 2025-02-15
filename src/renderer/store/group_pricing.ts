@@ -26,6 +26,8 @@ export const useGroupPricingStore = defineStore('groupPricing', {
       creation_date: null,
       quote_type: '',
       scheme_name: null,
+      scheme_contact: null,
+      scheme_email: null,
       quote_broker: null,
       obligation_type: '',
       commencement_date: null,

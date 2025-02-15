@@ -93,7 +93,7 @@ export const createMainWindow = async (mainWindow: BrowserWindow): Promise<Brows
         { role: 'zoomIn' },
         { role: 'zoomOut' },
         { type: 'separator' },
-        { role: 'toggleDevTools' }
+        { role: 'togglefullscreen' }
       ]
     },
     // { role: 'windowMenu' }
