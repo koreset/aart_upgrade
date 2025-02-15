@@ -29,7 +29,7 @@ import BaseCard from '@/renderer/components/BaseCard.vue'
 import { onMounted, ref } from 'vue'
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib'
 import * as pdfjsLib from 'pdfjs-dist'
-// import { saveAs } from 'file-saver'
+import { saveAs } from 'file-saver'
 import GroupPricingService from '@/renderer/api/GroupPricingService'
 
 const props = defineProps({
@@ -78,7 +78,7 @@ const loadPdf = async () => {
   pdfjsLib.GlobalWorkerOptions.workerSrc = `./js/pdf.worker.min.mjs`
 
   const pdf = await pdfjsLib.getDocument(pdfSrc.value).promise
-  const page = await pdf.getPage(1) // Load the first page
+  const page = await pdf.getPage(3) // Load the first page
 
   const viewport = page.getViewport({ scale: 1.8 })
   const canvas = canvasRef.value
@@ -269,7 +269,7 @@ const createQuotePdf = async () => {
   currentPage.drawText(quoteRemarks, {
     x: margin,
     y,
-    size: fontSize - 2,
+    size: fontSize,
     font,
     color: rgb(0, 0, 0)
   })
@@ -284,43 +284,43 @@ const createQuotePdf = async () => {
       benefit: 'Group Life Assurance',
       sumAssured: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.total_gla_capped_sum_assured))}`,
       annualPremium: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_total_gla_annual_office_premium))}`,
-      percentage: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_proportion_gla_office_premium_salary* 100) +"%")}`
+      percentage: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_proportion_gla_office_premium_salary * 100) + '%')}`
     },
     {
       benefit: 'Permanent Total Disability',
       sumAssured: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.total_ptd_capped_sum_assured))}`,
       annualPremium: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_total_ptd_annual_office_premium))}`,
-      percentage: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_proportion_ptd_office_premium_salary * 100) + "%")}`
+      percentage: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_proportion_ptd_office_premium_salary * 100) + '%')}`
     },
     {
       benefit: 'Critical Illness',
       sumAssured: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.total_ci_capped_sum_assured))}`,
       annualPremium: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_total_ci_annual_office_premium))}`,
-      percentage: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_proportion_ci_office_premium_salary * 100) + "%")}`
+      percentage: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_proportion_ci_office_premium_salary * 100) + '%')}`
     },
     {
       benefit: 'Spouses Group Life Assurance',
       sumAssured: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.total_sgla_capped_sum_assured))}`,
       annualPremium: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_total_sgla_annual_office_premium))}`,
-      percentage: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_proportion_sgla_office_premium_salary * 100) + "%")}`
+      percentage: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_proportion_sgla_office_premium_salary * 100) + '%')}`
     },
     {
       benefit: 'Permanent Health Insurance',
       sumAssured: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.total_phi_capped_income))}`,
       annualPremium: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_total_phi_annual_office_premium))}`,
-      percentage: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_proportion_phi_office_premium_salary * 100) + "%")}`
+      percentage: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_proportion_phi_office_premium_salary * 100) + '%')}`
     },
     {
       benefit: 'Total and Temporary Disability',
       sumAssured: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.total_ttd_capped_income))}`,
       annualPremium: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_total_ttd_annual_office_premium))}`,
-      percentage: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_proportion_ttd_office_premium_salary * 100) + "%")}`
+      percentage: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_proportion_ttd_office_premium_salary * 100) + '%')}`
     },
     {
       benefit: 'Sub Total/Total Premiums',
       sumAssured: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.total_gla_capped_sum_assured))}`,
       annualPremium: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_total_annual_premium_excl_funeral))}`,
-      percentage: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.proportion_exp_total_premium_excl_funeral_salary*100) + "%")}`
+      percentage: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.proportion_exp_total_premium_excl_funeral_salary * 100) + '%')}`
     }
   ]
 
@@ -354,7 +354,7 @@ const createQuotePdf = async () => {
       currentPage.drawText(header, {
         x: tableLeftX + table.tableColWidths.slice(0, i).reduce((a, b) => a + b, 0) + 3,
         y: tableTopY,
-        size: fontSize - 1,
+        size: fontSize,
         font: boldFont,
         color: rgb(0, 0, 0)
       })
@@ -383,7 +383,7 @@ const createQuotePdf = async () => {
         currentPage.drawText(value as string, {
           x: tableLeftX + table.tableColWidths.slice(0, j).reduce((a, b) => a + b, 0) + 5,
           y: tableTopY - (i + 1) * fontSize * 2 + 3,
-          size: fontSize - 2,
+          size: fontSize,
           font,
           color: rgb(0, 0, 0)
         })
@@ -394,7 +394,7 @@ const createQuotePdf = async () => {
     console.log('y', y)
 
     // add the table height to y
-    y -= table.tableRows.length * (fontSize - 2) * 2 + table.tableHeaders.length * fontSize * 2
+    y -= table.tableRows.length * fontSize * 2 + table.tableHeaders.length * fontSize * 2
 
     console.log('tableTopY', tableTopY)
     console.log('y', y)
@@ -406,7 +406,7 @@ const createQuotePdf = async () => {
   currentPage.drawText('Group Funeral', {
     x: margin,
     y,
-    size: fontSize - 2,
+    size: fontSize,
     font: boldFont,
     color: rgb(0, 0, 0)
   })
@@ -441,7 +441,7 @@ const createQuotePdf = async () => {
     currentPage.drawText(detail.label, {
       x: margin,
       y,
-      size: fontSize - 2,
+      size: fontSize,
       font,
       color: rgb(0, 0, 0)
     })
@@ -449,7 +449,7 @@ const createQuotePdf = async () => {
     currentPage.drawText(' :         ' + detail.value, {
       x: margin + 200,
       y,
-      size: fontSize - 2,
+      size: fontSize,
       font,
       color: rgb(0, 0, 0)
     })
@@ -466,25 +466,35 @@ const createQuotePdf = async () => {
 
   y -= fontSize * 2
 
+  if (y < 100) {
+    currentPage = page2
+    y = height - topMargin
+  }
+
   currentPage.drawText('The benefits and definitions of the cover are as follows:', {
     x: margin,
     y,
-    size: fontSize - 2,
+    size: fontSize,
     font: boldFont,
     color: rgb(0, 0, 0)
   })
 
   y -= fontSize * 2
 
+  if (y < 70) {
+    currentPage = page2
+    y = height - topMargin
+  }
+
   currentPage.drawText('Group Life Assurance', {
     x: margin,
     y,
-    size: fontSize - 2,
+    size: fontSize,
     font: boldFont,
     color: rgb(0, 0, 0)
   })
 
-  y -= fontSize
+  y -= fontSize + 3
 
   const groupLifeAssurance = [
     {
@@ -513,7 +523,7 @@ const createQuotePdf = async () => {
     currentPage.drawText(detail.label, {
       x: margin,
       y,
-      size: fontSize - 2,
+      size: fontSize,
       font,
       color: rgb(0, 0, 0)
     })
@@ -521,12 +531,12 @@ const createQuotePdf = async () => {
     currentPage.drawText(' :         ' + detail.value, {
       x: margin + 200,
       y,
-      size: fontSize - 2,
+      size: fontSize,
       font,
       color: rgb(0, 0, 0)
     })
 
-    y -= fontSize
+    y -= fontSize + 3
   })
 
   y -= fontSize * 2
@@ -539,7 +549,7 @@ const createQuotePdf = async () => {
   currentPage.drawText('Permanent Total Disability', {
     x: margin,
     y,
-    size: fontSize - 2,
+    size: fontSize,
     font: boldFont,
     color: rgb(0, 0, 0)
   })
@@ -567,13 +577,13 @@ const createQuotePdf = async () => {
     }
   ]
 
-  y -= fontSize
+  y -= fontSize + 3
 
   permanentTotalDisability.forEach((detail) => {
     currentPage.drawText(detail.label, {
       x: margin,
       y,
-      size: fontSize - 2,
+      size: fontSize,
       font,
       color: rgb(0, 0, 0)
     })
@@ -581,12 +591,12 @@ const createQuotePdf = async () => {
     currentPage.drawText(' :         ' + detail.value, {
       x: margin + 200,
       y,
-      size: fontSize - 2,
+      size: fontSize,
       font,
       color: rgb(0, 0, 0)
     })
 
-    y -= fontSize
+    y -= fontSize + 3
   })
 
   y -= fontSize * 2
@@ -601,12 +611,12 @@ const createQuotePdf = async () => {
   currentPage.drawText("Spouse's Group Life Assurance", {
     x: margin,
     y,
-    size: fontSize - 2,
+    size: fontSize,
     font: boldFont,
     color: rgb(0, 0, 0)
   })
 
-  y -= fontSize
+  y -= fontSize + 3
 
   const spouseGroupLifeAssurance = [
     {
@@ -627,7 +637,7 @@ const createQuotePdf = async () => {
     currentPage.drawText(detail.label, {
       x: margin,
       y,
-      size: fontSize - 2,
+      size: fontSize,
       font,
       color: rgb(0, 0, 0)
     })
@@ -635,12 +645,12 @@ const createQuotePdf = async () => {
     currentPage.drawText(' :         ' + detail.value, {
       x: margin + 200,
       y,
-      size: fontSize - 2,
+      size: fontSize,
       font,
       color: rgb(0, 0, 0)
     })
 
-    y -= fontSize
+    y -= fontSize + 3
   })
   y -= fontSize * 2
 
@@ -656,12 +666,12 @@ const createQuotePdf = async () => {
   currentPage.drawText(phiTitle(), {
     x: margin,
     y,
-    size: fontSize - 2,
+    size: fontSize,
     font: boldFont,
     color: rgb(0, 0, 0)
   })
 
-  y -= fontSize
+  y -= fontSize + 3
 
   const totalAndTemporaryDisability = [
     {
@@ -690,7 +700,7 @@ const createQuotePdf = async () => {
     currentPage.drawText(detail.label, {
       x: margin,
       y,
-      size: fontSize - 2,
+      size: fontSize,
       font,
       color: rgb(0, 0, 0)
     })
@@ -698,12 +708,12 @@ const createQuotePdf = async () => {
     currentPage.drawText(' :         ' + detail.value, {
       x: margin + 200,
       y,
-      size: fontSize - 2,
+      size: fontSize,
       font,
       color: rgb(0, 0, 0)
     })
 
-    y -= fontSize
+    y -= fontSize + 3
   })
 
   y -= fontSize * 2
@@ -711,12 +721,12 @@ const createQuotePdf = async () => {
   currentPage.drawText('Critical Illness', {
     x: margin,
     y,
-    size: fontSize - 2,
+    size: fontSize,
     font: boldFont,
     color: rgb(0, 0, 0)
   })
 
-  y -= fontSize
+  y -= fontSize + 3
 
   const criticalIllness = [
     {
@@ -737,7 +747,7 @@ const createQuotePdf = async () => {
     currentPage.drawText(detail.label, {
       x: margin,
       y,
-      size: fontSize - 2,
+      size: fontSize,
       font,
       color: rgb(0, 0, 0)
     })
@@ -745,12 +755,12 @@ const createQuotePdf = async () => {
     currentPage.drawText(' :         ' + detail.value, {
       x: margin + 200,
       y,
-      size: fontSize - 2,
+      size: fontSize,
       font,
       color: rgb(0, 0, 0)
     })
 
-    y -= fontSize
+    y -= fontSize + 3
   })
 
   y -= fontSize * 2
@@ -758,12 +768,12 @@ const createQuotePdf = async () => {
   currentPage.drawText('Group Funeral', {
     x: margin,
     y,
-    size: fontSize - 2,
+    size: fontSize,
     font: boldFont,
     color: rgb(0, 0, 0)
   })
 
-  y -= fontSize
+  y -= fontSize + 3
 
   const groupFuneralDetails = [
     {
@@ -801,7 +811,7 @@ const createQuotePdf = async () => {
     currentPage.drawText(detail.label, {
       x: margin,
       y,
-      size: fontSize - 2,
+      size: fontSize,
       font,
       color: rgb(0, 0, 0)
     })
@@ -809,42 +819,51 @@ const createQuotePdf = async () => {
     currentPage.drawText(' :         ' + detail.value, {
       x: margin + 200,
       y,
-      size: fontSize - 2,
+      size: fontSize,
       font,
       color: rgb(0, 0, 0)
     })
 
-    y -= fontSize
+    y -= fontSize + 3
   })
 
   y -= fontSize * 2
 
+  // if (y < 70) {
+  //   currentPage = page2
+  //   y = height - topMargin
+  // }
+
+  const page3 = pdfDoc.addPage([595.28, 841.89])
+  currentPage = page3
+  y = height - topMargin
+
   currentPage.drawText('Underwriting:', {
     x: margin,
     y,
-    size: fontSize - 2,
+    size: fontSize,
     font: boldFont,
     color: rgb(0, 0, 0)
   })
-  y -= fontSize
+  y -= fontSize + 3
 
   const underWritingText =
     '1. The quoted premium rates are based on the risk profile, data provided by the client, benefit features, and assumptions. The scheme is subject to the insurer' +
     "'" +
     's underwriting rules, and there is no guarantee of acceptance.'
 
-  let lines = wrapText(underWritingText, font, fontSize - 2, maxWidth)
+  let lines = wrapText(underWritingText, font, fontSize, maxWidth)
 
   lines.forEach((line) => {
     currentPage.drawText(line, {
       x: margin,
       y,
-      size: fontSize - 2,
+      size: fontSize,
       font,
       color: rgb(0, 0, 0)
     })
 
-    y -= fontSize
+    y -= fontSize + 3
   })
 
   y -= fontSize * 2
@@ -852,15 +871,15 @@ const createQuotePdf = async () => {
   currentPage.drawText('General Provision:', {
     x: margin,
     y,
-    size: fontSize - 2,
+    size: fontSize,
     font: boldFont,
     color: rgb(0, 0, 0)
   })
 
-  y -= fontSize
+  y -= fontSize + 3
 
   const gpNote1 =
-    '1. This quote is valid for' +
+    '1. This quote is valid for ' +
     resultSummary.value.quote_validity_period_months +
     ' month(s) from the date of issuance.'
 
@@ -880,27 +899,27 @@ const createQuotePdf = async () => {
   const gpNotes = [gpNote1, gpNote2, gpNote3, gpNote4, endNote]
 
   gpNotes.forEach((note) => {
-    lines = wrapText(note, font, fontSize - 2, maxWidth)
+    lines = wrapText(note, font, fontSize, maxWidth)
 
     lines.forEach((line) => {
       currentPage.drawText(line, {
         x: margin,
         y,
-        size: fontSize - 2,
+        size: fontSize,
         font,
         color: rgb(0, 0, 0)
       })
 
-      y -= fontSize
+      y -= fontSize + 3
     })
 
-    y -= fontSize
+    y -= fontSize + 3
   })
 
   // currentPage.drawText(underWritingText, {
   //   x: margin,
   //   y,
-  //   size: fontSize - 2,
+  //   size: fontSize,
   //   font,
   //   color: rgb(0, 0, 0)
   // })
@@ -913,7 +932,7 @@ const createQuotePdf = async () => {
 
   pdfSrc.value = url
   loadPdf()
-  // saveAs(blob, 'quotation.pdf')
+  saveAs(blob, 'quotation.pdf')
 }
 </script>
 <style lang="css" scoped></style>
