@@ -2,15 +2,49 @@
   <v-container>
     <v-row>
       <v-col>
-        <base-card :show-actions="false">
+        <base-card v-if="quote" :show-actions="false">
           <template #header>
-            <span class="headline">Quote Output</span>
+            <span class="headline">Quote Output for {{ quote.scheme_name }}</span>
           </template>
           <template #default>
             <v-row>
-              <v-col>
+              <v-col cols="6">
+                <v-btn class="mr-4" rounded size="small" color="primary" @click="goBack"
+                  >Go Back</v-btn
+                >
+
                 <v-btn rounded size="small" color="primary" @click="createQuotePdf"
                   >Generate PDF</v-btn
+                >
+                <v-btn
+                  v-if="pdfGenerated"
+                  class="ml-5"
+                  rounded
+                  size="small"
+                  color="primary"
+                  @click="savePdf"
+                  >Save PDF</v-btn
+                >
+              </v-col>
+              <v-col v-if="pdfGenerated" class="d-flex justify-end" cols="6">
+                <v-btn
+                  class="mr-6"
+                  size="small"
+                  rounded
+                  color="primary"
+                  :disabled="currentPage === 1"
+                  @click="prevPage"
+                  >Previous</v-btn
+                >
+                <span> Page {{ currentPage }} of {{ totalPages }} </span>
+                <v-btn
+                  class="ml-6 mr-9"
+                  size="small"
+                  rounded
+                  color="primary"
+                  :disabled="currentPage === totalPages"
+                  @click="nextPage"
+                  >Next</v-btn
                 >
               </v-col>
             </v-row>
@@ -31,6 +65,7 @@ import { PDFDocument, rgb, StandardFonts } from 'pdf-lib'
 import * as pdfjsLib from 'pdfjs-dist'
 import { saveAs } from 'file-saver'
 import GroupPricingService from '@/renderer/api/GroupPricingService'
+import { useRouter } from 'vue-router'
 
 const props = defineProps({
   quoteId: {
@@ -39,8 +74,14 @@ const props = defineProps({
   }
 })
 
+const router = useRouter()
+
 const quote: any = ref(null)
 const resultSummary: any = ref(null)
+const currentPage = ref(1)
+const totalPages = ref(1)
+let pdf: any = null
+const pdfGenerated = ref(false)
 
 const insurer: any = ref(null)
 // const addressLines = [
@@ -70,17 +111,66 @@ onMounted(() => {
   })
 })
 
+const goBack = () => {
+  router.push({ name: 'group-pricing-quotes' })
+}
+
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--
+    renderPage(currentPage.value)
+  }
+}
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++
+    renderPage(currentPage.value)
+  }
+}
+
+const savePdf = () => {
+  saveAs(pdfSrc.value, 'quotation.pdf')
+}
+
 const loadPdf = async () => {
   if (!pdfSrc.value || !canvasRef.value) return
 
   console.log('Loading PDF', pdfSrc.value)
+  pdfGenerated.value = true
 
   pdfjsLib.GlobalWorkerOptions.workerSrc = `./js/pdf.worker.min.mjs`
 
-  const pdf = await pdfjsLib.getDocument(pdfSrc.value).promise
-  const page = await pdf.getPage(3) // Load the first page
+  pdf = await pdfjsLib.getDocument(pdfSrc.value).promise
+  totalPages.value = pdf.numPages
 
-  const viewport = page.getViewport({ scale: 1.8 })
+  await renderPage(currentPage.value)
+
+  // const page = await pdf.getPage(3) // Load the first page
+
+  // const viewport = page.getViewport({ scale: 1.8 })
+  // const canvas = canvasRef.value
+  // const context = canvas.getContext('2d')
+
+  // if (!context) return
+
+  // canvas.width = viewport.width
+  // canvas.height = viewport.height
+
+  // const renderContext = {
+  //   canvasContext: context,
+  //   viewport
+  // }
+
+  // await page.render(renderContext).promise
+}
+
+const renderPage = async (num: any) => {
+  if (!pdfSrc.value || !canvasRef.value) return
+
+  const page = await pdf.getPage(num)
+
+  const viewport = page.getViewport({ scale: 1.9 })
   const canvas = canvasRef.value
   const context = canvas.getContext('2d')
 
@@ -251,7 +341,7 @@ const createQuotePdf = async () => {
     })
 
     currentPage.drawText(detail.value, {
-      x: margin + 200,
+      x: margin + 300,
       y,
       size: fontSize,
       font,
@@ -447,7 +537,7 @@ const createQuotePdf = async () => {
     })
 
     currentPage.drawText(' :         ' + detail.value, {
-      x: margin + 200,
+      x: margin + 300,
       y,
       size: fontSize,
       font,
@@ -529,7 +619,7 @@ const createQuotePdf = async () => {
     })
 
     currentPage.drawText(' :         ' + detail.value, {
-      x: margin + 200,
+      x: margin + 300,
       y,
       size: fontSize,
       font,
@@ -589,7 +679,7 @@ const createQuotePdf = async () => {
     })
 
     currentPage.drawText(' :         ' + detail.value, {
-      x: margin + 200,
+      x: margin + 300,
       y,
       size: fontSize,
       font,
@@ -643,7 +733,7 @@ const createQuotePdf = async () => {
     })
 
     currentPage.drawText(' :         ' + detail.value, {
-      x: margin + 200,
+      x: margin + 300,
       y,
       size: fontSize,
       font,
@@ -706,7 +796,7 @@ const createQuotePdf = async () => {
     })
 
     currentPage.drawText(' :         ' + detail.value, {
-      x: margin + 200,
+      x: margin + 300,
       y,
       size: fontSize,
       font,
@@ -753,7 +843,7 @@ const createQuotePdf = async () => {
     })
 
     currentPage.drawText(' :         ' + detail.value, {
-      x: margin + 200,
+      x: margin + 300,
       y,
       size: fontSize,
       font,
@@ -817,7 +907,7 @@ const createQuotePdf = async () => {
     })
 
     currentPage.drawText(' :         ' + detail.value, {
-      x: margin + 200,
+      x: margin + 300,
       y,
       size: fontSize,
       font,
@@ -932,7 +1022,8 @@ const createQuotePdf = async () => {
 
   pdfSrc.value = url
   loadPdf()
-  saveAs(blob, 'quotation.pdf')
+
+  // saveAs(blob, 'quotation.pdf')
 }
 </script>
 <style lang="css" scoped></style>
