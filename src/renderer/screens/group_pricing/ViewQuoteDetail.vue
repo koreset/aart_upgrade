@@ -716,6 +716,7 @@ import { useRouter } from 'vue-router'
 import FileUploadDialog from '@/renderer/components/FileUploadDialog.vue'
 import ConfirmDialog from '@/renderer/components/ConfirmDialog.vue'
 import OutputSummary from './OutputSummary.vue'
+import _ from 'lodash'
 
 const confirmAction = ref()
 const router = useRouter()
@@ -966,15 +967,19 @@ const viewTable = async (item: any) => {
     console.log('View Table:', item)
     const res = await GroupPricingService.getQuoteTable(quote.value.id, item.value)
     console.log(res.data)
-    if (res.data !== null && res.data.length > 0) {
+    if (res.data.data !== null && res.data.data.length > 0) {
+      const orderedData = res.data.data.map((item) =>
+        _.fromPairs(res.data.json_tags.map((key) => [key, item[key]]))
+      )
+
       if (item.value === 'member_rating_results' || item.value === 'member_premium_schedules') {
-        resultTableData.value = res.data
+        resultTableData.value = orderedData
       } else {
-        tableData.value = res.data
+        tableData.value = orderedData
       }
 
       selectedTable.value = item.table_type
-      createColumnDefs(res.data)
+      createColumnDefs(orderedData)
     } else {
       tableData.value = []
       resultTableData.value = []
