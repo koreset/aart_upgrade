@@ -354,17 +354,52 @@ const createQuotePdf = async () => {
   const quoteRemarks =
     'We are pleased to submit for your consideration the quotation you requested for the above scheme. Thank you for the opportunity to provide this quote.'
 
-  y -= fontSize * 2
+  const linesRemarks = wrapText(quoteRemarks, font, fontSize, maxWidth)
 
-  currentPage.drawText(quoteRemarks, {
-    x: margin,
-    y,
-    size: fontSize,
-    font,
-    color: rgb(0, 0, 0)
+  linesRemarks.forEach((line) => {
+    currentPage.drawText(line, {
+      x: margin,
+      y,
+      size: fontSize,
+      font,
+      color: rgb(0, 0, 0)
+    })
+
+    y -= fontSize + 3
   })
 
-  y -= fontSize * 3
+  y -= fontSize * 2
+
+  // currentPage.drawText(quoteRemarks, {
+  //   x: margin,
+  //   y,
+  //   size: fontSize,
+  //   font,
+  //   color: rgb(0, 0, 0)
+  // })
+
+  // y -= fontSize * 3
+
+  // const underWritingText =
+  //   '1. The quoted premium rates are based on the risk profile, data provided by the client, benefit features, and assumptions. The scheme is subject to the insurer' +
+  //   "'" +
+  //   's underwriting rules, and there is no guarantee of acceptance.'
+
+  // let lines = wrapText(underWritingText, font, fontSize, maxWidth)
+
+  // lines.forEach((line) => {
+  //   currentPage.drawText(line, {
+  //     x: margin,
+  //     y,
+  //     size: fontSize,
+  //     font,
+  //     color: rgb(0, 0, 0)
+  //   })
+
+  //   y -= fontSize + 3
+  // })
+
+  // y -= fontSize * 2
 
   // Benefits Table
   const benefitsHeaders: any = ['Benefit', 'Total Sum Assured', 'Annual Premium', '% of Salary']
@@ -556,7 +591,7 @@ const createQuotePdf = async () => {
 
   y -= fontSize * 2
 
-  if (y < 100) {
+  if (y < 120) {
     currentPage = page2
     y = height - topMargin
   }
