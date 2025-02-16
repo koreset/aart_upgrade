@@ -139,7 +139,6 @@ export const createMainWindow = async (mainWindow: BrowserWindow): Promise<Brows
     if (Constants.IS_DEV_ENV) {
       mainWindow.webContents.openDevTools()
     }
-    mainWindow.webContents.openDevTools()
   })
 
   mainWindow.once('ready-to-show', (): void => {
