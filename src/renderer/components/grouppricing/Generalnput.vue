@@ -186,6 +186,27 @@
             :items="groupStore.claimsExperiences"
           ></v-select>
         </v-col>
+        <v-col cols="4">
+          <v-text-field
+            v-model="groupStore.group_pricing_quote.free_cover_limit"
+            variant="outlined"
+            density="compact"
+            label="Free Cover Limit"
+            type="number"
+            placeholder="Free Cover Limit"
+          >
+          </v-text-field>
+        </v-col>
+        <v-col cols="4">
+          <v-text-field
+            v-model="groupStore.group_pricing_quote.normal_retirement_age"
+            variant="outlined"
+            density="compact"
+            label="Normal Retirement Age"
+            type="number"
+            placeholder="Normal Retirement Age"
+          ></v-text-field>
+        </v-col>
       </v-row>
     </v-container>
   </v-form>
