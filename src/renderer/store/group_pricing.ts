@@ -65,12 +65,13 @@ export const useGroupPricingStore = defineStore('groupPricing', {
       ci: {
         critical_illness_percentage: 0,
         max_benefit: 0,
-        benefit_structure: null
+        benefit_structure: null,
+        cover_termination_age: 0
       },
       sgla: {
-        sglaPercentage: 0,
-        maxBenefit: 0,
-        coverTerminationAge: 0
+        sgla_percentage: 0,
+        max_benefit: 0,
+        cover_termination_age: 0
       },
       phi: {
         benefit: null,

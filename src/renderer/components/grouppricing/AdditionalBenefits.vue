@@ -137,6 +137,16 @@
                   density="compact"
                   type="number"
                 ></v-text-field>
+              </v-col>
+              <v-col cols="4">
+                <v-text-field
+                  v-model:model-value="groupStore.group_pricing_quote.ci.cover_termination_age"
+                  placeholder="Enter a value"
+                  label="Cover Termination Age"
+                  variant="outlined"
+                  density="compact"
+                  type="number"
+                ></v-text-field>
               </v-col> </v-row
           ></template>
         </base-card>
@@ -152,7 +162,7 @@
             <v-row>
               <v-col cols="4">
                 <v-text-field
-                  v-model:model-value="groupStore.group_pricing_quote.sgla.sglaPercentage"
+                  v-model:model-value="groupStore.group_pricing_quote.sgla.sgla_percentage"
                   placeholder="Enter a value"
                   label="SGLA Percentage of Annual Salary"
                   variant="outlined"
@@ -162,7 +172,7 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                  v-model:model-value="groupStore.group_pricing_quote.sgla.maxBenefit"
+                  v-model:model-value="groupStore.group_pricing_quote.sgla.max_benefit"
                   placeholder="Enter a value"
                   label="Maximum Benefit"
                   variant="outlined"
@@ -172,7 +182,7 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                  v-model:model-value="groupStore.group_pricing_quote.sgla.coverTerminationAge"
+                  v-model:model-value="groupStore.group_pricing_quote.sgla.cover_termination_age"
                   placeholder="Enter a value"
                   label="Cover Termination Age"
                   variant="outlined"
