@@ -362,10 +362,6 @@
                       ></v-expansion-panel-title>
                       <v-expansion-panel-text>
                         <v-row>
-                          <v-col cols="3"><p>Benefit</p></v-col>
-                          <v-col cols="3"
-                            ><p class="text-right content-bg">{{ quote.phi.benefit }}</p></v-col
-                          >
                           <v-col cols="3"><p>Risk Type</p></v-col>
                           <v-col cols="3"
                             ><p class="text-right content-bg">{{ quote.phi.risk_type }}</p></v-col
@@ -467,10 +463,6 @@
                       ></v-expansion-panel-title>
                       <v-expansion-panel-text>
                         <v-row>
-                          <v-col cols="3"><p>Benefit</p></v-col>
-                          <v-col cols="3"
-                            ><p class="text-right content-bg">{{ quote.ttd.benefit }}</p></v-col
-                          >
                           <v-col cols="3"><p>Risk Type</p></v-col>
                           <v-col cols="3"
                             ><p class="text-right content-bg">{{ quote.ttd.risk_type }}</p></v-col
@@ -987,8 +979,8 @@ onMounted(async () => {
     }
     console.log('Parameter Bases:', parameterBases.value)
     GroupPricingService.getResultSummary(props.id).then((res) => {
-      console.log('Result Summary:', res.data.data)
-      resultSummary.value = res.data.data
+      console.log('Result Summary:', res.data)
+      resultSummary.value = res.data
     })
   } catch (error) {
     console.log('Error:', error)
