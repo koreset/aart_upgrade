@@ -289,7 +289,7 @@
                 <v-text-field
                   v-model:model-value="groupStore.group_pricing_quote.phi.number_monthly_payments"
                   placeholder="Enter a value"
-                  label="Number of Annual Payments"
+                  label="Number of Monthly Payments"
                   variant="outlined"
                   density="compact"
                   type="number"
@@ -424,7 +424,7 @@
                 <v-text-field
                   v-model:model-value="groupStore.group_pricing_quote.ttd.number_monthly_payments"
                   placeholder="Enter a value"
-                  label="Number of Annual Payments"
+                  label="Number of Monthly Payments"
                   variant="outlined"
                   density="compact"
                   type="number"
