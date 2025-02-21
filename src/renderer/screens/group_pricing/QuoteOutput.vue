@@ -779,16 +779,8 @@ const createQuotePdf = async () => {
   })
   y -= fontSize * 2
 
-  const phiTitle = () => {
-    if (quote.value.phi_ttd.benefit === 'PHI') {
-      return 'Permanent Health Insurance'
-    }
-    if (quote.value.phi_ttd.benefit === 'TTD') {
-      return 'Total and Temporary Disability'
-    }
-    return 'Permanent Health Insurance and Total and Temporary Disability'
-  }
-  currentPage.drawText(phiTitle(), {
+  const phiTitle = 'Permanent Health Insurance'
+  currentPage.drawText(phiTitle, {
     x: margin,
     y,
     size: fontSize,
@@ -798,30 +790,78 @@ const createQuotePdf = async () => {
 
   y -= fontSize + 3
 
-  const totalAndTemporaryDisability = [
-    {
-      label: 'Product Type',
-      value: quote.value.phi_ttd.benefit
-    },
+  const permanentHealthInsurance = [
     {
       label: 'Monthly benefit as a percentage of monthly salary',
-      value: quote.value.phi_ttd.monthly_benefit_percentage + '%'
+      value: quote.value.phi.monthly_benefit_percentage + '%'
     },
     {
       label: 'Maximum number of monthly payments to be made',
-      value: quote.value.phi_ttd.number_monthly_payments * 12
+      value: quote.value.phi.number_monthly_payments * 12
     },
     {
       label: 'Waiting Period',
-      value: quote.value.phi_ttd.waiting_period + ' month(s)'
+      value: quote.value.phi.waiting_period + ' month(s)'
     },
     {
       label: 'Cover Termination Age',
-      value: quote.value.phi_ttd.cover_termination_age
+      value: quote.value.phi.cover_termination_age
     }
   ]
 
-  totalAndTemporaryDisability.forEach((detail) => {
+  permanentHealthInsurance.forEach((detail) => {
+    currentPage.drawText(detail.label, {
+      x: margin,
+      y,
+      size: fontSize,
+      font,
+      color: rgb(0, 0, 0)
+    })
+
+    currentPage.drawText(' :         ' + detail.value, {
+      x: margin + 300,
+      y,
+      size: fontSize,
+      font,
+      color: rgb(0, 0, 0)
+    })
+
+    y -= fontSize + 3
+  })
+
+  y -= fontSize * 2
+
+  const ttdTitle = 'Total and Temporary Disability'
+  currentPage.drawText(ttdTitle, {
+    x: margin,
+    y,
+    size: fontSize,
+    font: boldFont,
+    color: rgb(0, 0, 0)
+  })
+
+  y -= fontSize + 3
+
+  const totalTemporaryDisability = [
+    {
+      label: 'Monthly benefit as a percentage of monthly salary',
+      value: quote.value.ttd.monthly_benefit_percentage + '%'
+    },
+    {
+      label: 'Maximum number of monthly payments to be made',
+      value: quote.value.ttd.number_monthly_payments * 12
+    },
+    {
+      label: 'Waiting Period',
+      value: quote.value.ttd.waiting_period + ' month(s)'
+    },
+    {
+      label: 'Cover Termination Age',
+      value: quote.value.ttd.cover_termination_age
+    }
+  ]
+
+  totalTemporaryDisability.forEach((detail) => {
     currentPage.drawText(detail.label, {
       x: margin,
       y,
@@ -903,32 +943,32 @@ const createQuotePdf = async () => {
   const groupFuneralDetails = [
     {
       label: 'Main Member Sum Assured',
-      value: `${dashIfEmpty(roundUpToTwoDecimals(quote.value.group_family_funeral.main_member_funeral_sum_assured))}`
+      value: `${dashIfEmpty(roundUpToTwoDecimals(quote.value.family_funeral.main_member_funeral_sum_assured))}`
     },
     {
       label: 'Spouse Sum Assured',
-      value: `${dashIfEmpty(roundUpToTwoDecimals(quote.value.group_family_funeral.spouse_funeral_sum_assured))}`
+      value: `${dashIfEmpty(roundUpToTwoDecimals(quote.value.family_funeral.spouse_funeral_sum_assured))}`
     },
     {
       label: 'Adult Dependant Sum Assured',
-      value: `${dashIfEmpty(roundUpToTwoDecimals(quote.value.group_family_funeral.adult_dependant_sum_assured))}`
+      value: `${dashIfEmpty(roundUpToTwoDecimals(quote.value.family_funeral.adult_dependant_sum_assured))}`
     },
     {
       label: 'Child Sum Assured',
-      value: `${dashIfEmpty(roundUpToTwoDecimals(quote.value.group_family_funeral.children_funeral_sum_assured))}`
+      value: `${dashIfEmpty(roundUpToTwoDecimals(quote.value.family_funeral.children_funeral_sum_assured))}`
     },
     {
       label: 'Parent Sum Assured',
-      value: `${dashIfEmpty(roundUpToTwoDecimals(quote.value.group_family_funeral.parent_funeral_sum_assured))}`
+      value: `${dashIfEmpty(roundUpToTwoDecimals(quote.value.family_funeral.parent_funeral_sum_assured))}`
     },
 
     {
       label: 'Maximum number of children covered',
-      value: quote.value.group_family_funeral.max_children_covered
+      value: quote.value.family_funeral.max_children_covered
     },
     {
       label: 'Maximum number of dependants covered',
-      value: quote.value.group_family_funeral.number_adult_dependants
+      value: quote.value.family_funeral.number_adult_dependants
     }
   ]
 
