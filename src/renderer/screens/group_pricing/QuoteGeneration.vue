@@ -116,15 +116,6 @@ const generateQuote = () => {
   console.log('Generating quote')
   console.log(groupStore.group_pricing_quote)
   const formData = new FormData()
-  // if (groupStore.group_pricing_quote.uploadData.member_data_file) {
-  //   formData.append('memberDataFile', groupStore.group_pricing_quote.uploadData.member_data_file)
-  // }
-  // if (groupStore.group_pricing_quote.uploadData.claims_experience_file) {
-  //   formData.append(
-  //     'claimsExperienceFile',
-  //     groupStore.group_pricing_quote.uploadData.claims_experience_file
-  //   )
-  // }
   console.log(groupStore.group_pricing_quote)
   groupStore.group_pricing_quote.occupation_class = 0
   console.log(JSON.stringify(groupStore.group_pricing_quote))

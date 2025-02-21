@@ -350,10 +350,10 @@
                       <v-expansion-panel-title
                         ><v-row
                           ><v-col cols="5">
-                            <p>Personal Health Insurance / Temporary Total Disability</p>
+                            <p>Personal Health Insurance</p>
                           </v-col>
                           <v-checkbox
-                            v-model:model-value="quote.phi_ttd_benefit"
+                            v-model:model-value="quote.phi_benefit"
                             density="compact"
                             hide-details
                             readonly
@@ -364,26 +364,24 @@
                         <v-row>
                           <v-col cols="3"><p>Benefit</p></v-col>
                           <v-col cols="3"
-                            ><p class="text-right content-bg">{{ quote.phi_ttd.benefit }}</p></v-col
+                            ><p class="text-right content-bg">{{ quote.phi.benefit }}</p></v-col
                           >
                           <v-col cols="3"><p>Risk Type</p></v-col>
                           <v-col cols="3"
-                            ><p class="text-right content-bg">{{
-                              quote.phi_ttd.risk_type
-                            }}</p></v-col
+                            ><p class="text-right content-bg">{{ quote.phi.risk_type }}</p></v-col
                           >
                         </v-row>
                         <v-row>
                           <v-col cols="3"><p>Cover Termination Age</p></v-col>
                           <v-col cols="3"
                             ><p class="text-right content-bg">{{
-                              quote.phi_ttd.cover_termination_age
+                              quote.phi.cover_termination_age
                             }}</p></v-col
                           >
                           <v-col cols="3"><p>Deferred Period (Months)</p></v-col>
                           <v-col cols="3"
                             ><p class="text-right content-bg">{{
-                              quote.phi_ttd.deferred_period
+                              quote.phi.deferred_period
                             }}</p></v-col
                           >
                         </v-row>
@@ -391,13 +389,13 @@
                           <v-col cols="3"><p>Disability Definition</p></v-col>
                           <v-col cols="3"
                             ><p class="text-right content-bg">{{
-                              quote.phi_ttd.disability_definition
+                              quote.phi.disability_definition
                             }}</p></v-col
                           >
                           <v-col cols="3"><p>Maximum Basic Benefit</p></v-col>
                           <v-col cols="3"
                             ><p class="text-right content-bg">{{
-                              quote.phi_ttd.maximum_benefit
+                              quote.phi.maximum_benefit
                             }}</p></v-col
                           >
                         </v-row>
@@ -405,13 +403,13 @@
                           <v-col cols="3"><p>Maximum Premium Waiver</p></v-col>
                           <v-col cols="3"
                             ><p class="text-right content-bg">{{
-                              quote.phi_ttd.max_premium_waiver
+                              quote.phi.max_premium_waiver
                             }}</p></v-col
                           >
                           <v-col cols="3"><p>Monthly Benefit Percentage</p></v-col>
                           <v-col cols="3"
                             ><p class="text-right content-bg">{{
-                              quote.phi_ttd.monthly_benefit_percentage
+                              quote.phi.monthly_benefit_percentage
                             }}</p></v-col
                           >
                         </v-row>
@@ -419,13 +417,13 @@
                           <v-col cols="3"><p>Number of Monthly Payments</p></v-col>
                           <v-col cols="3"
                             ><p class="text-right content-bg">{{
-                              quote.phi_ttd.number_monthly_payments
+                              quote.phi.number_monthly_payments
                             }}</p></v-col
                           >
                           <v-col cols="3"><p>PHI Escalation (%)</p></v-col>
                           <v-col cols="3"
                             ><p class="text-right content-bg">{{
-                              quote.phi_ttd.escalation_percentage
+                              quote.phi.escalation_percentage
                             }}</p></v-col
                           >
                         </v-row>
@@ -433,13 +431,13 @@
                           <v-col cols="3"><p>Premium Waiver Benefit</p></v-col>
                           <v-col cols="3"
                             ><p class="text-right content-bg">{{
-                              quote.phi_ttd.premium_waiver
+                              quote.phi.premium_waiver
                             }}</p></v-col
                           >
                           <v-col cols="3"><p>Premium Waiver Percentage</p></v-col>
                           <v-col cols="3"
                             ><p class="text-right content-bg">{{
-                              quote.phi_ttd.premium_waiver_percentage
+                              quote.phi.premium_waiver_percentage
                             }}</p></v-col
                           >
                         </v-row>
@@ -447,7 +445,112 @@
                           <v-col cols="3"><p>Waiting Period (Months)</p></v-col>
                           <v-col cols="3"
                             ><p class="text-right content-bg">{{
-                              quote.phi_ttd.waiting_period
+                              quote.phi.waiting_period
+                            }}</p></v-col
+                          >
+                        </v-row>
+                      </v-expansion-panel-text>
+                    </v-expansion-panel>
+                    <v-expansion-panel elevation="1" tile>
+                      <v-expansion-panel-title
+                        ><v-row
+                          ><v-col cols="5">
+                            <p>Temporary Total Disability</p>
+                          </v-col>
+                          <v-checkbox
+                            v-model:model-value="quote.ttd_benefit"
+                            density="compact"
+                            hide-details
+                            readonly
+                            disabled
+                          ></v-checkbox> </v-row
+                      ></v-expansion-panel-title>
+                      <v-expansion-panel-text>
+                        <v-row>
+                          <v-col cols="3"><p>Benefit</p></v-col>
+                          <v-col cols="3"
+                            ><p class="text-right content-bg">{{ quote.ttd.benefit }}</p></v-col
+                          >
+                          <v-col cols="3"><p>Risk Type</p></v-col>
+                          <v-col cols="3"
+                            ><p class="text-right content-bg">{{ quote.ttd.risk_type }}</p></v-col
+                          >
+                        </v-row>
+                        <v-row>
+                          <v-col cols="3"><p>Cover Termination Age</p></v-col>
+                          <v-col cols="3"
+                            ><p class="text-right content-bg">{{
+                              quote.ttd.cover_termination_age
+                            }}</p></v-col
+                          >
+                          <v-col cols="3"><p>Deferred Period (Months)</p></v-col>
+                          <v-col cols="3"
+                            ><p class="text-right content-bg">{{
+                              quote.ttd.deferred_period
+                            }}</p></v-col
+                          >
+                        </v-row>
+                        <v-row>
+                          <v-col cols="3"><p>Disability Definition</p></v-col>
+                          <v-col cols="3"
+                            ><p class="text-right content-bg">{{
+                              quote.ttd.disability_definition
+                            }}</p></v-col
+                          >
+                          <v-col cols="3"><p>Maximum Basic Benefit</p></v-col>
+                          <v-col cols="3"
+                            ><p class="text-right content-bg">{{
+                              quote.ttd.maximum_benefit
+                            }}</p></v-col
+                          >
+                        </v-row>
+                        <v-row>
+                          <v-col cols="3"><p>Maximum Premium Waiver</p></v-col>
+                          <v-col cols="3"
+                            ><p class="text-right content-bg">{{
+                              quote.ttd.max_premium_waiver
+                            }}</p></v-col
+                          >
+                          <v-col cols="3"><p>Monthly Benefit Percentage</p></v-col>
+                          <v-col cols="3"
+                            ><p class="text-right content-bg">{{
+                              quote.ttd.monthly_benefit_percentage
+                            }}</p></v-col
+                          >
+                        </v-row>
+                        <v-row>
+                          <v-col cols="3"><p>Number of Monthly Payments</p></v-col>
+                          <v-col cols="3"
+                            ><p class="text-right content-bg">{{
+                              quote.ttd.number_monthly_payments
+                            }}</p></v-col
+                          >
+                          <v-col cols="3"><p>PHI Escalation (%)</p></v-col>
+                          <v-col cols="3"
+                            ><p class="text-right content-bg">{{
+                              quote.ttd.escalation_percentage
+                            }}</p></v-col
+                          >
+                        </v-row>
+                        <v-row>
+                          <v-col cols="3"><p>Premium Waiver Benefit</p></v-col>
+                          <v-col cols="3"
+                            ><p class="text-right content-bg">{{
+                              quote.ttd.premium_waiver
+                            }}</p></v-col
+                          >
+                          <v-col cols="3"><p>Premium Waiver Percentage</p></v-col>
+                          <v-col cols="3"
+                            ><p class="text-right content-bg">{{
+                              quote.ttd.premium_waiver_percentage
+                            }}</p></v-col
+                          >
+                        </v-row>
+                        <v-row>
+                          <v-col cols="3"><p>Waiting Period (Months)</p></v-col>
+                          <v-col cols="3"
+                            ><p class="text-right content-bg">{{
+                              quote.ttd.waiting_period
                             }}</p></v-col
                           >
                         </v-row>

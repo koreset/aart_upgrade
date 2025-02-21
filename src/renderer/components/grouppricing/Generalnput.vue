@@ -25,6 +25,25 @@
             placeholder="Enter a scheme name"
           ></v-text-field>
         </v-col>
+        <v-col v-if="groupStore.group_pricing_quote.quote_type === 'New Business'" cols="4">
+          <v-text-field
+            v-model="groupStore.group_pricing_quote.scheme_contact"
+            variant="outlined"
+            density="compact"
+            label="Scheme Contact"
+            placeholder="Enter a name of scheme contact"
+          ></v-text-field>
+        </v-col>
+        <v-col v-if="groupStore.group_pricing_quote.quote_type === 'New Business'" cols="4">
+          <v-text-field
+            v-model="groupStore.group_pricing_quote.scheme_email"
+            variant="outlined"
+            density="compact"
+            label="Scheme Email"
+            placeholder="Enter an email of scheme contact"
+          ></v-text-field>
+        </v-col>
+
         <v-col v-if="groupStore.group_pricing_quote.quote_type === 'Renewal'" cols="4">
           <v-select
             v-model="groupStore.group_pricing_quote.scheme_name"
@@ -72,8 +91,6 @@
             :items="groupStore.obligationTypes"
           ></v-select>
         </v-col>
-      </v-row>
-      <v-row>
         <v-col
           v-if="
             groupStore.group_pricing_quote.quote_type !== '' &&

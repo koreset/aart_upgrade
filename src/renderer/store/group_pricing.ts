@@ -43,7 +43,8 @@ export const useGroupPricingStore = defineStore('groupPricing', {
       ptd_benefit: false,
       ci_benefit: false,
       sgla_benefit: false,
-      phi_ttd_benefit: false,
+      phi_benefit: false,
+      ttd_benefit: false,
       gla_benefit: true,
       family_funeral_benefit: false,
       gla: {
@@ -71,7 +72,7 @@ export const useGroupPricingStore = defineStore('groupPricing', {
         maxBenefit: 0,
         coverTerminationAge: 0
       },
-      phi_ttd: {
+      phi: {
         benefit: null,
         risk_type: null,
         maximum_benefit: 0,
@@ -86,7 +87,23 @@ export const useGroupPricingStore = defineStore('groupPricing', {
         deferred_period: 0,
         disability_definition: null
       },
-      group_family_funeral: {
+      ttd: {
+        benefit: null,
+        risk_type: null,
+        maximum_benefit: 0,
+        monthly_benefit_percentage: 0,
+        premium_waiver: null,
+        premium_waiver_percentage: 0,
+        escalation_percentage: null,
+        max_premium_waiver: '',
+        number_monthly_payments: 0,
+        cover_termination_age: '',
+        waiting_period: 0,
+        deferred_period: 0,
+        disability_definition: null
+      },
+
+      family_funeral: {
         main_member_funeral_sum_assured: 0,
         spouse_funeral_sum_assured: 0,
         children_funeral_sum_assured: 0,
