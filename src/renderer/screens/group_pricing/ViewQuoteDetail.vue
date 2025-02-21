@@ -575,13 +575,13 @@
                           <v-col cols="3"><p>Sum Assured (Main Member)</p></v-col>
                           <v-col cols="3"
                             ><p class="text-right content-bg">{{
-                              quote.group_family_funeral.main_member_funeral_sum_assured
+                              quote.family_funeral.main_member_funeral_sum_assured
                             }}</p></v-col
                           >
                           <v-col cols="3"><p>Sum Assured (Spouse)</p></v-col>
                           <v-col cols="3"
                             ><p class="text-right content-bg">{{
-                              quote.group_family_funeral.spouse_funeral_sum_assured
+                              quote.family_funeral.spouse_funeral_sum_assured
                             }}</p></v-col
                           >
                         </v-row>
@@ -589,13 +589,13 @@
                           <v-col cols="3"><p>Sum Assured (Children)</p></v-col>
                           <v-col cols="3"
                             ><p class="text-right content-bg">{{
-                              quote.group_family_funeral.children_funeral_sum_assured
+                              quote.family_funeral.children_funeral_sum_assured
                             }}</p></v-col
                           >
                           <v-col cols="3"><p>Sum Assured (Adult Dependants)</p></v-col>
                           <v-col cols="3"
                             ><p class="text-right content-bg">{{
-                              quote.group_family_funeral.adult_dependant_sum_assured
+                              quote.family_funeral.adult_dependant_sum_assured
                             }}</p></v-col
                           >
                         </v-row>
@@ -603,13 +603,13 @@
                           <v-col cols="3"><p>Maximum Children Covered</p></v-col>
                           <v-col cols="3"
                             ><p class="text-right content-bg">{{
-                              quote.group_family_funeral.max_children_covered
+                              quote.family_funeral.max_children_covered
                             }}</p></v-col
                           >
                           <v-col cols="3"><p>Sum Assured (Parent)</p></v-col>
                           <v-col cols="3"
                             ><p class="text-right content-bg">{{
-                              quote.group_family_funeral.parent_funeral_sum_assured
+                              quote.family_funeral.parent_funeral_sum_assured
                             }}</p></v-col
                           >
                         </v-row>
