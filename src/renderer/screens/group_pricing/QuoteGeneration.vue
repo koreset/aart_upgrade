@@ -122,7 +122,10 @@ const generateQuote = () => {
 
   formData.append('group_pricing_quote', JSON.stringify(groupStore.group_pricing_quote))
 
-  GroupPricingService.generateQuote(formData)
+  GroupPricingService.generateQuote(formData).then((res) => {
+    console.log(res)
+    router.push({ name: 'group-pricing-quotes' })
+  })
 }
 </script>
 <style lang="css" scoped>

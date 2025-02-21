@@ -978,8 +978,8 @@ onMounted(async () => {
 
     const res1 = await GroupPricingService.getQuoteTable(quote.value.id, 'group_pricing_parameters')
 
-    if (res1.data !== null && res1.data.length > 0) {
-      parameterBases.value = res1.data.map((item: any) => {
+    if (res1.data !== null && res1.data.data.length > 0) {
+      parameterBases.value = res1.data.data.map((item: any) => {
         return {
           basis: item.basis
         }
@@ -987,8 +987,8 @@ onMounted(async () => {
     }
     console.log('Parameter Bases:', parameterBases.value)
     GroupPricingService.getResultSummary(props.id).then((res) => {
-      console.log('Result Summary:', res.data)
-      resultSummary.value = res.data
+      console.log('Result Summary:', res.data.data)
+      resultSummary.value = res.data.data
     })
   } catch (error) {
     console.log('Error:', error)
