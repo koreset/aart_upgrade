@@ -98,5 +98,11 @@ export default {
   },
   getInsurer() {
     return Api.get('/group-pricing/insurers')
+  },
+  acceptQuote(quoteId) {
+    return Api.post('/group-pricing/quotes/' + quoteId + '/accept-quote')
+  },
+  approveQuote(quoteId) {
+    return Api.post('/group-pricing/quotes/' + quoteId + '/approve-quote')
   }
 }

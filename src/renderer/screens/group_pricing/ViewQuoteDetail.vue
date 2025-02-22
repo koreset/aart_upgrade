@@ -26,7 +26,12 @@
                   >Run Calculations</v-btn
                 >
 
-                <v-btn size="small" rounded color="primary" @click="goBack">Approve</v-btn>
+                <v-btn class="mr-3" size="small" rounded color="primary" @click="approveQuote"
+                  >Approve</v-btn
+                >
+                <v-btn size="small" rounded color="primary" @click="acceptQuote"
+                  >Accept Quote</v-btn
+                >
               </v-col>
             </v-row>
             <v-dialog v-model="basisDialog" persistent max-width="550px">
@@ -927,6 +932,32 @@ const closeBasisDialog = (value) => {
     runQuoteCalculations()
   }
   basisDialog.value = false
+}
+
+const approveQuote = async () => {
+  try {
+    const res = await GroupPricingService.approveQuote(quote.value.id)
+    console.log('Response:', res.data)
+    snackbarText.value = 'Quote Approved Successfully'
+    snackbar.value = true
+  } catch (error) {
+    console.log('Error:', error)
+    snackbarText.value = 'Quote Approval Failed'
+    snackbar.value = true
+  }
+}
+
+const acceptQuote = async () => {
+  try {
+    const res = await GroupPricingService.acceptQuote(quote.value.id)
+    console.log('Response:', res.data)
+    snackbarText.value = 'Quote Accepted Successfully'
+    snackbar.value = true
+  } catch (error) {
+    console.log('Error:', error)
+    snackbarText.value = 'Quote Acceptance Failed'
+    snackbar.value = true
+  }
 }
 
 const handleUpload = async (payload: any) => {
