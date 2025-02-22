@@ -887,6 +887,20 @@ const relatedResultTables = computed(() => {
     })
   }
 
+  if (quote.value.bordereaux_count > 0) {
+    tables.push({
+      table_type: 'Bordereaux',
+      value: 'bordereaux',
+      populated: true
+    })
+  } else {
+    tables.push({
+      table_type: 'Bordereaux',
+      value: 'bordereaux',
+      populated: false
+    })
+  }
+
   tables.push({
     table_type: 'Output Summary',
     value: 'output_summary',
