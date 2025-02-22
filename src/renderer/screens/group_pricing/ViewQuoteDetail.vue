@@ -711,23 +711,12 @@
                                 <span>Info</span>
                               </v-btn>
 
-                              <v-btn
+                              <!-- <v-btn
                                 v-if="
                                   item.table_type !== 'Group Pricing Parameters' &&
                                   item.table_type !== 'Member Rating Results' &&
                                   item.table_type !== 'Member Premium Schedules'
                                 "
-                                class="mr-3"
-                                variant="outlined"
-                                rounded
-                                size="small"
-                                @click.stop="openDialog(item)"
-                              >
-                                <v-icon left color="primary">mdi-upload</v-icon>
-                                <span>Upload</span>
-                              </v-btn>
-                              <v-btn
-                                v-if="item.table_type !== 'Group Pricing Parameters'"
                                 variant="outlined"
                                 rounded
                                 color="red"
@@ -736,7 +725,7 @@
                               >
                                 <v-icon left color="red">mdi-delete</v-icon>
                                 <span>Delete</span>
-                              </v-btn>
+                              </v-btn> -->
                             </td>
                           </tr>
                         </tbody>

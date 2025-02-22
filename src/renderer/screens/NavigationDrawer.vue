@@ -46,6 +46,10 @@
             title="Group Pricing"
           ></v-list-item>
         </template>
+        <v-list-item :to="{ name: 'group-pricing-dashboard' }">
+          <v-list-item-title>Dashboard</v-list-item-title>
+        </v-list-item>
+
         <v-list-item :to="{ name: 'group-pricing-quotes' }">
           <v-list-item-title>Quotes</v-list-item-title>
         </v-list-item>

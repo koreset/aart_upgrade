@@ -397,6 +397,11 @@ export default createRouter({
       name: 'group-pricing-tables',
       component: () => import('../screens/group_pricing/Tables.vue')
     },
+    {
+      path: '/group-pricing/dashboard',
+      name: 'group-pricing-dashboard',
+      component: () => import('../screens/group_pricing/GPDashBoard.vue')
+    },
 
     {
       path: '/tasks',
