@@ -29,7 +29,7 @@
                 >
               </v-col>
             </v-row>
-            <v-row v-if="schemes.length > 0" class="mx-5">
+            <v-row v-if="rowData.length > 0" class="mx-5">
               <v-col>
                 <base-card :showActions="false">
                   <template #header>
@@ -37,7 +37,16 @@
                   </template>
                   <template #default>
                     <v-row>
-                      <v-col> Scheme Table Here </v-col>
+                      <v-col>
+                        <data-grid
+                          :columnDefs="columnDefs"
+                          :show-close-button="true"
+                          :rowData="rowData"
+                          :table-title="selectedTable"
+                          :pagination="true"
+                          @update:clear-data="clearData"
+                        />
+                      </v-col>
                     </v-row>
                   </template>
                 </base-card>
@@ -57,10 +66,16 @@ import BaseCard from '../../components/BaseCard.vue'
 import { onMounted, ref } from 'vue'
 import ConfirmationDialog from '../../components/ConfirmDialog.vue'
 import GroupPricingService from '../../api/GroupPricingService'
+import DataGrid from '@/renderer/components/tables/DataGrid.vue'
+import formatValues from '@/renderer/utils/format_values'
 
 const confirmDialog = ref()
 const schemeName: any = ref('')
 const schemes: any = ref([])
+const selectedTable = ref('Group Schemes In Force')
+
+const columnDefs: any = ref([])
+const rowData = ref([])
 
 const createScheme = () => {
   console.log('Creating Portfolio')
@@ -78,14 +93,35 @@ const createScheme = () => {
 // }
 
 onMounted(() => {
-  GroupPricingService.getBrokers().then((res) => {
+  GroupPricingService.getSchemesInforce().then((res) => {
     if (res.data.length > 0) {
-      schemes.value = res.data
+      rowData.value = res.data
+      console.log(res.data)
+      createColumnDefs(res.data)
     } else {
       schemes.value = []
     }
   })
 })
+
+const clearData = () => {
+  rowData.value = []
+}
+
+const createColumnDefs = (data: any) => {
+  columnDefs.value = []
+  Object.keys(data[0]).forEach((element) => {
+    const header: any = {}
+    header.headerName = element
+    header.field = element
+    header.valueFormatter = formatValues
+    header.minWidth = 200
+    header.sortable = true
+    header.filter = true
+    header.resizable = true
+    columnDefs.value.push(header)
+  })
+}
 </script>
 
 <style scoped></style>

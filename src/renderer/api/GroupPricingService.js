@@ -58,8 +58,8 @@ export default {
   createScheme(scheme) {
     return Api.post('/group-pricing/schemes', scheme)
   },
-  getSchemes() {
-    return Api.get('/group-pricing/schemes')
+  getSchemesInforce() {
+    return Api.get('/group-pricing/schemes/in-force')
   },
   getScheme(id) {
     return Api.get('/group-pricing/schemes/' + id)
