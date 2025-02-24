@@ -137,13 +137,13 @@ const options: any = ref<AgChartOptions>({
 
 const revenueOptions: any = ref<AgChartOptions>({
   data: [
-    { category: 'GLA', revenue: 420000, claims: 252000 },
-    { category: 'PTD', revenue: 120000, claims: 72000 },
-    { category: 'CI', revenue: 60000, claims: 36000 },
-    { category: 'SGLA', revenue: 180000, claims: 108000 },
-    { category: 'PHI', revenue: 252000, claims: 151200 },
-    { category: 'TTD', revenue: 120000, claims: 72000 },
-    { category: 'GFF', revenue: 48000, claims: 28000 }
+    { type: 'GLA', revenue: 420000, claims: 252000 },
+    { type: 'PTD', revenue: 120000, claims: 72000 },
+    { type: 'CI', revenue: 60000, claims: 36000 },
+    { type: 'SGLA', revenue: 180000, claims: 108000 },
+    { type: 'PHI', revenue: 252000, claims: 151200 },
+    { type: 'TTD', revenue: 120000, claims: 72000 },
+    { type: 'GFF', revenue: 48000, claims: 28000 }
   ],
   title: {
     text: 'Total Revenue by Benefit',
@@ -153,13 +153,13 @@ const revenueOptions: any = ref<AgChartOptions>({
   series: [
     {
       type: 'bar',
-      xKey: 'category',
+      xKey: 'type',
       yKey: 'revenue',
       yName: 'Revenue'
     },
     {
       type: 'bar',
-      xKey: 'category',
+      xKey: 'type',
       yKey: 'claims',
       yName: 'Claims'
     }
@@ -219,6 +219,10 @@ const refreshDashboard = async () => {
       ]
     }
     // 2. Total Revenue by Benefit
+    revenueOptions.value = {
+      ...revenueOptions.value,
+      data: res.data.revenue_benefits
+    }
     // 3. Annual Premium
     cards.value = res.data.card_data
     // 4. Scheme Count
