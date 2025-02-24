@@ -104,5 +104,8 @@ export default {
   },
   approveQuote(quoteId) {
     return Api.post('/group-pricing/quotes/' + quoteId + '/approve-quote')
+  },
+  getDashboardData(year) {
+    return Api.get('/group-pricing/dashboard/year/' + year)
   }
 }

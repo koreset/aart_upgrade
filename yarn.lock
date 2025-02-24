@@ -1689,6 +1689,11 @@ ag-charts-types@10.3.1:
   resolved "https://registry.yarnpkg.com/ag-charts-types/-/ag-charts-types-10.3.1.tgz#b60163a5da5f27222db71d4fcc20c0aed1854c9c"
   integrity sha512-oZvu9vJLk6lmzaYi0TmVVmHFZJpVNFziU0bnllx4wR3muXCmnxz5LouKIZ8CYnNiC7VO5HmHNlFu+0DmEO5zxg==
 
+ag-charts-types@^11.1.1:
+  version "11.1.1"
+  resolved "https://registry.yarnpkg.com/ag-charts-types/-/ag-charts-types-11.1.1.tgz#2d5132978248c9422b7129df6d2c3537c1ad99c5"
+  integrity sha512-bRmUcf5VVhEEekhX8Vk0NSwa8Te8YM/zchjyYKR2CX4vDYiwoohM1Jg9RFvbIhVbLC1S6QrPEbx5v2C6RDfpSA==
+
 ag-charts-vue3@^10.2.0:
   version "10.2.0"
   resolved "https://registry.yarnpkg.com/ag-charts-vue3/-/ag-charts-vue3-10.2.0.tgz#bf879531aadcd944f0304a227f82276634247c66"
