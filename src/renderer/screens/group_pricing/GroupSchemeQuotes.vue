@@ -201,6 +201,7 @@ const goToQuoteCreation = () => {
 
 const editItem = (item) => {
   console.log('Editing:', item)
+  router.push({ name: 'group-pricing-quote-generation-edit', params: { id: item.id } })
 }
 
 const deleteItem = async (item) => {

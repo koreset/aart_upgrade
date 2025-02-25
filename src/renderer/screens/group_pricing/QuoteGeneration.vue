@@ -62,7 +62,7 @@
 </template>
 <script setup lang="ts">
 import { ref, shallowRef, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useGroupPricingStore } from '@/renderer/store/group_pricing'
 import GroupPricingService from '@/renderer/api/GroupPricingService'
 import Generalnput from '@/renderer/components/grouppricing/Generalnput.vue'
@@ -73,6 +73,10 @@ import LoadingInput from '@/renderer/components/grouppricing/LoadingInput.vue'
 
 const groupStore = useGroupPricingStore()
 const router = useRouter()
+const route = useRoute()
+const quoteId = ref(route.params.id)
+
+console.log('QuoteID', quoteId.value)
 
 const position = ref(0)
 const steps = shallowRef([
@@ -100,6 +104,7 @@ const movePrev = () => {
 }
 
 const goToQuotes = () => {
+  groupStore.resetGroupPricingQuote()
   router.push({ name: 'group-pricing-quotes' })
 }
 
@@ -107,9 +112,15 @@ onMounted(() => {
   GroupPricingService.getBrokers().then((res) => {
     groupStore.brokers = res.data
   })
-  GroupPricingService.getSchemes().then((res) => {
+  GroupPricingService.getSchemesInforce().then((res) => {
     groupStore.groupSchemes = res.data
   })
+  if (quoteId.value) {
+    GroupPricingService.getQuote(quoteId.value).then((res) => {
+      console.log(res.data)
+      groupStore.group_pricing_quote = res.data
+    })
+  }
 })
 
 const generateQuote = () => {
@@ -124,6 +135,8 @@ const generateQuote = () => {
 
   GroupPricingService.generateQuote(formData).then((res) => {
     console.log(res)
+    // we should be cleaning out the store here
+    groupStore.resetGroupPricingQuote()
     router.push({ name: 'group-pricing-quotes' })
   })
 }
