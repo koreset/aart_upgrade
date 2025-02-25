@@ -44,7 +44,7 @@
                   <template #default>
                     <v-row>
                       <v-col class="d-flex justify-center">
-                        <h3>{{ card.value }}</h3>
+                        <h2>{{ card.value }}</h2>
                       </v-col>
                     </v-row>
                   </template>
@@ -52,6 +52,9 @@
               </v-col>
             </v-row>
             <v-row class="mt-5">
+              <v-col cols="6" class="card-bg">
+                <ag-charts v-if="options" :options="gicOptions"></ag-charts>
+              </v-col>
               <v-col cols="6" class="card-bg">
                 <ag-charts v-if="options" :options="revenueOptions"></ag-charts>
               </v-col>
@@ -166,6 +169,37 @@ const revenueOptions: any = ref<AgChartOptions>({
   ]
 })
 
+const gicOptions: any = ref<AgChartOptions>({
+  data: [
+    { type: 'GLA', expected: 420000, actual: 252000 },
+    { type: 'PTD', expected: 120000, actual: 72000 },
+    { type: 'CI', expected: 60000, actual: 36000 },
+    { type: 'SGLA', expected: 180000, actual: 108000 },
+    { type: 'PHI', expected: 252000, actual: 151200 },
+    { type: 'TTD', expected: 120000, actual: 72000 },
+    { type: 'GFF', expected: 48000, actual: 28000 }
+  ],
+  title: {
+    text: 'Income Statement Components',
+    fontSize: 14,
+    fontWeight: 'bold'
+  },
+  series: [
+    {
+      type: 'bar',
+      xKey: 'type',
+      yKey: 'expected',
+      yName: 'Expected'
+    },
+    {
+      type: 'bar',
+      xKey: 'type',
+      yKey: 'actual',
+      yName: 'Actual'
+    }
+  ]
+})
+
 const cards = ref([
   { title: 'Annual Premium', value: '100 M', flex: 3 },
   { title: 'Scheme Count', value: '24', flex: 3 },
@@ -219,6 +253,11 @@ const refreshDashboard = async () => {
       ]
     }
     // 2. Total Revenue by Benefit
+    gicOptions.value = {
+      ...gicOptions.value,
+      data: res.data.income_statement_components
+    }
+
     revenueOptions.value = {
       ...revenueOptions.value,
       data: res.data.revenue_benefits
@@ -261,8 +300,8 @@ const refreshDashboard = async () => {
   background-color: #f5f5f5;
   border: 1px solid #f5f5f5;
   border-radius: 3px;
-  margin: 1px;
+  margin: 0px;
   margin-bottom: 16px;
-  padding: 1px;
+  padding: 0px;
 }
 </style>
