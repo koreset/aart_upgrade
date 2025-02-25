@@ -101,7 +101,7 @@
           <v-date-input
             v-model="groupStore.group_pricing_quote.commencement_date"
             hide-actions
-            locale="en-in"
+            locale="en-ZA"
             view-mode="month"
             prepend-icon=""
             prepend-inner-icon="$calendar"
