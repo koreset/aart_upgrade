@@ -22,16 +22,16 @@
               </v-col>
             </v-row>
             <v-row class="d-flex justify-center">
-              <v-col class="card-bg mr-6" cols="3">
+              <v-col cols="3">
                 <ag-charts v-if="options" :options="options"></ag-charts>
               </v-col>
-              <v-col class="card-bg mr-6" cols="3">
+              <v-col cols="3">
                 <ag-charts v-if="options" :options="options"></ag-charts>
               </v-col>
-              <v-col class="card-bg mr-6" cols="3">
+              <v-col cols="3">
                 <ag-charts v-if="options" :options="options"></ag-charts>
               </v-col>
-              <v-col class="card-bg mr-6" cols="3">
+              <v-col cols="3">
                 <ag-charts v-if="options" :options="options"></ag-charts>
               </v-col>
             </v-row>
@@ -39,7 +39,7 @@
               <v-col v-for="card in cards" :key="card.title" :cols="card.flex">
                 <base-card :show-actions="false">
                   <template #header>
-                    <span class="headline">{{ card.title }}</span>
+                    <span class="headline d-flex justify-center">{{ card.title }}</span>
                   </template>
                   <template #default>
                     <v-row>

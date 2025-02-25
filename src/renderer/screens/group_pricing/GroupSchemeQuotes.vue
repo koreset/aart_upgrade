@@ -133,6 +133,7 @@
         </template>
       </base-card>
     </v-dialog>
+    <confirm-dialog ref="confirmDeleteDialog"></confirm-dialog>
   </v-container>
 </template>
 <script setup lang="ts">
@@ -143,7 +144,9 @@ import { useRouter } from 'vue-router'
 import { onMounted, ref } from 'vue'
 import ProductService from '@/renderer/api/ProductService'
 import { useGroupPricingStore } from '@/renderer/store/group_pricing'
+import ConfirmDialog from '@/renderer/components/ConfirmDialog.vue'
 
+const confirmDeleteDialog = ref()
 const groupStore = useGroupPricingStore()
 const router = useRouter()
 const appStore = useAppStore()
@@ -200,8 +203,22 @@ const editItem = (item) => {
   console.log('Editing:', item)
 }
 
-const deleteItem = (item) => {
-  console.log('Deleting:', item)
+const deleteItem = async (item) => {
+  try {
+    const res = await confirmDeleteDialog.value.open(
+      'Delete Quote',
+      'Are you sure you want to delete this quote?'
+    )
+    if (res) {
+      console.log('Deleting:', item)
+      // console.log('Deleting:', item)
+      // GroupPricingService.deleteQuote(item.id)
+      // quotes.value = quotes.value.filter((quote) => quote.id !== item.id)
+    }
+    console.log('Deleting:', item)
+  } catch (error) {
+    console.log('Error:', error)
+  }
 }
 
 const viewItem = (item) => {
