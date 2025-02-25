@@ -82,6 +82,9 @@ export default {
   getQuote(quoteId) {
     return Api.get('/group-pricing/get-quote/' + quoteId)
   },
+  deleteQuote(quoteId) {
+    return Api.delete('/group-pricing/quotes/' + quoteId)
+  },
   getQuoteTable(quoteId, tableType) {
     return Api.get('/group-pricing/get-quote/' + quoteId + '/table-type/' + tableType)
   },

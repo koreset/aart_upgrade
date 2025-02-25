@@ -212,8 +212,8 @@ const deleteItem = async (item) => {
     if (res) {
       console.log('Deleting:', item)
       // console.log('Deleting:', item)
-      // GroupPricingService.deleteQuote(item.id)
-      // quotes.value = quotes.value.filter((quote) => quote.id !== item.id)
+      GroupPricingService.deleteQuote(item.id)
+      quotes.value = quotes.value.filter((quote: any) => quote.id !== item.id)
     }
     console.log('Deleting:', item)
   } catch (error) {
