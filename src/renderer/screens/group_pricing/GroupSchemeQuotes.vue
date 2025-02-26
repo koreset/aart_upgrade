@@ -190,7 +190,6 @@ const headers = [
 
 const parseDateString = (dateString) => {
   const date = new Date(dateString)
-  console.log('Date:', date)
   const formattedDate = date.toISOString().split('T')[0]
   return formattedDate
 }

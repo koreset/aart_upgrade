@@ -78,3 +78,7 @@ contextBridge.exposeInMainWorld('mainApi', {
     throw new Error(`Unknown ipc channel name: ${channel}`)
   }
 })
+
+contextBridge.exposeInMainWorld('node', {
+  setImmediate: (fn: (...args: any[]) => void, ...args: any[]) => setTimeout(fn, 0, ...args)
+})

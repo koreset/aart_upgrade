@@ -22,8 +22,13 @@ declare global {
   // eslint-disable-next-line no-unused-vars
   interface Window {
     mainApi?: any
+    node?: any
   }
 }
+
+window.node?.setImmediate(() => {
+  console.log('setImmediate is working!')
+})
 
 // save the license server url to the store. temp fix for now. This should be done in setup.
 window.mainApi?.sendSync('msgSetLicenseServerUrl', import.meta.env.VITE_APP_LICENSE_SERVER)

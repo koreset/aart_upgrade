@@ -51,12 +51,19 @@
                 </base-card>
               </v-col>
             </v-row>
-            <v-row class="mt-5">
-              <v-col cols="6" class="card-bg">
-                <ag-charts v-if="options" :options="gicOptions"></ag-charts>
+            <v-row class="mt-5 d-flex justify-center">
+              <v-col cols="5" class="card-bg mx-3">
+                <v-btn icon color="primary" variant="plain" size="small" @click="downloadGicChart">
+                  <v-icon>mdi-download</v-icon>
+                </v-btn>
+                <ag-charts v-if="options" ref="gicCharts" :options="gicOptions"></ag-charts>
               </v-col>
-              <v-col cols="6" class="card-bg">
-                <ag-charts v-if="options" :options="revenueOptions"></ag-charts>
+              <v-col cols="5" class="card-bg mx-3">
+                <v-btn icon color="primary" variant="plain" size="small" @click="downloadRevChart">
+                  <v-icon>mdi-download</v-icon>
+                </v-btn>
+
+                <ag-charts v-if="options" ref="revenueCharts" :options="revenueOptions"></ag-charts>
               </v-col>
             </v-row>
           </template>
@@ -83,6 +90,8 @@ const availableYears = computed(() => {
   return years
 })
 
+const gicCharts: any = ref(null)
+const revenueCharts: any = ref(null)
 const allQuotes: any = ref(0)
 const convertedQuotes: any = ref(0)
 // const unconvertedQuotes: any = ref(0)
@@ -96,6 +105,17 @@ onMounted(() => {
   selectedYear.value = new Date().getFullYear().toString()
   refreshDashboard()
 })
+
+const downloadGicChart = () => {
+  if (gicCharts.value) {
+    gicCharts.value.chart.download()
+  }
+}
+const downloadRevChart = () => {
+  if (revenueCharts.value) {
+    revenueCharts.value.chart.download()
+  }
+}
 
 const options: any = ref<AgChartOptions>({
   // Data: Data to be displayed in the chart
