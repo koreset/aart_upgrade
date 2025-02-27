@@ -9,7 +9,7 @@
             variant="outlined"
             density="compact"
             placeholder="Enter a value"
-            label="Salary Multiple"
+            label="GLA Salary Multiple"
           ></v-text-field>
         </v-col>
         <v-col cols="4">
