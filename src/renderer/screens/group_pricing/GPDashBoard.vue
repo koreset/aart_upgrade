@@ -66,6 +66,27 @@
                 <ag-charts v-if="options" ref="revenueCharts" :options="revenueOptions"></ag-charts>
               </v-col>
             </v-row>
+            <v-row>
+              <v-col cols="3">
+                <v-select
+                  v-model="selectedBenefit"
+                  :items="benefitList"
+                  variant="outlined"
+                  density="compact"
+                  label="Benefit"
+                  placeholder="Select Benefit"
+                  @update:model-value="getExposureData"
+                ></v-select>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col class="col-style" cols="6">
+                <ag-charts v-if="options" :options="exposureOptions"></ag-charts>
+              </v-col>
+              <v-col cols="6">
+                <ag-charts v-if="options" :options="exposureGenderOptions"></ag-charts>
+              </v-col>
+            </v-row>
           </template>
         </base-card>
       </v-col>
@@ -79,6 +100,13 @@ import { AgCharts } from 'ag-charts-vue3'
 import { computed, onMounted, ref } from 'vue'
 import GroupPricingService from '@/renderer/api/GroupPricingService'
 
+const paperTheme = {
+  palette: {
+    fills: ['#006f9b', '#ff7faa', '#00994d', '#000000', '#00a0dd'],
+    strokes: ['#003f58', '#934962', '#004a25', '#914d1d', '#006288']
+  }
+}
+
 const selectedYear = ref<string | null>(null)
 
 const availableYears = computed(() => {
@@ -90,6 +118,7 @@ const availableYears = computed(() => {
   return years
 })
 
+const selectedBenefit = ref<string | null>(null)
 const gicCharts: any = ref(null)
 const revenueCharts: any = ref(null)
 const allQuotes: any = ref(0)
@@ -100,10 +129,14 @@ const convertedQuotes: any = ref(0)
 //   return allQuotes.value
 // }
 
+const benefitList = ['All', 'GLA', 'SGLA', 'PTD', 'CI', 'PHI', 'TTD']
+
 onMounted(() => {
   // set the selected year to the current year
   selectedYear.value = new Date().getFullYear().toString()
+  selectedBenefit.value = 'All'
   refreshDashboard()
+  getExposureData()
 })
 
 const downloadGicChart = () => {
@@ -114,6 +147,51 @@ const downloadGicChart = () => {
 const downloadRevChart = () => {
   if (revenueCharts.value) {
     revenueCharts.value.chart.download()
+  }
+}
+
+const getExposureData = async () => {
+  try {
+    console.log(
+      'Getting exposure data for:',
+      selectedBenefit.value,
+      ' and year:',
+      selectedYear.value
+    )
+    if (selectedBenefit.value && selectedYear.value) {
+      console.log('Getting exposure data for:', selectedBenefit.value)
+      const res = await GroupPricingService.getExposureData(
+        selectedYear.value,
+        selectedBenefit.value
+      )
+      console.log(res.data)
+      exposureOptions.value = {
+        ...exposureOptions.value,
+        title: {
+          text: `${selectedBenefit.value} Exposure (${selectedYear.value})`,
+          fontSize: 14,
+          fontWeight: 'bold'
+        },
+        background: {
+          fill: 'aliceblue'
+        },
+        data: res.data
+      }
+      exposureGenderOptions.value = {
+        ...exposureGenderOptions.value,
+        title: {
+          text: `${selectedBenefit.value} Exposure (${selectedYear.value})`,
+          fontSize: 14,
+          fontWeight: 'bold'
+        },
+        background: {
+          fill: 'aliceblue'
+        },
+        data: res.data
+      }
+    }
+  } catch (error) {
+    console.error(error)
   }
 }
 
@@ -220,6 +298,70 @@ const gicOptions: any = ref<AgChartOptions>({
   ]
 })
 
+const exposureOptions: any = ref<AgChartOptions>({
+  theme: paperTheme,
+  data: [],
+  title: {
+    text: `${selectedBenefit.value} Exposure`,
+    fontSize: 14,
+    fontWeight: 'bold'
+  },
+  legend: {
+    enabled: true
+  },
+  series: [
+    {
+      type: 'bar',
+      xKey: 'age_band',
+      xName: 'Age Band',
+      yKey: 'total_sum_assured',
+      yName: 'Total Sum Assured',
+      stroke: '#000000',
+      strokeWidth: 1
+    }
+  ]
+})
+
+const exposureGenderOptions: any = ref<AgChartOptions>({
+  data: [],
+  title: {
+    text: `${selectedBenefit.value} Exposure`,
+    fontSize: 14,
+    fontWeight: 'bold'
+  },
+  series: [
+    {
+      type: 'bar',
+      xKey: 'age_band',
+      xName: 'Age Band',
+      yKey: 'male_sum_assured',
+      yName: 'Male Sum Assured'
+    },
+    {
+      type: 'bar',
+      xKey: 'age_band',
+      xName: 'Age Band',
+      yKey: 'female_sum_assured',
+      yName: 'Female Sum Assured'
+    }
+  ],
+  axes: [
+    {
+      type: 'number',
+      position: 'left',
+      title: {
+        text: 'Sum Assured',
+        fontSize: 14
+      },
+      label: {
+        formatter: (params: any) => {
+          return `R ${params.value / 1000}K`
+        }
+      }
+    }
+  ]
+})
+
 const cards = ref([
   { title: 'Annual Premium', value: '100 M', flex: 3 },
   { title: 'Scheme Count', value: '24', flex: 3 },
@@ -312,6 +454,7 @@ const refreshDashboard = async () => {
     //     { category: 'GFF', revenue: 48000, claims: 28000 }
     //   ]
     // }
+    getExposureData()
   }
 }
 </script>
@@ -323,5 +466,11 @@ const refreshDashboard = async () => {
   margin: 0px;
   margin-bottom: 16px;
   padding: 0px;
+}
+
+.col-style {
+  border: 1px solid green;
+  padding: 0px;
+  border-radius: 10px;
 }
 </style>

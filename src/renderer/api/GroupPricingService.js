@@ -110,5 +110,9 @@ export default {
   },
   getDashboardData(year) {
     return Api.get('/group-pricing/dashboard/year/' + year)
+  },
+  getExposureData(year, benefit) {
+    console.log('year and benefit', year, benefit)
+    return Api.get('/group-pricing/dashboard/exposures/year/' + year + '/benefit/' + benefit)
   }
 }
