@@ -21,20 +21,8 @@
                 ></v-select>
               </v-col>
             </v-row>
-            <v-row class="d-flex justify-center">
-              <v-col cols="3">
-                <ag-charts v-if="options" :options="options"></ag-charts>
-              </v-col>
-              <v-col cols="3">
-                <ag-charts v-if="options" :options="options"></ag-charts>
-              </v-col>
-              <v-col cols="3">
-                <ag-charts v-if="options" :options="options"></ag-charts>
-              </v-col>
-              <v-col cols="3">
-                <ag-charts v-if="options" :options="options"></ag-charts>
-              </v-col>
-            </v-row>
+
+            <v-divider class="my-5"></v-divider>
             <v-row class="d-flex justify-center">
               <v-col v-for="card in cards" :key="card.title" :cols="card.flex">
                 <base-card :show-actions="false">
@@ -51,19 +39,59 @@
                 </base-card>
               </v-col>
             </v-row>
+            <v-divider class="my-5"></v-divider>
+            <v-row>
+              <v-col cols="3">
+                <v-select
+                  v-model="selectedDataView"
+                  placeholder="Select a data view"
+                  variant="outlined"
+                  density="compact"
+                  :items="['Annual Premium', 'Count']"
+                  @update:model-value="getCountData"
+                ></v-select>
+              </v-col>
+            </v-row>
+            <v-row class="d-flex justify-center">
+              <v-col cols="3">
+                <ag-charts v-if="conversionOptions" :options="conversionOptions"></ag-charts>
+              </v-col>
+              <v-col cols="3">
+                <ag-charts
+                  v-if="inForceSchemesOptions"
+                  :options="inForceSchemesOptions"
+                ></ag-charts>
+              </v-col>
+              <v-col cols="3">
+                <ag-charts v-if="newQuoteOptions" :options="newQuoteOptions"></ag-charts>
+              </v-col>
+              <v-col cols="3">
+                <ag-charts v-if="renewalsOptions" :options="renewalsOptions"></ag-charts>
+              </v-col>
+            </v-row>
+            <v-divider class="my-5"></v-divider>
+
             <v-row class="mt-5 d-flex justify-center">
               <v-col cols="5" class="card-bg mx-3">
                 <v-btn icon color="primary" variant="plain" size="small" @click="downloadGicChart">
                   <v-icon>mdi-download</v-icon>
                 </v-btn>
-                <ag-charts v-if="options" ref="gicCharts" :options="gicOptions"></ag-charts>
+                <ag-charts
+                  v-if="conversionOptions"
+                  ref="gicCharts"
+                  :options="gicOptions"
+                ></ag-charts>
               </v-col>
               <v-col cols="5" class="card-bg mx-3">
                 <v-btn icon color="primary" variant="plain" size="small" @click="downloadRevChart">
                   <v-icon>mdi-download</v-icon>
                 </v-btn>
 
-                <ag-charts v-if="options" ref="revenueCharts" :options="revenueOptions"></ag-charts>
+                <ag-charts
+                  v-if="conversionOptions"
+                  ref="revenueCharts"
+                  :options="revenueOptions"
+                ></ag-charts>
               </v-col>
             </v-row>
             <v-row>
@@ -81,10 +109,10 @@
             </v-row>
             <v-row>
               <v-col class="col-style" cols="6">
-                <ag-charts v-if="options" :options="exposureOptions"></ag-charts>
+                <ag-charts v-if="conversionOptions" :options="exposureOptions"></ag-charts>
               </v-col>
               <v-col cols="6">
-                <ag-charts v-if="options" :options="exposureGenderOptions"></ag-charts>
+                <ag-charts v-if="conversionOptions" :options="exposureGenderOptions"></ag-charts>
               </v-col>
             </v-row>
           </template>
@@ -108,6 +136,7 @@ const paperTheme = {
 }
 
 const selectedYear = ref<string | null>(null)
+const selectedDataView = ref<string | null>(null)
 
 const availableYears = computed(() => {
   const years: any = []
@@ -135,6 +164,7 @@ onMounted(() => {
   // set the selected year to the current year
   selectedYear.value = new Date().getFullYear().toString()
   selectedBenefit.value = 'All'
+  selectedDataView.value = 'Annual Premium'
   refreshDashboard()
   getExposureData()
 })
@@ -148,6 +178,10 @@ const downloadRevChart = () => {
   if (revenueCharts.value) {
     revenueCharts.value.chart.download()
   }
+}
+
+const getCountData = () => {
+  console.log('Getting data for:', selectedDataView.value)
 }
 
 const getExposureData = async () => {
@@ -195,7 +229,7 @@ const getExposureData = async () => {
   }
 }
 
-const options: any = ref<AgChartOptions>({
+const conversionOptions: any = ref<AgChartOptions>({
   // Data: Data to be displayed in the chart
   data: [
     { asset: 'Converted', amount: 39 },
@@ -203,6 +237,129 @@ const options: any = ref<AgChartOptions>({
   ],
   title: {
     text: 'Quote Conversion',
+    fontSize: 14,
+    fontWeight: 'bold'
+  },
+  // Series: Defines which chart type and data to use
+  series: [
+    {
+      type: 'donut',
+      calloutLabelKey: 'asset',
+      calloutLabel: {
+        enabled: false
+      },
+      angleKey: 'amount',
+      innerRadiusRatio: 0.6,
+      innerLabels: [
+        {
+          text: 'Total Quotes',
+          fontWeight: 'bold'
+        },
+        {
+          text: `${allQuotes.value}`,
+          spacing: 4,
+          fontSize: 14,
+          color: 'black'
+        }
+      ],
+      innerCircle: {
+        fill: '#c9fdc9'
+      },
+      showInLegend: true
+    }
+  ]
+})
+
+const inForceSchemesOptions: any = ref<AgChartOptions>({
+  // Data: Data to be displayed in the chart
+  data: [
+    { asset: 'Converted', amount: 39 },
+    { asset: 'Unconverted', amount: 61 }
+  ],
+  title: {
+    text: 'Inforce Schemes',
+    fontSize: 14,
+    fontWeight: 'bold'
+  },
+  // Series: Defines which chart type and data to use
+  series: [
+    {
+      type: 'donut',
+      calloutLabelKey: 'asset',
+      calloutLabel: {
+        enabled: false
+      },
+      angleKey: 'amount',
+      innerRadiusRatio: 0.6,
+      innerLabels: [
+        {
+          text: 'Total Quotes',
+          fontWeight: 'bold'
+        },
+        {
+          text: `${allQuotes.value}`,
+          spacing: 4,
+          fontSize: 14,
+          color: 'black'
+        }
+      ],
+      innerCircle: {
+        fill: '#c9fdc9'
+      },
+      showInLegend: true
+    }
+  ]
+})
+
+const newQuoteOptions: any = ref<AgChartOptions>({
+  // Data: Data to be displayed in the chart
+  data: [
+    { asset: 'New', amount: 39 },
+    { asset: 'Old', amount: 61 }
+  ],
+  title: {
+    text: 'New Quotes',
+    fontSize: 14,
+    fontWeight: 'bold'
+  },
+  // Series: Defines which chart type and data to use
+  series: [
+    {
+      type: 'donut',
+      calloutLabelKey: 'asset',
+      calloutLabel: {
+        enabled: false
+      },
+      angleKey: 'amount',
+      innerRadiusRatio: 0.6,
+      innerLabels: [
+        {
+          text: 'Total Quotes',
+          fontWeight: 'bold'
+        },
+        {
+          text: `${allQuotes.value}`,
+          spacing: 4,
+          fontSize: 14,
+          color: 'black'
+        }
+      ],
+      innerCircle: {
+        fill: '#c9fdc9'
+      },
+      showInLegend: true
+    }
+  ]
+})
+
+const renewalsOptions: any = ref<AgChartOptions>({
+  // Data: Data to be displayed in the chart
+  data: [
+    { asset: 'New', amount: 39 },
+    { asset: 'Old', amount: 61 }
+  ],
+  title: {
+    text: 'Renewals',
     fontSize: 14,
     fontWeight: 'bold'
   },
@@ -344,21 +501,6 @@ const exposureGenderOptions: any = ref<AgChartOptions>({
       yKey: 'female_sum_assured',
       yName: 'Female Sum Assured'
     }
-  ],
-  axes: [
-    {
-      type: 'number',
-      position: 'left',
-      title: {
-        text: 'Sum Assured',
-        fontSize: 14
-      },
-      label: {
-        formatter: (params: any) => {
-          return `R ${params.value / 1000}K`
-        }
-      }
-    }
   ]
 })
 
@@ -380,8 +522,8 @@ const refreshDashboard = async () => {
     convertedQuotes.value = res.data.in_force_quotes
     // get the following data for the selected year
     // 1. Quote Conversion
-    options.value = {
-      ...options.value,
+    conversionOptions.value = {
+      ...conversionOptions.value,
       data: [
         { asset: 'Converted', amount: convertedQuotes.value },
         { asset: 'Unconverted', amount: allQuotes.value - convertedQuotes.value }
@@ -397,11 +539,7 @@ const refreshDashboard = async () => {
           innerRadiusRatio: 0.6,
           innerLabels: [
             {
-              text: 'Total Quotes',
-              fontWeight: 'bold'
-            },
-            {
-              text: `${allQuotes.value}`,
+              text: `${(convertedQuotes.value / allQuotes.value) * 100}%`,
               spacing: 4,
               fontSize: 14,
               color: 'black'
