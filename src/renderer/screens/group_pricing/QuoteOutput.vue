@@ -745,8 +745,8 @@ const createQuotePdf = async () => {
 
   const spouseGroupLifeAssurance = [
     {
-      label: 'Sum Assured',
-      value: resultSummary.value.total_spouse_gla_sum_assured
+      label: 'Sgla Salary Multiple',
+      value: quote.value.sgla.sgla_salary_multiple
     },
     {
       label: 'Maximum Sum Assured',
@@ -792,12 +792,12 @@ const createQuotePdf = async () => {
 
   const permanentHealthInsurance = [
     {
-      label: 'Monthly benefit as a percentage of monthly salary',
-      value: quote.value.phi.monthly_benefit_percentage + '%'
+      label: 'Income replacement percentage',
+      value: quote.value.phi.income_replacement_percentage + '%'
     },
     {
       label: 'Maximum number of monthly payments to be made',
-      value: quote.value.phi.number_monthly_payments * 12
+      value: quote.value.phi.number_monthly_payments
     },
     {
       label: 'Waiting Period',
@@ -844,12 +844,12 @@ const createQuotePdf = async () => {
 
   const totalTemporaryDisability = [
     {
-      label: 'Monthly benefit as a percentage of monthly salary',
-      value: quote.value.ttd.monthly_benefit_percentage + '%'
+      label: 'Income replacement percentage',
+      value: quote.value.ttd.income_replacement_percentage + '%'
     },
     {
       label: 'Maximum number of monthly payments to be made',
-      value: quote.value.ttd.number_monthly_payments * 12
+      value: quote.value.ttd.number_monthly_payments
     },
     {
       label: 'Waiting Period',
@@ -899,8 +899,8 @@ const createQuotePdf = async () => {
       value: quote.value.ci.benefit_structure
     },
     {
-      label: 'Critical Illness Percentage',
-      value: quote.value.ci.critical_illness_percentage + '%'
+      label: 'Critical Illness Salary Multiple',
+      value: quote.value.ci.critical_illness_salary_multiple
     },
     {
       label: 'Maximum Benefit',
@@ -968,7 +968,7 @@ const createQuotePdf = async () => {
     },
     {
       label: 'Maximum number of dependants covered',
-      value: quote.value.family_funeral.number_adult_dependants
+      value: quote.value.family_funeral.maximum_number_dependants
     }
   ]
 

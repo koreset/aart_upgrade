@@ -60,7 +60,7 @@
                   variant="outlined"
                   density="compact"
                   placeholder="Enter a value"
-                  label="Salary Multiple"
+                  label="PTD Salary Multiple"
                 ></v-text-field>
               </v-col>
               <v-col cols="4">
@@ -132,7 +132,7 @@
                     groupStore.group_pricing_quote.ci.critical_illness_percentage
                   "
                   placeholder="Enter a value"
-                  label="Critical Illness Percentage"
+                  label="Critical Illness Salary Multiple"
                   variant="outlined"
                   density="compact"
                   type="number"
@@ -164,7 +164,7 @@
                 <v-text-field
                   v-model:model-value="groupStore.group_pricing_quote.sgla.sgla_percentage"
                   placeholder="Enter a value"
-                  label="SGLA Percentage of Annual Salary"
+                  label="SGLA Salary Multiple"
                   variant="outlined"
                   density="compact"
                   type="number"
@@ -217,7 +217,7 @@
                 <v-text-field
                   v-model:model-value="groupStore.group_pricing_quote.phi.maximum_benefit"
                   placeholder="Enter a value"
-                  label="Maximum Basic Benefit"
+                  label="Maximum Monthly Benefit"
                   variant="outlined"
                   density="compact"
                   type="number"
@@ -229,7 +229,7 @@
                     groupStore.group_pricing_quote.phi.monthly_benefit_percentage
                   "
                   placeholder="Enter a value"
-                  label="Monthly Benefit"
+                  label="Income Replacement %"
                   variant="outlined"
                   density="compact"
                   type="number"
@@ -352,7 +352,7 @@
                 <v-text-field
                   v-model:model-value="groupStore.group_pricing_quote.ttd.maximum_benefit"
                   placeholder="Enter a value"
-                  label="Maximum Basic Benefit"
+                  label="Maximum Monthly Benefit"
                   variant="outlined"
                   density="compact"
                   type="number"
@@ -364,7 +364,7 @@
                     groupStore.group_pricing_quote.ttd.monthly_benefit_percentage
                   "
                   placeholder="Enter a value"
-                  label="Monthly Benefit"
+                  label="Income Replacement %"
                   variant="outlined"
                   density="compact"
                   type="number"
@@ -518,7 +518,7 @@
                   variant="outlined"
                   density="compact"
                   placeholder="Enter a value"
-                  label="Adult Dependant Sum Assured"
+                  label="Dependant Sum Assured"
                 ></v-text-field>
               </v-col>
               <v-col cols="4">
@@ -543,7 +543,7 @@
                   variant="outlined"
                   density="compact"
                   placeholder="Enter a value"
-                  label="Number of Children"
+                  label="Maximum Number of Children"
                 ></v-text-field>
               </v-col>
               <v-col cols="4">
@@ -555,7 +555,7 @@
                   variant="outlined"
                   density="compact"
                   placeholder="Enter a value"
-                  label="Number of Adult Dependants"
+                  label="Maximum Number of Dependants"
                 ></v-text-field>
               </v-col>
             </v-row>
