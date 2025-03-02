@@ -1,6 +1,6 @@
 <!-- eslint-disable no-use-before-define -->
 <template>
-  <v-container fluid>
+  <v-container>
     <v-row>
       <v-col>
         <base-card :show-actions="false">
@@ -22,8 +22,25 @@
               </v-col>
             </v-row>
 
-            <v-divider class="my-5"></v-divider>
+            <v-divider class="mb-5 mt-n6"></v-divider>
             <v-row class="d-flex justify-center">
+              <v-col v-for="card in cards" :key="card.title" :cols="card.flex">
+                <v-card variant="tonal" color="primary" class="dash-card">
+                  <v-card-title
+                    ><span class="d-flex justify-center">{{ card.title }}</span></v-card-title
+                  >
+                  <v-card-text>
+                    <v-row>
+                      <v-col class="d-flex justify-center">
+                        <h2>{{ addFormat(card) }}</h2>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+
+            <!-- <v-row class="d-flex justify-center">
               <v-col v-for="card in cards" :key="card.title" :cols="card.flex">
                 <base-card :show-actions="false">
                   <template #header>
@@ -38,35 +55,40 @@
                   </template>
                 </base-card>
               </v-col>
-            </v-row>
+            </v-row> -->
             <v-divider class="my-5"></v-divider>
             <v-row>
-              <v-col cols="3">
-                <v-select
-                  v-model="selectedDataView"
-                  placeholder="Select a data view"
-                  variant="outlined"
-                  density="compact"
-                  :items="['Annual Premium', 'Count']"
-                  @update:model-value="getCountData"
-                ></v-select>
-              </v-col>
-            </v-row>
-            <v-row class="d-flex justify-center">
-              <v-col cols="3">
-                <ag-charts v-if="conversionOptions" :options="conversionOptions"></ag-charts>
-              </v-col>
-              <v-col cols="3">
-                <ag-charts
-                  v-if="inForceSchemesOptions"
-                  :options="inForceSchemesOptions"
-                ></ag-charts>
-              </v-col>
-              <v-col cols="3">
-                <ag-charts v-if="newQuoteOptions" :options="newQuoteOptions"></ag-charts>
-              </v-col>
-              <v-col cols="3">
-                <ag-charts v-if="renewalsOptions" :options="renewalsOptions"></ag-charts>
+              <v-col class="pane-bg pa-5 ma-3">
+                <v-row class="mb-n12">
+                  <v-col cols="3">
+                    View by:
+                    <v-select
+                      v-model="selectedDataView"
+                      placeholder="Select a data view"
+                      variant="outlined"
+                      density="compact"
+                      :items="['Annual Premium', 'Count']"
+                      @update:model-value="getCountData"
+                    ></v-select>
+                  </v-col>
+                </v-row>
+                <v-row class="d-flex justify-center">
+                  <v-col cols="3">
+                    <ag-charts v-if="conversionOptions" :options="conversionOptions"></ag-charts>
+                  </v-col>
+                  <v-col cols="3">
+                    <ag-charts
+                      v-if="inForceSchemesOptions"
+                      :options="inForceSchemesOptions"
+                    ></ag-charts>
+                  </v-col>
+                  <v-col cols="3">
+                    <ag-charts v-if="newQuoteOptions" :options="newQuoteOptions"></ag-charts>
+                  </v-col>
+                  <v-col cols="3">
+                    <ag-charts v-if="renewalsOptions" :options="renewalsOptions"></ag-charts>
+                  </v-col>
+                </v-row>
               </v-col>
             </v-row>
             <v-divider class="my-5"></v-divider>
@@ -178,6 +200,14 @@ const downloadRevChart = () => {
   if (revenueCharts.value) {
     revenueCharts.value.chart.download()
   }
+}
+
+const addFormat = (card: any) => {
+  console.log('Adding format for:', card)
+  if (card.data_type === 'currency') {
+    return `R${card.value}`
+  }
+  return card.value
 }
 
 const getCountData = () => {
@@ -610,5 +640,18 @@ const refreshDashboard = async () => {
   border: 1px solid green;
   padding: 0px;
   border-radius: 10px;
+}
+
+.pane-bg {
+  background-color: #f5f5f5;
+  border: 1px solid #f5f5f5;
+  border-radius: 3px;
+  margin: 0px;
+  padding: 0px;
+}
+
+.dash-card {
+  border-radius: 10px;
+  border: 1px solid #b2cbe1;
 }
 </style>
