@@ -214,15 +214,30 @@ const changeChartDataSource = () => {
   let convertedQuotes = 0
   let unconvertedQuotes = 0
   let totalQuotes = 0
+
+  let inForceSchemesRenewal = 0
+  let inForceSchemesNew = 0
+  let inForceSchemesTotal = 0
+  // let inForceInnerLabel = ''
+
   if (data) {
     if (selectedDataView.value === 'Annual Premium') {
       convertedQuotes = data.new_quotes_converted_premium
       unconvertedQuotes = data.new_quotes_unconverted_premium
       totalQuotes = data.new_quotes_total_premium
+
+      inForceSchemesRenewal = data.renewals_in_force_premium
+      inForceSchemesNew = data.new_business_in_force_premium
+      inForceSchemesTotal = data.total_in_force_premium
+      // inForceInnerLabel = `${(inForceSchemesRenewal / inForceSchemesTotal) * 100}%`
     } else {
       convertedQuotes = data.new_quotes_converted_count
       unconvertedQuotes = data.new_quotes_unconverted_count
       totalQuotes = data.new_quotes_total_count
+
+      inForceSchemesRenewal = data.renewals_in_force_count
+      inForceSchemesNew = data.new_business_in_force_count
+      inForceSchemesTotal = data.total_in_force_count
     }
   }
 
@@ -244,6 +259,37 @@ const changeChartDataSource = () => {
         innerLabels: [
           {
             text: `${(convertedQuotes / totalQuotes) * 100}%`,
+            spacing: 4,
+            fontSize: 10,
+            color: 'black'
+          }
+        ],
+        innerCircle: {
+          fill: '#c9fdc9'
+        },
+        showInLegend: true
+      }
+    ]
+  }
+
+  inForceSchemesOptions.value = {
+    ...inForceSchemesOptions.value,
+    data: [
+      { asset: 'Renewal', amount: inForceSchemesRenewal },
+      { asset: 'New Business', amount: inForceSchemesNew }
+    ],
+    series: [
+      {
+        type: 'donut',
+        calloutLabelKey: 'asset',
+        calloutLabel: {
+          enabled: false
+        },
+        angleKey: 'amount',
+        innerRadiusRatio: 0.6,
+        innerLabels: [
+          {
+            text: `${(inForceSchemesRenewal / inForceSchemesTotal) * 100}%`,
             spacing: 4,
             fontSize: 10,
             color: 'black'
