@@ -223,12 +223,12 @@ const changeChartDataSource = () => {
   let newQuotesInProgress = 0
   let newQuotesApproved = 0
   let newQuotesAccepted = 0
-  let totalnewQuotes = 0
+  let totalnewQuotes = ''
 
   let renewalQuotesInProgress = 0
   let renewalQuotesApproved = 0
   let renewalQuotesAccepted = 0
-  let totalrenewalQuotes = 0
+  let totalrenewalQuotes = ''
 
   // let inForceInnerLabel = ''
 
@@ -245,12 +245,12 @@ const changeChartDataSource = () => {
       newQuotesInProgress =  data.new_quotes_in_progress_premium/1000000
       newQuotesApproved = data.new_quotes_approved_premium/1000000
       newQuotesAccepted = data.new_quotes_in_force_premium/1000000
-      totalnewQuotes  = newQuotesInProgress + newQuotesApproved + newQuotesAccepted
+      totalnewQuotes  = `${roundUpToTwoDecimals(newQuotesInProgress + newQuotesApproved + newQuotesAccepted)}m`
 
       renewalQuotesInProgress =  data.renewals_quotes_in_progress_premium/1000000
       renewalQuotesApproved = data.renewals_quotes_approved_premium/1000000
       renewalQuotesAccepted = data.renewals_quotes_in_force_premium/1000000
-      totalrenewalQuotes  = renewalQuotesInProgress + renewalQuotesApproved + renewalQuotesAccepted
+      totalrenewalQuotes  = `${roundUpToTwoDecimals(renewalQuotesInProgress + renewalQuotesApproved + renewalQuotesAccepted)}m`
     } else {
       convertedQuotes = data.new_quotes_converted_count
       unconvertedQuotes = data.new_quotes_unconverted_count
@@ -263,14 +263,17 @@ const changeChartDataSource = () => {
       newQuotesInProgress = data.new_quotes_in_progress_count
       newQuotesApproved = data.new_quotes_approved_count
       newQuotesAccepted = data.new_quotes_in_force_count
-      totalnewQuotes  = newQuotesInProgress + newQuotesApproved + newQuotesAccepted
+      totalnewQuotes  = roundUpToTwoDecimals(newQuotesInProgress + newQuotesApproved + newQuotesAccepted)
 
       renewalQuotesInProgress =  data.renewals_quotes_in_progress_count
       renewalQuotesApproved = data.renewals_quotes_approved_count
       renewalQuotesAccepted = data.renewals_quotes_in_force_count
-      totalrenewalQuotes  = renewalQuotesInProgress + renewalQuotesApproved + renewalQuotesAccepted
+      totalrenewalQuotes  = roundUpToTwoDecimals(renewalQuotesInProgress + renewalQuotesApproved + renewalQuotesAccepted)
     }
   }
+  console.log(convertedQuotes)
+  console.log(unconvertedQuotes)
+  console.log(totalQuotes)
 
 
   conversionOptions.value = {
@@ -284,7 +287,7 @@ const changeChartDataSource = () => {
         ...conversionOptions.value.series[0],
         innerLabels: [
           {
-            text: `${(convertedQuotes / totalQuotes) * 100}%`,
+            text: `${roundUpToTwoDecimals((convertedQuotes / totalQuotes) * 100)}%`,
             spacing: 4,
             fontSize: 14,
             color: 'black'
@@ -350,9 +353,9 @@ const changeChartDataSource = () => {
   renewalsOptions.value = {
     ...renewalsOptions.value,
     data: [
-      { asset: 'InProgress', amount: newQuotesInProgress },
-      { asset: 'Approved', amount: newQuotesApproved },
-      { asset: 'Accepted', amount: newQuotesAccepted }
+      { asset: 'InProgress', amount: renewalQuotesInProgress },
+      { asset: 'Approved', amount: renewalQuotesApproved },
+      { asset: 'Accepted', amount: renewalQuotesAccepted }
     ],
     series: [
       {
