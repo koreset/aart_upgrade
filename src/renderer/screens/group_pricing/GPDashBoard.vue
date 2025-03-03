@@ -217,7 +217,7 @@ const changeChartDataSource = () => {
 
   let inForceSchemesRenewal = 0
   let inForceSchemesNew = 0
-  let inForceSchemesTotal = 0
+  let inForceSchemesTotal = ''
   // let inForceInnerLabel = ''
 
   if (data) {
@@ -228,7 +228,7 @@ const changeChartDataSource = () => {
 
       inForceSchemesRenewal = data.renewals_in_force_premium
       inForceSchemesNew = data.new_business_in_force_premium
-      inForceSchemesTotal = data.total_in_force_premium
+      inForceSchemesTotal = `Total ${(roundUpToTwoDecimals(data.total_in_force_premium/1000000))}m`
       // inForceInnerLabel = `${(inForceSchemesRenewal / inForceSchemesTotal) * 100}%`
     } else {
       convertedQuotes = data.new_quotes_converted_count
@@ -237,7 +237,7 @@ const changeChartDataSource = () => {
 
       inForceSchemesRenewal = data.renewals_in_force_count
       inForceSchemesNew = data.new_business_in_force_count
-      inForceSchemesTotal = data.total_in_force_count
+      inForceSchemesTotal = `Total ${(data.total_in_force_count)}`
     }
   }
 
@@ -260,7 +260,7 @@ const changeChartDataSource = () => {
           {
             text: `${(convertedQuotes / totalQuotes) * 100}%`,
             spacing: 4,
-            fontSize: 10,
+            fontSize: 14,
             color: 'black'
           }
         ],
@@ -289,9 +289,9 @@ const changeChartDataSource = () => {
         innerRadiusRatio: 0.6,
         innerLabels: [
           {
-            text: `${(inForceSchemesRenewal / inForceSchemesTotal) * 100}%`,
+            text: inForceSchemesTotal,
             spacing: 4,
-            fontSize: 10,
+            fontSize: 14,
             color: 'black'
           }
         ],
@@ -690,6 +690,15 @@ const refreshDashboard = async () => {
     // }
     getExposureData()
   }
+}
+const roundUpToTwoDecimals = (num) => {
+  const roundedNum = Math.ceil(num * 100) / 100 // Round up to two decimal places
+  return roundedNum
+    .toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    })
+    .replace(/,/g, ' ') // Replace commas with spaces for accounting format }
 }
 </script>
 <style lang="css" scoped>
