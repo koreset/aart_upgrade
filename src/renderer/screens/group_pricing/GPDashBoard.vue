@@ -176,6 +176,7 @@ const newQuotesTotalCount: any = ref(0)
 let data: any = null
 
 const benefitList = ['All', 'GLA', 'SGLA', 'PTD', 'CI', 'PHI', 'TTD']
+const inForceInnerLabel: any = ref<string>('')
 
 onMounted(() => {
   // set the selected year to the current year
@@ -229,7 +230,6 @@ const changeChartDataSource = () => {
       inForceSchemesRenewal = data.renewals_in_force_premium
       inForceSchemesNew = data.new_business_in_force_premium
       inForceSchemesTotal = data.total_in_force_premium
-      // inForceInnerLabel = `${(inForceSchemesRenewal / inForceSchemesTotal) * 100}%`
     } else {
       convertedQuotes = data.new_quotes_converted_count
       unconvertedQuotes = data.new_quotes_unconverted_count
@@ -241,6 +241,8 @@ const changeChartDataSource = () => {
     }
   }
 
+  inForceInnerLabel.value = `${(inForceSchemesRenewal / inForceSchemesTotal) * 100}%`
+
   conversionOptions.value = {
     ...conversionOptions.value,
     data: [
@@ -249,13 +251,7 @@ const changeChartDataSource = () => {
     ],
     series: [
       {
-        type: 'donut',
-        calloutLabelKey: 'asset',
-        calloutLabel: {
-          enabled: false
-        },
-        angleKey: 'amount',
-        innerRadiusRatio: 0.6,
+        ...conversionOptions.value.series[0],
         innerLabels: [
           {
             text: `${(convertedQuotes / totalQuotes) * 100}%`,
@@ -263,11 +259,7 @@ const changeChartDataSource = () => {
             fontSize: 10,
             color: 'black'
           }
-        ],
-        innerCircle: {
-          fill: '#c9fdc9'
-        },
-        showInLegend: true
+        ]
       }
     ]
   }
@@ -280,25 +272,15 @@ const changeChartDataSource = () => {
     ],
     series: [
       {
-        type: 'donut',
-        calloutLabelKey: 'asset',
-        calloutLabel: {
-          enabled: false
-        },
-        angleKey: 'amount',
-        innerRadiusRatio: 0.6,
+        ...inForceSchemesOptions.value.series[0],
         innerLabels: [
           {
-            text: `${(inForceSchemesRenewal / inForceSchemesTotal) * 100}%`,
+            text: `${inForceInnerLabel.value}`,
             spacing: 4,
             fontSize: 10,
             color: 'black'
           }
-        ],
-        innerCircle: {
-          fill: '#c9fdc9'
-        },
-        showInLegend: true
+        ]
       }
     ]
   }
@@ -376,7 +358,7 @@ const conversionOptions: any = ref<AgChartOptions>({
           fontWeight: 'bold'
         },
         {
-          text: `${newQuotesTotalCount.value}`,
+          text: `100`,
           spacing: 4,
           fontSize: 14,
           color: 'black'
@@ -417,7 +399,7 @@ const inForceSchemesOptions: any = ref<AgChartOptions>({
           fontWeight: 'bold'
         },
         {
-          text: `${newQuotesTotalCount.value}`,
+          text: `${inForceInnerLabel.value}`,
           spacing: 4,
           fontSize: 14,
           color: 'black'
