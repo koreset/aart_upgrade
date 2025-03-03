@@ -218,6 +218,16 @@ const changeChartDataSource = () => {
   let inForceSchemesRenewal = 0
   let inForceSchemesNew = 0
   let inForceSchemesTotal = ''
+
+  let newQuotesInProgress = 0
+  let newQuotesApproved = 0
+  let newQuotesAccepted = 0
+  let totalnewQuotes = 0
+
+  let renewalQuotesInProgress = 0
+  let renewalQuotesApproved = 0
+  let renewalQuotesAccepted = 0
+  let totalrenewalQuotes = 0
   // let inForceInnerLabel = ''
 
   if (data) {
@@ -225,11 +235,22 @@ const changeChartDataSource = () => {
       convertedQuotes = data.new_quotes_converted_premium
       unconvertedQuotes = data.new_quotes_unconverted_premium
       totalQuotes = data.new_quotes_total_premium
-
+    
       inForceSchemesRenewal = data.renewals_in_force_premium
       inForceSchemesNew = data.new_business_in_force_premium
       inForceSchemesTotal = `Total ${(roundUpToTwoDecimals(data.total_in_force_premium/1000000))}m`
       // inForceInnerLabel = `${(inForceSchemesRenewal / inForceSchemesTotal) * 100}%`
+
+      newQuotesInProgress =  data.new_quotes_in_progress_premium/1000000
+      newQuotesApproved = data.new_quotes_approved_premium/1000000
+      newQuotesAccepted = data.new_quotes_in_force_premium/1000000
+      totalnewQuotes  = newQuotesInProgress + newQuotesApproved + newQuotesAccepted
+
+      renewalQuotesInProgress =  data.renewals_quotes_in_progress_premium/1000000
+      renewalQuotesApproved = data.renewals_quotes_approved_premium/1000000
+      renewalQuotesAccepted = data.renewals_quotes_in_force_premium/1000000
+      totalrenewalQuotes  = renewalQuotesInProgress + renewalQuotesApproved + renewalQuotesAccepted
+
     } else {
       convertedQuotes = data.new_quotes_converted_count
       unconvertedQuotes = data.new_quotes_unconverted_count
@@ -238,6 +259,16 @@ const changeChartDataSource = () => {
       inForceSchemesRenewal = data.renewals_in_force_count
       inForceSchemesNew = data.new_business_in_force_count
       inForceSchemesTotal = `Total ${(data.total_in_force_count)}`
+
+      newQuotesInProgress = data.new_quotes_in_progress_count
+      newQuotesApproved = data.new_quotes_approved_count
+      newQuotesAccepted = data.new_quotes_in_force_count
+      totalnewQuotes  = newQuotesInProgress + newQuotesApproved + newQuotesAccepted
+
+      renewalQuotesInProgress =  data.renewals_quotes_in_progress_count
+      renewalQuotesApproved = data.renewals_quotes_approved_count
+      renewalQuotesAccepted = data.renewals_quotes_in_force_count
+      totalrenewalQuotes  = renewalQuotesInProgress + renewalQuotesApproved + renewalQuotesAccepted
     }
   }
 
@@ -290,6 +321,70 @@ const changeChartDataSource = () => {
         innerLabels: [
           {
             text: inForceSchemesTotal,
+            spacing: 4,
+            fontSize: 14,
+            color: 'black'
+          }
+        ],
+        innerCircle: {
+          fill: '#c9fdc9'
+        },
+        showInLegend: true
+      }
+    ]
+  }
+
+  newQuoteOptions.value = {
+    ...newQuoteOptions.value,
+    data: [
+      { asset: 'InProgress', amount: newQuotesInProgress },
+      { asset: 'Approved', amount: newQuotesApproved },
+      { asset: 'Accepted', amount: newQuotesAccepted }
+    ],
+    series: [
+      {
+        type: 'donut',
+        calloutLabelKey: 'asset',
+        calloutLabel: {
+          enabled: false
+        },
+        angleKey: 'amount',
+        innerRadiusRatio: 0.6,
+        innerLabels: [
+          {
+            text: totalnewQuotes,
+            spacing: 4,
+            fontSize: 14,
+            color: 'black'
+          }
+        ],
+        innerCircle: {
+          fill: '#c9fdc9'
+        },
+        showInLegend: true
+      }
+    ]
+  }
+
+  renewalsOptions.value = {
+    ...renewalsOptions.value,
+    data: [
+      { asset: 'InProgress', amount: newQuotesInProgress },
+      { asset: 'Approved', amount: newQuotesApproved },
+      { asset: 'Accepted', amount: newQuotesAccepted }
+    ],
+    series: [
+      {
+        type: 'donut',
+        calloutLabelKey: 'asset',
+        calloutLabel: {
+          enabled: false
+        },
+        angleKey: 'amount',
+        innerRadiusRatio: 0.6,
+        innerLabels: [
+          {
+            text: totalrenewalQuotes,
             spacing: 4,
             fontSize: 14,
             color: 'black'
@@ -434,8 +529,9 @@ const inForceSchemesOptions: any = ref<AgChartOptions>({
 const newQuoteOptions: any = ref<AgChartOptions>({
   // Data: Data to be displayed in the chart
   data: [
-    { asset: 'New', amount: 39 },
-    { asset: 'Old', amount: 61 }
+    { asset: 'InProgress', amount: 39 },
+    { asset: 'Approved', amount: 61 },
+    { asset: 'Accepted', amount: 20 }
   ],
   title: {
     text: 'New Quotes',
@@ -475,8 +571,9 @@ const newQuoteOptions: any = ref<AgChartOptions>({
 const renewalsOptions: any = ref<AgChartOptions>({
   // Data: Data to be displayed in the chart
   data: [
-    { asset: 'New', amount: 39 },
-    { asset: 'Old', amount: 61 }
+    { asset: 'InProgress', amount: 39 },
+    { asset: 'Approved', amount: 61 },
+    { asset: 'Accepted', amount: 20 }
   ],
   title: {
     text: 'Renewals',
