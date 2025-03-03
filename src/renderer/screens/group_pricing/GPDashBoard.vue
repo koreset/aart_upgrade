@@ -256,7 +256,7 @@ const changeChartDataSource = () => {
           {
             text: `${(convertedQuotes / totalQuotes) * 100}%`,
             spacing: 4,
-            fontSize: 10,
+            fontSize: 14,
             color: 'black'
           }
         ]
@@ -277,7 +277,7 @@ const changeChartDataSource = () => {
           {
             text: `${inForceInnerLabel.value}`,
             spacing: 4,
-            fontSize: 10,
+            fontSize: 14,
             color: 'black'
           }
         ]
@@ -673,6 +673,15 @@ const refreshDashboard = async () => {
     getExposureData()
   }
 }
+// const roundUpToTwoDecimals = (num) => {
+//   const roundedNum = Math.ceil(num * 100) / 100 // Round up to two decimal places
+//   return roundedNum
+//     .toLocaleString('en-US', {
+//       minimumFractionDigits: 2,
+//       maximumFractionDigits: 2
+//     })
+//     .replace(/,/g, ' ') // Replace commas with spaces for accounting format }
+// }
 </script>
 <style lang="css" scoped>
 .card-bg {
