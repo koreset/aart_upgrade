@@ -68,7 +68,7 @@
                       variant="outlined"
                       density="compact"
                       :items="['Annual Premium', 'Count']"
-                      @update:model-value="getCountData"
+                      @update:model-value="changeChartDataSource"
                     ></v-select>
                   </v-col>
                 </v-row>
@@ -172,13 +172,8 @@ const availableYears = computed(() => {
 const selectedBenefit = ref<string | null>(null)
 const gicCharts: any = ref(null)
 const revenueCharts: any = ref(null)
-const allQuotes: any = ref(0)
-const convertedQuotes: any = ref(0)
-// const unconvertedQuotes: any = ref(0)
-
-// const getTotalQuotes = () => {
-//   return allQuotes.value
-// }
+const newQuotesTotalCount: any = ref(0)
+let data: any = null
 
 const benefitList = ['All', 'GLA', 'SGLA', 'PTD', 'CI', 'PHI', 'TTD']
 
@@ -214,8 +209,53 @@ const addFormat = (card: any) => {
   return card.value
 }
 
-const getCountData = () => {
+const changeChartDataSource = () => {
   console.log('Getting data for:', selectedDataView.value)
+  let convertedQuotes = 0
+  let unconvertedQuotes = 0
+  let totalQuotes = 0
+  if (data) {
+    if (selectedDataView.value === 'Annual Premium') {
+      convertedQuotes = data.new_quotes_converted_premium
+      unconvertedQuotes = data.new_quotes_unconverted_premium
+      totalQuotes = data.new_quotes_total_premium
+    } else {
+      convertedQuotes = data.new_quotes_converted_count
+      unconvertedQuotes = data.new_quotes_unconverted_count
+      totalQuotes = data.new_quotes_total_count
+    }
+  }
+
+  conversionOptions.value = {
+    ...conversionOptions.value,
+    data: [
+      { asset: 'Converted', amount: convertedQuotes },
+      { asset: 'Unconverted', amount: unconvertedQuotes }
+    ],
+    series: [
+      {
+        type: 'donut',
+        calloutLabelKey: 'asset',
+        calloutLabel: {
+          enabled: false
+        },
+        angleKey: 'amount',
+        innerRadiusRatio: 0.6,
+        innerLabels: [
+          {
+            text: `${(convertedQuotes / totalQuotes) * 100}%`,
+            spacing: 4,
+            fontSize: 10,
+            color: 'black'
+          }
+        ],
+        innerCircle: {
+          fill: '#c9fdc9'
+        },
+        showInLegend: true
+      }
+    ]
+  }
 }
 
 const getExposureData = async () => {
@@ -290,7 +330,7 @@ const conversionOptions: any = ref<AgChartOptions>({
           fontWeight: 'bold'
         },
         {
-          text: `${allQuotes.value}`,
+          text: `${newQuotesTotalCount.value}`,
           spacing: 4,
           fontSize: 14,
           color: 'black'
@@ -331,7 +371,7 @@ const inForceSchemesOptions: any = ref<AgChartOptions>({
           fontWeight: 'bold'
         },
         {
-          text: `${allQuotes.value}`,
+          text: `${newQuotesTotalCount.value}`,
           spacing: 4,
           fontSize: 14,
           color: 'black'
@@ -372,7 +412,7 @@ const newQuoteOptions: any = ref<AgChartOptions>({
           fontWeight: 'bold'
         },
         {
-          text: `${allQuotes.value}`,
+          text: `${newQuotesTotalCount.value}`,
           spacing: 4,
           fontSize: 14,
           color: 'black'
@@ -413,7 +453,7 @@ const renewalsOptions: any = ref<AgChartOptions>({
           fontWeight: 'bold'
         },
         {
-          text: `${allQuotes.value}`,
+          text: `${newQuotesTotalCount.value}`,
           spacing: 4,
           fontSize: 14,
           color: 'black'
@@ -552,40 +592,16 @@ const refreshDashboard = async () => {
     console.log('Refreshing Dashboard for year:', selectedYear.value)
     const res = await GroupPricingService.getDashboardData(selectedYear.value)
     console.log(res.data)
-    allQuotes.value = res.data.all_quotes
-    convertedQuotes.value = res.data.in_force_quotes
+    data = res.data
+
+    // newQuotesTotalPremium.value = res.data.new_quotes_total_premium
+    // newQuotesTotalCount.value = res.data.new_quotes_total_count
+    // newQuotesConvertedPremium.value = res.data.in_force_quotes
     // get the following data for the selected year
     // 1. Quote Conversion
-    conversionOptions.value = {
-      ...conversionOptions.value,
-      data: [
-        { asset: 'Converted', amount: convertedQuotes.value },
-        { asset: 'Unconverted', amount: allQuotes.value - convertedQuotes.value }
-      ],
-      series: [
-        {
-          type: 'donut',
-          calloutLabelKey: 'asset',
-          calloutLabel: {
-            enabled: false
-          },
-          angleKey: 'amount',
-          innerRadiusRatio: 0.6,
-          innerLabels: [
-            {
-              text: `${(convertedQuotes.value / allQuotes.value) * 100}%`,
-              spacing: 4,
-              fontSize: 14,
-              color: 'black'
-            }
-          ],
-          innerCircle: {
-            fill: '#c9fdc9'
-          },
-          showInLegend: true
-        }
-      ]
-    }
+
+    changeChartDataSource()
+
     // 2. Total Revenue by Benefit
     gicOptions.value = {
       ...gicOptions.value,
