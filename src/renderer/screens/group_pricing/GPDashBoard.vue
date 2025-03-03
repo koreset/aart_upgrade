@@ -26,13 +26,13 @@
             <v-row class="d-flex justify-center">
               <v-col v-for="card in cards" :key="card.title" :cols="card.flex">
                 <v-card variant="tonal" color="primary" class="dash-card">
-                  <v-card-title
-                    ><span class="d-flex justify-center">{{ card.title }}</span></v-card-title
+                  <v-card-subtitle
+                    ><h5>{{ card.title }}</h5></v-card-subtitle
                   >
                   <v-card-text>
                     <v-row>
                       <v-col class="d-flex justify-center">
-                        <h2>{{ addFormat(card) }}</h2>
+                        <h1>{{ addFormat(card) }}</h1>
                       </v-col>
                     </v-row>
                   </v-card-text>
@@ -202,10 +202,14 @@ const downloadRevChart = () => {
   }
 }
 
+const formatWithCommas = (value: number) => {
+  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}
+
 const addFormat = (card: any) => {
   console.log('Adding format for:', card)
   if (card.data_type === 'currency') {
-    return `R${card.value}`
+    return `R${formatWithCommas(card.value)}`
   }
   return card.value
 }
