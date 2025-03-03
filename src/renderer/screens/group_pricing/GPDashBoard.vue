@@ -176,6 +176,7 @@ const newQuotesTotalCount: any = ref(0)
 let data: any = null
 
 const benefitList = ['All', 'GLA', 'SGLA', 'PTD', 'CI', 'PHI', 'TTD']
+const inForceInnerLabel: any = ref<string>('')
 
 onMounted(() => {
   // set the selected year to the current year
@@ -228,6 +229,7 @@ const changeChartDataSource = () => {
   let renewalQuotesApproved = 0
   let renewalQuotesAccepted = 0
   let totalrenewalQuotes = 0
+
   // let inForceInnerLabel = ''
 
   if (data) {
@@ -238,8 +240,7 @@ const changeChartDataSource = () => {
     
       inForceSchemesRenewal = data.renewals_in_force_premium
       inForceSchemesNew = data.new_business_in_force_premium
-      inForceSchemesTotal = `Total ${(roundUpToTwoDecimals(data.total_in_force_premium/1000000))}m`
-      // inForceInnerLabel = `${(inForceSchemesRenewal / inForceSchemesTotal) * 100}%`
+      inForceSchemesTotal = roundUpToTwoDecimals(data.total_in_force_premium/1000000)
 
       newQuotesInProgress =  data.new_quotes_in_progress_premium/1000000
       newQuotesApproved = data.new_quotes_approved_premium/1000000
@@ -250,7 +251,6 @@ const changeChartDataSource = () => {
       renewalQuotesApproved = data.renewals_quotes_approved_premium/1000000
       renewalQuotesAccepted = data.renewals_quotes_in_force_premium/1000000
       totalrenewalQuotes  = renewalQuotesInProgress + renewalQuotesApproved + renewalQuotesAccepted
-
     } else {
       convertedQuotes = data.new_quotes_converted_count
       unconvertedQuotes = data.new_quotes_unconverted_count
@@ -258,7 +258,7 @@ const changeChartDataSource = () => {
 
       inForceSchemesRenewal = data.renewals_in_force_count
       inForceSchemesNew = data.new_business_in_force_count
-      inForceSchemesTotal = `Total ${(data.total_in_force_count)}`
+      inForceSchemesTotal = data.total_in_force_count
 
       newQuotesInProgress = data.new_quotes_in_progress_count
       newQuotesApproved = data.new_quotes_approved_count
@@ -272,6 +272,7 @@ const changeChartDataSource = () => {
     }
   }
 
+
   conversionOptions.value = {
     ...conversionOptions.value,
     data: [
@@ -280,13 +281,7 @@ const changeChartDataSource = () => {
     ],
     series: [
       {
-        type: 'donut',
-        calloutLabelKey: 'asset',
-        calloutLabel: {
-          enabled: false
-        },
-        angleKey: 'amount',
-        innerRadiusRatio: 0.6,
+        ...conversionOptions.value.series[0],
         innerLabels: [
           {
             text: `${(convertedQuotes / totalQuotes) * 100}%`,
@@ -294,11 +289,7 @@ const changeChartDataSource = () => {
             fontSize: 14,
             color: 'black'
           }
-        ],
-        innerCircle: {
-          fill: '#c9fdc9'
-        },
-        showInLegend: true
+        ]
       }
     ]
   }
@@ -311,25 +302,15 @@ const changeChartDataSource = () => {
     ],
     series: [
       {
-        type: 'donut',
-        calloutLabelKey: 'asset',
-        calloutLabel: {
-          enabled: false
-        },
-        angleKey: 'amount',
-        innerRadiusRatio: 0.6,
+        ...inForceSchemesOptions.value.series[0],
         innerLabels: [
           {
-            text: inForceSchemesTotal,
+            text: `Total ${inForceSchemesTotal}m`,
             spacing: 4,
             fontSize: 14,
             color: 'black'
           }
-        ],
-        innerCircle: {
-          fill: '#c9fdc9'
-        },
-        showInLegend: true
+        ]
       }
     ]
   }
@@ -471,7 +452,7 @@ const conversionOptions: any = ref<AgChartOptions>({
           fontWeight: 'bold'
         },
         {
-          text: `${newQuotesTotalCount.value}`,
+          text: `100`,
           spacing: 4,
           fontSize: 14,
           color: 'black'
@@ -512,7 +493,7 @@ const inForceSchemesOptions: any = ref<AgChartOptions>({
           fontWeight: 'bold'
         },
         {
-          text: `${newQuotesTotalCount.value}`,
+          text: `${inForceInnerLabel.value}`,
           spacing: 4,
           fontSize: 14,
           color: 'black'
@@ -730,6 +711,16 @@ const cards = ref([
   { title: 'Gross Profit', value: '200 M', flex: 3 }
 ])
 
+const roundUpToTwoDecimals = (num) => {
+  const roundedNum = Math.ceil(num * 100) / 100 // Round up to two decimal places
+  return roundedNum
+    .toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    })
+    .replace(/,/g, ' ') // Replace commas with spaces for accounting format }
+}
+
 const refreshDashboard = async () => {
   if (selectedYear.value) {
     console.log('Refreshing Dashboard for year:', selectedYear.value)
@@ -788,15 +779,15 @@ const refreshDashboard = async () => {
     getExposureData()
   }
 }
-const roundUpToTwoDecimals = (num) => {
-  const roundedNum = Math.ceil(num * 100) / 100 // Round up to two decimal places
-  return roundedNum
-    .toLocaleString('en-US', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    })
-    .replace(/,/g, ' ') // Replace commas with spaces for accounting format }
-}
+// const roundUpToTwoDecimals = (num) => {
+//   const roundedNum = Math.ceil(num * 100) / 100 // Round up to two decimal places
+//   return roundedNum
+//     .toLocaleString('en-US', {
+//       minimumFractionDigits: 2,
+//       maximumFractionDigits: 2
+//     })
+//     .replace(/,/g, ' ') // Replace commas with spaces for accounting format }
+// }
 </script>
 <style lang="css" scoped>
 .card-bg {
