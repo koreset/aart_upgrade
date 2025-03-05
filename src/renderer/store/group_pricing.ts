@@ -63,13 +63,13 @@ export const useGroupPricingStore = defineStore('groupPricing', {
         disability_definition: null
       },
       ci: {
-        critical_illness_percentage: 0,
+        critical_illness_salary_multiple: 0,
         max_benefit: 0,
         benefit_structure: null,
         cover_termination_age: 0
       },
       sgla: {
-        sgla_percentage: 0,
+        sgla_salary_multiple: 0,
         max_benefit: 0,
         cover_termination_age: 0
       },
@@ -77,7 +77,7 @@ export const useGroupPricingStore = defineStore('groupPricing', {
         benefit: null,
         risk_type: null,
         maximum_benefit: 0,
-        monthly_benefit_percentage: 0,
+        phi_income_replacement_percentage: 0,
         premium_waiver: null,
         premium_waiver_percentage: 0,
         escalation_percentage: null,
@@ -92,7 +92,7 @@ export const useGroupPricingStore = defineStore('groupPricing', {
         benefit: null,
         risk_type: null,
         maximum_benefit: 0,
-        monthly_benefit_percentage: 0,
+        ttd_income_replacement_percentage: 0,
         premium_waiver: null,
         premium_waiver_percentage: 0,
         escalation_percentage: null,
@@ -109,8 +109,8 @@ export const useGroupPricingStore = defineStore('groupPricing', {
         children_funeral_sum_assured: 0,
         adult_dependant_sum_assured: 0,
         parent_funeral_sum_assured: 0,
-        number_children: 0,
-        number_adult_dependants: 0
+        max_number_children: 0,
+        max_number_adult_dependants: 0
       },
       loadings: {
         commission_loading: 0,
@@ -175,13 +175,13 @@ export const useGroupPricingStore = defineStore('groupPricing', {
           disability_definition: null
         },
         ci: {
-          critical_illness_percentage: 0,
+          critical_illness_salary_multiple: 0,
           max_benefit: 0,
           benefit_structure: null,
           cover_termination_age: 0
         },
         sgla: {
-          sgla_percentage: 0,
+          sgla_salary_multiple: 0,
           max_benefit: 0,
           cover_termination_age: 0
         },
@@ -189,7 +189,7 @@ export const useGroupPricingStore = defineStore('groupPricing', {
           benefit: null,
           risk_type: null,
           maximum_benefit: 0,
-          monthly_benefit_percentage: 0,
+          phi_income_replacement_percentage: 0,
           premium_waiver: null,
           premium_waiver_percentage: 0,
           escalation_percentage: null,
@@ -204,7 +204,7 @@ export const useGroupPricingStore = defineStore('groupPricing', {
           benefit: null,
           risk_type: null,
           maximum_benefit: 0,
-          monthly_benefit_percentage: 0,
+          ttd_income_replacement_percentage: 0,
           premium_waiver: null,
           premium_waiver_percentage: 0,
           escalation_percentage: null,
@@ -221,8 +221,8 @@ export const useGroupPricingStore = defineStore('groupPricing', {
           children_funeral_sum_assured: 0,
           adult_dependant_sum_assured: 0,
           parent_funeral_sum_assured: 0,
-          number_children: 0,
-          number_adult_dependants: 0
+          max_number_children: 0,
+          max_number_adult_dependants: 0
         },
         loadings: {
           commission_loading: 0,

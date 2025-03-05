@@ -129,7 +129,7 @@
               <v-col cols="4">
                 <v-text-field
                   v-model:model-value="
-                    groupStore.group_pricing_quote.ci.critical_illness_percentage
+                    groupStore.group_pricing_quote.ci.critical_illness_salary_multiple
                   "
                   placeholder="Enter a value"
                   label="Critical Illness Salary Multiple"
@@ -162,7 +162,7 @@
             <v-row>
               <v-col cols="4">
                 <v-text-field
-                  v-model:model-value="groupStore.group_pricing_quote.sgla.sgla_percentage"
+                  v-model:model-value="groupStore.group_pricing_quote.sgla.sgla_salary_multiple"
                   placeholder="Enter a value"
                   label="SGLA Salary Multiple"
                   variant="outlined"
@@ -226,7 +226,7 @@
               <v-col cols="4">
                 <v-text-field
                   v-model:model-value="
-                    groupStore.group_pricing_quote.phi.monthly_benefit_percentage
+                    groupStore.group_pricing_quote.phi.phi_income_replacement_percentage
                   "
                   placeholder="Enter a value"
                   label="Income Replacement %"
@@ -361,7 +361,7 @@
               <v-col cols="4">
                 <v-text-field
                   v-model:model-value="
-                    groupStore.group_pricing_quote.ttd.monthly_benefit_percentage
+                    groupStore.group_pricing_quote.ttd.ttd_income_replacement_percentage
                   "
                   placeholder="Enter a value"
                   label="Income Replacement %"
@@ -537,7 +537,7 @@
               <v-col cols="4">
                 <v-text-field
                   v-model:model-value="
-                    groupStore.group_pricing_quote.family_funeral.number_children
+                    groupStore.group_pricing_quote.family_funeral.max_number_children
                   "
                   type="number"
                   variant="outlined"
@@ -549,7 +549,7 @@
               <v-col cols="4">
                 <v-text-field
                   v-model:model-value="
-                    groupStore.group_pricing_quote.family_funeral.number_adult_dependants
+                    groupStore.group_pricing_quote.family_funeral.max_number_adult_dependants
                   "
                   type="number"
                   variant="outlined"
