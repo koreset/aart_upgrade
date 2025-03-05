@@ -226,7 +226,7 @@
               <v-col cols="4">
                 <v-text-field
                   v-model:model-value="
-                    groupStore.group_pricing_quote.phi.phi_income_replacement_percentage
+                    groupStore.group_pricing_quote.phi.income_replacement_percentage
                   "
                   placeholder="Enter a value"
                   label="Income Replacement %"
@@ -361,7 +361,7 @@
               <v-col cols="4">
                 <v-text-field
                   v-model:model-value="
-                    groupStore.group_pricing_quote.ttd.ttd_income_replacement_percentage
+                    groupStore.group_pricing_quote.ttd.income_replacement_percentage
                   "
                   placeholder="Enter a value"
                   label="Income Replacement %"
