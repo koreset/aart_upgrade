@@ -250,10 +250,10 @@
                           >
                         </v-row>
                         <v-row>
-                          <v-col cols="3"><p>Spousal Percentage</p></v-col>
+                          <v-col cols="3"><p>Sgla Salary Multiple</p></v-col>
                           <v-col cols="3"
                             ><p class="text-right content-bg">{{
-                              quote.sgla.sgla_percentage
+                              quote.sgla.sgla_salary_multiple
                             }}</p></v-col
                           >
                         </v-row>
@@ -342,10 +342,10 @@
                           >
                         </v-row>
                         <v-row>
-                          <v-col cols="3"><p>Critical Illness Percentage</p></v-col>
+                          <v-col cols="3"><p>Critical Illness Salary Multiple</p></v-col>
                           <v-col cols="3"
                             ><p class="text-right content-bg">{{
-                              quote.ci.critical_illness_percentage
+                              quote.ci.critical_illness_salary_multiple
                             }}</p></v-col
                           >
                         </v-row>
@@ -407,15 +407,15 @@
                               quote.phi.max_premium_waiver
                             }}</p></v-col
                           >
-                          <v-col cols="3"><p>Monthly Benefit Percentage</p></v-col>
+                          <v-col cols="3"><p>Income Replacement Percentage</p></v-col>
                           <v-col cols="3"
                             ><p class="text-right content-bg">{{
-                              quote.phi.monthly_benefit_percentage
+                              quote.phi.income_replacement_percentage
                             }}</p></v-col
                           >
                         </v-row>
                         <v-row>
-                          <v-col cols="3"><p>Number of Monthly Payments</p></v-col>
+                          <v-col cols="3"><p>Number of Monthly Payments in a Year</p></v-col>
                           <v-col cols="3"
                             ><p class="text-right content-bg">{{
                               quote.phi.number_monthly_payments
@@ -508,15 +508,15 @@
                               quote.ttd.max_premium_waiver
                             }}</p></v-col
                           >
-                          <v-col cols="3"><p>Monthly Benefit Percentage</p></v-col>
+                          <v-col cols="3"><p>Income Replacement Percentage</p></v-col>
                           <v-col cols="3"
                             ><p class="text-right content-bg">{{
-                              quote.ttd.monthly_benefit_percentage
+                              quote.ttd.income_replacement_percentage
                             }}</p></v-col
                           >
                         </v-row>
                         <v-row>
-                          <v-col cols="3"><p>Number of Monthly Payments</p></v-col>
+                          <v-col cols="3"><p>Number of Monthly Payments in a Year</p></v-col>
                           <v-col cols="3"
                             ><p class="text-right content-bg">{{
                               quote.ttd.number_monthly_payments
