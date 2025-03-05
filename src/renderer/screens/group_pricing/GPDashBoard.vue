@@ -237,20 +237,20 @@ const changeChartDataSource = () => {
       convertedQuotes = data.new_quotes_converted_premium
       unconvertedQuotes = data.new_quotes_unconverted_premium
       totalQuotes = data.new_quotes_total_premium
-    
+
       inForceSchemesRenewal = data.renewals_in_force_premium
       inForceSchemesNew = data.new_business_in_force_premium
-      inForceSchemesTotal = roundUpToTwoDecimals(data.total_in_force_premium/1000000)
+      inForceSchemesTotal = `${roundUpToTwoDecimals(data.total_in_force_premium / 1000000)}m`
 
-      newQuotesInProgress =  data.new_quotes_in_progress_premium/1000000
-      newQuotesApproved = data.new_quotes_approved_premium/1000000
-      newQuotesAccepted = data.new_quotes_in_force_premium/1000000
-      totalnewQuotes  = `${roundUpToTwoDecimals(newQuotesInProgress + newQuotesApproved + newQuotesAccepted)}m`
+      newQuotesInProgress = data.new_quotes_in_progress_premium / 1000000
+      newQuotesApproved = data.new_quotes_approved_premium / 1000000
+      newQuotesAccepted = data.new_quotes_in_force_premium / 1000000
+      totalnewQuotes = `${roundUpToTwoDecimals(newQuotesInProgress + newQuotesApproved + newQuotesAccepted)}m`
 
-      renewalQuotesInProgress =  data.renewals_quotes_in_progress_premium/1000000
-      renewalQuotesApproved = data.renewals_quotes_approved_premium/1000000
-      renewalQuotesAccepted = data.renewals_quotes_in_force_premium/1000000
-      totalrenewalQuotes  = `${roundUpToTwoDecimals(renewalQuotesInProgress + renewalQuotesApproved + renewalQuotesAccepted)}m`
+      renewalQuotesInProgress = data.renewals_quotes_in_progress_premium / 1000000
+      renewalQuotesApproved = data.renewals_quotes_approved_premium / 1000000
+      renewalQuotesAccepted = data.renewals_quotes_in_force_premium / 1000000
+      totalrenewalQuotes = `${roundUpToTwoDecimals(renewalQuotesInProgress + renewalQuotesApproved + renewalQuotesAccepted)}m`
     } else {
       convertedQuotes = data.new_quotes_converted_count
       unconvertedQuotes = data.new_quotes_unconverted_count
@@ -263,18 +263,21 @@ const changeChartDataSource = () => {
       newQuotesInProgress = data.new_quotes_in_progress_count
       newQuotesApproved = data.new_quotes_approved_count
       newQuotesAccepted = data.new_quotes_in_force_count
-      totalnewQuotes  = roundUpToTwoDecimals(newQuotesInProgress + newQuotesApproved + newQuotesAccepted)
+      totalnewQuotes = roundUpToTwoDecimals(
+        newQuotesInProgress + newQuotesApproved + newQuotesAccepted
+      )
 
-      renewalQuotesInProgress =  data.renewals_quotes_in_progress_count
+      renewalQuotesInProgress = data.renewals_quotes_in_progress_count
       renewalQuotesApproved = data.renewals_quotes_approved_count
       renewalQuotesAccepted = data.renewals_quotes_in_force_count
-      totalrenewalQuotes  = roundUpToTwoDecimals(renewalQuotesInProgress + renewalQuotesApproved + renewalQuotesAccepted)
+      totalrenewalQuotes = roundUpToTwoDecimals(
+        renewalQuotesInProgress + renewalQuotesApproved + renewalQuotesAccepted
+      )
     }
   }
   console.log(convertedQuotes)
   console.log(unconvertedQuotes)
   console.log(totalQuotes)
-
 
   conversionOptions.value = {
     ...conversionOptions.value,
@@ -308,7 +311,7 @@ const changeChartDataSource = () => {
         ...inForceSchemesOptions.value.series[0],
         innerLabels: [
           {
-            text: `Total ${inForceSchemesTotal}m`,
+            text: `${inForceSchemesTotal}`,
             spacing: 4,
             fontSize: 14,
             color: 'black'
