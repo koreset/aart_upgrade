@@ -4,7 +4,7 @@ export const useGroupPricingStore = defineStore('groupPricing', {
   state: () => ({
     quoteTypes: ['New Business', 'Renewal'],
     obligationTypes: ['Voluntary', 'Compulsory'],
-    schemeTypes: ['Management', 'Administration','General'],
+    schemeTypes: ['Management', 'Administration', 'General'],
     currencies: ['USD', 'ZAR'],
     terminalIllnessBenefits: ['Yes', 'No'],
     yesNoItems: ['Yes', 'No'],
