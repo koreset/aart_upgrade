@@ -1,6 +1,6 @@
 <!-- eslint-disable no-use-before-define -->
 <template>
-  <v-container>
+  <v-container fluid>
     <v-row>
       <v-col>
         <base-card :show-actions="false">
@@ -91,11 +91,17 @@
                 </v-row>
               </v-col>
             </v-row>
-            <v-divider class="my-5"></v-divider>
+            <v-divider class="my-7"></v-divider>
 
-            <v-row class="mt-5 d-flex justify-center">
-              <v-col cols="5" class="card-bg mx-3">
-                <v-btn icon color="primary" variant="plain" size="small" @click="downloadGicChart">
+            <v-row class="d-flex justify-center">
+              <v-col cols="5.1" class="card-bg mx-1">
+                <v-btn
+                  icon
+                  color="primary"
+                  variant="plain"
+                  size="small"
+                  @click="downloadChart('gic')"
+                >
                   <v-icon>mdi-download</v-icon>
                 </v-btn>
                 <ag-charts
@@ -104,8 +110,14 @@
                   :options="gicOptions"
                 ></ag-charts>
               </v-col>
-              <v-col cols="5" class="card-bg mx-3">
-                <v-btn icon color="primary" variant="plain" size="small" @click="downloadRevChart">
+              <v-col cols="5.1" class="card-bg mx-1">
+                <v-btn
+                  icon
+                  color="primary"
+                  variant="plain"
+                  size="small"
+                  @click="downloadChart('rev')"
+                >
                   <v-icon>mdi-download</v-icon>
                 </v-btn>
 
@@ -116,8 +128,10 @@
                 ></ag-charts>
               </v-col>
             </v-row>
+            <v-divider class="my-7"></v-divider>
+
             <v-row>
-              <v-col cols="3">
+              <v-col cols="3" class="mb-n7">
                 <v-select
                   v-model="selectedBenefit"
                   :items="benefitList"
@@ -130,11 +144,39 @@
               </v-col>
             </v-row>
             <v-row>
-              <v-col class="col-style" cols="6">
-                <ag-charts v-if="conversionOptions" :options="exposureOptions"></ag-charts>
+              <v-col cols="5.1" class="card-bg mx-1">
+                <v-btn
+                  icon
+                  color="primary"
+                  variant="plain"
+                  size="small"
+                  @click="downloadChart('exposure')"
+                >
+                  <v-icon>mdi-download</v-icon>
+                </v-btn>
+
+                <ag-charts
+                  v-if="conversionOptions"
+                  ref="expCharts"
+                  :options="exposureOptions"
+                ></ag-charts>
               </v-col>
-              <v-col cols="6">
-                <ag-charts v-if="conversionOptions" :options="exposureGenderOptions"></ag-charts>
+              <v-col cols="5.1" class="card-bg mx-1">
+                <v-btn
+                  icon
+                  color="primary"
+                  variant="plain"
+                  size="small"
+                  @click="downloadChart('exposure_gender')"
+                >
+                  <v-icon>mdi-download</v-icon>
+                </v-btn>
+
+                <ag-charts
+                  v-if="conversionOptions"
+                  ref="expGenderCharts"
+                  :options="exposureGenderOptions"
+                ></ag-charts>
               </v-col>
             </v-row>
           </template>
@@ -172,6 +214,8 @@ const availableYears = computed(() => {
 const selectedBenefit = ref<string | null>(null)
 const gicCharts: any = ref(null)
 const revenueCharts: any = ref(null)
+const expCharts: any = ref(null)
+const expGenderCharts: any = ref(null)
 const newQuotesTotalCount: any = ref(0)
 let data: any = null
 
@@ -187,19 +231,33 @@ onMounted(() => {
   getExposureData()
 })
 
-const downloadGicChart = () => {
-  if (gicCharts.value) {
+const downloadChart = (value) => {
+  if (value === 'gic') {
     gicCharts.value.chart.download()
   }
-}
-const downloadRevChart = () => {
-  if (revenueCharts.value) {
+
+  if (value === 'rev') {
     revenueCharts.value.chart.download()
+  }
+  if (value === 'exposure') {
+    expCharts.value.chart.download()
+  }
+  if (value === 'exposure_gender') {
+    expGenderCharts.value.chart.download()
   }
 }
 
 const formatWithCommas = (value: number) => {
   return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}
+
+const formatNumber = (num) => {
+  if (num >= 1_000_000) {
+    return (num / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M'
+  } else if (num >= 1_000) {
+    return (num / 1_000).toFixed(1).replace(/\.0$/, '') + 'K'
+  }
+  return num.toString()
 }
 
 const addFormat = (card: any) => {
@@ -408,9 +466,6 @@ const getExposureData = async () => {
           fontSize: 14,
           fontWeight: 'bold'
         },
-        background: {
-          fill: 'aliceblue'
-        },
         data: res.data
       }
       exposureGenderOptions.value = {
@@ -419,9 +474,6 @@ const getExposureData = async () => {
           text: `${selectedBenefit.value} Exposure (${selectedYear.value})`,
           fontSize: 14,
           fontWeight: 'bold'
-        },
-        background: {
-          fill: 'aliceblue'
         },
         data: res.data
       }
@@ -612,6 +664,10 @@ const revenueOptions: any = ref<AgChartOptions>({
     fontSize: 14,
     fontWeight: 'bold'
   },
+  background: {
+    fill: 'aliceblue'
+  },
+
   series: [
     {
       type: 'bar',
@@ -624,6 +680,26 @@ const revenueOptions: any = ref<AgChartOptions>({
       xKey: 'type',
       yKey: 'claims',
       yName: 'Claims'
+    }
+  ],
+  axes: [
+    {
+      type: 'number',
+      position: 'left',
+      label: {
+        formatter: (params) => {
+          return `R${formatNumber(params.value)}`
+        }
+      },
+      title: {
+        text: 'Amount',
+        fontSize: 10,
+        fontWeight: 'bold'
+      }
+    },
+    {
+      type: 'category',
+      position: 'bottom'
     }
   ]
 })
@@ -643,6 +719,10 @@ const gicOptions: any = ref<AgChartOptions>({
     fontSize: 14,
     fontWeight: 'bold'
   },
+  background: {
+    fill: 'aliceblue'
+  },
+
   series: [
     {
       type: 'bar',
@@ -655,6 +735,21 @@ const gicOptions: any = ref<AgChartOptions>({
       xKey: 'type',
       yKey: 'actual',
       yName: 'Actual'
+    }
+  ],
+  axes: [
+    {
+      type: 'number',
+      position: 'left',
+      label: {
+        formatter: (params) => {
+          return `R${formatNumber(params.value)}`
+        }
+      }
+    },
+    {
+      type: 'category',
+      position: 'bottom'
     }
   ]
 })
@@ -670,6 +765,10 @@ const exposureOptions: any = ref<AgChartOptions>({
   legend: {
     enabled: true
   },
+  background: {
+    fill: 'aliceblue'
+  },
+
   series: [
     {
       type: 'bar',
@@ -679,6 +778,26 @@ const exposureOptions: any = ref<AgChartOptions>({
       yName: 'Total Sum Assured',
       stroke: '#000000',
       strokeWidth: 1
+    }
+  ],
+  axes: [
+    {
+      type: 'number',
+      position: 'left',
+      label: {
+        formatter: (params) => {
+          return `R${formatNumber(params.value)}`
+        }
+      },
+      title: {
+        text: 'Total Sum Assured',
+        fontSize: 10,
+        fontWeight: 'bold'
+      }
+    },
+    {
+      type: 'category',
+      position: 'bottom'
     }
   ]
 })
@@ -690,6 +809,10 @@ const exposureGenderOptions: any = ref<AgChartOptions>({
     fontSize: 14,
     fontWeight: 'bold'
   },
+  background: {
+    fill: 'aliceblue'
+  },
+
   series: [
     {
       type: 'bar',
@@ -704,6 +827,26 @@ const exposureGenderOptions: any = ref<AgChartOptions>({
       xName: 'Age Band',
       yKey: 'female_sum_assured',
       yName: 'Female Sum Assured'
+    }
+  ],
+  axes: [
+    {
+      type: 'number',
+      position: 'left',
+      label: {
+        formatter: (params) => {
+          return `R${formatNumber(params.value)}`
+        }
+      },
+      title: {
+        text: 'Total Sum Assured',
+        fontSize: 10,
+        fontWeight: 'bold'
+      }
+    },
+    {
+      type: 'category',
+      position: 'bottom'
     }
   ]
 })
@@ -798,7 +941,7 @@ const refreshDashboard = async () => {
 <style lang="css" scoped>
 .card-bg {
   background-color: #f5f5f5;
-  border: 1px solid #f5f5f5;
+  border: 1px solid #dadada;
   border-radius: 3px;
   margin: 0px;
   margin-bottom: 16px;
