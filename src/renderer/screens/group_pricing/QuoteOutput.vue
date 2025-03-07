@@ -750,11 +750,11 @@ const createQuotePdf = async () => {
     },
     {
       label: 'Maximum Sum Assured',
-      value: `${dashIfEmpty(roundUpToTwoDecimals(quote.value.sgla.maxBenefit))}`
+      value: `${dashIfEmpty(roundUpToTwoDecimals(quote.value.sgla.max_benefit))}`
     },
     {
       label: 'Cover Termination Age',
-      value: quote.value.sgla.coverTerminationAge
+      value: quote.value.sgla.cover_termination_age
     }
   ]
 
@@ -964,11 +964,11 @@ const createQuotePdf = async () => {
 
     {
       label: 'Maximum number of children covered',
-      value: quote.value.family_funeral.max_children_covered
+      value: quote.value.family_funeral.max_number_children
     },
     {
       label: 'Maximum number of dependants covered',
-      value: quote.value.family_funeral.maximum_number_dependants
+      value: quote.value.family_funeral.max_number_adult_dependants
     }
   ]
 
