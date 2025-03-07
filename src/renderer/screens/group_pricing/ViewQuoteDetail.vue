@@ -993,6 +993,10 @@ const handleUpload = async (payload: any) => {
 }
 
 onMounted(async () => {
+  loadQuote()
+})
+
+const loadQuote = async () => {
   try {
     console.log('Group Life Assurance Pricing')
     console.log(props.id)
@@ -1019,7 +1023,7 @@ onMounted(async () => {
   } catch (error) {
     console.log('Error:', error)
   }
-})
+}
 
 const clearData = () => {
   tableData.value = []
@@ -1047,6 +1051,7 @@ const runQuoteCalculations = async () => {
         snackbar.value = true
       }
       loading.value = false
+      loadQuote()
     } catch (error) {
       console.log('Error:', error)
       snackbarText.value = 'Calculations Failed'
