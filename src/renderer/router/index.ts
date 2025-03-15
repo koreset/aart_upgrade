@@ -380,6 +380,13 @@ export default createRouter({
       component: () => import('../screens/group_pricing/GroupSchemeList.vue')
     },
     {
+      path: '/group-pricing/schemes/:id',
+      name: 'group-pricing-schemes-detail',
+      props: true,
+      component: () => import('../screens/group_pricing/GroupSchemeDetail.vue')
+    },
+
+    {
       path: '/group-pricing/scheme-details/:id',
       name: 'group-pricing-scheme-details',
       props: true,

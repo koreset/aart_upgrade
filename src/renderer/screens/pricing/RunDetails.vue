@@ -273,7 +273,7 @@ const downloadControlFile = () => {
   PricingService.getPricingExcelControlResults(
     runId.value,
     selectedScenario.value.id,
-    product.value.product_code
+    product.value.product.product_code
   ).then((response) => {
     const fileURL = window.URL.createObjectURL(new Blob([response.data]))
     const fileLink = document.createElement('a')

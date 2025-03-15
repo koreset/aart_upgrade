@@ -7,62 +7,6 @@
             <span class="headline">Group Pricing Schemes In Force</span>
           </template>
           <template #default>
-            <!-- <v-row class="mt-9 mx-5">
-              <v-col cols="3">
-                <v-text-field
-                  v-model="schemeName"
-                  class="mr-9"
-                  placeholder="Scheme Name"
-                  label="Scheme Name"
-                  variant="outlined"
-                  density="compact"
-                ></v-text-field>
-              </v-col>
-              <v-col class="d-flex align-baseline" cols="3">
-                <v-btn
-                  rounded
-                  class="primary mt-1"
-                  size="small"
-                  variant="outlined"
-                  @click="createScheme"
-                  >Add Group Scheme</v-btn
-                >
-              </v-col>
-            </v-row> -->
-            <!-- <v-row v-if="selectedScheme.length > 0">
-              <v-col class="d-flex justify-end">
-                <v-btn icon size="small" variant="plain" color="primary" @click="editScheme(null)">
-                  <v-icon>mdi-pencil</v-icon>
-                </v-btn>
-                <v-btn icon variant="plain" size="small" color="error">
-                  <v-icon>mdi-delete</v-icon>
-                </v-btn>
-                <v-tooltip>
-                  <template #activator="{ props }">
-                    <v-btn icon color="primary" variant="plain" size="small" v-bind="props">
-                      <v-icon>mdi-eye</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>View Item</span>
-                </v-tooltip>
-                <v-tooltip>
-                  <template #activator="{ props }">
-                    <v-btn icon color="primary" variant="plain" size="small" v-bind="props">
-                      <v-icon>mdi-file-eye-outline</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Submit for Review</span>
-                </v-tooltip>
-                <v-tooltip>
-                  <template #activator="{ props }">
-                    <v-btn icon color="primary" variant="plain" size="small" v-bind="props">
-                      <v-icon>mdi-file-send-outline</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Generate Quote</span>
-                </v-tooltip>
-              </v-col>
-            </v-row> -->
             <v-row v-if="schemes">
               <v-col>
                 <v-data-table
@@ -78,39 +22,21 @@
                 >
                   <!-- Slot for Actions Column -->
                   <template #[`item.actions`]="{ item }: { item: any }">
-                    <v-btn
-                      v-if="selectedScheme[0].id === item.id"
-                      icon
-                      size="small"
-                      variant="plain"
-                      color="primary"
-                      @click="editScheme(item)"
-                    >
-                      <v-icon>mdi-pencil</v-icon>
-                    </v-btn>
-                    <v-btn
-                      v-if="selectedScheme[0].id === item.id"
-                      icon
-                      variant="plain"
-                      size="small"
-                      color="error"
-                    >
-                      <v-icon>mdi-delete</v-icon>
-                    </v-btn>
                     <v-tooltip>
                       <template #activator="{ props }">
                         <v-btn
                           v-if="selectedScheme[0].id === item.id"
                           icon
-                          color="primary"
-                          variant="plain"
                           size="small"
+                          variant="plain"
+                          color="primary"
                           v-bind="props"
+                          @click="editScheme(item)"
                         >
-                          <v-icon>mdi-eye</v-icon>
+                          <v-icon>mdi-pencil</v-icon>
                         </v-btn>
                       </template>
-                      <span>View Item</span>
+                      <span>Maintain Scheme</span>
                     </v-tooltip>
                   </template>
                 </v-data-table>
@@ -131,9 +57,10 @@ import { computed, onMounted, ref } from 'vue'
 import ConfirmationDialog from '../../components/ConfirmDialog.vue'
 import GroupPricingService from '../../api/GroupPricingService'
 import formatValues from '@/renderer/utils/format_values'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const confirmDialog = ref()
-// const schemeName: any = ref('')
 const schemes: any = ref([])
 const selectedScheme: any = ref([])
 
@@ -163,29 +90,6 @@ const headers = computed(() => {
 
   return baseHeaders
 })
-// [
-// { title: 'Scheme Name', value: 'name', key: 'name' },
-// { title: 'In Force', value: 'in_force', key: 'in_force' },
-// { title: 'Annual Premium', value: 'annual_premium', key: 'annual_premium' },
-// { title: 'Duration in Force', value: 'duration_in_force' },
-// {
-//   title: 'Renewal Date',
-//   key: 'renewal_date',
-//   width: '20%',
-//   value: (item: any) => parseDateString(item.renewal_date)
-// },
-// { title: 'Member Count', value: 'member_count' },
-// { title: 'Earned Premium', value: 'earned_premium' }
-// { title: 'PTD', value: 'ptd_benefit' },
-// { title: 'CI', value: 'ci_benefit' },
-// { title: 'Funeral', value: 'family_funeral_benefit' },
-// { title: 'Basis', value: 'basis' },
-// { title: 'Status', value: 'status' },
-
-// { title: 'Submitted By', value: 'created_by' },
-// { title: 'Reviewer', value: 'reviewer' },
-// { title: 'Actions', value: 'actions', align: 'center' as 'center', sortable: false }
-// ]
 
 console.log('headers:', headers)
 
@@ -212,6 +116,7 @@ const parseDateString = (dateString) => {
 
 const editScheme = (item) => {
   console.log('editing:', item)
+  router.push({ name: 'group-pricing-schemes-detail', params: { id: item.id } })
 }
 
 onMounted(() => {
