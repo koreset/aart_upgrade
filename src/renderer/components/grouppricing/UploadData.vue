@@ -66,6 +66,11 @@ const orgUsers: any = ref([])
 const organization = computed(() => appStore.getLicenseData.data.attributes.metadata.organization)
 const parameterBases = ref([])
 
+const validateForm = () => {
+  console.log('Validating form')
+  return true
+}
+
 onMounted(() => {
   try {
     ProductService.getOrgUsers({ name: organization.value }).then((res) => {
@@ -79,6 +84,10 @@ onMounted(() => {
   } catch (error) {
     console.log('Error:', error)
   }
+})
+
+defineExpose({
+  validateForm
 })
 </script>
 <style lang="css" scoped></style>

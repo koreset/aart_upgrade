@@ -87,16 +87,21 @@ const steps = shallowRef([
 ])
 const isPrevDisabled = computed(() => position.value <= 1)
 const isNextDisabled = computed(() => position.value >= steps.value.length)
-const currentStep: any = ref()
+const currentStep: any = ref(null)
 
 const moveNext = async () => {
-  // const isValid = currentStep.value
-  //   ? await currentStep.value[position.value - 1].validateForm()
-  //   : false
-  // if (!isValid) {
-  //   return
-  // }
-  position.value++
+  try {
+    console.log(currentStep.value)
+    // const isValid = currentStep.value
+    //   ? await currentStep.value[position.value - 1].validateForm()
+    //   : false
+    // if (!isValid) {
+    //   return
+    // }
+    position.value++
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 const movePrev = () => {

@@ -114,5 +114,8 @@ export default {
   getExposureData(year, benefit) {
     console.log('year and benefit', year, benefit)
     return Api.get('/group-pricing/dashboard/exposures/year/' + year + '/benefit/' + benefit)
+  },
+  checkDuplicateSchemeName(scheme) {
+    return Api.get('/group-pricing/schemes/check-name/' + scheme)
   }
 }

@@ -22,6 +22,7 @@
             variant="outlined"
             density="compact"
             label="Scheme Name"
+            :rules="[rules.checkDuplicateSchemeName]"
             placeholder="Enter a scheme name"
           ></v-text-field>
         </v-col>
@@ -214,11 +215,28 @@
 <script setup lang="ts">
 import { useGroupPricingStore } from '@/renderer/store/group_pricing'
 import { VDateInput } from 'vuetify/labs/VDateInput'
+import GroupPricingService from '@/renderer/api/GroupPricingService'
+const rules: any = {
+  checkDuplicateSchemeName: async (value: string) => {
+    if (value !== '') {
+      const resp: any = await GroupPricingService.checkDuplicateSchemeName(value)
+      if (resp.data.name_exists === true) {
+        return 'Scheme name already exists'
+      }
+      return true
+    }
+  }
+}
 
 const groupStore = useGroupPricingStore()
 const industries = ['Industry 1', 'Industry 2', 'Industry 3']
 
 // methods
+const validateForm = () => {
+  console.log('Validating form')
+  return true
+}
+
 const chooseQuoteFlow = (value: string | null) => {
   console.log('Choosing quote flow')
   console.log(value)
@@ -226,5 +244,9 @@ const chooseQuoteFlow = (value: string | null) => {
     groupStore.group_pricing_quote.quote_type = value
   }
 }
+
+defineExpose({
+  validateForm
+})
 </script>
 <style lang="css" scoped></style>

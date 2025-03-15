@@ -572,6 +572,11 @@ import BaseCard from '../BaseCard.vue'
 
 const groupStore = useGroupPricingStore()
 
+const validateForm = () => {
+  console.log('Validating form')
+  return true
+}
+
 const anyBoxChecked = computed(() => {
   return (
     groupStore.group_pricing_quote.ptd_benefit ||
@@ -581,6 +586,10 @@ const anyBoxChecked = computed(() => {
     groupStore.group_pricing_quote.ttd_benefit ||
     groupStore.group_pricing_quote.family_funeral_benefit
   )
+})
+
+defineExpose({
+  validateForm
 })
 </script>
 <style lang="css" scoped></style>

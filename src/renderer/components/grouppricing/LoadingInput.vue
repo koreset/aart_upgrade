@@ -60,5 +60,14 @@
 import { useGroupPricingStore } from '@/renderer/store/group_pricing'
 
 const groupStore = useGroupPricingStore()
+
+const validateForm = () => {
+  console.log('Validating form')
+  return true
+}
+
+defineExpose({
+  validateForm
+})
 </script>
 <style lang="css" scoped></style>
