@@ -117,5 +117,8 @@ export default {
   },
   checkDuplicateSchemeName(scheme) {
     return Api.get('/group-pricing/schemes/check-name/' + scheme)
+  },
+  getInforceDataTable(schemeId, tableType) {
+    return Api.get('/group-pricing/inforce-data/' + schemeId + '/table-type/' + tableType)
   }
 }
