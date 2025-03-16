@@ -78,7 +78,7 @@ const quoteId = ref(route.params.id)
 
 console.log('QuoteID', quoteId.value)
 
-const position = ref(0)
+const position = ref(1)
 const steps = shallowRef([
   { title: 'General', value: 1, component: Generalnput },
   { title: 'GLA', value: 2, component: GlaInput },
@@ -92,12 +92,12 @@ const currentStep: any = ref(null)
 const moveNext = async () => {
   try {
     console.log(currentStep.value)
-    // const isValid = currentStep.value
-    //   ? await currentStep.value[position.value - 1].validateForm()
-    //   : false
-    // if (!isValid) {
-    //   return
-    // }
+    const isValid = currentStep.value
+      ? await currentStep.value[position.value - 1].validateForm()
+      : false
+    if (!isValid) {
+      return
+    }
     position.value++
   } catch (e) {
     console.log(e)

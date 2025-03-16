@@ -18,11 +18,10 @@
       <v-row>
         <v-col v-if="groupStore.group_pricing_quote.quote_type === 'New Business'" cols="4">
           <v-text-field
-            v-model="groupStore.group_pricing_quote.scheme_name"
+            v-model="form.scheme_name"
             variant="outlined"
             density="compact"
             label="Scheme Name"
-            :rules="[rules.checkDuplicateSchemeName]"
             placeholder="Enter a scheme name"
           ></v-text-field>
         </v-col>
@@ -216,14 +215,31 @@
 import { useGroupPricingStore } from '@/renderer/store/group_pricing'
 import { VDateInput } from 'vuetify/labs/VDateInput'
 import GroupPricingService from '@/renderer/api/GroupPricingService'
-const rules: any = {
-  checkDuplicateSchemeName: async (value: string) => {
-    if (value !== '') {
-      const resp: any = await GroupPricingService.checkDuplicateSchemeName(value)
-      if (resp.data.name_exists === true) {
-        return 'Scheme name already exists'
+import { reactive } from 'vue'
+import useVuelidate from '@vuelidate/core'
+// const rules: any = {
+//   checkDuplicateSchemeName: async (value: string) => {
+//     if (value !== '') {
+//       const resp: any = await GroupPricingService.checkDuplicateSchemeName(value)
+//       if (resp.data.name_exists === true) {
+//         return 'Scheme name already exists'
+//       }
+//       return true
+//     }
+//   }
+// }
+
+const rules = {
+  scheme_name: {
+    checkDuplicateSchemeName: async (value: string) => {
+      if (value !== '') {
+        const resp: any = await GroupPricingService.checkDuplicateSchemeName(value)
+        console.log('Checking duplicate scheme name', resp)
+        if (resp.data.name_exists === true) {
+          return true
+        }
+        return false
       }
-      return true
     }
   }
 }
@@ -231,9 +247,30 @@ const rules: any = {
 const groupStore = useGroupPricingStore()
 const industries = ['Industry 1', 'Industry 2', 'Industry 3']
 
+const form = reactive({
+  scheme_name: groupStore.group_pricing_quote.scheme_name,
+  scheme_contact: groupStore.group_pricing_quote.scheme_contact,
+  scheme_email: groupStore.group_pricing_quote.scheme_email,
+  scheme_type: groupStore.group_pricing_quote.scheme_type,
+  currency: groupStore.group_pricing_quote.currency,
+  obligation_type: groupStore.group_pricing_quote.obligation_type,
+  commencement_date: groupStore.group_pricing_quote.commencement_date,
+  industry: groupStore.group_pricing_quote.industry,
+  free_cover_limit: groupStore.group_pricing_quote.free_cover_limit,
+  normal_retirement_age: groupStore.group_pricing_quote.normal_retirement_age,
+  exchangeRate: groupStore.group_pricing_quote.exchangeRate,
+  experience_rating: groupStore.group_pricing_quote.experience_rating
+})
+
+const v$ = useVuelidate(rules, form)
+
 // methods
-const validateForm = () => {
-  console.log('Validating form')
+const validateForm = async () => {
+  const isValid = await v$.value.$validate()
+  if (!isValid) {
+    return false
+  }
+  console.log('Validating form', isValid)
   return true
 }
 

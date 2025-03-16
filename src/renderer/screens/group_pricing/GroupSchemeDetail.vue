@@ -49,17 +49,7 @@
                           variant="outlined"
                           rounded
                           size="small"
-                          @click.stop="openDialog(item)"
-                        >
-                          <v-icon left color="primary">mdi-upload</v-icon>
-                          <span>Upload</span>
-                        </v-btn>
-                        <v-btn
-                          class="mr-3"
-                          variant="outlined"
-                          rounded
-                          size="small"
-                          @click.stop="openDialog(item)"
+                          @click.stop="openMemberDialog(item)"
                         >
                           <v-icon left color="primary">mdi-upload</v-icon>
                           <span>Add Member</span>
@@ -112,6 +102,121 @@
       {{ snackbarText }}
       <v-btn rounded color="red" variant="text" @click="snackbar = false">Close</v-btn>
     </v-snackbar>
+    <v-row>
+      <v-col>
+        <file-upload-dialog
+          :yearLabel="yearLabel"
+          :isDialogOpen="isDialogOpen"
+          :showModelPoint="showModelPoint"
+          :mpLabel="mpLabel"
+          :table="'undefined'"
+          :uploadTitle="uploadTitle"
+          :years="years"
+          @upload="handleUpload"
+          @update:isDialogOpen="updateDialog"
+        />
+      </v-col>
+    </v-row>
+    <confirm-dialog ref="confirmAction" />
+    <v-dialog v-model="addMemberDialog" persistent max-width="1024px">
+      <base-card>
+        <template #header>
+          <span class="headline">Add Member</span>
+        </template>
+        <template #default>
+          <v-row>
+            <v-col cols="4">
+              <v-text-field
+                v-model="member.member_name"
+                variant="outlined"
+                density="compact"
+                label="Member Name"
+                placeholder="Enter member name"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="4">
+              <v-date-input
+                v-model="member.date_of_birth"
+                hide-actions
+                locale="en-ZA"
+                view-mode="month"
+                prepend-icon=""
+                prepend-inner-icon="$calendar"
+                variant="outlined"
+                density="compact"
+                label="Date of Birth"
+                placeholder="Select a date"
+              ></v-date-input>
+            </v-col>
+            <v-col cols="4">
+              <v-select
+                v-model="member.gender"
+                variant="outlined"
+                density="compact"
+                placeholder="Choose a gender"
+                label="Gender"
+                :items="genderItems"
+              ></v-select>
+            </v-col>
+            <v-col class="d-flex">
+              <v-text-field
+                v-model="member.member_id_number"
+                class="mr-9"
+                variant="outlined"
+                density="compact"
+                label="ID Number"
+                placeholder="ID or Passport Number"
+              ></v-text-field>
+              <v-radio-group v-model="member.member_id_type" inline>
+                <v-radio label="National ID" value="national_id"></v-radio>
+                <v-radio label="Passport" value="passport"></v-radio>
+              </v-radio-group>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-text-field
+                v-model="member.annual_salary"
+                variant="outlined"
+                density="compact"
+                label="Annual Salary"
+                type="number"
+                placeholder="Enter Annual Salary"
+              ></v-text-field>
+            </v-col>
+            <v-col>
+              <v-text-field
+                v-model="member.benefit_salary_multiple"
+                variant="outlined"
+                density="compact"
+                label="Salary Multiple"
+                type="number"
+                placeholder="Enter Salary Multiple"
+              ></v-text-field>
+            </v-col>
+
+            <v-col>
+              <v-date-input
+                v-model="member.entry_date"
+                hide-actions
+                locale="en-ZA"
+                view-mode="month"
+                prepend-icon=""
+                prepend-inner-icon="$calendar"
+                variant="outlined"
+                density="compact"
+                label="Entry Date"
+                placeholder="Select a date"
+              ></v-date-input>
+            </v-col>
+          </v-row>
+        </template>
+        <template #actions>
+          <v-btn color="primary" @click="addMember">Add to Scheme</v-btn>
+          <v-btn color="red" @click="addMemberDialog = false">Cancel</v-btn>
+        </template>
+      </base-card>
+    </v-dialog>
   </v-container>
 </template>
 <script setup lang="ts">
@@ -122,6 +227,9 @@ import GroupPricingService from '@/renderer/api/GroupPricingService'
 import formatValues from '@/renderer/utils/format_values'
 import _ from 'lodash'
 import DataGrid from '@/renderer/components/tables/DataGrid.vue'
+import FileUploadDialog from '@/renderer/components/FileUploadDialog.vue'
+import ConfirmDialog from '@/renderer/components/ConfirmDialog.vue'
+import { VDateInput } from 'vuetify/labs/VDateInput'
 
 const backText = ref('< Back to listing')
 const route = useRoute()
@@ -133,6 +241,29 @@ const selectedTable = ref('')
 const loadingData = ref(false)
 const rowCount = ref(0)
 const columnDefs: any = ref([])
+const genderItems = ['Male', 'Female']
+
+const showModelPoint = ref(false)
+const yearLabel = ref('') // 'Select a year'
+const uploadTitle = ref('')
+const mpLabel = ref('')
+const isDialogOpen = ref(false)
+const addMemberDialog = ref(false)
+const member = ref({
+  member_name: '',
+  member_id_number: '',
+  member_id_type: '',
+  annual_salary: 0,
+  date_of_birth: null,
+  entry_date: null,
+  benefit_salary_multiple: 0,
+  gender: '',
+  scheme_id: 0
+})
+const years = ref<number[]>(Array.from({ length: 10 }, (v, k) => new Date().getFullYear() - k))
+const updateDialog = (value: boolean) => {
+  isDialogOpen.value = value
+}
 
 const snackbar = ref(false)
 const timeout = 2000
@@ -147,8 +278,6 @@ const parseDateString = (dateString) => {
 const relatedTables = computed(() => {
   const tables: any = []
   tables.push({ table_type: 'Member Data', value: 'member_data', populated: true })
-  tables.push({ table_type: 'Claims Experience', value: 'claims_experience', populated: true })
-
   return tables
 })
 
@@ -200,6 +329,30 @@ const goBack = () => {
   router.go(-1)
 }
 
+const addMember = () => {
+  member.value.scheme_id = scheme.value.id
+
+  member.value.annual_salary = Number(member.value.annual_salary) || 0
+  member.value.benefit_salary_multiple = Number(member.value.benefit_salary_multiple) || 0
+  console.log('Adding member:', member)
+
+  GroupPricingService.addMember(member.value)
+    .then((res) => {
+      console.log('Response:', res.data)
+      snackbarText.value = 'Member added successfully'
+      snackbar.value = true
+      addMemberDialog.value = false
+    })
+    .catch((error) => {
+      console.log('Error:', error)
+      snackbarText.value = 'Failed to add member'
+      snackbar.value = true
+      addMemberDialog.value = false
+    })
+
+  // addMemberDialog.value = false
+}
+
 const viewTable = async (item) => {
   try {
     const res = await GroupPricingService.getInforceDataTable(scheme.value.id, item.value)
@@ -222,8 +375,16 @@ const viewTable = async (item) => {
   }
 }
 
-const openDialog = (item) => {
-  console.log('Opening dialog:', item)
+const openDialog = (item: any) => {
+  console.log('Open Dialog:', item)
+  selectedTable.value = item
+  yearLabel.value = 'Select a year'
+  uploadTitle.value = 'Upload Data for ' + item.table_type + ' Table (csv)'
+  isDialogOpen.value = true
+}
+
+const openMemberDialog = (item: any) => {
+  addMemberDialog.value = true
 }
 
 const deleteTable = (item) => {
@@ -242,6 +403,35 @@ onMounted(() => {
 const clearData = () => {
   tableData.value = []
   selectedTable.value = ''
+}
+
+const handleUpload = async (payload: any) => {
+  console.log('Handle Upload:', payload)
+  // const formdata = new FormData()
+  // formdata.append('file', payload.file)
+  // formdata.append('quote_id', quote.value.id)
+  // formdata.append('table_type', selectedTable.value.table_type)
+  // GroupPricingService.uploadQuoteTable(formdata)
+  //   .then((res) => {
+  //     console.log('Response:', res.data)
+  //     const count = res.data
+  //     snackbarText.value = 'Upload Successful'
+  //     snackbar.value = true
+  //     if (selectedTable.value.table_type === 'Member Data') {
+  //       quote.value.member_data_count = count
+  //     } else if (selectedTable.value.table_type === 'Claims Experience') {
+  //       quote.value.claims_experience_count = count
+  //     } else if (selectedTable.value.table_type === 'Member Rating Results') {
+  //       quote.value.member_rating_result_count = count
+  //     } else if (selectedTable.value.table_type === 'Member Premium Schedules') {
+  //       quote.value.member_premium_schedule_count = count
+  //     }
+  //   })
+  //   .catch((error) => {
+  //     console.log('Error:', error)
+  //     snackbarText.value = 'Upload Failed'
+  //     snackbar.value = true
+  //   })
 }
 
 const createColumnDefs = (data: any) => {

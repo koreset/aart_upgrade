@@ -21,7 +21,6 @@
                 />
               </v-stepper-window-item>
             </template>
-
             <v-divider class="my-5"></v-divider>
             <v-row>
               <v-col class="d-flex">

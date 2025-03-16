@@ -120,5 +120,8 @@ export default {
   },
   getInforceDataTable(schemeId, tableType) {
     return Api.get('/group-pricing/inforce-data/' + schemeId + '/table-type/' + tableType)
+  },
+  addMember(member) {
+    return Api.post('/group-pricing/schemes/' + member.scheme_id + '/members', member)
   }
 }
