@@ -59,7 +59,7 @@
                           variant="outlined"
                           rounded
                           size="small"
-                          @click.stop="openDialog(item)"
+                          @click.stop="openRemoveMemberDialog(item)"
                         >
                           <v-icon left color="primary">mdi-upload</v-icon>
                           <span>Remove Member</span>
@@ -217,6 +217,65 @@
         </template>
       </base-card>
     </v-dialog>
+    <v-dialog v-model="removeMemberDialog" persistent max-width="1024px">
+      <base-card>
+        <template #header>
+          <span class="headline">Remove Member</span>
+        </template>
+        <template #default>
+          <v-row>
+            <v-col>
+              <v-autocomplete
+                v-model="selected"
+                variant="outlined"
+                density="compact"
+                :items="items"
+                :loading="loading"
+                :search="search"
+                label="Search"
+                item-title="firstName"
+                item-value="id"
+                no-data-text="No results found"
+                hide-no-data
+                hide-selected
+                return-object
+                @update:model-value="displayUser"
+                @update:search="onSearchUpdate"
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="4">
+              <v-text-field
+                v-model="member.member_name"
+                variant="outlined"
+                density="compact"
+                label="Member Name"
+                placeholder="Enter member name"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="4">
+              <v-date-input
+                v-model="member.date_of_birth"
+                hide-actions
+                locale="en-ZA"
+                view-mode="month"
+                prepend-icon=""
+                prepend-inner-icon="$calendar"
+                variant="outlined"
+                density="compact"
+                label="Date of Birth"
+                placeholder="Select a date"
+              ></v-date-input>
+            </v-col>
+          </v-row>
+        </template>
+        <template #actions>
+          <v-btn color="primary" @click="removeMember">Remove from Scheme</v-btn>
+          <v-btn color="red" @click="removeMemberDialog = false">Cancel</v-btn>
+        </template>
+      </base-card>
+    </v-dialog>
   </v-container>
 </template>
 <script setup lang="ts">
@@ -249,6 +308,7 @@ const uploadTitle = ref('')
 const mpLabel = ref('')
 const isDialogOpen = ref(false)
 const addMemberDialog = ref(false)
+const removeMemberDialog = ref(false)
 const member = ref({
   member_name: '',
   member_id_number: '',
@@ -342,6 +402,17 @@ const addMember = () => {
       snackbarText.value = 'Member added successfully'
       snackbar.value = true
       addMemberDialog.value = false
+      member.value = {
+        member_name: '',
+        member_id_number: '',
+        member_id_type: '',
+        annual_salary: 0,
+        date_of_birth: null,
+        entry_date: null,
+        benefit_salary_multiple: 0,
+        gender: '',
+        scheme_id: 0
+      }
     })
     .catch((error) => {
       console.log('Error:', error)
@@ -349,8 +420,23 @@ const addMember = () => {
       snackbar.value = true
       addMemberDialog.value = false
     })
+}
 
-  // addMemberDialog.value = false
+const removeMember = () => {
+  console.log('Removing member:', member)
+  GroupPricingService.removeMember(member.value)
+    .then((res) => {
+      console.log('Response:', res.data)
+      snackbarText.value = 'Member removed successfully'
+      snackbar.value = true
+      removeMemberDialog.value = false
+    })
+    .catch((error) => {
+      console.log('Error:', error)
+      snackbarText.value = 'Failed to remove member'
+      snackbar.value = true
+      removeMemberDialog.value = false
+    })
 }
 
 const viewTable = async (item) => {
@@ -375,16 +461,12 @@ const viewTable = async (item) => {
   }
 }
 
-const openDialog = (item: any) => {
-  console.log('Open Dialog:', item)
-  selectedTable.value = item
-  yearLabel.value = 'Select a year'
-  uploadTitle.value = 'Upload Data for ' + item.table_type + ' Table (csv)'
-  isDialogOpen.value = true
-}
-
 const openMemberDialog = (item: any) => {
   addMemberDialog.value = true
+}
+
+const openRemoveMemberDialog = (item: any) => {
+  removeMemberDialog.value = true
 }
 
 const deleteTable = (item) => {
@@ -447,6 +529,55 @@ const createColumnDefs = (data: any) => {
     header.resizable = true
     columnDefs.value.push(header)
   })
+}
+
+/// test code
+// State
+const selected = ref(null)
+const search = ref('')
+const items = ref<any[]>([])
+const loading = ref(false)
+let searchTimeout: any = null
+
+// Watch search input and debounce API call
+const onSearchUpdate = (val: string) => {
+  search.value = val
+  if (searchTimeout) clearTimeout(searchTimeout)
+
+  // Debounce API call
+  searchTimeout = setTimeout(() => {
+    fetchItems(val)
+  }, 500)
+}
+
+// Simulated API call
+const fetchItems = async (query: string) => {
+  if (!query) {
+    items.value = []
+    return
+  }
+
+  loading.value = true
+  try {
+    // Replace this with your actual API call
+    const response = await fetch(`https://dummyjson.com/users/search?q=${query}`)
+    const result = await response.json()
+    console.log('Result:', result)
+    items.value = result.users || []
+  } catch (err) {
+    console.error('Error fetching items:', err)
+    items.value = []
+  } finally {
+    loading.value = false
+  }
+}
+
+const displayUser = (val: any) => {
+  console.log('Selected:', val)
+  // if (val) {
+  //   member.value.member_name = val.firstName + ' ' + val.lastName
+  //   member.value.date_of_birth = val.dateOfBirth
+  // }
 }
 </script>
 <style scoped>
