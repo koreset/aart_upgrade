@@ -414,7 +414,16 @@ export default createRouter({
       name: 'group-pricing-dashboard',
       component: () => import('../screens/group_pricing/GPDashBoard.vue')
     },
-
+    {
+      path: '/group-pricing/claims-list',
+      name: 'group-pricing-claims-list',
+      component: () => import('../screens/group_pricing/ClaimsList.vue')
+    },
+    {
+      path: '/group-pricing/lodge-claim',
+      name: 'group-pricing-lodge-claim',
+      component: () => import('../screens/group_pricing/LodgeClaim.vue')
+    },
     {
       path: '/tasks',
       name: 'tasks',

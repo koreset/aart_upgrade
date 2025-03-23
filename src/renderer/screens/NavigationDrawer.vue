@@ -62,6 +62,14 @@
         <v-list-item :to="{ name: 'group-pricing-schemes' }">
           <v-list-item-title>Schemes</v-list-item-title>
         </v-list-item>
+        <v-list-group subgroup class="first-level-group" value="Claims">
+          <template #activator="{ props }">
+            <v-list-item v-bind="props" title="Claims"></v-list-item>
+          </template>
+          <v-list-item class="second-level-item" :to="{ name: 'group-pricing-claims-list' }">
+            <v-list-item-title>Claims List</v-list-item-title>
+          </v-list-item>
+        </v-list-group>
       </v-list-group>
       <v-list-group value="Valuations">
         <template #activator="{ props }">

@@ -123,5 +123,12 @@ export default {
   },
   addMember(member) {
     return Api.post('/group-pricing/schemes/' + member.scheme_id + '/members', member)
+  },
+  getMembersInForce(schemeId) {
+    return Api.get('/group-pricing/schemes/' + schemeId + '/members')
+  },
+  submitClaim(claim) {
+    const payload = JSON.stringify(claim)
+    return Api.post('/group-pricing/claims', payload)
   }
 }

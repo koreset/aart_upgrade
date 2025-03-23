@@ -33,7 +33,7 @@
                           v-bind="props"
                           @click="editScheme(item)"
                         >
-                          <v-icon>mdi-pencil</v-icon>
+                          <v-icon>mdi-wrench</v-icon>
                         </v-btn>
                       </template>
                       <span>Maintain Scheme</span>
