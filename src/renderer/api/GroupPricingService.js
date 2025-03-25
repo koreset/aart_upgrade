@@ -130,5 +130,11 @@ export default {
   submitClaim(claim) {
     const payload = JSON.stringify(claim)
     return Api.post('/group-pricing/claims', payload)
+  },
+  getClaims() {
+    return Api.get('/group-pricing/claims')
+  },
+  getMemberRating(schemeId, quoteId, memberId) {
+    return Api.get('/group-pricing/claims/scheme/' + schemeId + '/quote/' + quoteId + '/member/' + memberId + '/rating')
   }
 }

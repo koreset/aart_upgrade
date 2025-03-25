@@ -58,6 +58,20 @@
                   item-value="value"
                   label="Member Type"
                   placeholder="Select a Member Type"
+                  @update:model-value="getClaimAmount"
+                ></v-select>
+              </v-col>
+              <v-col cols="4"
+                ><v-select
+                  v-model="selectedClaimType"
+                  variant="outlined"
+                  density="compact"
+                  :items="claimTypes"
+                  item-title="name"
+                  item-value="value"
+                  label="Claim Type"
+                  placeholder="Select a Claim Type"
+                  @update:model-value="getClaimAmount"
                 ></v-select>
               </v-col>
               <v-col cols="4">
@@ -71,18 +85,7 @@
                 >
                 </v-text-field>
               </v-col>
-              <v-col cols="4"
-                ><v-select
-                  v-model="selectedClaimType"
-                  variant="outlined"
-                  density="compact"
-                  :items="claimTypes"
-                  item-title="name"
-                  item-value="value"
-                  label="Claim Type"
-                  placeholder="Select a Claim Type"
-                ></v-select>
-              </v-col>
+
               <v-col cols="4"
                 ><v-select
                   v-model="selectedPaymentType"
@@ -277,6 +280,31 @@ const submitClaim = async () => {
   const response = await GroupPricingService.submitClaim(data)
   console.log('Claim Response:', response)
   resetFields()
+}
+
+const getClaimAmount = async () => {
+  if (
+    selectedClaimType.value !== null &&
+    selectedMemberType.value !== null &&
+    selectedMember.value !== null
+  ) {
+    console.log('Getting Claim Amount')
+    console.log('Selected Claim Type:', selectedClaimType.value)
+    console.log('Selected Member Type:', selectedMemberType.value)
+    console.log('Selected Member:', selectedMember.value)
+    console.log('Selected Scheme:', selectedScheme.value)
+
+    console.log('Calculating Claim Amount')
+    GroupPricingService.getMemberRating(
+      selectedScheme.value.name,
+      selectedScheme.value.quote_id,
+      selectedMember.value.id
+    ).then((response) => {
+      console.log('Member Rating:', response.data)
+      // console.log('Claim Amount:', response.data.claim_amount)
+      // amountClaimed.value = response.data.claim_amount
+    })
+  }
 }
 
 const resetFields = () => {
