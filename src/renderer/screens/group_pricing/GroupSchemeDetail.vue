@@ -318,7 +318,9 @@ const member = ref({
   entry_date: null,
   benefit_salary_multiple: 0,
   gender: '',
-  scheme_id: 0
+  scheme_id: 0,
+  scheme_name: '',
+  quote_id: 0
 })
 const years = ref<number[]>(Array.from({ length: 10 }, (v, k) => new Date().getFullYear() - k))
 const updateDialog = (value: boolean) => {
@@ -391,7 +393,8 @@ const goBack = () => {
 
 const addMember = () => {
   member.value.scheme_id = scheme.value.id
-
+  member.value.scheme_name = scheme.value.name
+  member.value.quote_id = scheme.value.quote_id
   member.value.annual_salary = Number(member.value.annual_salary) || 0
   member.value.benefit_salary_multiple = Number(member.value.benefit_salary_multiple) || 0
   console.log('Adding member:', member)
@@ -411,7 +414,9 @@ const addMember = () => {
         entry_date: null,
         benefit_salary_multiple: 0,
         gender: '',
-        scheme_id: 0
+        scheme_id: 0,
+        scheme_name: '',
+        quote_id: 0
       }
     })
     .catch((error) => {

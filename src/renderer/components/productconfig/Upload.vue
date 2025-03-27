@@ -555,6 +555,17 @@ const addToFileList = () => {
     }
   }
 
+  if (selectedFeatures.value.some((item) => item.name === 'PRODUCT_LEVEL_ESCALATIONS')) {
+    if (!fileDescriptors.value.some((f) => f.table === 'Product_Level_Escalations')) {
+      const productEscalations = {
+        table: 'Product_Level_Escalations',
+        class: 'BenefitStructure',
+        filename: 'file must be uploaded prior to valuation run'
+      }
+      fileDescriptors.value.push(productEscalations)
+    }
+  }
+
   table.value = ''
   tableClass.value = ''
   file.value = null
