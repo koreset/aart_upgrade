@@ -289,6 +289,7 @@ import DataGrid from '@/renderer/components/tables/DataGrid.vue'
 import FileUploadDialog from '@/renderer/components/FileUploadDialog.vue'
 import ConfirmDialog from '@/renderer/components/ConfirmDialog.vue'
 import { VDateInput } from 'vuetify/labs/VDateInput'
+import formatDateString from '@/renderer/utils/helpers.js'
 
 const backText = ref('< Back to listing')
 const route = useRoute()
@@ -397,6 +398,9 @@ const addMember = () => {
   member.value.quote_id = scheme.value.quote_id
   member.value.annual_salary = Number(member.value.annual_salary) || 0
   member.value.benefit_salary_multiple = Number(member.value.benefit_salary_multiple) || 0
+  member.value.date_of_birth = member.value.date_of_birth
+    ? formatDateString(member.value.date_of_birth, true, true, true)
+    : null
   console.log('Adding member:', member)
 
   GroupPricingService.addMember(member.value)
