@@ -310,18 +310,18 @@ const getClaimAmount = async () => {
     ).then((response) => {
       console.log('Member Rating:', response.data)
       if (selectedClaimType.value === 'gla') {
-        amountClaimed.value = response.data.gla_capped_sum_assured * response.data.gla_sum_assured
+        amountClaimed.value = response.data.gla_capped_sum_assured //* response.data.gla_sum_assured
       } else if (selectedClaimType.value === 'sgla') {
         amountClaimed.value =
-          response.data.spouse_gla_capped_sum_assured * response.data.spouse_gla_sum_assured
+          response.data.spouse_gla_capped_sum_assured //* response.data.spouse_gla_sum_assured
       } else if (selectedClaimType.value === 'ptd') {
-        amountClaimed.value = response.data.ptd_capped_sum_assured * response.data.ptd_sum_assured
+        amountClaimed.value = response.data.ptd_capped_sum_assured //* response.data.ptd_sum_assured
       } else if (selectedClaimType.value === 'ci') {
-        amountClaimed.value = response.data.ci_capped_sum_assured * response.data.ci_sum_assured
+        amountClaimed.value = response.data.ci_capped_sum_assured //* response.data.ci_sum_assured
       } else if (selectedClaimType.value === 'ttd') {
-        amountClaimed.value = response.data.ttd_capped_sum_assured * response.data.ttd_sum_assured
+        amountClaimed.value = response.data.ttd_capped_sum_assured //* response.data.ttd_sum_assured
       } else if (selectedClaimType.value === 'phi') {
-        amountClaimed.value = response.data.phi_capped_sum_assured * response.data.phi_sum_assured
+        amountClaimed.value = response.data.phi_capped_sum_assured //* response.data.phi_sum_assured
       } else if (selectedClaimType.value === 'group_funeral') {
         amountClaimed.value = response.data.group_funeral
       }

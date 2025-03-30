@@ -135,6 +135,14 @@ export default {
     return Api.get('/group-pricing/claims')
   },
   getMemberRating(schemeId, quoteId, memberId) {
-    return Api.get('/group-pricing/claims/scheme/' + schemeId + '/quote/' + quoteId + '/member/' + memberId + '/rating')
+    return Api.get(
+      '/group-pricing/claims/scheme/' +
+        schemeId +
+        '/quote/' +
+        quoteId +
+        '/member/' +
+        memberId +
+        '/rating'
+    )
   }
 }
