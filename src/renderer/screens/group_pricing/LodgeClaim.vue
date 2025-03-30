@@ -323,7 +323,17 @@ const getClaimAmount = async () => {
       } else if (selectedClaimType.value === 'phi') {
         amountClaimed.value = response.data.phi_capped_sum_assured //* response.data.phi_sum_assured
       } else if (selectedClaimType.value === 'group_funeral') {
-        amountClaimed.value = response.data.group_funeral
+        if (selectedMemberType.value === "member"){
+          amountClaimed.value = response.data.member_funeral_sum_assured
+        } else if (selectedMemberType.value ==="spouse"){
+          amountClaimed.value = response.data.spouse_funeral_sum_assured
+        }else if (selectedMemberType.value === "child"){
+          amountClaimed.value = response.data.child_funeral_sum_assured
+        }else if (selectedMemberType.value === "parent"){
+          amountClaimed.value = response.data.parent_funeral_sum_assured
+        }else if (selectedMemberType.value === "dependant"){
+          amountClaimed.value = response.data.dependant_funeral_sum_assured
+        }
       }
       // console.log('Claim Amount:', response.data.claim_amount)
       // amountClaimed.value = response.data.claim_amount
