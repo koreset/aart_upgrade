@@ -9,9 +9,14 @@
           <template #default>
             <v-row
               ><v-col
-                ><v-btn color="primary" size="small" @click="lodgeClaim">Lodge Claim</v-btn>
+                ><v-btn rounded color="primary" size="small" @click="lodgeClaim">Lodge Claim</v-btn>
               </v-col></v-row
             >
+            <v-row>
+              <v-col>
+                <data-grid :columnDefs="columnDefs" :rowData="rowData" :pagination="true" />
+              </v-col>
+            </v-row>
           </template>
         </base-card>
       </v-col>
@@ -23,9 +28,13 @@ import BaseCard from '@/renderer/components/BaseCard.vue'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import GroupPricingService from '@/renderer/api/GroupPricingService'
-// import DataGrid from '@/renderer/components/tables/DataGrid.vue'
+import DataGrid from '@/renderer/components/tables/DataGrid.vue'
+import formatValues from '@/renderer/utils/format_values'
 const router = useRouter()
 const claims = ref([])
+const rowData: any = ref([])
+const columnDefs: any = ref([])
+
 const lodgeClaim = () => {
   console.log('Lodge Claim')
   router.push({ name: 'group-pricing-lodge-claim' })
@@ -34,9 +43,25 @@ const lodgeClaim = () => {
 onMounted(() => {
   console.log('Claims List')
   GroupPricingService.getClaims().then((response) => {
-    claims.value = response.data
+    rowData.value = response.data
     console.log('Claims', claims.value)
+    createColumnDefs(rowData.value)
   })
 })
+
+const createColumnDefs = (data: any) => {
+  columnDefs.value = []
+  Object.keys(data[0]).forEach((element) => {
+    const header: any = {}
+    header.headerName = element
+    header.field = element
+    header.valueFormatter = formatValues
+    header.minWidth = 220
+    header.filter = true
+    header.resizable = true
+    header.sortable = true
+    columnDefs.value.push(header)
+  })
+}
 </script>
 <style lang="css" scoped></style>

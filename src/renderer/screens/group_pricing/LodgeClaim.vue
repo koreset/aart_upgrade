@@ -248,12 +248,20 @@ const submitClaim = async () => {
   }
   console.log('Submitting Claim')
 
+  const transformDateString = (dateString: string) => {
+    const date = new Date(dateString)
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+  }
+
   const data = {
     scheme_name: selectedScheme.value.name,
     scheme_id: selectedScheme.value.id,
     member_name: selectedMember.value.member_name,
     occupation: '',
-    member_date_of_birth: selectedMember.value.date_of_birth,
+    member_date_of_birth: transformDateString(selectedMember.value.date_of_birth),
     date_joined_scheme: selectedMember.value.entry_date,
     claim_type: selectedClaimType.value,
     claim_member_type: selectedMemberType.value,
@@ -301,6 +309,22 @@ const getClaimAmount = async () => {
       selectedMember.value.id
     ).then((response) => {
       console.log('Member Rating:', response.data)
+      if (selectedClaimType.value === 'gla') {
+        amountClaimed.value = response.data.gla_capped_sum_assured * response.data.gla_sum_assured
+      } else if (selectedClaimType.value === 'sgla') {
+        amountClaimed.value =
+          response.data.spouse_gla_capped_sum_assured * response.data.spouse_gla_sum_assured
+      } else if (selectedClaimType.value === 'ptd') {
+        amountClaimed.value = response.data.ptd_capped_sum_assured * response.data.ptd_sum_assured
+      } else if (selectedClaimType.value === 'ci') {
+        amountClaimed.value = response.data.ci_capped_sum_assured * response.data.ci_sum_assured
+      } else if (selectedClaimType.value === 'ttd') {
+        amountClaimed.value = response.data.ttd_capped_sum_assured * response.data.ttd_sum_assured
+      } else if (selectedClaimType.value === 'phi') {
+        amountClaimed.value = response.data.phi_capped_sum_assured * response.data.phi_sum_assured
+      } else if (selectedClaimType.value === 'group_funeral') {
+        amountClaimed.value = response.data.group_funeral
+      }
       // console.log('Claim Amount:', response.data.claim_amount)
       // amountClaimed.value = response.data.claim_amount
     })
