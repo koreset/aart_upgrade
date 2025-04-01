@@ -312,8 +312,7 @@ const getClaimAmount = async () => {
       if (selectedClaimType.value === 'gla') {
         amountClaimed.value = response.data.gla_capped_sum_assured //* response.data.gla_sum_assured
       } else if (selectedClaimType.value === 'sgla') {
-        amountClaimed.value =
-          response.data.spouse_gla_capped_sum_assured //* response.data.spouse_gla_sum_assured
+        amountClaimed.value = response.data.spouse_gla_capped_sum_assured //* response.data.spouse_gla_sum_assured
       } else if (selectedClaimType.value === 'ptd') {
         amountClaimed.value = response.data.ptd_capped_sum_assured //* response.data.ptd_sum_assured
       } else if (selectedClaimType.value === 'ci') {
@@ -323,15 +322,15 @@ const getClaimAmount = async () => {
       } else if (selectedClaimType.value === 'phi') {
         amountClaimed.value = response.data.phi_capped_sum_assured //* response.data.phi_sum_assured
       } else if (selectedClaimType.value === 'group_funeral') {
-        if (selectedMemberType.value === "member"){
+        if (selectedMemberType.value === 'member') {
           amountClaimed.value = response.data.member_funeral_sum_assured
-        } else if (selectedMemberType.value ==="spouse"){
+        } else if (selectedMemberType.value === 'spouse') {
           amountClaimed.value = response.data.spouse_funeral_sum_assured
-        }else if (selectedMemberType.value === "child"){
+        } else if (selectedMemberType.value === 'child') {
           amountClaimed.value = response.data.child_funeral_sum_assured
-        }else if (selectedMemberType.value === "parent"){
+        } else if (selectedMemberType.value === 'parent') {
           amountClaimed.value = response.data.parent_funeral_sum_assured
-        }else if (selectedMemberType.value === "dependant"){
+        } else if (selectedMemberType.value === 'dependant') {
           amountClaimed.value = response.data.dependant_funeral_sum_assured
         }
       }

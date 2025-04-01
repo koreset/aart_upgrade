@@ -49,6 +49,9 @@ export default {
   getBrokers() {
     return Api.get('/group-pricing/brokers')
   },
+  getIndustries() {
+    return Api.get('/group-pricing/industries')
+  },
   getBroker(id) {
     return Api.get('/group-pricing/brokers/' + id)
   },

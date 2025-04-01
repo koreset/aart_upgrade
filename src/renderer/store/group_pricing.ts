@@ -16,6 +16,7 @@ export const useGroupPricingStore = defineStore('groupPricing', {
     productTypes: ['PHI', 'TTD', 'PHI & TTD'],
     benefitStructures: ['Standalone', 'Accelerated'],
     brokers: [],
+    industries:[],
     groupSchemes: [],
     selectedQuote: null,
     memberDataCount: 0,
