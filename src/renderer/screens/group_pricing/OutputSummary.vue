@@ -540,12 +540,12 @@
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.total_ptd_risk_rate))
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_total_ptd_risk_rate))
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.total_ptd_risk_rate))
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_total_ptd_risk_rate))
                         }}</p></v-col
                       >
                     </v-row>
@@ -582,12 +582,12 @@
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_total_ptd_risk_rate))
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_ptd_risk_rate_per_1000_sa))
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_total_ptd_risk_rate))
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_ptd_risk_rate_per_1000_sa))
                         }}</p></v-col
                       >
                     </v-row>
@@ -845,12 +845,12 @@
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.total_ci_risk_rate))
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_total_ci_risk_rate))
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.total_ci_risk_rate))
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_total_ci_risk_rate))
                         }}</p></v-col
                       >
                     </v-row>
@@ -887,12 +887,12 @@
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_total_ci_risk_rate))
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_ci_risk_rate_per_1000_sa))
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_total_ci_risk_rate))
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_ci_risk_rate_per_1000_sa))
                         }}</p></v-col
                       >
                     </v-row>
@@ -1138,12 +1138,12 @@
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.total_phi_risk_rate))
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_total_phi_risk_rate))
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.total_phi_risk_rate))
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_total_phi_risk_rate))
                         }}</p></v-col
                       >
                     </v-row>
@@ -1180,12 +1180,16 @@
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_phi_risk_rate_per_1000_sa))
+                          dashIfEmpty(
+                            roundUpToTwoDecimals(resultSummary.exp_phi_risk_rate_per_1000_sa)
+                          )
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_phi_risk_rate_per_1000_sa))
+                          dashIfEmpty(
+                            roundUpToTwoDecimals(resultSummary.exp_phi_risk_rate_per_1000_sa)
+                          )
                         }}</p></v-col
                       >
                     </v-row>
@@ -1431,12 +1435,12 @@
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.total_ttd_risk_rate))
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_total_ttd_risk_rate))
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.total_ttd_risk_rate))
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_total_ttd_risk_rate))
                         }}</p></v-col
                       >
                     </v-row>
@@ -1473,12 +1477,16 @@
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_ttd_risk_rate_per_1000_sa))
+                          dashIfEmpty(
+                            roundUpToTwoDecimals(resultSummary.exp_ttd_risk_rate_per_1000_sa)
+                          )
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_ttd_risk_rate_per_1000_sa))
+                          dashIfEmpty(
+                            roundUpToTwoDecimals(resultSummary.exp_ttd_risk_rate_per_1000_sa)
+                          )
                         }}</p></v-col
                       >
                     </v-row>
@@ -1742,12 +1750,12 @@
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.total_sgla_risk_rate))
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_total_sgla_risk_rate))
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.total_sgla_risk_rate))
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_total_sgla_risk_rate))
                         }}</p></v-col
                       >
                     </v-row>
@@ -1786,12 +1794,12 @@
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_total_sgla_risk_rate))
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_sgla_risk_rate_per_1000_sa))
                         }}</p></v-col
                       >
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
-                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_total_sgla_risk_rate))
+                          dashIfEmpty(roundUpToTwoDecimals(resultSummary.exp_sgla_risk_rate_per_1000_sa))
                         }}</p></v-col
                       >
                     </v-row>
