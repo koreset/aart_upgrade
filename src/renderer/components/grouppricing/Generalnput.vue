@@ -244,7 +244,7 @@ import { VDateInput } from 'vuetify/labs/VDateInput'
 // }
 
 const groupStore = useGroupPricingStore()
-const industries = ['Industry 1', 'Industry 2', 'Industry 3']
+const industries = ['Administration', 'NGO', 'Banks']
 
 // const form = reactive({
 //   scheme_name: groupStore.group_pricing_quote.scheme_name,

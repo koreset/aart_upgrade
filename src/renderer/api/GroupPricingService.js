@@ -49,6 +49,9 @@ export default {
   getBrokers() {
     return Api.get('/group-pricing/brokers')
   },
+  getIndustries() {
+    return Api.get('/group-pricing/industries')
+  },
   getBroker(id) {
     return Api.get('/group-pricing/brokers/' + id)
   },
@@ -135,6 +138,14 @@ export default {
     return Api.get('/group-pricing/claims')
   },
   getMemberRating(schemeId, quoteId, memberId) {
-    return Api.get('/group-pricing/claims/scheme/' + schemeId + '/quote/' + quoteId + '/member/' + memberId + '/rating')
+    return Api.get(
+      '/group-pricing/claims/scheme/' +
+        schemeId +
+        '/quote/' +
+        quoteId +
+        '/member/' +
+        memberId +
+        '/rating'
+    )
   }
 }

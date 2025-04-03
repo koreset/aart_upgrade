@@ -58,6 +58,5 @@ const validateForm = () => {
 defineExpose({
   validateForm
 })
-
 </script>
 <style lang="css" scoped></style>

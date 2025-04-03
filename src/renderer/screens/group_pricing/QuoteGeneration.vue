@@ -117,6 +117,9 @@ onMounted(() => {
   GroupPricingService.getBrokers().then((res) => {
     groupStore.brokers = res.data
   })
+  GroupPricingService.getIndustries().then((res) => {
+    groupStore.industries = res.data
+  })
   GroupPricingService.getSchemesInforce().then((res) => {
     groupStore.groupSchemes = res.data
   })
