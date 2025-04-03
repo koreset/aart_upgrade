@@ -159,6 +159,7 @@ const selectedQuote: any = ref({})
 const organization: any = ref(null)
 
 const headers = [
+  { title: 'Actions', value: 'actions', align: 'center' as 'center', sortable: false },
   { title: 'Scheme Name', value: 'scheme_name', key: 'scheme_name', width: '120px' },
   { title: 'In Force', value: 'quote_type', key: 'quote_type', width: '20%' },
   {
@@ -184,8 +185,7 @@ const headers = [
     value: (item: any) => parseDateString(item.creation_date)
   },
   { title: 'Submitted By', value: 'created_by' },
-  { title: 'Reviewer', value: 'reviewer' },
-  { title: 'Actions', value: 'actions', align: 'center' as 'center', sortable: false }
+  { title: 'Reviewer', value: 'reviewer' }
 ]
 
 const parseDateString = (dateString) => {

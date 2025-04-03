@@ -225,6 +225,35 @@ const wrapText = (text, font, fontSize, maxWidth) => {
   return lines
 }
 
+const getImageType = (base64String: string): string | null => {
+  const match = base64String.match(/^data:image\/(png|jpeg|jpg|gif|bmp|webp);base64,/)
+  console.log('match', match)
+  return match ? match[1] : null
+}
+
+// const embedAndResizeImage = async (pdfDoc: PDFDocument, base64Image: string) => {
+//   const imageType = getImageType(base64Image);
+//   if (!imageType) {
+//     throw new Error('Invalid base64 image string');
+//   }
+//   // Remove the prefix from the base64 string
+//   const base64Data = base64Image.replace(/^data:image\/(png|jpeg|jpg|gif|bmp|webp);base64,/, '');
+
+//   const embeddedImage = await pdfDoc.embedPng(base64Image); // Use embedJpg() if it's a JPG
+//   const { width, height } = embeddedImage;
+
+//   // Target size
+//   const targetWidth = 100;
+//   const targetHeight = 100;
+
+//   // Maintain aspect ratio
+//   const scale = Math.min(targetWidth / width, targetHeight / height);
+//   const newWidth = width * scale;
+//   const newHeight = height * scale;
+
+//   return { embeddedImage, newWidth, newHeight };
+// };
+
 const createQuotePdf = async () => {
   const pdfDoc = await PDFDocument.create()
   const page1 = pdfDoc.addPage([595.28, 841.89])
@@ -242,6 +271,15 @@ const createQuotePdf = async () => {
 
   const font = await pdfDoc.embedFont(StandardFonts.Helvetica)
   const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold)
+
+  let logoImage: any = null
+  let logoDims: any = null
+  // embed insurer logo
+  if (insurer.value.logo) {
+    console.log('image type', getImageType(insurer.value.logo))
+    logoImage = await pdfDoc.embedJpg(insurer.value.logo)
+    logoDims = logoImage.scale(0.05)
+  }
 
   console.log('font', font)
   const fontSize = 10
@@ -262,21 +300,31 @@ const createQuotePdf = async () => {
     const insurerAddress = `${insurer.value.address_line_1}, ${insurer.value.address_line_2}`
     const insurerAddress1 = `${insurer.value.city}, ${insurer.value.province}, ${insurer.value.post_code}`
     const insurerCountry = `${insurer.value.country}`
-    const insurerContact = `Tel: ${insurer.value.telephone}, Email: ${insurer.value.email}`
+    const insurerContactEmail = `Email: ${insurer.value.email}`
+    const insurerContactTel = `Tel: ${insurer.value.telephone}`
 
     const insurerText = [
       insurerName,
       insurerAddress,
       insurerAddress1,
-      insurerCountry,
-      insurerContact
+      insurerContactEmail,
+      insurerContactTel,
+      insurerCountry
     ]
 
     y = height - topMargin
 
+    currentPage.drawImage(logoImage, {
+      x: width - margin - logoDims.width,
+      y: y - logoDims.height,
+      width: logoDims.width,
+      height: logoDims.height
+    })
+
     insurerText.forEach((line) => {
-      const textWidth = font.widthOfTextAtSize(line, fontSize)
-      const x = width - margin - textWidth // Calculate X position for right alignment
+      // const textWidth = font.widthOfTextAtSize(line, fontSize)
+      // const x = width - margin - textWidth // Calculate X position for right alignment
+      const x = margin // Calculate X position for right alignment
       currentPage.drawText(line, { x, y, size: fontSize, font, color: rgb(0, 0, 0) })
       y -= fontSize * 1.5 // Move down for the next line
     })
