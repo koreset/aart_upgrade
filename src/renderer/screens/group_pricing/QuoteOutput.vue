@@ -277,8 +277,14 @@ const createQuotePdf = async () => {
   // embed insurer logo
   if (insurer.value.logo) {
     console.log('image type', getImageType(insurer.value.logo))
-    logoImage = await pdfDoc.embedJpg(insurer.value.logo)
-    logoDims = logoImage.scale(0.05)
+    if (insurer.value.logo_mime_type === 'image/jpeg') {
+      logoImage = await pdfDoc.embedJpg(insurer.value.logo)
+    }
+    if (insurer.value.logo_mime_type === 'image/png') {
+      logoImage = await pdfDoc.embedPng(insurer.value.logo)
+    }
+
+    logoDims = logoImage.scale(0.2)
   }
 
   console.log('font', font)

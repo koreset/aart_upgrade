@@ -198,7 +198,8 @@ const insurerData: any = ref({
   post_code: '',
   country: '',
   telephone: '',
-  email: ''
+  email: '',
+  logo: ''
 })
 
 const logoFile: any = ref(null)
@@ -228,25 +229,12 @@ const createInsurer = () => {
   const formData = new FormData()
   formData.append('insurer', JSON.stringify(insurerData.value))
   formData.append('logo', logoFile.value)
+  console.log('Form Data', formData)
+  // insurerData.value.logo = imagePreview.value
 
   GroupPricingService.createInsurer(formData).then((res) => {
     console.log('Insurer Created', res.data)
   })
-  // const insurerPayload = {
-  //   name: insurerData.value.name,
-  //   address1: insurerData.value.address1,
-  //   address2: insurerData.value.address2,
-  //   city: insurerData.value.city,
-  //   province: insurerData.value.province,
-  //   postCode: insurerData.value.postCode,
-  //   country: insurerData.value.country,
-  //   phone: insurerData.value.phone,
-  //   email: insurerData.value.email,
-  //   logo: insurerData.value.logo
-  // }
-  // GroupPricingService.createInsurer(insurerPayload).then((res) => {
-  //   console.log('Insurer Created', res.data)
-  // })
 }
 
 onMounted(() => {
