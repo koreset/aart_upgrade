@@ -15,6 +15,16 @@ function isInteger(value) {
   return false
 }
 
+export const roundUpToTwoDecimalsAccounting = (num) => {
+  const roundedNum = Math.ceil(num * 100) / 100 // Round up to two decimal places
+  return roundedNum
+    .toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    })
+    .replace(/,/g, ' ') // Replace commas with spaces for accounting format }
+}
+
 export const formatValues = (params) => {
   const header = params.column.userProvidedColDef.headerName
 

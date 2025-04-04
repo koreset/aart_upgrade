@@ -283,7 +283,9 @@ import BaseCard from '@/renderer/components/BaseCard.vue'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import GroupPricingService from '@/renderer/api/GroupPricingService'
-import formatValues from '@/renderer/utils/format_values'
+// import formatValues from '@/renderer/utils/format_values'
+import { formatValues, roundUpToTwoDecimalsAccounting } from '@/renderer/utils/format_values'
+
 import _ from 'lodash'
 import DataGrid from '@/renderer/components/tables/DataGrid.vue'
 import FileUploadDialog from '@/renderer/components/FileUploadDialog.vue'
@@ -348,8 +350,27 @@ const headers = computed(() => {
   const baseHeaders: any = [
     { title: 'Scheme Name', value: 'name' },
     { title: 'In Force', value: 'in_force' },
-    { title: 'Annual Premium', value: 'annual_premium' },
-    { title: 'Earned Premium', value: 'earned_premium' },
+    {
+      title: 'Annual Premium',
+      key: 'annual_premium',
+      value: (item: any) => roundUpToTwoDecimalsAccounting(item.annual_premium)
+    },
+    {
+      title: 'Earned Premium',
+      key: 'earned_premium',
+      value: (item: any) => roundUpToTwoDecimalsAccounting(item.earned_premium)
+    },
+
+    { title: 'Basis', value: 'basis' },
+    { title: 'Status', value: 'status' },
+    { title: 'Broker', value: 'quote_broker.name', key: 'quote_broker', width: '20%' },
+    { title: 'Type', value: 'obligation_type' },
+    { title: 'SGLA', value: 'sgla_benefit' },
+    { title: 'PHI', value: 'phi_benefit' },
+    { title: 'TTD', value: 'ttd_benefit' },
+    { title: 'PTD', value: 'ptd_benefit' },
+    { title: 'CI', value: 'ci_benefit' },
+    { title: 'Funeral', value: 'family_funeral_benefit' },
     { title: 'Duration in Force', value: 'duration_in_force' },
     { title: 'New Business', value: 'new_business' },
     {
@@ -359,21 +380,65 @@ const headers = computed(() => {
       value: (item: any) => parseDateString(item.renewal_date)
     },
     { title: 'Member Count', value: 'member_count' },
-    { title: 'Commission', value: 'commission' },
-    { title: 'Actual Claims', value: 'actual_claims' },
-    { title: 'Expected Claims', value: 'expected_claims' },
+    {
+      title: 'Commission',
+      key: 'commission',
+      value: (item: any) => roundUpToTwoDecimalsAccounting(item.commission)
+    },
+    {
+      title: 'Actual Claims',
+      key: 'actual_claims',
+      value: (item: any) => roundUpToTwoDecimalsAccounting(item.actual_claims)
+    },
+    {
+      title: 'Expected Claims',
+      key: 'expected_claims',
+      value: (item: any) => roundUpToTwoDecimalsAccounting(item.expected_claims)
+    },
     { title: 'Actual Claims Ratio', value: 'actual_claims_ratio' },
     { title: 'Expected Claims Ratio', value: 'expected_claims_ratio' },
     { title: 'Actual Loss Ratio', value: 'actual_loss_ratio' },
     { title: 'Expected Loss Ratio', value: 'expected_loss_ratio' },
-    { title: 'Expected Expenses', value: 'expected_expenses' },
-    { title: 'GLA Annual Premium', value: 'gla_annual_premium' },
-    { title: 'SGLA Annual Premium', value: 'sgla_annual_premium' },
-    { title: 'PTD Annual Premium', value: 'ptd_annual_premium' },
-    { title: 'CI Annual Premium', value: 'ci_annual_premium' },
-    { title: 'PHI Annual Premium', value: 'phi_annual_premium' },
-    { title: 'TTD Annual Premium', value: 'ttd_annual_premium' },
-    { title: 'Funeral Annual Premium', value: 'funeral_annual_premium' },
+    {
+      title: 'Expected Expenses',
+      key: 'expected_expenses',
+      value: (item: any) => roundUpToTwoDecimalsAccounting(item.expected_expenses)
+    },
+    {
+      title: 'GLA Annual Premium',
+      key: 'gla_annual_premium',
+      value: (item: any) => roundUpToTwoDecimalsAccounting(item.gla_annual_premium)
+    },
+    {
+      title: 'SGLA Annual Premium',
+      key: 'sgla_annual_premium',
+      value: (item: any) => roundUpToTwoDecimalsAccounting(item.sgla_annual_premium)
+    },
+    {
+      title: 'PTD Annual Premium',
+      value: (item: any) => roundUpToTwoDecimalsAccounting(item.ptd_annual_premium),
+      key: 'ptd_annual_premium'
+    },
+    {
+      title: 'CI Annual Premium',
+      value: (item: any) => roundUpToTwoDecimalsAccounting(item.ci_annual_premium),
+      key: 'ci_annual_premium'
+    },
+    {
+      title: 'PHI Annual Premium',
+      value: (item: any) => roundUpToTwoDecimalsAccounting(item.phi_annual_premium),
+      key: 'phi_annual_premium'
+    },
+    {
+      title: 'TTD Annual Premium',
+      value: (item: any) => roundUpToTwoDecimalsAccounting(item.ttd_annual_premium),
+      key: 'phi_annual_premium'
+    },
+    {
+      title: 'Funeral Annual Premium',
+      value: (item: any) => roundUpToTwoDecimalsAccounting(item.funeral_annual_premium),
+      key: 'funeral_annual_premium'
+    },
     { title: 'Contact Person', value: 'contact_person' },
     { title: 'Email', value: 'contact_email' },
     { title: 'Created By', value: 'created_by' },

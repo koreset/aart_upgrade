@@ -4,7 +4,7 @@
       <v-col>
         <base-card :show-actions="false">
           <template #header>
-            <span class="headline">Scheme List</span>
+            <span class="headline">Quote List</span>
           </template>
           <template #default>
             <v-row>
@@ -168,6 +168,8 @@ const headers = [
     width: '20%',
     value: (item: any) => parseDateString(item.commencement_date)
   },
+  { title: 'Basis', value: 'basis' },
+  { title: 'Status', value: 'status' },
   { title: 'Broker', value: 'quote_broker.name', key: 'quote_broker', width: '20%' },
   { title: 'Type', value: 'obligation_type' },
   { title: 'SGLA', value: 'sgla_benefit' },
@@ -176,8 +178,6 @@ const headers = [
   { title: 'PTD', value: 'ptd_benefit' },
   { title: 'CI', value: 'ci_benefit' },
   { title: 'Funeral', value: 'family_funeral_benefit' },
-  { title: 'Basis', value: 'basis' },
-  { title: 'Status', value: 'status' },
   {
     title: 'Creation Date',
     key: 'creation_date',

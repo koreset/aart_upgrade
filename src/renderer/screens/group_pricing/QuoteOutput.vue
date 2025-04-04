@@ -66,6 +66,7 @@ import * as pdfjsLib from 'pdfjs-dist'
 import { saveAs } from 'file-saver'
 import GroupPricingService from '@/renderer/api/GroupPricingService'
 import { useRouter } from 'vue-router'
+import formatDateString from '@/renderer/utils/helpers.js'
 
 const props = defineProps({
   quoteId: {
@@ -187,7 +188,7 @@ const renderPage = async (num: any) => {
   await page.render(renderContext).promise
 }
 
-const roundUpToTwoDecimals = (num) => {
+const roundUpToTwoDecimalsAccounting = (num) => {
   const roundedNum = Math.ceil(num * 100) / 100 // Round up to two decimal places
   return roundedNum
     .toLocaleString('en-US', {
@@ -364,24 +365,29 @@ const createQuotePdf = async () => {
     { label: 'Type of Policy:', value: 'Group Life Assurance' },
     {
       label: 'Quote Date:',
-      value: quote.value.creation_date ? quote.value.creation_date : '2021-09-01'
+      value: quote.value.creation_date
+        ? formatDateString(quote.value.creation_date, true, true, true)
+        : '2021-09-01'
     },
     { label: 'Prepared For:', value: quote.value.scheme_name },
     { label: 'Scheme Name:', value: quote.value.scheme_name },
-    { label: 'Commencement Date:', value: quote.value.commencement_date },
+    {
+      label: 'Commencement Date:',
+      value: formatDateString(quote.value.commencement_date, true, true, true)
+    },
     { label: 'Period of Assurance:', value: '1 year' },
     { label: 'Number of Lives Covered', value: `${resultSummary.value.member_count}` },
     {
       label: 'Total Sum Assured:',
-      value: `${roundUpToTwoDecimals(resultSummary.value.total_sum_assured)}`
+      value: `${roundUpToTwoDecimalsAccounting(resultSummary.value.total_sum_assured)}`
     },
     {
       label: 'Total Annual Salary:',
-      value: `${roundUpToTwoDecimals(resultSummary.value.total_annual_salary)}`
+      value: `${roundUpToTwoDecimalsAccounting(resultSummary.value.total_annual_salary)}`
     },
     {
       label: 'Total Annual Premium:',
-      value: `${roundUpToTwoDecimals(resultSummary.value.total_annual_premium)}`
+      value: `${roundUpToTwoDecimalsAccounting(resultSummary.value.total_annual_premium)}`
     }
   ]
 
@@ -461,45 +467,45 @@ const createQuotePdf = async () => {
   const benefitsStructure: any = [
     {
       benefit: 'Group Life Assurance',
-      sumAssured: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.total_gla_capped_sum_assured))}`,
-      annualPremium: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_total_gla_annual_office_premium))}`,
-      percentage: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_proportion_gla_office_premium_salary * 100) + '%')}`
+      sumAssured: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.total_gla_capped_sum_assured))}`,
+      annualPremium: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_total_gla_annual_office_premium))}`,
+      percentage: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_proportion_gla_office_premium_salary * 100) + '%')}`
     },
     {
       benefit: 'Permanent Total Disability',
-      sumAssured: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.total_ptd_capped_sum_assured))}`,
-      annualPremium: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_total_ptd_annual_office_premium))}`,
-      percentage: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_proportion_ptd_office_premium_salary * 100) + '%')}`
+      sumAssured: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.total_ptd_capped_sum_assured))}`,
+      annualPremium: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_total_ptd_annual_office_premium))}`,
+      percentage: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_proportion_ptd_office_premium_salary * 100) + '%')}`
     },
     {
       benefit: 'Critical Illness',
-      sumAssured: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.total_ci_capped_sum_assured))}`,
-      annualPremium: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_total_ci_annual_office_premium))}`,
-      percentage: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_proportion_ci_office_premium_salary * 100) + '%')}`
+      sumAssured: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.total_ci_capped_sum_assured))}`,
+      annualPremium: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_total_ci_annual_office_premium))}`,
+      percentage: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_proportion_ci_office_premium_salary * 100) + '%')}`
     },
     {
       benefit: 'Spouses Group Life Assurance',
-      sumAssured: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.total_sgla_capped_sum_assured))}`,
-      annualPremium: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_total_sgla_annual_office_premium))}`,
-      percentage: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_proportion_sgla_office_premium_salary * 100) + '%')}`
+      sumAssured: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.total_sgla_capped_sum_assured))}`,
+      annualPremium: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_total_sgla_annual_office_premium))}`,
+      percentage: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_proportion_sgla_office_premium_salary * 100) + '%')}`
     },
     {
       benefit: 'Permanent Health Insurance',
-      sumAssured: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.total_phi_capped_income))}`,
-      annualPremium: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_total_phi_annual_office_premium))}`,
-      percentage: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_proportion_phi_office_premium_salary * 100) + '%')}`
+      sumAssured: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.total_phi_capped_income))}`,
+      annualPremium: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_total_phi_annual_office_premium))}`,
+      percentage: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_proportion_phi_office_premium_salary * 100) + '%')}`
     },
     {
       benefit: 'Total and Temporary Disability',
-      sumAssured: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.total_ttd_capped_income))}`,
-      annualPremium: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_total_ttd_annual_office_premium))}`,
-      percentage: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_proportion_ttd_office_premium_salary * 100) + '%')}`
+      sumAssured: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.total_ttd_capped_income))}`,
+      annualPremium: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_total_ttd_annual_office_premium))}`,
+      percentage: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_proportion_ttd_office_premium_salary * 100) + '%')}`
     },
     {
       benefit: 'Sub Total/Total Premiums',
-      sumAssured: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.total_gla_capped_sum_assured))}`,
-      annualPremium: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_total_annual_premium_excl_funeral))}`,
-      percentage: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.proportion_exp_total_premium_excl_funeral_salary * 100) + '%')}`
+      sumAssured: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.total_gla_capped_sum_assured))}`,
+      annualPremium: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_total_annual_premium_excl_funeral))}`,
+      percentage: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.proportion_exp_total_premium_excl_funeral_salary * 100) + '%')}`
     }
   ]
 
@@ -604,15 +610,15 @@ const createQuotePdf = async () => {
   const groupFuneral = [
     {
       label: 'Monthly Premium per Member',
-      value: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_total_fun_monthly_premium_per_member))}`
+      value: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_total_fun_monthly_premium_per_member))}`
     },
     {
       label: 'Annual Premium per Member',
-      value: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_total_fun_annual_premium_per_member))}`
+      value: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_total_fun_annual_premium_per_member))}`
     },
     {
       label: 'Total Annual Premium',
-      value: `${dashIfEmpty(roundUpToTwoDecimals(resultSummary.value.exp_total_fun_annual_office_premium))}`
+      value: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_total_fun_annual_office_premium))}`
     }
   ]
 
@@ -682,7 +688,7 @@ const createQuotePdf = async () => {
     },
     {
       label: 'GLA Free Cover Limit (FCL)',
-      value: `${dashIfEmpty(roundUpToTwoDecimals(quote.value.free_cover_limit))}`
+      value: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(quote.value.free_cover_limit))}`
     },
     {
       label: 'Terminal Illness Benefit',
@@ -740,7 +746,7 @@ const createQuotePdf = async () => {
     },
     {
       label: 'PTD Free Cover Limit (FCL)',
-      value: `${dashIfEmpty(roundUpToTwoDecimals(quote.value.free_cover_limit))}`
+      value: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(quote.value.free_cover_limit))}`
     },
     {
       label: 'Benefit Structure',
@@ -804,7 +810,7 @@ const createQuotePdf = async () => {
     },
     {
       label: 'Maximum Sum Assured',
-      value: `${dashIfEmpty(roundUpToTwoDecimals(quote.value.sgla.max_benefit))}`
+      value: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(quote.value.sgla.max_benefit))}`
     },
     {
       label: 'Cover Termination Age',
@@ -997,23 +1003,23 @@ const createQuotePdf = async () => {
   const groupFuneralDetails = [
     {
       label: 'Main Member Sum Assured',
-      value: `${dashIfEmpty(roundUpToTwoDecimals(quote.value.family_funeral.main_member_funeral_sum_assured))}`
+      value: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(quote.value.family_funeral.main_member_funeral_sum_assured))}`
     },
     {
       label: 'Spouse Sum Assured',
-      value: `${dashIfEmpty(roundUpToTwoDecimals(quote.value.family_funeral.spouse_funeral_sum_assured))}`
+      value: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(quote.value.family_funeral.spouse_funeral_sum_assured))}`
     },
     {
       label: 'Adult Dependant Sum Assured',
-      value: `${dashIfEmpty(roundUpToTwoDecimals(quote.value.family_funeral.adult_dependant_sum_assured))}`
+      value: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(quote.value.family_funeral.adult_dependant_sum_assured))}`
     },
     {
       label: 'Child Sum Assured',
-      value: `${dashIfEmpty(roundUpToTwoDecimals(quote.value.family_funeral.children_funeral_sum_assured))}`
+      value: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(quote.value.family_funeral.children_funeral_sum_assured))}`
     },
     {
       label: 'Parent Sum Assured',
-      value: `${dashIfEmpty(roundUpToTwoDecimals(quote.value.family_funeral.parent_funeral_sum_assured))}`
+      value: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(quote.value.family_funeral.parent_funeral_sum_assured))}`
     },
 
     {

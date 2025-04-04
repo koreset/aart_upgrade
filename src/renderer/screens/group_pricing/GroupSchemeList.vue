@@ -56,7 +56,7 @@ import BaseCard from '../../components/BaseCard.vue'
 import { computed, onMounted, ref } from 'vue'
 import ConfirmationDialog from '../../components/ConfirmDialog.vue'
 import GroupPricingService from '../../api/GroupPricingService'
-import formatValues from '@/renderer/utils/format_values'
+import { formatValues, roundUpToTwoDecimalsAccounting } from '@/renderer/utils/format_values'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -72,7 +72,11 @@ const headers = computed(() => {
   const baseHeaders: any = [
     { title: 'Scheme Name', value: 'name' },
     { title: 'In Force', value: 'in_force' },
-    { title: 'Annual Premium', value: 'annual_premium' },
+    {
+      title: 'Annual Premium',
+      key: 'annual_premium',
+      value: (item: any) => roundUpToTwoDecimalsAccounting(item.annual_premium)
+    },
     { title: 'Duration in Force', value: 'duration_in_force' },
     {
       title: 'Renewal Date',
