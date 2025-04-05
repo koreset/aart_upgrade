@@ -213,7 +213,7 @@ const rowSelection: any = ref(null)
 const aggRowSelection: any = ref(null)
 const columnDefs = ref([])
 const aggPointColumnDefs = ref([])
-const headers = ref([])
+const headers: any = ref([])
 // const aggPointHeaders = ref([])
 const aggPoints = ref([])
 const pdfHeaders: any = ref([])
@@ -289,50 +289,6 @@ const downloadControlFile = () => {
   })
 }
 
-// const generatePdf = () => {
-//   const canvas: any = document.getElementById('chart-results')
-//   html2canvas(canvas).then((canvas) => {
-//     const imgData = canvas.toDataURL('image/png')
-//     // eslint-disable-next-line new-cap
-//     const doc = new jsPDF('p', 'mm', 'a4')
-//     doc.setFontSize(18)
-//     doc.text(
-//       'Pricing Analysis ( ' +
-//         product.value.product_code +
-//         ') - ' +
-//         selectedScenario.value.description +
-//         ' Scenario',
-//       10,
-//       10
-//     )
-
-//     const width = doc.internal.pageSize.getWidth()
-//     const imgProps = doc.getImageProperties(imgData)
-//     const imgHeight = (imgProps.height * width) / imgProps.width
-//     // var height = doc.internal.pageSize.getHeight();
-//     doc.addImage(imgData, 'PNG', 10, 15, width - 20, imgHeight - 10)
-//     const headers: any = [pdfHeaders]
-//     const body: any = []
-//     pricingDistribution.value.forEach((item) => {
-//       const row = [
-//         item.age,
-//         item['5000_male'],
-//         item['5000_female'],
-//         item['10000_male'],
-//         item['10000_female'],
-//         item['20000_male'],
-//         item['20000_female'],
-//         item['50000_male'],
-//         item['50000_female']
-//       ]
-//       body.push(row)
-//     })
-//     doc.setFontSize(10)
-//     autoTable(doc, { head: headers, body, startY: imgHeight + 10, theme: 'grid' })
-
-//     doc.save(product.value.product_code + '_' + selectedScenario.value.description + '.pdf')
-//   })
-// }
 const customSort = (arr) => {
   // Separate the array into two subarrays: one for alphabet strings and one for numeric strings
   const alphabetStrings = arr.filter((str) => isNaN(Number(str[0])))
@@ -368,6 +324,7 @@ const loadScenario = () => {
   pricingDistribution.value = null
   options.value = null
   PricingService.getScenarioData(selectedScenario.value.id, runId).then((res) => {
+    console.log('Scenario data', res.data)
     profitabilities.value = res.data.profitability
     pricingDistribution.value = res.data.pricing_distribution
     filteredData.value = res.data.filtered
@@ -378,7 +335,6 @@ const loadScenario = () => {
     rowData.value = filteredData.value
     rowSelection.value = 'single'
 
-    // columnDefs = createColumnDefs(filteredData[0])
     columnDefs.value = createColumnDefs(headers.value)
 
     if (res.data.aggregated_points !== null && res.data.aggregated_points.length > 0) {
@@ -413,7 +369,6 @@ const loadScenario = () => {
           label: {
             color: 'red',
             formatter: function (params) {
-              console.log('item:', params)
               return `${params.value}`
             }
           }
@@ -427,7 +382,6 @@ const loadScenario = () => {
           calloutLabel: {
             color: 'black',
             formatter: function (params) {
-              console.log(params)
               return `${params.datum.label}  ${((params.datum.value / totalValue) * 100).toFixed(2)}%`
               // return `${((params.datum.value / totalValue) * 100).toFixed(2)}%`
             }
@@ -459,8 +413,8 @@ const generatePdf = () => {
   html2canvas(canvas).then((canvas) => {
     const imgData = canvas.toDataURL('image/png')
     // eslint-disable-next-line new-cap
-    const doc = new jsPDF('p', 'mm', 'a4')
-    doc.setFontSize(18)
+    const doc = new jsPDF('l', 'mm', 'a4')
+    doc.setFontSize(12)
     doc.text(
       'Pricing Analysis ( ' +
         product.value.product_code +
@@ -476,24 +430,27 @@ const generatePdf = () => {
     const imgHeight = (imgProps.height * width) / imgProps.width
     // var height = doc.internal.pageSize.getHeight();
     doc.addImage(imgData, 'PNG', 10, 15, width - 20, imgHeight - 10)
-    const headers = [pdfHeaders]
+    doc.addPage('l')
+    console.log('PDF Headers', headers.value)
+    console.log('Filtered Data', filteredData.value)
+    // const headers = [pdfHeaders]
     const body: any = []
-    pricingDistribution.value.forEach((item) => {
-      const row: any = [
-        item.age,
-        item['5000_male'],
-        item['5000_female'],
-        item['10000_male'],
-        item['10000_female'],
-        item['20000_male'],
-        item['20000_female'],
-        item['50000_male'],
-        item['50000_female']
-      ]
+    filteredData.value.forEach((item) => {
+      const row: any = []
+      Object.entries(item).forEach(([key, value]) => {
+        console.log('Key', key)
+        console.log('Value', value)
+        row.push(value)
+        // if (key !== 'age') {
+
+        // } else {
+        //   row.unshift(item.age)
+        // }
+      })
       body.push(row)
     })
     doc.setFontSize(10)
-    autoTable(doc, { head: headers, body, startY: imgHeight + 10, theme: 'grid' })
+    autoTable(doc, { head: [headers.value], body, startY: 10, theme: 'grid' })
 
     doc.save(
       pricingRun.value.name +

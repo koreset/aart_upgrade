@@ -54,7 +54,7 @@
                         </v-col>
                       </v-row>
                       <v-row
-                        v-for="mp in modelPointSets"
+                        v-for="mp in paginatedMpSets"
                         :key="mp.version"
                         class="borderline blue-grey lighten-5 mx-2 mt-3 mb-1 accent-4--text"
                       >
@@ -84,6 +84,15 @@
                             <v-icon color="error">mdi-delete</v-icon>
                             <span>Delete</span>
                           </v-btn>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col>
+                          <v-pagination
+                            v-if="totalPages > 1"
+                            v-model="currentPage"
+                            :length="totalPages"
+                          ></v-pagination>
                         </v-col>
                       </v-row>
                     </template>
@@ -237,14 +246,6 @@
         </template>
       </base-card>
     </v-dialog>
-    <!-- <table-uploader
-      ref="tableUploader"
-      :filePlaceHolder="filePlaceHolder"
-      :formTitle="formTitle"
-      :dialog="showDialog"
-      @form-submitted="handleFormSubmitted"
-      @close-dialog="closeDialog"
-    /> -->
     <confirmation-dialog ref="confirmDelete" />
   </v-container>
 </template>
@@ -253,15 +254,13 @@
 import PricingService from '@/renderer/api/PricingService'
 import formatValues from '@/renderer/utils/format_values'
 import ProductService from '@/renderer/api/ProductService'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import BaseCard from '@/renderer/components/BaseCard.vue'
 import ConfirmationDialog from '@/renderer/components/ConfirmDialog.vue'
 import AssociatedPricingTableDisplay from '@/renderer/components/AssociatedPricingTableDisplay.vue'
 import FileInfo from '@/renderer/components/FileInfo.vue'
-// import { useAppStore } from '@/renderer/store/app'
 import FileUpdater from '@/renderer/components/FileUpdater.vue'
 
-// const appStore = useAppStore()
 const confirmDelete = ref()
 const showDialog = ref(false)
 const loadDataComplete = ref(false)
@@ -291,6 +290,16 @@ const selectedProduct: any = ref(null)
 const pricingProduct: any = ref(null)
 const items: any = []
 
+const pageSize = 5
+const currentPage = ref(1)
+const totalPages = ref(3)
+
+const paginatedMpSets: any = computed(() => {
+  const start = (currentPage.value - 1) * pageSize
+  const end = start + pageSize
+  return modelPointSets.value.slice(start, end)
+})
+
 const closeDialog = (value) => {
   showDialog.value = value
   tableDialog.value = value
@@ -307,6 +316,7 @@ const getModelPointsCount = async () => {
     modelPointCount.value = res.data.count
     modelPoints.value = res.data.model_points
     modelPointSets.value = res.data.model_point_sets
+    totalPages.value = Math.ceil(modelPointSets.value.length / pageSize)
   })
 }
 
