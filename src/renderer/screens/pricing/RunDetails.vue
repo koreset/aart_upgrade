@@ -412,6 +412,43 @@ const loadScenario = () => {
   })
 }
 
+type RateRecord = Record<string, number>
+
+const rearrangeRates = (data: RateRecord[]): RateRecord[] => {
+  if (data.length === 0) return []
+
+  // Step 1: Extract all keys except "Age/Sum Assured"
+  const sample = data[0]
+  const sumAssuredKeys = Object.keys(sample).filter((key) => key !== 'Age/Sum Assured')
+
+  // Step 2: Extract unique sum assured amounts
+  const sumAssuredSet = new Set<number>()
+  for (const key of sumAssuredKeys) {
+    const match = key.match(/^(\d+)\s+\([MF]\)$/)
+    if (match) {
+      sumAssuredSet.add(parseInt(match[1]))
+    }
+  }
+
+  // Step 3: Sort sum assured amounts numerically
+  const sortedSumAssureds = Array.from(sumAssuredSet).sort((a, b) => a - b)
+
+  // Step 4: Define final ordered keys
+  const orderedKeys = [
+    'Age/Sum Assured',
+    ...sortedSumAssureds.flatMap((sa) => [`${sa} (F)`, `${sa} (M)`])
+  ]
+
+  // Step 5: Rearrange each object
+  return data.map((entry) => {
+    const newObj: RateRecord = {}
+    for (const key of orderedKeys) {
+      newObj[key] = entry[key]
+    }
+    return newObj
+  })
+}
+
 const generatePdf = () => {
   const canvas: any = document.getElementById('chart-results')
   html2canvas(canvas).then((canvas) => {
@@ -439,11 +476,12 @@ const generatePdf = () => {
     console.log('Filtered Data', filteredData.value)
     // const headers = [pdfHeaders]
     const body: any = []
-    filteredData.value.forEach((item) => {
+    const reorderedData = rearrangeRates(filteredData.value)
+    reorderedData.forEach((item) => {
       const row: any = []
       Object.entries(item).forEach(([key, value]) => {
-        console.log('Key', key)
-        console.log('Value', value)
+        // console.log('Key', key)
+        // console.log('Value', value)
         row.push(value)
         // if (key !== 'age') {
 
