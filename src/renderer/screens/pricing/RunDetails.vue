@@ -3,9 +3,9 @@
     <base-card :show-actions="false" class="rounded-lg">
       <template #header>
         <span v-if="product" class="headline"
-          >{{ product.product.product_name }} [{{ product.product.product_code }}] Pricing
-          Analysis</span
-        >
+          >{{ product.product.product_name }} [{{ product.product.product_code }}] Pricing Analysis
+          - Run: {{ pricingRun.name }}
+        </span>
       </template>
       <template #default>
         <v-row
