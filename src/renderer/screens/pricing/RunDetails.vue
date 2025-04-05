@@ -43,6 +43,7 @@
               size="small"
               variant="outlined"
               rounded
+              :loading="loadingXls"
               class="primary ml-4"
               @click="downloadControlFile"
               >Download Control Results</v-btn
@@ -228,6 +229,7 @@ const runDetails = ref(null)
 const data: any = ref([])
 const filteredData = ref([])
 const loadingData = ref(false)
+const loadingXls = ref(false)
 // const tableData = ref([])
 
 // transform methods
@@ -269,6 +271,7 @@ const deleteScenario = () => {
 }
 
 const downloadControlFile = () => {
+  loadingXls.value = true
   // selectedScenario.value.id, runId.value, product.value.product_code
   PricingService.getPricingExcelControlResults(
     runId.value,
@@ -286,6 +289,7 @@ const downloadControlFile = () => {
     document.body.appendChild(fileLink)
 
     fileLink.click()
+    loadingXls.value = false
   })
 }
 
