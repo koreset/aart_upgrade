@@ -397,15 +397,27 @@ const handleFileUpload = (event, tableType) => {
   }
 }
 
-const deleteModelPoints = (mp: any) => {
-  PricingService.deleteModelPoints(selectedProduct.value.product_code, mp.version).then(
-    (response) => {
-      text.value = response.data
+const deleteModelPoints = async (mp: any) => {
+  try {
+    const result = await confirmDelete.value.open(
+      'Deleting Model Points',
+      `Are you sure you want to delete model points for ${selectedProduct.value.product_code}?`
+    )
+    if (!result) return
+
+    PricingService.deleteModelPoints(selectedProduct.value.product_code, mp.version).then(() => {
+      text.value = 'deleted successfully'
       snackbar.value = true
       modelPointCount.value = 0
       modelPoints.value = []
-    }
-  )
+      // remove the deleted model point from the list
+      modelPointSets.value = modelPointSets.value.filter((item) => item.version !== mp.version)
+      totalPages.value = Math.ceil(modelPointSets.value.length / pageSize)
+      currentPage.value = 1
+    })
+  } catch (err: any) {
+    console.error('Error deleting model points:', err)
+  }
 }
 
 const uploadModelPoints = () => {
