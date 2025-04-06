@@ -93,5 +93,8 @@ export default {
   },
   deleteModelPoints(productCode, mpVersion) {
     return Api.delete('pricing/delete-model-points/' + productCode + '/' + mpVersion)
+  },
+  reRunPricingJob(runId) {
+    return Api.post('pricing/rerun/' + runId)
   }
 }

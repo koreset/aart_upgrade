@@ -87,6 +87,16 @@
                         @click="downloadResults(job.id)"
                         >Download Results</v-btn
                       >
+                      <v-btn
+                        v-if="job.status !== 'failed'"
+                        rounded
+                        size="small"
+                        variant="outlined"
+                        class="primary text--white mr-4"
+                        @click="reRun(job.id)"
+                        >Re Run Job</v-btn
+                      >
+
                     </v-col>
                   </v-row>
                 </v-expansion-panel-text>
@@ -194,6 +204,15 @@ const downloadResults = (jobId) => {
     document.body.appendChild(fileLink)
 
     fileLink.click()
+  })
+}
+
+const reRun = (jobId) => {
+  PricingService.reRunPricingJob(jobId).then((response) => {
+    runJobs.value = runJobs.value.filter(function (elem) {
+      return elem.id !== jobId
+    })
+    runJobs.value.push(response.data)
   })
 }
 </script>
