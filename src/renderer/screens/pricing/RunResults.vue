@@ -96,7 +96,6 @@
                         @click="reRun(job.id)"
                         >Re Run Job</v-btn
                       >
-
                     </v-col>
                   </v-row>
                 </v-expansion-panel-text>
@@ -126,6 +125,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <confirm-dialog ref="confirmAction" />
   </v-container>
 </template>
 <script setup lang="ts">
@@ -135,8 +135,10 @@ import PricingService from '@/renderer/api/PricingService.js'
 import { onMounted, ref } from 'vue'
 import { DateTime } from 'luxon'
 import BaseCard from '@/renderer/components/BaseCard.vue'
+import ConfirmDialog from '@/renderer/components/ConfirmDialog.vue'
 // import LoadingIndicator from '@/renderer/components/LoadingIndicator.vue'
 
+const confirmAction = ref()
 let pollTimer
 const reduceDecimal = (number) => {
   return number.toFixed(2)
@@ -207,13 +209,25 @@ const downloadResults = (jobId) => {
   })
 }
 
-const reRun = (jobId) => {
-  PricingService.reRunPricingJob(jobId).then((response) => {
-    runJobs.value = runJobs.value.filter(function (elem) {
-      return elem.id !== jobId
+const reRun = async (jobId) => {
+  try {
+    const rerunAction = await confirmAction.value.open(
+      'Confirming Rerun Action',
+      'Are you sure you want to re-run this job?'
+    )
+    if (!rerunAction) {
+      return
+    }
+    PricingService.reRunPricingJob(jobId).then((response) => {
+      runJobs.value = runJobs.value.filter(function (elem) {
+        return elem.id !== jobId
+      })
+      runJobs.value.push(response.data)
     })
-    runJobs.value.push(response.data)
-  })
+  } catch (error) {
+    console.error('Error re-running job:', error)
+    // Handle the error as needed, e.g., show a notification to the user
+  }
 }
 </script>
 
