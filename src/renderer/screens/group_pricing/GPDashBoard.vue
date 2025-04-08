@@ -660,7 +660,7 @@ const revenueOptions: any = ref<AgChartOptions>({
     { type: 'GFF', revenue: 48000, claims: 28000 }
   ],
   title: {
-    text: 'Total Revenue by Benefit',
+    text: 'Expected Revenue & Claims by Benefit',
     fontSize: 14,
     fontWeight: 'bold'
   },
