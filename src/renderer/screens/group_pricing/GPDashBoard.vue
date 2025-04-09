@@ -292,12 +292,12 @@ const changeChartDataSource = () => {
 
   if (data) {
     if (selectedDataView.value === 'Annual Premium') {
-      convertedQuotes = data.new_quotes_converted_premium
-      unconvertedQuotes = data.new_quotes_unconverted_premium
-      totalQuotes = data.new_quotes_total_premium
+      convertedQuotes = data.new_quotes_converted_premium  / 1000000
+      unconvertedQuotes = data.new_quotes_unconverted_premium  / 1000000
+      totalQuotes = data.new_quotes_total_premium  / 1000000
 
-      inForceSchemesRenewal = data.renewals_in_force_premium
-      inForceSchemesNew = data.new_business_in_force_premium
+      inForceSchemesRenewal = data.renewals_in_force_premium  / 1000000
+      inForceSchemesNew = data.new_business_in_force_premium / 1000000
       inForceSchemesTotal = `${roundUpToTwoDecimals(data.total_in_force_premium / 1000000)}m`
 
       newQuotesInProgress = data.new_quotes_in_progress_premium / 1000000
@@ -340,8 +340,8 @@ const changeChartDataSource = () => {
   conversionOptions.value = {
     ...conversionOptions.value,
     data: [
-      { asset: 'Converted', amount: convertedQuotes },
-      { asset: 'Unconverted', amount: unconvertedQuotes }
+      { asset: 'InForce', amount: convertedQuotes },
+      { asset: 'Approved', amount: unconvertedQuotes }
     ],
     series: [
       {
