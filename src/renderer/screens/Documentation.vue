@@ -71,6 +71,7 @@ import { paaLibrary } from '../data/paa_library'
 import { gmmVfaLibrary } from '../data/gmm_vfa_library'
 import { pricingLibrary } from '../data/pricing_library'
 import { experienceAnalysis } from '../data/experience_analysis'
+import { groupPricing } from '../data/group_pricing'
 import BaseCard from '../components/BaseCard.vue'
 // import documentMarkdown from "../docs/base.md"
 import 'prismjs/themes/prism-dark.css' // Import the desired theme
@@ -100,7 +101,8 @@ const topics = ref([
   'PAA Library',
   'GMM VFA Library',
   'Pricing Library',
-  'Experience Analysis'
+  'Experience Analysis',
+  'Group Pricing'
 ])
 const headers: any = ref([])
 const language: any = ref('javascript')
@@ -152,6 +154,19 @@ const getHelp = () => {
   }
   if (selectedTopic.value === 'Experience Analysis') {
     libraryFile.value = experienceAnalysis
+    headers.value = [
+      {
+        title: 'Data Variable',
+        align: 'start',
+        filterable: true,
+        value: 'data_variable'
+      },
+      { title: 'Description', value: 'data_description', width: '400' }
+    ]
+  }
+
+  if (selectedTopic.value === 'Group Pricing') {
+    libraryFile.value = groupPricing
     headers.value = [
       {
         title: 'Data Variable',
