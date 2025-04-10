@@ -37,7 +37,7 @@
                             variant="outlined"
                             rounded
                             size="small"
-                            @click.stop="deleteTableData(item)"
+                            @click.stop="chooseYear(item)"
                           >
                             <v-icon color="error">mdi-delete</v-icon>
                             <span>Delete</span>
@@ -83,6 +83,46 @@
       <v-btn rounded color="red" variant="text" @click="snackbar = false">Close</v-btn>
     </v-snackbar>
     <confirmation-dialog ref="confirmDeleteDialog" />
+    <v-dialog v-model="yearsDialog" persistent max-width="550px">
+      <base-card>
+        <template #header>
+          <span class="headline">Choose the relevant data year</span>
+        </template>
+        <template #default>
+          <v-row>
+            <v-col>
+              <v-select
+                v-model="selectedYear"
+                variant="outlined"
+                density="compact"
+                label="Select a year for this data set"
+                :items="availableDataYears"
+                item-title="year"
+                item-value="year"
+                @update:model-value="getRiskRateCodes"
+              ></v-select>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-select
+                v-model="selectedRiskRateCode"
+                variant="outlined"
+                density="compact"
+                label="Select a year for this data set"
+                :items="availableRiskRateCodes"
+                item-title="year"
+                item-value="year"
+              ></v-select>
+            </v-col>
+          </v-row>
+        </template>
+        <template #actions>
+          <v-spacer></v-spacer>
+          <v-btn rounded variant="text" @click="closeDialog">Ok</v-btn>
+        </template>
+      </base-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -99,12 +139,16 @@ import { ref, onMounted } from 'vue'
 import { DataPayload } from '@/renderer/components/types'
 
 // data
+const yearsDialog: any = ref(false)
+const availableDataYears: any = ref([])
+const selectedYear: any = ref('')
 const viewHeader: string = 'Group Pricing Rating Tables'
 const confirmDeleteDialog: any = ref()
 const loadingData: any = ref(false)
 const rowCount: any = ref(0)
 const tableData: any = ref([])
 const selectedTable: any = ref('')
+const selectedTableText: any = ref('')
 const tables: any = ref([
   { name: 'Parameters' },
   { name: 'Yield Curve' },
@@ -112,25 +156,80 @@ const tables: any = ref([
   { name: 'Shocks' }
 ])
 
-const text: any = ref('')
+// const text: any = ref('')
 const columnDefs: any = ref([])
-const dialog: any = ref(false)
+// const dialog: any = ref(false)
 
 const uploadComplete = ref(false)
 const snackbarText: any = ref(null)
 const timeout: any = ref(3000)
 const snackbar: any = ref(false)
+const availableRiskRateCodes: any = ref([])
+const selectedRiskRateCode: any = ref('')
 
 onMounted(() => {
   GroupPricingService.getTableMetaData().then((res) => {
     tables.value = res.data.associated_tables
+    console.log('tables', tables.value)
   })
 })
+
+const closeDialog = () => {
+  yearsDialog.value = false
+  deleteTableData()
+}
 
 // methods
 const clearData = () => {
   tableData.value = []
   selectedTable.value = ''
+}
+
+const getRiskRateCodes = async () => {
+  const tableType = selectedTable.value.replace(/\s+/g, '').toLowerCase()
+  const response = await GroupPricingService.getRiskRateCodes(tableType, selectedYear.value)
+  availableRiskRateCodes.value = response.data
+  console.log('availableRiskRateCodes', availableRiskRateCodes.value)
+}
+
+const chooseYear = async (item: any) => {
+  availableDataYears.value = []
+  selectedYear.value = null
+  selectedRiskRateCode.value = null
+
+  if (item !== null) {
+    console.log('item', item)
+    selectedTableText.value = item.table_type
+    selectedTable.value = item.table_type.replace(/\s+/g, '').toLowerCase()
+    const response = await GroupPricingService.getTableYears(selectedTable.value)
+    availableDataYears.value = response.data
+    yearsDialog.value = true
+  }
+
+  // if (
+  //   item.table === 'Accidental_Mortality' ||
+  //   item.table === 'Mortality' ||
+  //   item.table === 'Lapse' ||
+  //   item.table === 'Lapse_Margins' ||
+  //   item.table === 'Disability' ||
+  //   item.table === 'Retrenchment'
+  // ) {
+  //   ProductService.getProductTableYears(
+  //     props.product.product.id,
+  //     item.table,
+  //     'valuations',
+  //     item.table_class
+  //   ).then((response) => {
+  //     availableDataYears.value = response.data
+  //   })
+
+  //   selectedItem.value = item
+
+  //   yearsDialog.value = true
+  // } else {
+  //   selectedYear.value = 0
+  //   confirmDelete(item)
+  // }
 }
 
 const handleUpload = (payload: DataPayload) => {
@@ -158,17 +257,23 @@ const handleUpload = (payload: DataPayload) => {
     })
 }
 
-const deleteTableData = async (table: any) => {
+const deleteTableData = async () => {
   try {
     const result = await confirmDeleteDialog.value.open(
-      'Deleting Data for ' + table.table_type + ' table',
+      'Deleting Data for ' + selectedTableText.value + ' table',
       'Are you sure you want to delete this data?'
     )
     if (result) {
-      GroupPricingService.deleteTable(table.table_type).then((response) => {
-        text.value = response.data
+      // const tableType = table.table_type.replace(/\s+/g, '').toLowerCase()
+      GroupPricingService.deleteTable(
+        selectedTable.value,
+        selectedYear.value,
+        selectedRiskRateCode.value
+      ).then((response) => {
+        // text.value = response.data
+        // dialog.value = false
         snackbar.value = true
-        dialog.value = false
+
         tableData.value = []
         selectedTable.value = ''
       })

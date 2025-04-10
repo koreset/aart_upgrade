@@ -37,8 +37,10 @@ export default {
     return Api.delete('group-pricing/quote-tables/' + tableType + '/' + quoteId)
   },
 
-  deleteTable(tableType) {
-    return Api.delete('group-pricing/rate-tables/' + tableType)
+  deleteTable(tableType, year, riskCode) {
+    return Api.delete(
+      'group-pricing/rate-tables/' + tableType + '/year/' + year + '/risk-code/' + riskCode
+    )
   },
   getDataForTable(tableType) {
     return Api.get('/group-pricing/rate-tables/' + tableType.toLowerCase())
@@ -147,5 +149,11 @@ export default {
         memberId +
         '/rating'
     )
+  },
+  getTableYears(tableType) {
+    return Api.get('/group-pricing/rate-tables/' + tableType + '/get-years')
+  },
+  getRiskRateCodes(tableType, year) {
+    return Api.get('/group-pricing/rate-tables/' + tableType + '/get-risk-codes/' + year)
   }
 }
