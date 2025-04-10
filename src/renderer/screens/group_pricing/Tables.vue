@@ -109,7 +109,7 @@
                 v-model="selectedRiskRateCode"
                 variant="outlined"
                 density="compact"
-                label="Select a year for this data set"
+                label="Select a risk rate code"
                 :items="availableRiskRateCodes"
                 item-title="year"
                 item-value="year"
@@ -270,10 +270,10 @@ const deleteTableData = async () => {
         selectedYear.value,
         selectedRiskRateCode.value
       ).then((response) => {
-        // text.value = response.data
+        snackbarText.value = 'Data deleted successfully'
         // dialog.value = false
         snackbar.value = true
-
+        timeout.value = 3000
         tableData.value = []
         selectedTable.value = ''
       })

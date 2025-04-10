@@ -157,7 +157,7 @@
                   </template>
                   <template #default>
                     <v-row>
-                      <v-col> Broker Table Here </v-col>
+                      <v-col><data-grid :row-data="rowData" :column-defs="columnDefs" /> </v-col>
                     </v-row>
                   </template>
                 </base-card>
@@ -181,12 +181,16 @@ import ConfirmationDialog from '../../components/ConfirmDialog.vue'
 import GroupPricingService from '../../api/GroupPricingService'
 // import Cropper from 'cropperjs'
 import 'cropperjs/dist/cropper.css'
+import DataGrid from '@/renderer/components/tables/DataGrid.vue'
+import formatValues from '@/renderer/utils/format_values'
 
 const confirmDialog = ref()
 
 // broker data
 const brokerName: any = ref('')
 const brokers: any = ref([])
+const rowData: any = ref([])
+const columnDefs: any = ref([])
 
 // insurer data
 const insurerData: any = ref({
@@ -241,6 +245,9 @@ onMounted(() => {
   GroupPricingService.getBrokers().then((res) => {
     if (res.data.length > 0) {
       brokers.value = res.data
+      console.log('Brokers', res.data)
+      rowData.value = res.data
+      createColumnDefs(res.data)
     } else {
       brokers.value = []
     }
@@ -268,6 +275,21 @@ const onFileChange = (e: any) => {
     }
     reader.readAsDataURL(file)
   }
+}
+
+const createColumnDefs = (data: any) => {
+  columnDefs.value = []
+  Object.keys(data[0]).forEach((element) => {
+    const header: any = {}
+    header.headerName = element
+    header.field = element
+    header.valueFormatter = formatValues
+    header.minWidth = 200
+    header.sortable = true
+    header.filter = true
+    header.resizable = true
+    columnDefs.value.push(header)
+  })
 }
 </script>
 
