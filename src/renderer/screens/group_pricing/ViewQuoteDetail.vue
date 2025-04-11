@@ -29,7 +29,12 @@
                 <v-btn class="mr-3" size="small" rounded color="primary" @click="approveQuote"
                   >Approve</v-btn
                 >
-                <v-btn size="small" rounded color="primary" @click="acceptQuote"
+                <v-btn
+                  :disabled="quote.status === 'InForce'"
+                  size="small"
+                  rounded
+                  color="primary"
+                  @click="acceptQuote"
                   >Accept Quote</v-btn
                 >
               </v-col>
