@@ -40,7 +40,9 @@
                       <span class="headline">Model Points</span>
                     </template>
                     <template #default>
-                      <v-row class="mt-3 mb-3">
+                      <loading-indicator :loading-data="dataLoading" />
+
+                      <v-row v-if="!dataLoading" class="mt-3 mb-3">
                         <v-col>
                           <v-btn
                             variant="outlined"
@@ -261,6 +263,7 @@ import ConfirmationDialog from '@/renderer/components/ConfirmDialog.vue'
 import AssociatedPricingTableDisplay from '@/renderer/components/AssociatedPricingTableDisplay.vue'
 import FileInfo from '@/renderer/components/FileInfo.vue'
 import FileUpdater from '@/renderer/components/FileUpdater.vue'
+import LoadingIndicator from '@/renderer/components/LoadingIndicator.vue'
 
 const confirmDelete = ref()
 const showDialog = ref(false)
@@ -271,6 +274,7 @@ const modelPoints: any = ref([])
 const modelPointSets: any = ref([])
 const selectedYear = ref(null)
 const loading = ref(false)
+const dataLoading = ref(false)
 const timeout = 3000
 const snackbar = ref(false)
 const text = ref('')
@@ -313,6 +317,7 @@ const getModelPointsCount = async () => {
 
   console.log('pricingProduct', pricingProduct)
 
+  dataLoading.value = true
   PricingService.getModelPointCount(selectedProduct.value.product_code).then((res) => {
     modelPointCount.value = res.data.count
     if (res.data.model_point_sets !== null && res.data.model_point_sets.length > 0) {
@@ -322,6 +327,7 @@ const getModelPointsCount = async () => {
       modelPointSets.value = []
       totalPages.value = 0
     }
+    dataLoading.value = false
   })
 }
 
