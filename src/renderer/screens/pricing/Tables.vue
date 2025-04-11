@@ -313,6 +313,7 @@ const getModelPointsCount = async () => {
   console.log('pricingProduct', pricingProduct)
 
   PricingService.getModelPointCount(selectedProduct.value.product_code).then((res) => {
+    console.log('model point count', res.data)
     modelPointCount.value = res.data.count
     modelPoints.value = res.data.model_points
     if (res.data.model_points.length > 0) {
