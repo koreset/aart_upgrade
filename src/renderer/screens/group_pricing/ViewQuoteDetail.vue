@@ -961,8 +961,8 @@ const acceptQuote = async () => {
     console.log('Response:', res.data)
     snackbarText.value = 'Quote Accepted Successfully'
     snackbar.value = true
-  } catch (error) {
-    console.log('Error:', error)
+  } catch (error: any) {
+    console.log('Error:', error.data)
     snackbarText.value = 'Quote Acceptance Failed'
     snackbar.value = true
   }
