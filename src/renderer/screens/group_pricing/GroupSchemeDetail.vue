@@ -361,16 +361,14 @@ const headers = computed(() => {
       value: (item: any) => roundUpToTwoDecimalsAccounting(item.earned_premium)
     },
 
-    { title: 'Basis', value: 'basis' },
-    { title: 'Status', value: 'status' },
-    { title: 'Broker', value: 'quote_broker.name', key: 'quote_broker', width: '20%' },
-    { title: 'Type', value: 'obligation_type' },
-    { title: 'SGLA', value: 'sgla_benefit' },
-    { title: 'PHI', value: 'phi_benefit' },
-    { title: 'TTD', value: 'ttd_benefit' },
-    { title: 'PTD', value: 'ptd_benefit' },
-    { title: 'CI', value: 'ci_benefit' },
-    { title: 'Funeral', value: 'family_funeral_benefit' },
+    { title: 'Broker', value: 'broker.name', key: 'broker', width: '20%' },
+    { title: 'Type', value: 'quote.obligation_type' },
+    { title: 'SGLA', value: 'quote.sgla_benefit' },
+    { title: 'PHI', value: 'quote.phi_benefit' },
+    { title: 'TTD', value: 'quote.ttd_benefit' },
+    { title: 'PTD', value: 'quote.ptd_benefit' },
+    { title: 'CI', value: 'quote.ci_benefit' },
+    { title: 'Funeral', value: 'quote.family_funeral_benefit' },
     { title: 'Duration in Force', value: 'duration_in_force' },
     { title: 'New Business', value: 'new_business' },
     {
@@ -551,7 +549,7 @@ onMounted(() => {
   console.log(route.params.id)
   GroupPricingService.getScheme(route.params.id).then((response) => {
     scheme.value = response.data
-    console.log(scheme)
+    console.log('Scheme found: ', scheme.value)
     schemes.value.push(scheme.value)
   })
 })

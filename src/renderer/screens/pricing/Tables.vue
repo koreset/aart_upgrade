@@ -315,8 +315,12 @@ const getModelPointsCount = async () => {
   PricingService.getModelPointCount(selectedProduct.value.product_code).then((res) => {
     modelPointCount.value = res.data.count
     modelPoints.value = res.data.model_points
-    modelPointSets.value = res.data.model_point_sets
-    totalPages.value = Math.ceil(modelPointSets.value.length / pageSize)
+    if (res.data.model_points.length > 0) {
+      modelPointSets.value = res.data.model_point_sets
+      totalPages.value = Math.ceil(modelPointSets.value.length / pageSize)
+    } else {
+      modelPointSets.value = []
+    }
   })
 }
 
