@@ -225,6 +225,7 @@
                   <v-btn
                     variant="outlined"
                     rounded
+                    :loading="loading"
                     color="primary"
                     size="small"
                     @click="uploadModelPoints"
@@ -426,6 +427,7 @@ const deleteModelPoints = async (mp: any) => {
 
 const uploadModelPoints = () => {
   if (modelpointFile.value === null) {
+    console.error('Please select a file to upload')
     errorMessages.value.push('Please select a file to upload')
     error.value = true
     return
@@ -437,6 +439,8 @@ const uploadModelPoints = () => {
   formdata.append('file', modelpointFile.value)
   ProductService.postProductPricingModelPoints(formdata, selectedProduct.value.id)
     .then(() => {
+      snackbar.value = true
+      text.value = 'Model points successfully uploaded'
       showFileUpload.value = false
       modelPointsDialog.value = false
       error.value = false
