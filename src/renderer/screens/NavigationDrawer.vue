@@ -20,14 +20,14 @@
     <v-list class="nav-text smaller-font">
       <v-list-item
         :class="{ 'disabled-item': checkEntitlement('dashboard') }"
-        :to="{ name: 'dashboard' }"
-        :title="'Dashboard'"
+        :to="checkEntitlement('dashboard') ? undefined : { name: 'dashboard' }"
         :prepend-icon="'mdi-monitor-dashboard'"
-        @click="checkEntitlement('dashboard') ? showAccessMessage('dashboard') : null"
-      ></v-list-item>
+        @click.prevent="handleNavigation('dashboard')"
+        ><v-list-item-title>Dashboard</v-list-item-title></v-list-item
+      >
       <v-list-item
         :class="{ 'disabled-item': checkEntitlement('product-setup') }"
-        :to="{ name: 'product-setup' }"
+        :to="checkEntitlement('product-setup') ? undefined : { name: 'product-setup' }"
         :prepend-icon="'mdi-table-settings'"
         @click="checkEntitlement('product-setup') ? showAccessMessage('product-setup') : null"
       >
@@ -343,6 +343,26 @@
       >
         <v-list-item-title>Tasks</v-list-item-title>
       </v-list-item>
+      <v-list-group class="first-level-group" value="User Management">
+        <template #activator="{ props }">
+          <v-list-item
+            :disabled="checkEntitlement('user-management')"
+            v-bind="props"
+            prepend-icon="mdi-file-table-box-multiple-outline"
+            title="User Management"
+          ></v-list-item>
+        </template>
+        <v-list-item :to="{ name: 'user-management-list' }">
+          <v-list-item-title>Users List</v-list-item-title>
+        </v-list-item>
+        <v-list-item :to="{ name: 'user-management-roles' }">
+          <v-list-item-title>Roles</v-list-item-title>
+        </v-list-item>
+        <v-list-item :to="{ name: 'user-management-permissions' }">
+          <v-list-item-title>Permissions</v-list-item-title>
+        </v-list-item>
+      </v-list-group>
+
       <v-list-item :to="{ name: 'app-settings' }" :prepend-icon="'mdi-table-settings'">
         <v-list-item-title>Application Settings</v-list-item-title>
       </v-list-item>
@@ -381,6 +401,27 @@ const showAccessMessage = (entitlement: string) => {
   snackbarMessage.value = `You are not entitled to access this feature: ${entitlement}`
   snackbar.value = true
 }
+
+const handleNavigation = (feature: string) => {
+  if (checkEntitlement(feature)) {
+    showAccessMessage(feature)
+  }
+}
+
+// function getNavigationProps(feature: string, routeName: string) {
+//   const isDisabled = checkEntitlement(feature)
+
+//   return {
+//     to: isDisabled ? undefined : { name: routeName },
+//     class: { 'disabled-item': isDisabled },
+//     onClick: (e: MouseEvent) => {
+//       if (isDisabled) {
+//         e.preventDefault()
+//         showAccessMessage(feature)
+//       }
+//     }
+//   }
+// }
 
 const checkEntitlement = (entitlement: string) => {
   const entitlements: any = appStore.getEntitlements()

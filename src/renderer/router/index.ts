@@ -439,6 +439,21 @@ export default createRouter({
       name: 'app-settings',
       component: () => import('../screens/AppSettings.vue')
     },
+    {
+      path: '/user-management-list',
+      name: 'user-management-list',
+      component: () => import('../screens/user_management/UserList.vue')
+    },
+    {
+      path: '/user-management-roles',
+      name: 'user-management-roles',
+      component: () => import('../screens/user_management/UserRoles.vue')
+    },
+    {
+      path: '/user-management-permissions',
+      name: 'user-management-permissions',
+      component: () => import('../screens/user_management/UserPermissions.vue')
+    },
 
     {
       path: '/error',
