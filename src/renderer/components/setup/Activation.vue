@@ -99,6 +99,8 @@ const addDashes = () => {
   }
 }
 
+
+
 const activateLicense = async () => {
   activationSuccess.value = false
   apiUrlComplete.value = false
@@ -116,6 +118,7 @@ const activateLicense = async () => {
   })
 
   const rs = await validation.json()
+  console.log('License response', rs)
   // We are doing machine activations to avoid catch 22, right?
   keyErrors.value = []
   switch (rs.meta.constant) {

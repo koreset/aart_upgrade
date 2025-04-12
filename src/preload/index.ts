@@ -19,12 +19,15 @@ const mainAvailChannels: string[] = [
   'msgSetLicenseServerUrl',
   'msgCheckLicenseValidity',
   'msgActivateLicense',
-  'msgGetEnvironment'
+  'msgGetEnvironment',
+  'msgGetEntitlements',
+  'msgLogout'
 ]
 const rendererAvailChannels: string[] = [
   'update_available',
   'update_not_available',
-  'update_downloaded'
+  'update_downloaded',
+  'logout'
 ]
 
 contextBridge.exposeInMainWorld('mainApi', {

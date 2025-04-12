@@ -47,6 +47,12 @@ export const createMainWindow = async (mainWindow: BrowserWindow): Promise<Brows
               { role: 'hideOthers' },
               { role: 'unhide' },
               { type: 'separator' },
+              {
+                label: 'Log Out',
+                click: () => {
+                  mainWindow.webContents.send('logout')
+                }
+              },
               { role: 'quit' }
             ]
           }

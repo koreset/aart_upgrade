@@ -27,6 +27,14 @@ window.mainApi?.on('update_available', async () => {
     window.mainApi?.send('msgRestartApplication', true)
   }
 })
+
+window.mainApi?.on('logout', async () => {
+  log.info('Logout')
+  const res = await confirmationDialog.value?.open('Logout', 'Are you sure you want to logout?')
+  if (res) {
+    window.mainApi?.send('msgLogout')
+  }
+})
 </script>
 
 <template>

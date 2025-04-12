@@ -5,6 +5,7 @@ export const useAppStore = defineStore('app', {
     user: null,
     licenseData: null,
     organization: null,
+    entitlements: [],
     allProducts: []
   }),
   actions: {
@@ -13,6 +14,15 @@ export const useAppStore = defineStore('app', {
     },
     setLicense(licenseData: any) {
       this.licenseData = licenseData
+    },
+    setEntitlements(entitlements: any) {
+      this.entitlements = entitlements
+    },
+    getEntitlements() {
+      return this.entitlements
+    },
+    clearEntitlement() {
+      this.entitlements = []
     },
     clearUser() {
       this.user = null

@@ -19,52 +19,95 @@
     </v-container>
     <v-list class="nav-text smaller-font">
       <v-list-item
+        :class="{ 'disabled-item': checkEntitlement('dashboard') }"
         :to="{ name: 'dashboard' }"
         :title="'Dashboard'"
         :prepend-icon="'mdi-monitor-dashboard'"
+        @click="checkEntitlement('dashboard') ? showAccessMessage('dashboard') : null"
       ></v-list-item>
-      <v-list-item :to="{ name: 'product-setup' }" :prepend-icon="'mdi-table-settings'">
+      <v-list-item
+        :class="{ 'disabled-item': checkEntitlement('product-setup') }"
+        :to="{ name: 'product-setup' }"
+        :prepend-icon="'mdi-table-settings'"
+        @click="checkEntitlement('product-setup') ? showAccessMessage('product-setup') : null"
+      >
         <v-list-item-title>Product Configuration</v-list-item-title>
       </v-list-item>
-      <v-list-item :to="{ name: 'products' }" :prepend-icon="'mdi-dolly'">
+      <v-list-item
+        :disabled="checkEntitlement('products')"
+        :to="{ name: 'products' }"
+        :prepend-icon="'mdi-dolly'"
+      >
         <v-list-item-title>Products</v-list-item-title>
       </v-list-item>
-      <v-list-item :to="{ name: 'global-tables' }" :prepend-icon="'mdi-table-multiple'">
+      <v-list-item
+        :disabled="checkEntitlement('global-tables')"
+        :to="{ name: 'global-tables' }"
+        :prepend-icon="'mdi-table-multiple'"
+      >
         <v-list-item-title>Global Tables</v-list-item-title>
       </v-list-item>
-      <v-list-item :to="{ name: 'product-comparison' }" :prepend-icon="'mdi-compare-horizontal'">
+      <v-list-item
+        :disabled="checkEntitlement('product-comparison')"
+        :to="{ name: 'product-comparison' }"
+        :prepend-icon="'mdi-compare-horizontal'"
+      >
         <v-list-item-title>Cash Flow Comparison</v-list-item-title>
       </v-list-item>
-      <v-list-item :to="{ name: 'reporting' }" :prepend-icon="'mdi-chart-box-multiple'">
+      <v-list-item
+        :disabled="checkEntitlement('reporting')"
+        :to="{ name: 'reporting' }"
+        :prepend-icon="'mdi-chart-box-multiple'"
+      >
         <v-list-item-title>Reports</v-list-item-title>
       </v-list-item>
       <v-list-group value="Group Pricing">
         <template #activator="{ props }">
           <v-list-item
+            :disabled="checkEntitlement('group-pricing')"
             v-bind="props"
             prepend-icon="mdi-file-table-box-multiple-outline"
             title="Group Pricing"
           ></v-list-item>
         </template>
-        <v-list-item :to="{ name: 'group-pricing-dashboard' }">
+        <v-list-item
+          :disabled="checkEntitlement('group-pricing-dashboard')"
+          :to="{ name: 'group-pricing-dashboard' }"
+        >
           <v-list-item-title>Dashboard</v-list-item-title>
         </v-list-item>
 
-        <v-list-item :to="{ name: 'group-pricing-quotes' }">
+        <v-list-item
+          :disabled="checkEntitlement('group-pricing-quotes')"
+          :to="{ name: 'group-pricing-quotes' }"
+        >
           <v-list-item-title>Quotes</v-list-item-title>
         </v-list-item>
-        <v-list-item :to="{ name: 'group-pricing-tables' }">
+        <v-list-item
+          :disabled="checkEntitlement('group-pricing-tables')"
+          :to="{ name: 'group-pricing-tables' }"
+        >
           <v-list-item-title>Tables</v-list-item-title>
         </v-list-item>
-        <v-list-item :to="{ name: 'group-pricing-brokers' }">
+        <v-list-item
+          :disabled="checkEntitlement('group-pricing-brokers')"
+          :to="{ name: 'group-pricing-brokers' }"
+        >
           <v-list-item-title>Metadata</v-list-item-title>
         </v-list-item>
-        <v-list-item :to="{ name: 'group-pricing-schemes' }">
+        <v-list-item
+          :disabled="checkEntitlement('group-pricing-schemes')"
+          :to="{ name: 'group-pricing-schemes' }"
+        >
           <v-list-item-title>Schemes</v-list-item-title>
         </v-list-item>
         <v-list-group subgroup class="first-level-group" value="Claims">
           <template #activator="{ props }">
-            <v-list-item v-bind="props" title="Claims"></v-list-item>
+            <v-list-item
+              :disabled="checkEntitlement('group-pricing-claims')"
+              v-bind="props"
+              title="Claims"
+            ></v-list-item>
           </template>
           <v-list-item class="second-level-item" :to="{ name: 'group-pricing-claims-list' }">
             <v-list-item-title>Claims List</v-list-item-title>
@@ -74,6 +117,7 @@
       <v-list-group value="Valuations">
         <template #activator="{ props }">
           <v-list-item
+            :disabled="checkEntitlement('valuations')"
             v-bind="props"
             prepend-icon="mdi-file-table-box-multiple-outline"
             title="Valuations"
@@ -160,6 +204,7 @@
       <v-list-group class="first-level-group" value="Pricing">
         <template #activator="{ props }">
           <v-list-item
+            :disabled="checkEntitlement('pricing')"
             v-bind="props"
             prepend-icon="mdi-file-table-box-multiple-outline"
             title="Pricing"
@@ -178,6 +223,7 @@
       <v-list-group class="first-level-group" value="Exp Analysis">
         <template #activator="{ props }">
           <v-list-item
+            :disabled="checkEntitlement('exp-analysis')"
             v-bind="props"
             prepend-icon="mdi-file-table-box-multiple-outline"
             title="Exp Analysis"
@@ -199,6 +245,7 @@
       <v-list-group class="first-level-group" value="IFRS17">
         <template #activator="{ props }">
           <v-list-item
+            :disabled="checkEntitlement('ifrs17')"
             v-bind="props"
             prepend-icon="mdi-file-table-box-multiple-outline"
             title="IFRS17"
@@ -223,6 +270,7 @@
       <v-list-group class="first-level-group" value="IFRS17 Reports">
         <template #activator="{ props }">
           <v-list-item
+            :disabled="checkEntitlement('ifrs17-reports')"
             v-bind="props"
             prepend-icon="mdi-chart-box-multiple"
             title="IFRS17 Reports"
@@ -288,7 +336,11 @@
           </v-list-item>
         </v-list-group>
       </v-list-group>
-      <v-list-item :to="{ name: 'tasks' }" :prepend-icon="'mdi-table-settings'">
+      <v-list-item
+        :disabled="checkEntitlement('tasks')"
+        :to="{ name: 'tasks' }"
+        :prepend-icon="'mdi-table-settings'"
+      >
         <v-list-item-title>Tasks</v-list-item-title>
       </v-list-item>
       <v-list-item :to="{ name: 'app-settings' }" :prepend-icon="'mdi-table-settings'">
@@ -298,11 +350,18 @@
         <v-list-item-title>Documentation</v-list-item-title>
       </v-list-item>
     </v-list>
+    <v-snackbar v-model="snackbar" :timeout="timeout">
+      {{ snackbarMessage }}
+      <template #actions>
+        <v-btn color="white" variant="text" @click="snackbar = false"> Close </v-btn>
+      </template>
+    </v-snackbar>
   </v-navigation-drawer>
 </template>
 <script setup lang="ts">
 import TaskService from '@/renderer/api/TaskService'
 import { watchEffect, defineProps, ref, onMounted } from 'vue'
+import { useAppStore } from '@/renderer/store/app'
 // import ProductService from '@/renderer/api/ProductService' // Assuming the 'ProductService' module is located in the 'api' folder at the root of your project
 const navProps = defineProps({
   drawer: {
@@ -311,6 +370,25 @@ const navProps = defineProps({
   }
 })
 
+const appStore = useAppStore()
+const snackbar = ref(false)
+const snackbarMessage = ref('')
+const timeout = ref(3000)
+
+const showAccessMessage = (entitlement: string) => {
+  console.log('Entitlement', entitlement)
+  console.log('You are not entitled to access this feature.')
+  snackbarMessage.value = `You are not entitled to access this feature: ${entitlement}`
+  snackbar.value = true
+}
+
+const checkEntitlement = (entitlement: string) => {
+  const entitlements: any = appStore.getEntitlements()
+  if (entitlements && entitlements.length > 0) {
+    return !entitlements.includes(entitlement)
+  }
+  return false
+}
 const appVersion: any = ref('')
 const apiVersion: any = ref('')
 
@@ -368,5 +446,11 @@ watchEffect(() => {
 
 .v-list-group__items .v-list-item {
   padding-inline-start: calc(var(--indent-padding)) !important;
+}
+
+.disabled-item {
+  pointer-events: auto; /* allow click events */
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 </style>

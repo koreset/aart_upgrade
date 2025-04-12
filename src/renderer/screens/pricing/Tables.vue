@@ -370,6 +370,7 @@ const dismissModelPointsDialog = () => {
 onMounted(async () => {
   const prodResponse = await ProductService.getProducts()
   allProducts.value = prodResponse.data
+  console.log('allProducts', allProducts.value)
   // allProducts.value = appStore.getAllProducts
 
   allProducts.value.forEach((family: any) => {

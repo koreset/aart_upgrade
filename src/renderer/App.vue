@@ -5,15 +5,53 @@ import { onMounted } from 'vue'
 import ProductService from '@/renderer/api/ProductService'
 
 const appStore = useAppStore()
+const licenseUrl = import.meta.env.VITE_APP_LICENSE_SERVER
+
+const getEntitlements = async (licenseId) => {
+  console.log('Fetching entitlements for license ID:', licenseId)
+  if (!licenseId) {
+    console.error('License ID is required to fetch entitlements.')
+    return
+  }
+  const validation = await fetch(licenseUrl + '/licenses/' + licenseId + '/get-entitlements', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json'
+    }
+  })
+
+  const rs = await validation.json()
+  console.log('Entitlements response', rs)
+  const entitlementList: any = []
+  if (rs && rs.data && rs.data.length > 0) {
+    rs.data.forEach((entitlement: any) => {
+      entitlementList.push(entitlement.attributes.name)
+    })
+  }
+
+  console.log('Entitlement List', entitlementList)
+  appStore.setEntitlements(entitlementList)
+}
 
 onMounted(async () => {
   const response = await ProductService.getProducts()
   appStore.setProducts(response.data)
 
   const result = await window.mainApi?.sendSync('msgGetUserLicense')
+  console.log('License response', result)
   if (result) {
     appStore.setLicense(result)
   }
+
+  await getEntitlements(result.data.id)
+
+  // get entitlements
+  // const entitlements = await window.mainApi?.sendSync('msgGetEntitlements')
+  // if (entitlements) {
+  //   console.log('Entitlements', entitlements)
+  //   // appStore.setEntitlements(entitlements)
+  // }
 })
 </script>
 

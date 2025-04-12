@@ -43,6 +43,15 @@ export default class IPCs {
       event.returnValue = Constants.APP_VERSION
     })
 
+    // Logout user
+    ipcMain.on('msgLogout', (event: IpcMainEvent) => {
+      console.log('Logout user')
+      // store.delete('authenticatedUser')
+      // store.delete('access_token')
+      // store.delete('user_profile')
+      // event.returnValue = 'success'
+    })
+
     // Open url via web browser
     ipcMain.on('msgOpenExternalLink', async (event: IpcMainEvent, url: string) => {
       await shell.openExternal(url)
