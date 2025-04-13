@@ -2,8 +2,10 @@
 import { DefaultLayout } from '@/renderer/components/layout'
 import { useAppStore } from '@/renderer/store/app'
 import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import ProductService from '@/renderer/api/ProductService'
 
+const router = useRouter()
 const appStore = useAppStore()
 const licenseUrl = import.meta.env.VITE_APP_LICENSE_SERVER
 
@@ -30,7 +32,6 @@ const getEntitlements = async (licenseId) => {
     })
   }
 
-  console.log('Entitlement List', entitlementList)
   appStore.setEntitlements(entitlementList)
 }
 
@@ -45,6 +46,20 @@ onMounted(async () => {
   }
 
   await getEntitlements(result.data.id)
+
+  console.log('Entitlements', appStore.getEntitlements())
+
+  const entitlements: any = appStore.entitlements
+  if (entitlements.includes('dashboard')) {
+    await router.push('/')
+  } else if (entitlements.includes('group-pricing-dashboard')) {
+    await router.push('/group-pricing/dashboard')
+  } else {
+    // fallback or unauthorized
+    console.log('first entitlement', entitlements[0])
+    await router.push({ name: entitlements[0] })
+    // await router.push('/no-entitlements')
+  }
 
   // get entitlements
   // const entitlements = await window.mainApi?.sendSync('msgGetEntitlements')

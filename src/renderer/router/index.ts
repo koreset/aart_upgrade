@@ -454,7 +454,11 @@ export default createRouter({
       name: 'user-management-permissions',
       component: () => import('../screens/user_management/UserPermissions.vue')
     },
-
+    {
+      path: '/no-entitlements',
+      name: 'no-entitlements',
+      component: () => import('../screens/NoEntitlements.vue')
+    },
     {
       path: '/error',
       component: ErrorScreen,

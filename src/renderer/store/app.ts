@@ -12,6 +12,9 @@ export const useAppStore = defineStore('app', {
     setUser(user: any) {
       this.user = user
     },
+    getOrganization() {
+      return this.organization
+    },
     setLicense(licenseData: any) {
       this.licenseData = licenseData
     },
