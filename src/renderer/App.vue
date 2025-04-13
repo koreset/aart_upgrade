@@ -50,15 +50,20 @@ onMounted(async () => {
   console.log('Entitlements', appStore.getEntitlements())
 
   const entitlements: any = appStore.entitlements
-  if (entitlements.includes('dashboard')) {
-    await router.push('/')
-  } else if (entitlements.includes('group-pricing-dashboard')) {
-    await router.push('/group-pricing/dashboard')
+  if (entitlements && entitlements.length > 0) {
+    if (entitlements.includes('dashboard') || entitlements.includes('all-features')) {
+      await router.push('/')
+    } else if (entitlements.includes('group-pricing-dashboard')) {
+      await router.push('/group-pricing/dashboard')
+    } else {
+      // fallback or unauthorized
+      console.log('first entitlement', entitlements[0])
+      await router.push({ name: entitlements[0] })
+      // await router.push('/no-entitlements')
+    }
   } else {
-    // fallback or unauthorized
-    console.log('first entitlement', entitlements[0])
-    await router.push({ name: entitlements[0] })
-    // await router.push('/no-entitlements')
+    console.log('No entitlements found')
+    await router.push('/no-entitlements')
   }
 
   // get entitlements

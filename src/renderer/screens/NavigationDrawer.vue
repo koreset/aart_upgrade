@@ -602,10 +602,17 @@ const handleNavigation = (feature: string) => {
 
 const checkEntitlement = (entitlement: string) => {
   const entitlements: any = appStore.getEntitlements()
+
+  if (entitlements && entitlements.length > 0) {
+    if (entitlements.includes('all-features')) {
+      return false
+    }
+  }
+
   if (entitlements && entitlements.length > 0) {
     return !entitlements.includes(entitlement)
   }
-  return false
+  return true
 }
 const appVersion: any = ref('')
 const apiVersion: any = ref('')
