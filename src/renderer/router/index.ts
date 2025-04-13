@@ -370,9 +370,9 @@ export default createRouter({
       component: () => import('../screens/group_pricing/QuoteGeneration.vue')
     },
     {
-      path: '/group-pricing/brokers',
-      name: 'group-pricing-brokers',
-      component: () => import('../screens/group_pricing/BrokerList.vue')
+      path: '/group-pricing/metadata',
+      name: 'group-pricing-metadata',
+      component: () => import('../screens/group_pricing/MetaData.vue')
     },
     {
       path: '/group-pricing/schemes',

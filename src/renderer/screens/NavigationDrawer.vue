@@ -89,7 +89,9 @@
 
         <v-list-item
           :class="{ 'disabled-item': checkEntitlement('group-pricing-quotes') }"
-          :to="{ name: 'group-pricing-quotes' }"
+          :to="
+            checkEntitlement('group-pricing-quotes') ? undefined : { name: 'group-pricing-quotes' }
+          "
           @click="handleNavigation('group-pricing-quotes')"
         >
           <v-list-item-title>Quotes</v-list-item-title>
@@ -104,13 +106,13 @@
           <v-list-item-title>Tables</v-list-item-title>
         </v-list-item>
         <v-list-item
-          :class="{ 'disabled-item': checkEntitlement('group-pricing-brokers') }"
+          :class="{ 'disabled-item': checkEntitlement('group-pricing-metadata') }"
           :to="
-            checkEntitlement('group-pricing-brokers')
+            checkEntitlement('group-pricing-metadata')
               ? undefined
-              : { name: 'group-pricing-brokers' }
+              : { name: 'group-pricing-metadata' }
           "
-          @click="handleNavigation('group-pricing-brokers')"
+          @click="handleNavigation('group-pricing-metadata')"
         >
           <v-list-item-title>Metadata</v-list-item-title>
         </v-list-item>
