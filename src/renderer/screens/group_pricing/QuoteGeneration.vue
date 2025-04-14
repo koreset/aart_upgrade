@@ -61,7 +61,7 @@
   </v-container>
 </template>
 <script setup lang="ts">
-import { ref, shallowRef, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onBeforeMount, shallowRef } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useGroupPricingStore } from '@/renderer/store/group_pricing'
 import GroupPricingService from '@/renderer/api/GroupPricingService'
@@ -75,16 +75,32 @@ const groupStore = useGroupPricingStore()
 const router = useRouter()
 const route = useRoute()
 const quoteId = ref(route.params.id)
+const benefitMaps: any = ref([])
 
-console.log('QuoteID', quoteId.value)
+const getBenefitAlias = (benefit: any) => {
+  console.log('Benefit', benefit)
+  console.log('Benefit Maps', benefitMaps.value)
+  const benefitMap = benefitMaps.value.find((map: any) => map.benefit_code === benefit)
+  console.log('Benefit Map', benefitMap)
+  return benefitMap.benefit_alias !== '' ? benefitMap.benefit_alias : benefit
+  // return 'WORK'
+}
+const steps: any = shallowRef([])
+
+onBeforeMount(async () => {
+  const res = await GroupPricingService.getBenefitMaps()
+  benefitMaps.value = res.data
+  console.log('Benefit Maps', benefitMaps.value)
+  steps.value = [
+    { title: 'General', value: 1, component: Generalnput },
+    { title: `${getBenefitAlias('GLA')}`, value: 2, component: GlaInput },
+    { title: 'Additional Benefits', value: 3, component: AdditionalBenefits },
+    { title: 'Loading', value: 4, component: LoadingInput }
+  ]
+})
 
 const position = ref(1)
-const steps = shallowRef([
-  { title: 'General', value: 1, component: Generalnput },
-  { title: 'GLA', value: 2, component: GlaInput },
-  { title: 'Additional Benefits', value: 3, component: AdditionalBenefits },
-  { title: 'Loading', value: 4, component: LoadingInput }
-])
+
 const isPrevDisabled = computed(() => position.value <= 1)
 const isNextDisabled = computed(() => position.value >= steps.value.length)
 const currentStep: any = ref(null)
@@ -113,24 +129,10 @@ const goToQuotes = () => {
   router.push({ name: 'group-pricing-quotes' })
 }
 
-onMounted(() => {
-  GroupPricingService.getBrokers().then((res) => {
-    groupStore.brokers = res.data
-  })
-  GroupPricingService.getIndustries().then((res) => {
-    groupStore.industries = res.data
-  })
-  GroupPricingService.getSchemesInforce().then((res) => {
-    groupStore.groupSchemes = res.data
-  })
-  if (quoteId.value) {
-    GroupPricingService.getQuote(quoteId.value).then((res) => {
-      console.log(res.data)
-      groupStore.group_pricing_quote = res.data
-      groupStore.group_pricing_quote.commencement_date = null
-    })
-  }
-})
+// const getBenefitCode = (benefit: any) => {
+//   const benefitMap = benefitMaps.value.find((map: any) => map.id === benefit.benefit_id)
+//   return benefitMap ? benefitMap.benefit_code : ''
+// }
 
 const generateQuote = () => {
   console.log('Generating quote')
@@ -149,6 +151,25 @@ const generateQuote = () => {
     router.push({ name: 'group-pricing-quotes' })
   })
 }
+
+onMounted(() => {
+  GroupPricingService.getBenefitMaps().then((res) => {
+    groupStore.brokers = res.data
+  })
+  GroupPricingService.getIndustries().then((res) => {
+    groupStore.industries = res.data
+  })
+  GroupPricingService.getSchemesInforce().then((res) => {
+    groupStore.groupSchemes = res.data
+  })
+  if (quoteId.value) {
+    GroupPricingService.getQuote(quoteId.value).then((res) => {
+      console.log(res.data)
+      groupStore.group_pricing_quote = res.data
+      groupStore.group_pricing_quote.commencement_date = null
+    })
+  }
+})
 </script>
 <style lang="css" scoped>
 .smaller-font {

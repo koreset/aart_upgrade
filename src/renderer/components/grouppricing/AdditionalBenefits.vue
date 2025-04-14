@@ -2,25 +2,40 @@
   <v-container>
     <v-row>
       <v-col cols="2">
-        <v-checkbox v-model="groupStore.group_pricing_quote.ptd_benefit" label="PTD"></v-checkbox>
+        <v-checkbox
+          v-model="groupStore.group_pricing_quote.ptd_benefit"
+          :label="ptdLabel"
+        ></v-checkbox>
       </v-col>
       <v-col cols="2">
-        <v-checkbox v-model="groupStore.group_pricing_quote.ci_benefit" label="CI"></v-checkbox>
+        <v-checkbox
+          v-model="groupStore.group_pricing_quote.ci_benefit"
+          :label="ciLabel"
+        ></v-checkbox>
       </v-col>
       <v-col cols="2">
-        <v-checkbox v-model="groupStore.group_pricing_quote.sgla_benefit" label="SGLA"></v-checkbox>
+        <v-checkbox
+          v-model="groupStore.group_pricing_quote.sgla_benefit"
+          :label="sglaLabel"
+        ></v-checkbox>
       </v-col>
       <v-col cols="2">
-        <v-checkbox v-model="groupStore.group_pricing_quote.phi_benefit" label="PHI"></v-checkbox>
+        <v-checkbox
+          v-model="groupStore.group_pricing_quote.phi_benefit"
+          :label="phiLabel"
+        ></v-checkbox>
       </v-col>
       <v-col cols="2">
-        <v-checkbox v-model="groupStore.group_pricing_quote.ttd_benefit" label="TTD"></v-checkbox>
+        <v-checkbox
+          v-model="groupStore.group_pricing_quote.ttd_benefit"
+          :label="ttdLabel"
+        ></v-checkbox>
       </v-col>
 
       <v-col cols="2">
         <v-checkbox
           v-model="groupStore.group_pricing_quote.family_funeral_benefit"
-          label="Family Funeral"
+          :label="familyFuneralLabel"
         ></v-checkbox>
       </v-col>
     </v-row>
@@ -29,7 +44,7 @@
       <v-col>
         <base-card :show-actions="false">
           <template #header>
-            <span class="headline">PTD Benefit</span>
+            <span class="headline">{{ ptdLabel }} Benefit</span>
           </template>
           <template #default>
             <v-row>
@@ -102,7 +117,7 @@
       <v-col>
         <base-card :show-actions="false">
           <template #header>
-            <span class="headline">Critical Illness Benefit</span>
+            <span class="headline">{{ ciLabel }} Benefit</span>
           </template>
           <template #default>
             <v-row>
@@ -156,7 +171,7 @@
       <v-col>
         <base-card :show-actions="false">
           <template #header>
-            <span class="headline">Spouse Group Life Assurance Benefit</span>
+            <span class="headline">{{ sglaLabel }} Benefit</span>
           </template>
           <template #default>
             <v-row>
@@ -199,7 +214,7 @@
       <v-col>
         <base-card :show-actions="false">
           <template #header>
-            <span class="headline">PHI Benefit</span>
+            <span class="headline">{{ phiLabel }} Benefit</span>
           </template>
           <template #default>
             <v-row>
@@ -334,7 +349,7 @@
       <v-col>
         <base-card :show-actions="false">
           <template #header>
-            <span class="headline">TTD Benefit</span>
+            <span class="headline">{{ ttdLabel }} Benefit</span>
           </template>
           <template #default>
             <v-row>
@@ -469,7 +484,7 @@
       <v-col>
         <base-card :show-actions="false">
           <template #header>
-            <span class="headline">Family Funeral Benefit</span>
+            <span class="headline">{{ familyFuneralLabel }} Benefit</span>
           </template>
           <template #default>
             <v-row>
@@ -567,10 +582,40 @@
 </template>
 <script setup lang="ts">
 import { useGroupPricingStore } from '@/renderer/store/group_pricing'
-import { computed } from 'vue'
+import { computed, onBeforeMount, ref } from 'vue'
 import BaseCard from '../BaseCard.vue'
+import GroupPricingService from '@/renderer/api/GroupPricingService'
 
 const groupStore = useGroupPricingStore()
+const benefitMaps: any = ref([])
+
+const ptdLabel = ref('PTD')
+const ciLabel = ref('CI')
+const sglaLabel = ref('SGLA')
+const phiLabel = ref('PHI')
+const ttdLabel = ref('TTD')
+const familyFuneralLabel = ref('Family Funeral')
+
+onBeforeMount(async () => {
+  const res = await GroupPricingService.getBenefitMaps()
+  benefitMaps.value = res.data
+  console.log('Benefit Maps', benefitMaps.value)
+  ptdLabel.value = getBenefitAlias('PTD')
+  ciLabel.value = getBenefitAlias('CI')
+  sglaLabel.value = getBenefitAlias('SGLA')
+  phiLabel.value = getBenefitAlias('PHI')
+  ttdLabel.value = getBenefitAlias('TTD')
+  familyFuneralLabel.value = getBenefitAlias('GFF')
+})
+
+const getBenefitAlias = (benefit: any) => {
+  console.log('Benefit', benefit)
+  console.log('Benefit Maps', benefitMaps.value)
+  const benefitMap = benefitMaps.value.find((map: any) => map.benefit_code === benefit)
+  console.log('Benefit Map', benefitMap)
+  return benefitMap.benefit_alias !== '' ? benefitMap.benefit_alias : benefit
+  // return 'WORK'
+}
 
 const validateForm = () => {
   console.log('Validating form')

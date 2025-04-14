@@ -19,6 +19,14 @@
                   density="compact"
                 />
               </v-col>
+              <v-col v-if="benefit.benefit_alias" cols="4">
+                <v-text-field
+                  v-model="benefit.benefit_alias_code"
+                  :label="`Code for ${benefit.benefit_alias}`"
+                  variant="outlined"
+                  density="compact"
+                />
+              </v-col>
             </v-row>
             <v-btn rounded size="small" color="primary" class="mt-4" @click="submitBenefits">
               Save Mappings
@@ -39,6 +47,7 @@ interface Benefit {
   benefit_name: string
   benefit_alias: string
   benefit_code: string
+  benefit_alias_code: string
   is_mapped: boolean
 }
 
@@ -56,6 +65,7 @@ onMounted(() => {
         benefit_name: benefit.benefit_name,
         benefit_alias: benefit.benefit_alias,
         benefit_code: benefit.benefit_code,
+        benefit_alias_code: benefit.benefit_alias_code,
         is_mapped: benefit.is_mapped
       }))
     }
