@@ -164,7 +164,8 @@
               </v-col>
             </v-row>
             <v-divider class="my-5"></v-divider>
-            <h4>Scheme Data</h4>
+            <h4>Benefits Customization</h4>
+            <benefit-mapper @submit="submitBenefits" />
           </template>
           <template #actions> </template>
         </base-card>
@@ -176,6 +177,7 @@
 
 <script setup lang="ts">
 import BaseCard from '../../components/BaseCard.vue'
+import BenefitMapper from '@/renderer/components/grouppricing/BenefitMapper.vue'
 import { onMounted, ref } from 'vue'
 import ConfirmationDialog from '../../components/ConfirmDialog.vue'
 import GroupPricingService from '../../api/GroupPricingService'
@@ -227,6 +229,13 @@ const createBroker = () => {
 // const deleteBroker = async (id: number) => {
 //   console.log('Deleting Portfolio', id)
 // }
+
+const submitBenefits = (benefits: any) => {
+  console.log('Benefits', benefits)
+  GroupPricingService.saveBenefitMap(benefits).then((res) => {
+    console.log('Benefits Created', res.data)
+  })
+}
 
 const createInsurer = () => {
   console.log('Creating Insurer')

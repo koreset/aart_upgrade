@@ -155,5 +155,11 @@ export default {
   },
   getRiskRateCodes(tableType, year) {
     return Api.get('/group-pricing/rate-tables/' + tableType + '/get-risk-codes/' + year)
+  },
+  getBenefitMaps() {
+    return Api.get('/group-pricing/benefit-maps')
+  },
+  saveBenefitMap(benefitMaps) {
+    return Api.post('/group-pricing/benefit-maps', benefitMaps)
   }
 }
