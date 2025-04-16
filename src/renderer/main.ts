@@ -4,6 +4,7 @@ import { createPinia } from 'pinia'
 import App from '@/renderer/App.vue'
 import AppLogin from '@/renderer/AppLogin.vue'
 import AppSetup from '@/renderer/AppSetup.vue'
+import AppNoInternet from '@/renderer/AppNoInternet.vue'
 import LicenseWindow from '@/renderer/LicenseWindow.vue'
 import router from '@/renderer/router'
 import vuetify from '@/renderer/plugins/vuetify'
@@ -38,9 +39,15 @@ const activated = window.mainApi?.sendSync('msgGetAppStatus')
 let activeApp: any
 
 if (activated) {
+  console.log('Checking for internet access and the validate the license')
   const validLicense = window.mainApi?.sendSync('msgCheckLicenseValidity')
 
+  console.log('validLicense: ', validLicense)
+
   switch (validLicense) {
+    case 'NO_INTERNET':
+      activeApp = AppNoInternet
+      break
     case 'VALID':
       activeApp = App
       break

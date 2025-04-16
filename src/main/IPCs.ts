@@ -33,6 +33,18 @@ const decode = (token) => {
   return toSnakeCaseKeys(decodedObject)
 }
 
+async function hasInternetConnection(): Promise<boolean> {
+  try {
+    await axios.get('https://clients3.google.com/generate_204', {
+      timeout: 3000,
+      validateStatus: (status) => status === 204
+    })
+    return true
+  } catch {
+    return false
+  }
+}
+
 /*
  * IPC Communications
  * */
@@ -144,6 +156,13 @@ export default class IPCs {
 
     ipcMain.on('msgCheckLicenseValidity', async (event: IpcMainEvent) => {
       let licenseStatus = 'NO_LICENSE'
+
+      const isOnline = await hasInternetConnection()
+      if (!isOnline) {
+        console.log('No internet connection')
+        event.returnValue = 'NO_INTERNET'
+        return
+      }
 
       if (store.get('license', null) === null) {
         event.returnValue = licenseStatus

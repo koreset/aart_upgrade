@@ -1,7 +1,7 @@
 <script setup lang="tsx">
 import { DefaultLayout } from '@/renderer/components/layout'
 import { useAppStore } from '@/renderer/store/app'
-import { onMounted } from 'vue'
+import { onBeforeMount, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import ProductService from '@/renderer/api/ProductService'
 
@@ -35,6 +35,10 @@ const getEntitlements = async (licenseId) => {
   appStore.setEntitlements(entitlementList)
 }
 
+onBeforeMount(() => {
+  window.mainApi?.send('msgResizeWindow', 1024, 600, true)
+})
+
 onMounted(async () => {
   const response = await ProductService.getProducts()
   appStore.setProducts(response.data)
@@ -65,13 +69,6 @@ onMounted(async () => {
     console.log('No entitlements found')
     await router.push('/no-entitlements')
   }
-
-  // get entitlements
-  // const entitlements = await window.mainApi?.sendSync('msgGetEntitlements')
-  // if (entitlements) {
-  //   console.log('Entitlements', entitlements)
-  //   // appStore.setEntitlements(entitlements)
-  // }
 })
 </script>
 

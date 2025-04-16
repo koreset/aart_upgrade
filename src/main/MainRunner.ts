@@ -23,8 +23,8 @@ export const createMainWindow = async (mainWindow: BrowserWindow): Promise<Brows
   mainWindow = new BrowserWindow({
     title: Constants.APP_NAME,
     show: false,
-    width: Constants.IS_DEV_ENV ? 1500 : 1200,
-    height: 650,
+    width: Constants.IS_DEV_ENV ? 1024 : 1024,
+    height: 600,
     useContentSize: true,
     webPreferences: Constants.DEFAULT_WEB_PREFERENCES
   })
@@ -134,7 +134,7 @@ export const createMainWindow = async (mainWindow: BrowserWindow): Promise<Brows
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
 
-  mainWindow.maximize()
+  // mainWindow.maximize()
 
   mainWindow.on('close', (event: Event): void => {
     event.preventDefault()
