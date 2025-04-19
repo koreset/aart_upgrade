@@ -19,23 +19,20 @@
     </v-container>
     <v-list class="nav-text smaller-font">
       <v-list-item
-        :class="{ 'disabled-item': checkEntitlement('dashboard') }"
-        :to="checkEntitlement('dashboard') ? undefined : { name: 'dashboard' }"
+        v-bind="getNavigationProps('dashboard', 'dashboard')"
         :prepend-icon="'mdi-monitor-dashboard'"
         @click="handleNavigation('dashboard')"
         ><v-list-item-title>Dashboard</v-list-item-title></v-list-item
       >
       <v-list-item
-        :class="{ 'disabled-item': checkEntitlement('product-setup') }"
-        :to="checkEntitlement('product-setup') ? undefined : { name: 'product-setup' }"
+        v-bind="getNavigationProps('product-setup', 'product-setup')"
         :prepend-icon="'mdi-table-settings'"
-        @click="checkEntitlement('product-setup') ? showAccessMessage('product-setup') : null"
+        @click="handleNavigation('product-setup')"
       >
         <v-list-item-title>Product Configuration</v-list-item-title>
       </v-list-item>
       <v-list-item
-        :class="{ 'disabled-item': checkEntitlement('products') }"
-        :to="checkEntitlement('products') ? undefined : { name: 'products' }"
+        v-bind="getNavigationProps('products', 'products')"
         :prepend-icon="'mdi-dolly'"
         @click="handleNavigation('products')"
       >
@@ -587,20 +584,14 @@ const handleNavigation = (feature: string) => {
   }
 }
 
-// function getNavigationProps(feature: string, routeName: string) {
-//   const isDisabled = checkEntitlement(feature)
+const getNavigationProps = (feature: string, routeName: string) => {
+  const isDisabled = checkEntitlement(feature)
 
-//   return {
-//     to: isDisabled ? undefined : { name: routeName },
-//     class: { 'disabled-item': isDisabled },
-//     onClick: (e: MouseEvent) => {
-//       if (isDisabled) {
-//         e.preventDefault()
-//         showAccessMessage(feature)
-//       }
-//     }
-//   }
-// }
+  return {
+    to: isDisabled ? undefined : { name: routeName },
+    class: { 'disabled-item': isDisabled }
+  }
+}
 
 const checkEntitlement = (entitlement: string) => {
   const entitlements: any = appStore.getEntitlements()

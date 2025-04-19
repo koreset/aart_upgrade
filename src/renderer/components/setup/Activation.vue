@@ -99,8 +99,6 @@ const addDashes = () => {
   }
 }
 
-
-
 const activateLicense = async () => {
   activationSuccess.value = false
   apiUrlComplete.value = false

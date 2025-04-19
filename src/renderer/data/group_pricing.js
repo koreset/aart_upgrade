@@ -25,10 +25,8 @@ export const groupPricing = [
   {
     data_variable: 'exit_date',
     data_type: 'number',
-    data_description:
-      'The date on which a member exits the group scheme.',
-    data_source:
-      ' Scheme Maintenance',
+    data_description: 'The date on which a member exits the group scheme.',
+    data_source: ' Scheme Maintenance',
     data_source_type: 'User Input'
-  },
+  }
 ]

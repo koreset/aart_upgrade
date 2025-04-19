@@ -199,7 +199,9 @@
                     <v-expansion-panel elevation="1" tile>
                       <v-expansion-panel-title
                         ><v-row
-                          ><v-col cols="5"> <p>Group Life Assurance (GLA)</p> </v-col>
+                          ><v-col cols="5">
+                            <p>{{ glaBenefitTitle }}</p>
+                          </v-col>
                         </v-row></v-expansion-panel-title
                       >
                       <v-expansion-panel-text>
@@ -230,7 +232,9 @@
                     <v-expansion-panel elevation="1" tile>
                       <v-expansion-panel-title
                         ><v-row
-                          ><v-col cols="5"> <p>Spouse Group Life Assurance (GLA)</p> </v-col>
+                          ><v-col cols="5">
+                            <p>{{ sglaBenefitTitle }}</p>
+                          </v-col>
                           <v-checkbox
                             v-model:model-value="quote.sgla_benefit"
                             density="compact"
@@ -267,7 +271,9 @@
                     <v-expansion-panel elevation="1" tile>
                       <v-expansion-panel-title
                         ><v-row
-                          ><v-col cols="5"> <p>Permanent Total Disability</p> </v-col>
+                          ><v-col cols="5">
+                            <p>{{ ptdBenefitTitle }}</p>
+                          </v-col>
                           <v-checkbox
                             v-model:model-value="quote.ptd_benefit"
                             density="compact"
@@ -322,7 +328,9 @@
                     <v-expansion-panel elevation="1" tile>
                       <v-expansion-panel-title
                         ><v-row
-                          ><v-col cols="5"> <p>Critical Illness</p> </v-col>
+                          ><v-col cols="5">
+                            <p>{{ ciBenefitTitle }}</p>
+                          </v-col>
                           <v-checkbox
                             v-model:model-value="quote.ci_benefit"
                             density="compact"
@@ -360,7 +368,7 @@
                       <v-expansion-panel-title
                         ><v-row
                           ><v-col cols="5">
-                            <p>Personal Health Insurance</p>
+                            <p>{{ phiBenefitTitle }}</p>
                           </v-col>
                           <v-checkbox
                             v-model:model-value="quote.phi_benefit"
@@ -461,7 +469,7 @@
                       <v-expansion-panel-title
                         ><v-row
                           ><v-col cols="5">
-                            <p>Temporary Total Disability</p>
+                            <p>{{ ttdBenefitTitle }}</p>
                           </v-col>
                           <v-checkbox
                             v-model:model-value="quote.ttd_benefit"
@@ -562,7 +570,7 @@
                       <v-expansion-panel-title
                         ><v-row
                           ><v-col cols="5">
-                            <p>Family Funeral</p>
+                            <p>{{ familyFuneralBenefitTitle }}</p>
                           </v-col>
                           <v-checkbox
                             v-model:model-value="quote.family_funeral_benefit"
@@ -821,6 +829,14 @@ const props = defineProps({
   }
 })
 
+const glaBenefitTitle = ref('Group Life Assurance (GLA)')
+const sglaBenefitTitle = ref('Spouse Group Life Assurance (GLA)')
+const ptdBenefitTitle = ref('Permanent Total Disability')
+const ciBenefitTitle = ref('Critical Illness')
+const phiBenefitTitle = ref('Personal Health Insurance')
+const ttdBenefitTitle = ref('Temporary Total Disability')
+const familyFuneralBenefitTitle = ref('Family Funeral')
+const benefitMaps: any = ref([])
 const showModelPoint = ref(false)
 const yearLabel = ref('') // 'Select a year'
 const uploadTitle = ref('')
@@ -998,6 +1014,38 @@ const handleUpload = async (payload: any) => {
 }
 
 onMounted(async () => {
+  GroupPricingService.getBenefitMaps().then((res) => {
+    benefitMaps.value = res.data
+    console.log('Benefit Maps:', benefitMaps.value)
+    const glaBenefit = benefitMaps.value.find((item) => item.benefit_code === 'GLA')
+    if (glaBenefit.benefit_alias !== '') {
+      glaBenefitTitle.value = glaBenefit.benefit_alias
+    }
+    const sglaBenefit = benefitMaps.value.find((item) => item.benefit_code === 'SGLA')
+    if (sglaBenefit.benefit_alias !== '') {
+      sglaBenefitTitle.value = sglaBenefit.benefit_alias
+    }
+    const ptdBenefit = benefitMaps.value.find((item) => item.benefit_code === 'PTD')
+    if (ptdBenefit.benefit_alias !== '') {
+      ptdBenefitTitle.value = ptdBenefit.benefit_alias
+    }
+    const ciBenefit = benefitMaps.value.find((item) => item.benefit_code === 'CI')
+    if (ciBenefit.benefit_alias !== '') {
+      ciBenefitTitle.value = ciBenefit.benefit_alias
+    }
+    const phiBenefit = benefitMaps.value.find((item) => item.benefit_code === 'PHI')
+    if (phiBenefit.benefit_alias !== '') {
+      phiBenefitTitle.value = phiBenefit.benefit_alias
+    }
+    const ttdBenefit = benefitMaps.value.find((item) => item.benefit_code === 'TTD')
+    if (ttdBenefit.benefit_alias !== '') {
+      ttdBenefitTitle.value = ttdBenefit.benefit_alias
+    }
+    const familyFuneralBenefit = benefitMaps.value.find((item) => item.benefit_code === 'GFF')
+    if (familyFuneralBenefit.benefit_alias !== '') {
+      familyFuneralBenefitTitle.value = familyFuneralBenefit.benefit_alias
+    }
+  })
   loadQuote()
 })
 

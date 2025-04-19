@@ -157,8 +157,9 @@ const reviewers: any = ref([])
 const dialog = ref(false)
 const selectedQuote: any = ref({})
 const organization: any = ref(null)
+const benefitMaps: any = ref([])
 
-const headers = [
+const headers = ref([
   { title: 'Actions', value: 'actions', align: 'center' as 'center', sortable: false },
   { title: 'Scheme Name', value: 'scheme_name', key: 'scheme_name', width: '120px' },
   { title: 'In Force', value: 'quote_type', key: 'quote_type', width: '20%' },
@@ -177,7 +178,7 @@ const headers = [
   { title: 'TTD', value: 'ttd_benefit' },
   { title: 'PTD', value: 'ptd_benefit' },
   { title: 'CI', value: 'ci_benefit' },
-  { title: 'Funeral', value: 'family_funeral_benefit' },
+  { title: 'GFF', value: 'family_funeral_benefit' },
   {
     title: 'Creation Date',
     key: 'creation_date',
@@ -186,7 +187,7 @@ const headers = [
   },
   { title: 'Submitted By', value: 'created_by' },
   { title: 'Reviewer', value: 'reviewer' }
-]
+])
 
 const parseDateString = (dateString) => {
   const date = new Date(dateString)
@@ -245,10 +246,25 @@ const submitQuoteGeneration = (item) => {
 
 onMounted(() => {
   try {
+    organization.value = appStore.getLicenseData.data.attributes.metadata.organization
+
     ProductService.getOrgUsers({ name: organization.value }).then((res) => {
       const uniqueData = Array.from(new Map(res.data.map((entry) => [entry.user, entry])).values())
       reviewers.value = uniqueData
       console.log('Org Users:', reviewers.value)
+    })
+    GroupPricingService.getBenefitMaps().then((res) => {
+      benefitMaps.value = res.data
+      headers.value = headers.value.map((header) => {
+        const bff = benefitMaps.value.find((map) => map.benefit_code === header.title)
+        if (bff && bff.benefit_alias !== '') {
+          return {
+            ...header,
+            title: bff.benefit_alias
+          }
+        }
+        return header
+      })
     })
     GroupPricingService.getAllQuotes().then((res) => {
       if (res.data.length > 0) {
@@ -258,13 +274,9 @@ onMounted(() => {
         quotes.value = []
       }
     })
-    organization.value = appStore.getLicenseData.data.attributes.metadata.organization
-    console.log('Organization:', organization.value)
   } catch (error) {
     console.log('Error:', error)
   }
-
-  console.log('Organization:', appStore.getLicenseData)
 
   // ProductService.getOrgUsers({ name: organization.value }).then((res) => {
   //   const uniqueData = Array.from(new Map(res.data.map((entry) => [entry.user, entry])).values())

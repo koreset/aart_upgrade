@@ -86,7 +86,9 @@
               <v-expansion-panel elevation="1" tile>
                 <v-expansion-panel-title
                   ><v-row
-                    ><v-col cols="4"> <p>Group Life Assurance (GLA)</p> </v-col>
+                    ><v-col cols="4">
+                      <p>{{ glaBenefitTitle }}</p>
+                    </v-col>
                   </v-row></v-expansion-panel-title
                 >
                 <v-expansion-panel-text>
@@ -401,7 +403,9 @@
               <v-expansion-panel elevation="1" tile>
                 <v-expansion-panel-title
                   ><v-row
-                    ><v-col cols="4"> <p>Permanent Total Disability (PTD)</p> </v-col>
+                    ><v-col cols="4">
+                      <p>{{ ptdBenefitTitle }}</p>
+                    </v-col>
                   </v-row></v-expansion-panel-title
                 >
                 <v-expansion-panel-text>
@@ -716,7 +720,9 @@
               <v-expansion-panel elevation="1" tile>
                 <v-expansion-panel-title
                   ><v-row
-                    ><v-col cols="4"> <p>Critical Illness (CI)</p> </v-col>
+                    ><v-col cols="4">
+                      <p>{{ ciBenefitTitle }}</p>
+                    </v-col>
                   </v-row></v-expansion-panel-title
                 >
                 <v-expansion-panel-text>
@@ -1025,7 +1031,9 @@
               <v-expansion-panel elevation="1" tile>
                 <v-expansion-panel-title
                   ><v-row
-                    ><v-col cols="4"> <p>Permanent Health Insurance (PHI)</p> </v-col>
+                    ><v-col cols="4">
+                      <p>{{ phiBenefitTitle }}</p>
+                    </v-col>
                   </v-row></v-expansion-panel-title
                 >
                 <v-expansion-panel-text>
@@ -1322,7 +1330,9 @@
               <v-expansion-panel elevation="1" tile>
                 <v-expansion-panel-title
                   ><v-row
-                    ><v-col cols="4"> <p>Temporary Total Disability (TTD)</p> </v-col>
+                    ><v-col cols="4">
+                      <p>{{ ttdBenefitTitle }}</p>
+                    </v-col>
                   </v-row></v-expansion-panel-title
                 >
                 <v-expansion-panel-text>
@@ -1619,7 +1629,9 @@
               <v-expansion-panel elevation="1" tile>
                 <v-expansion-panel-title
                   ><v-row
-                    ><v-col cols="4"> <p>Spouse Group Life Assurance (SGLA)</p> </v-col>
+                    ><v-col cols="4">
+                      <p>{{ sglaBenefitTitle }}</p>
+                    </v-col>
                   </v-row></v-expansion-panel-title
                 >
                 <v-expansion-panel-text>
@@ -1936,7 +1948,9 @@
               <v-expansion-panel elevation="1" tile>
                 <v-expansion-panel-title
                   ><v-row
-                    ><v-col cols="4"> <p>Group Family Funeral</p> </v-col>
+                    ><v-col cols="4">
+                      <p>{{ familyFuneralBenefitTitle }}</p>
+                    </v-col>
                   </v-row></v-expansion-panel-title
                 >
                 <v-expansion-panel-text>
@@ -2133,6 +2147,17 @@
 </template>
 <script setup lang="ts">
 import BaseCard from '@/renderer/components/BaseCard.vue'
+import { onMounted, ref } from 'vue'
+import GroupPricingService from '@/renderer/api/GroupPricingService'
+
+const glaBenefitTitle = ref('Group Life Assurance (GLA)')
+const sglaBenefitTitle = ref('Spouse Group Life Assurance (GLA)')
+const ptdBenefitTitle = ref('Permanent Total Disability')
+const ciBenefitTitle = ref('Critical Illness')
+const phiBenefitTitle = ref('Personal Health Insurance')
+const ttdBenefitTitle = ref('Temporary Total Disability')
+const familyFuneralBenefitTitle = ref('Family Funeral')
+const benefitMaps: any = ref([])
 
 const props = defineProps({
   quote: {
@@ -2167,5 +2192,46 @@ const roundUpToTwoDecimals = (num) => {
 const dashIfEmpty = (value: any) => {
   return value || '-'
 }
+
+onMounted(async () => {
+  GroupPricingService.getBenefitMaps().then((res) => {
+    console.log('Output Summary:', res.data)
+    benefitMaps.value = res.data
+
+    const glaBenefit = benefitMaps.value.find((item) => item.benefit_code === 'GLA')
+    if (glaBenefit.benefit_alias !== '') {
+      glaBenefitTitle.value = glaBenefit.benefit_alias
+    }
+    const sglaBenefit = benefitMaps.value.find((item) => item.benefit_code === 'SGLA')
+    if (sglaBenefit.benefit_alias !== '') {
+      sglaBenefitTitle.value = sglaBenefit.benefit_alias
+    }
+    const ptdBenefit = benefitMaps.value.find((item) => item.benefit_code === 'PTD')
+    if (ptdBenefit.benefit_alias !== '') {
+      ptdBenefitTitle.value = ptdBenefit.benefit_alias
+    }
+    const ciBenefit = benefitMaps.value.find((item) => item.benefit_code === 'CI')
+    if (ciBenefit.benefit_alias !== '') {
+      ciBenefitTitle.value = ciBenefit.benefit_alias
+    }
+    const phiBenefit = benefitMaps.value.find((item) => item.benefit_code === 'PHI')
+    if (phiBenefit.benefit_alias !== '') {
+      phiBenefitTitle.value = phiBenefit.benefit_alias
+    }
+    const ttdBenefit = benefitMaps.value.find((item) => item.benefit_code === 'TTD')
+    if (ttdBenefit.benefit_alias !== '') {
+      ttdBenefitTitle.value = ttdBenefit.benefit_alias
+    }
+    const familyFuneralBenefit = benefitMaps.value.find((item) => item.benefit_code === 'GFF')
+    if (familyFuneralBenefit.benefit_alias !== '') {
+      familyFuneralBenefitTitle.value = familyFuneralBenefit.benefit_alias
+    }
+  })
+})
+// onMounted(() => {
+//   GroupPricingService.getBenefitMaps().then((response) => {
+
+//  console.log(response)
+// })
 </script>
 <style lang="css" scoped></style>

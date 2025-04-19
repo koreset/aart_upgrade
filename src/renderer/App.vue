@@ -44,14 +44,11 @@ onMounted(async () => {
   appStore.setProducts(response.data)
 
   const result = await window.mainApi?.sendSync('msgGetUserLicense')
-  console.log('License response', result)
   if (result) {
     appStore.setLicense(result)
   }
 
   await getEntitlements(result.data.id)
-
-  console.log('Entitlements', appStore.getEntitlements())
 
   const entitlements: any = appStore.entitlements
   if (entitlements && entitlements.length > 0) {
@@ -61,12 +58,10 @@ onMounted(async () => {
       await router.push('/group-pricing/dashboard')
     } else {
       // fallback or unauthorized
-      console.log('first entitlement', entitlements[0])
       await router.push({ name: entitlements[0] })
       // await router.push('/no-entitlements')
     }
   } else {
-    console.log('No entitlements found')
     await router.push('/no-entitlements')
   }
 })
