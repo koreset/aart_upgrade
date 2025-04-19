@@ -1179,11 +1179,42 @@ const viewTable = async (item: any) => {
   }
 }
 
+const replaceSubstring = (input, search, replacement) => {
+  if (input.includes(search)) {
+    benefitMaps.value.forEach((item) => {
+      if (item.benefit_code.toLowerCase() === search && item.benefit_alias_code !== '') {
+        input = input.replace(search, item.benefit_alias_code.toLowerCase())
+      }
+    })
+    // return input
+  }
+  return input
+}
+
 const createColumnDefs = (data: any) => {
   columnDefs.value = []
   Object.keys(data[0]).forEach((element) => {
     const header: any = {}
-    header.headerName = element
+    console.log('Header:', element)
+    if (element.includes('ci')) {
+      header.headerName = replaceSubstring(element, 'ci', 'severe')
+    } else if (element.includes('phi')) {
+      header.headerName = replaceSubstring(element, 'phi', 'phi2')
+    } else if (element.includes('gla')) {
+      header.headerName = replaceSubstring(element, 'gla', 'gla2')
+    } else if (element.includes('sgla')) {
+      header.headerName = replaceSubstring(element, 'sgla', 'sgla2')
+    } else if (element.includes('ptd')) {
+      header.headerName = replaceSubstring(element, 'ptd', 'ptd2')
+    } else if (element.includes('ttd')) {
+      header.headerName = replaceSubstring(element, 'ttd', 'ttd2')
+    } else if (element.includes('gff')) {
+      header.headerName = replaceSubstring(element, 'gff', 'gff2')
+    } else {
+      header.headerName = element
+    }
+
+    // header.headerName = element
     header.field = element
     header.valueFormatter = formatValues
     header.minWidth = 200

@@ -84,6 +84,15 @@ const totalPages = ref(1)
 let pdf: any = null
 const pdfGenerated = ref(false)
 
+const glaBenefitTitle = ref('Group Life Assurance (GLA)')
+const sglaBenefitTitle = ref('Spouse Group Life Assurance (GLA)')
+const ptdBenefitTitle = ref('Permanent Total Disability')
+const ciBenefitTitle = ref('Critical Illness')
+const phiBenefitTitle = ref('Personal Health Insurance')
+const ttdBenefitTitle = ref('Temporary Total Disability')
+const familyFuneralBenefitTitle = ref('Family Funeral')
+const benefitMaps: any = ref([])
+
 const insurer: any = ref(null)
 // const addressLines = [
 //   '534, Amberley Crescent',
@@ -97,6 +106,39 @@ const pdfSrc: any = ref(null)
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 
 onMounted(() => {
+  GroupPricingService.getBenefitMaps().then((res) => {
+    benefitMaps.value = res.data
+    console.log('Benefit Maps:', benefitMaps.value)
+    const glaBenefit = benefitMaps.value.find((item) => item.benefit_code === 'GLA')
+    if (glaBenefit.benefit_alias !== '') {
+      glaBenefitTitle.value = glaBenefit.benefit_alias
+    }
+    const sglaBenefit = benefitMaps.value.find((item) => item.benefit_code === 'SGLA')
+    if (sglaBenefit.benefit_alias !== '') {
+      sglaBenefitTitle.value = sglaBenefit.benefit_alias
+    }
+    const ptdBenefit = benefitMaps.value.find((item) => item.benefit_code === 'PTD')
+    if (ptdBenefit.benefit_alias !== '') {
+      ptdBenefitTitle.value = ptdBenefit.benefit_alias
+    }
+    const ciBenefit = benefitMaps.value.find((item) => item.benefit_code === 'CI')
+    if (ciBenefit.benefit_alias !== '') {
+      ciBenefitTitle.value = ciBenefit.benefit_alias
+    }
+    const phiBenefit = benefitMaps.value.find((item) => item.benefit_code === 'PHI')
+    if (phiBenefit.benefit_alias !== '') {
+      phiBenefitTitle.value = phiBenefit.benefit_alias
+    }
+    const ttdBenefit = benefitMaps.value.find((item) => item.benefit_code === 'TTD')
+    if (ttdBenefit.benefit_alias !== '') {
+      ttdBenefitTitle.value = ttdBenefit.benefit_alias
+    }
+    const familyFuneralBenefit = benefitMaps.value.find((item) => item.benefit_code === 'GFF')
+    if (familyFuneralBenefit.benefit_alias !== '') {
+      familyFuneralBenefitTitle.value = familyFuneralBenefit.benefit_alias
+    }
+  })
+
   console.log('quoteId', props.quoteId)
   GroupPricingService.getQuote(props.quoteId).then((res) => {
     console.log('Quote:', res.data)
@@ -466,37 +508,37 @@ const createQuotePdf = async () => {
 
   const benefitsStructure: any = [
     {
-      benefit: 'Group Life Assurance',
+      benefit: `${glaBenefitTitle.value}`,
       sumAssured: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.total_gla_capped_sum_assured))}`,
       annualPremium: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_total_gla_annual_office_premium))}`,
       percentage: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_proportion_gla_office_premium_salary * 100) + '%')}`
     },
     {
-      benefit: 'Permanent Total Disability',
+      benefit: `${ptdBenefitTitle.value}`,
       sumAssured: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.total_ptd_capped_sum_assured))}`,
       annualPremium: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_total_ptd_annual_office_premium))}`,
       percentage: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_proportion_ptd_office_premium_salary * 100) + '%')}`
     },
     {
-      benefit: 'Critical Illness',
+      benefit: `${ciBenefitTitle.value}`,
       sumAssured: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.total_ci_capped_sum_assured))}`,
       annualPremium: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_total_ci_annual_office_premium))}`,
       percentage: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_proportion_ci_office_premium_salary * 100) + '%')}`
     },
     {
-      benefit: 'Spouses Group Life Assurance',
+      benefit: `${sglaBenefitTitle.value}`,
       sumAssured: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.total_sgla_capped_sum_assured))}`,
       annualPremium: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_total_sgla_annual_office_premium))}`,
       percentage: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_proportion_sgla_office_premium_salary * 100) + '%')}`
     },
     {
-      benefit: 'Permanent Health Insurance',
+      benefit: `${phiBenefitTitle.value}`,
       sumAssured: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.total_phi_capped_income))}`,
       annualPremium: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_total_phi_annual_office_premium))}`,
       percentage: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_proportion_phi_office_premium_salary * 100) + '%')}`
     },
     {
-      benefit: 'Total and Temporary Disability',
+      benefit: `${ttdBenefitTitle.value}`,
       sumAssured: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.total_ttd_capped_income))}`,
       annualPremium: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_total_ttd_annual_office_premium))}`,
       percentage: `${dashIfEmpty(roundUpToTwoDecimalsAccounting(resultSummary.value.exp_proportion_ttd_office_premium_salary * 100) + '%')}`

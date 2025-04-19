@@ -132,6 +132,19 @@
                 ></v-select>
               </v-col>
               <v-col cols="4">
+                <v-select
+                  v-model="groupStore.group_pricing_quote.ci.benefit_definition"
+                  placeholder="Choose a Benefit Definition"
+                  label="Benefit Definition"
+                  variant="outlined"
+                  density="compact"
+                  :items="benefitDefinitions"
+                  item-title="text"
+                  item-value="value"
+                ></v-select>
+              </v-col>
+
+              <v-col cols="4">
                 <v-text-field
                   v-model:model-value="groupStore.group_pricing_quote.ci.max_benefit"
                   placeholder="Enter a value"
@@ -595,8 +608,13 @@ const sglaLabel = ref('SGLA')
 const phiLabel = ref('PHI')
 const ttdLabel = ref('TTD')
 const familyFuneralLabel = ref('Family Funeral')
+const benefitDefinitions = ref([
+  { text: 'Lump Sum', value: 'Lump Sum' },
+  { text: 'Monthly', value: 'Monthly' }
+])
 
 onBeforeMount(async () => {
+  // get benefit definitions from the API
   const res = await GroupPricingService.getBenefitMaps()
   benefitMaps.value = res.data
   console.log('Benefit Maps', benefitMaps.value)

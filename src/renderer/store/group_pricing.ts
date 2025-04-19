@@ -69,7 +69,8 @@ export const useGroupPricingStore = defineStore('groupPricing', {
         critical_illness_salary_multiple: 0,
         max_benefit: 0,
         benefit_structure: null,
-        cover_termination_age: 0
+        cover_termination_age: 0,
+        benefit_definition: null
       },
       sgla: {
         sgla_salary_multiple: 0,
@@ -183,7 +184,8 @@ export const useGroupPricingStore = defineStore('groupPricing', {
           critical_illness_salary_multiple: 0,
           max_benefit: 0,
           benefit_structure: null,
-          cover_termination_age: 0
+          cover_termination_age: 0,
+          benefit_definition: null
         },
         sgla: {
           sgla_salary_multiple: 0,
