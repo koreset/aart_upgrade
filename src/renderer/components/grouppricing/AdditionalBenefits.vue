@@ -139,8 +139,6 @@
                   variant="outlined"
                   density="compact"
                   :items="benefitDefinitions"
-                  item-title="text"
-                  item-value="value"
                 ></v-select>
               </v-col>
 
@@ -608,13 +606,12 @@ const sglaLabel = ref('SGLA')
 const phiLabel = ref('PHI')
 const ttdLabel = ref('TTD')
 const familyFuneralLabel = ref('Family Funeral')
-const benefitDefinitions = ref([
-  { text: 'Lump Sum', value: 'Lump Sum' },
-  { text: 'Monthly', value: 'Monthly' }
-])
+const benefitDefinitions: any = ref(['Lump Sum', 'Monthly'])
 
 onBeforeMount(async () => {
   // get benefit definitions from the API
+  const benefitResponse = await GroupPricingService.getBenefitDefinitions()
+  benefitDefinitions.value = benefitResponse.data
   const res = await GroupPricingService.getBenefitMaps()
   benefitMaps.value = res.data
   console.log('Benefit Maps', benefitMaps.value)

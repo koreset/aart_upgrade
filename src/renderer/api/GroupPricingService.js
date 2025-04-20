@@ -161,5 +161,8 @@ export default {
   },
   saveBenefitMap(benefitMaps) {
     return Api.post('/group-pricing/benefit-maps', benefitMaps)
+  },
+  getBenefitDefinitions() {
+    return Api.get('/group-pricing/benefit-definitions')
   }
 }
