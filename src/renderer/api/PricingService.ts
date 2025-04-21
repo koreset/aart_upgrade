@@ -96,5 +96,8 @@ export default {
   },
   reRunPricingJob(runId) {
     return Api.post('pricing/rerun/' + runId)
+  },
+  getModelPointVersions(productCode) {
+    return Api.get('pricing/get-modelpoint-versions/' + productCode)
   }
 }

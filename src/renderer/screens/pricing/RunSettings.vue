@@ -216,8 +216,6 @@ const clonedPricingConfig: any = ref(null)
 const clonedDescription = ref(null)
 const clonedProductType = ref(null)
 const pricingParams = ref(null)
-const modelpointCount = ref(0)
-const modelpoints = ref([])
 const paramsAvailable = ref(false)
 const snackbar = ref(false)
 const timeout = ref(5000)
@@ -355,11 +353,9 @@ const setProductType = async () => {
     runPossible.value = false
   }
 
-  res = await PricingService.getModelPointCount(selectedProduct.value.product_code)
+  res = await PricingService.getModelPointVersions(selectedProduct.value.product_code)
 
   if (res.status === 200) {
-    modelpointCount.value = res.data.count
-    modelpoints.value = res.data.model_points
     mpVersions.value = res.data.versions
     if (mpVersions.value.length > 0) {
       runPossible.value = true
@@ -369,8 +365,7 @@ const setProductType = async () => {
       errorMessages.value.push('no matching model points found. Please update pricing tables')
     }
   } else {
-    modelpointCount.value = 0
-    modelpoints.value = []
+    mpVersions.value = []
     error.value = true
     errorMessages.value.push('no matching model points found. Please update pricing tables')
     runPossible.value = false
