@@ -102,7 +102,7 @@
                             </v-col>
                           </v-row>
                           <v-row>
-                            <v-col>
+                            <v-col cols="4">
                               <v-btn
                                 size="small"
                                 variant="outlined"
@@ -112,6 +112,17 @@
                                 >Add Scenario</v-btn
                               >
                             </v-col>
+                            <v-col cols="4">
+                              <v-file-input
+                                v-model="runSettingsFile"
+                                variant="outlined"
+                                density="compact"
+                                label="Upload Run Settings File"
+                                accept=".csv"
+                                prepend-icon="mdi-upload"
+                                @change="handleFileUpload"
+                              ></v-file-input>
+                            </v-col>
                           </v-row>
                           <v-row v-if="pricingScenarios.length > 0">
                             <v-col>
@@ -120,7 +131,7 @@
                                   <tr class="table-row">
                                     <th
                                       v-for="(k, v) in pricingScenarios[0]"
-                                      :key="k"
+                                      :key="v"
                                       class="table-col"
                                       >{{ v }}</th
                                     >
@@ -199,6 +210,7 @@ import { onMounted, ref } from 'vue'
 // import { useAppStore } from '@/renderer/store/app'
 import BaseCard from '@/renderer/components/BaseCard.vue'
 import { useRouter } from 'vue-router'
+import Papa from 'papaparse'
 
 // data
 // const appStore = useAppStore()
@@ -231,6 +243,8 @@ const paramsBases = ref([])
 const productsList: any = ref([])
 const allProducts = ref([])
 const selectedMpVersionErrors = ref([])
+const csvData: any = ref([])
+const runSettingsFile = ref(null)
 
 // lifecycle hooks
 onMounted(async () => {
@@ -248,7 +262,67 @@ onMounted(async () => {
 })
 
 // methods
+
+const handleFileUpload = () => {
+  if (!runSettingsFile.value) return
+
+  console.log('file', runSettingsFile)
+
+  const selectedFile = runSettingsFile.value
+
+  console.log('selectedFile', selectedFile)
+  // let scenario: any = null
+
+  Papa.parse(selectedFile, {
+    header: true,
+    skipEmptyLines: true,
+    transform(value, field) {
+      const booleanFields = [
+        'death',
+        'cow',
+        'child_indicator',
+        'critical_illness',
+        'cash_back',
+        'cash_back_on_death',
+        'cash_back_on_survival',
+        'educator_indicator',
+        'grocery',
+        'paidup',
+        'paidup_on_survival',
+        'premium_waiver_on_death',
+        'repatriation',
+        'perm_disability',
+        'funeral',
+        'spouse_indicator',
+        'temp_disability',
+        'tombstone',
+        'retrenchment'
+      ]
+      if (booleanFields.includes(field)) {
+        return value === '1'
+      }
+      return value
+    },
+    complete: (result) => {
+      console.log('results: ', result.data)
+      result.data.forEach((item: any) => {
+        const scenario = {
+          ...item
+        }
+        console.log('scenario', scenario)
+        pricingScenarios.value.push(scenario)
+      })
+    },
+    error: (error) => {
+      console.error('CSV parsing error:', error)
+    }
+  })
+
+  console.log('csvData', csvData.value)
+}
+
 const removeScenario = (item: any) => {
+  console.log('removing scenario', item)
   pricingScenarios.value = pricingScenarios.value.filter(
     (scenario: any) => scenario.description !== item.description
   )
@@ -273,10 +347,13 @@ const addToScenarios = () => {
     return
   }
 
+  console.log('clonedDescription', clonedDescription.value)
+  console.log('clonedPricingConfig', clonedPricingConfig.value)
   const scenario = {
     description: clonedDescription.value,
     ...clonedPricingConfig.value
   }
+  console.log('scenario', scenario)
   scenario.parameter_basis = selectedParameterBasis.value
   scenario.mp_version = selectedMpVersion.value
   scenario.shock_basis = selectedShockBasis.value
