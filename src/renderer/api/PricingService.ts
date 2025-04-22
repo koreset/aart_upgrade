@@ -99,5 +99,8 @@ export default {
   },
   getModelPointVersions(productCode) {
     return Api.get('pricing/get-modelpoint-versions/' + productCode)
+  },
+  getModelPointsForVersion(productCode, mpVersion) {
+    return Api.get('pricing/get-modelpoints/' + productCode + '/version/' + mpVersion)
   }
 }

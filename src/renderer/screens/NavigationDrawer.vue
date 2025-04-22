@@ -595,17 +595,19 @@ const getNavigationProps = (feature: string, routeName: string) => {
 
 const checkEntitlement = (entitlement: string) => {
   const entitlements: any = appStore.getEntitlements()
+  console.log('Entitlements', entitlements)
+  return false
 
-  if (entitlements && entitlements.length > 0) {
-    if (entitlements.includes('all-features')) {
-      return false
-    }
-  }
+  // if (entitlements && entitlements.length > 0) {
+  //   if (entitlements.includes('all-features')) {
+  //     return false
+  //   }
+  // }
 
-  if (entitlements && entitlements.length > 0) {
-    return !entitlements.includes(entitlement)
-  }
-  return true
+  // if (entitlements && entitlements.length > 0) {
+  //   return !entitlements.includes(entitlement)
+  // }
+  // return true
 }
 const appVersion: any = ref('')
 const apiVersion: any = ref('')

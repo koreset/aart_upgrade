@@ -72,7 +72,7 @@
                             rounded
                             class="mr-3"
                             size="small"
-                            @click.stop="getModelPoints(mp.model_points)"
+                            @click.stop="getModelPoints(mp)"
                           >
                             <v-icon left color="primary">mdi-information</v-icon>
                             <span>Info</span>
@@ -331,14 +331,22 @@ const getModelPointsCount = async () => {
   })
 }
 
-const getModelPoints = (modelPoints) => {
+const getModelPoints = async (mp) => {
+  const resPoints = await PricingService.getModelPointsForVersion(
+    selectedProduct.value.product_code,
+    mp.version
+  )
+
+  console.log('getModelPointsForVersion', resPoints.data)
+
+  console.log('getModelPoints', mp)
   loadingComplete.value = true
-  if (modelPoints !== null && modelPoints.length > 0) {
+  if (resPoints.data !== null && resPoints.data.length > 0) {
     items.value = []
     columnDefs.value = []
     rowData.value = []
-    createColumnDefs(modelPoints)
-    modelPoints.forEach((item) => {
+    createColumnDefs(resPoints.data)
+    resPoints.data.forEach((item) => {
       const transformed = {}
       const keys = Object.keys(item)
       keys.forEach((i) => {
