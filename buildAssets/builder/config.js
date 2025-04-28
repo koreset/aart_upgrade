@@ -99,12 +99,12 @@ baseConfig.files = [
 ]
 
 // TODO: Notarize for macOS
-baseConfig.mac.identity = null
-/* if (process.env.MAC_NOTARIZE === 'true') {
-  baseConfig.afterSign = './buildAssets/builder/notarize.ts'
-} else {
-  baseConfig.mac.identity = null
-} */
+// baseConfig.mac.identity = 'Onajome Akpoduado (KYR2TJ3Z3M)'
+// if (process.env.MAC_NOTARIZE === 'true') {
+//   baseConfig.afterSign = './buildAssets/builder/notarize.ts'
+// } else {
+//   baseConfig.mac.identity = null
+// }
 
 module.exports = {
   ...baseConfig
