@@ -163,6 +163,16 @@ const runJobs: any = ref([])
 const loading = ref(false)
 // const value = ref(30)
 
+// const loadPricingJobs = async () => {
+//   loading.value = true
+//   const res = await ProductService.getPricingJobs()
+//   runJobs.value = res.data
+//   if (runJobs.value === undefined || runJobs.value === null) {
+//     runJobs.value = []
+//   }
+//   loading.value = false
+// }
+
 onMounted(async () => {
   loading.value = true
   const res = await ProductService.getPricingJobs()
@@ -170,6 +180,7 @@ onMounted(async () => {
   if (runJobs.value === undefined || runJobs.value === null) {
     runJobs.value = []
   }
+  // loadPricingJobs()
   if (runJobs.value.length > 0 && runJobs.value.some((job) => job.status === 'in progress')) {
     pollTimer = setInterval(() => {
       if (runJobs.value.some((job) => job.status === 'in progress')) {
@@ -218,12 +229,33 @@ const reRun = async (jobId) => {
     if (!rerunAction) {
       return
     }
-    PricingService.reRunPricingJob(jobId).then((response) => {
-      runJobs.value = runJobs.value.filter(function (elem) {
-        return elem.id !== jobId
-      })
-      runJobs.value.push(response.data)
-    })
+    const res = await PricingService.reRunPricingJob(jobId)
+    console.log('Job re-run response:', res.data)
+    clearInterval(pollTimer)
+
+    runJobs.value = []
+    //   const resp = await ProductService.getPricingJobs()
+    //   runJobs.value = resp.data
+    //   console.log('Updated jobs:', runJobs.value)
+    //   if (runJobs.value.length > 0 && runJobs.value.some((job) => job.status === 'in progress')) {
+    //   pollTimer = setInterval(() => {
+    //     if (runJobs.value.some((job) => job.status === 'in progress')) {
+    //       ProductService.getPricingJobs().then((response) => {
+    //         runJobs.value = response.data
+    //       })
+    //     } else {
+    //       clearInterval(pollTimer)
+    //     }
+    //   }, 3000)
+    // }
+
+    // .then((response) => {
+    //   console.log('Job re-run response:', response)
+    //   runJobs.value = runJobs.value.filter(function (elem) {
+    //     return elem.id !== jobId
+    //   })
+    //   runJobs.value.push(response.data)
+    // })
   } catch (error) {
     console.error('Error re-running job:', error)
     // Handle the error as needed, e.g., show a notification to the user
