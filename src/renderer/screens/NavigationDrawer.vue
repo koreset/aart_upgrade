@@ -89,6 +89,20 @@
             <v-list-item-title>Claims List</v-list-item-title>
           </v-list-item>
         </v-list-group>
+        <!-- <v-list-group subgroup class="first-level-group" value="User Management">
+          <template #activator="{ props }">
+            <v-list-item v-bind="props" title="User Management"></v-list-item>
+          </template>
+          <v-list-item class="second-level-item" :to="{ name: 'user-management-list' }">
+            <v-list-item-title>Users List</v-list-item-title>
+          </v-list-item>
+          <v-list-item class="second-level-item" :to="{ name: 'user-management-roles' }">
+            <v-list-item-title>Roles</v-list-item-title>
+          </v-list-item>
+          <v-list-item class="second-level-item" :to="{ name: 'user-management-permissions' }">
+            <v-list-item-title>Permissions</v-list-item-title>
+          </v-list-item>
+        </v-list-group> -->
       </v-list-group>
       <v-list-group value="Valuations">
         <template #activator="{ props }">
@@ -310,24 +324,6 @@
       <v-list-item :to="{ name: 'tasks' }" :prepend-icon="'mdi-table-settings'">
         <v-list-item-title>Tasks</v-list-item-title>
       </v-list-item>
-      <v-list-group class="first-level-group" value="User Management">
-        <template #activator="{ props }">
-          <v-list-item
-            v-bind="props"
-            prepend-icon="mdi-file-table-box-multiple-outline"
-            title="User Management"
-          ></v-list-item>
-        </template>
-        <v-list-item :to="{ name: 'user-management-list' }">
-          <v-list-item-title>Users List</v-list-item-title>
-        </v-list-item>
-        <v-list-item :to="{ name: 'user-management-roles' }">
-          <v-list-item-title>Roles</v-list-item-title>
-        </v-list-item>
-        <v-list-item :to="{ name: 'user-management-permissions' }">
-          <v-list-item-title>Permissions</v-list-item-title>
-        </v-list-item>
-      </v-list-group>
 
       <v-list-item :to="{ name: 'app-settings' }" :prepend-icon="'mdi-table-settings'">
         <v-list-item-title>Application Settings</v-list-item-title>

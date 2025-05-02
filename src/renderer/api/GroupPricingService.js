@@ -164,5 +164,17 @@ export default {
   },
   getBenefitDefinitions() {
     return Api.get('/group-pricing/benefit-definitions')
+  },
+  getUserRoles() {
+    return Api.get('/group-pricing/user-management/roles')
+  },
+  getPermissions() {
+    return Api.get('/group-pricing/user-management/permissions')
+  },
+  createUserRole(role) {
+    return Api.post('/group-pricing/user-management/roles', role)
+  },
+  getRolePermissions(roleId) {
+    return Api.get('/group-pricing/user-management/roles/' + roleId + '/permissions')
   }
 }

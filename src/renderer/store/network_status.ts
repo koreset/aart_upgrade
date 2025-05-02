@@ -30,7 +30,7 @@ export const useNetworkStatusStore = defineStore('networkStatus', {
     startCheckingService() {
       this.checkServiceAvailability() // Initial check
       if (!this.checkInterval) {
-        this.checkInterval = window.setInterval(this.checkServiceAvailability, 5000) // Check every 10 seconds
+        this.checkInterval = window.setInterval(this.checkServiceAvailability, 10000) // Check every 10 seconds
       }
     },
     stopCheckingService() {

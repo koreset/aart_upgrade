@@ -2,8 +2,6 @@ import instance from './Api'
 
 const Api = instance
 
-const licenseServerUrl = import.meta.env.VITE_APP_LICENSE_SERVER
-
 export default {
   deleteProduct(id) {
     return Api.delete('products/' + id)
@@ -155,8 +153,7 @@ export default {
   },
   getOrgUsers(organization) {
     const json = JSON.stringify(organization)
-    return Api.post('get-org-users', json, {
-      baseURL: licenseServerUrl + '/',
+    return Api.post('org-users', json, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
