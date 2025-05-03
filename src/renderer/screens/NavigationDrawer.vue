@@ -89,7 +89,7 @@
             <v-list-item-title>Claims List</v-list-item-title>
           </v-list-item>
         </v-list-group>
-        <!-- <v-list-group subgroup class="first-level-group" value="User Management">
+        <v-list-group subgroup class="first-level-group" value="User Management">
           <template #activator="{ props }">
             <v-list-item v-bind="props" title="User Management"></v-list-item>
           </template>
@@ -102,7 +102,7 @@
           <v-list-item class="second-level-item" :to="{ name: 'user-management-permissions' }">
             <v-list-item-title>Permissions</v-list-item-title>
           </v-list-item>
-        </v-list-group> -->
+        </v-list-group>
       </v-list-group>
       <v-list-group value="Valuations">
         <template #activator="{ props }">

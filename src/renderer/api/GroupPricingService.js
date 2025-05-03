@@ -176,5 +176,8 @@ export default {
   },
   getRolePermissions(roleId) {
     return Api.get('/group-pricing/user-management/roles/' + roleId + '/permissions')
+  },
+  updateUserRole(userRole) {
+    return Api.put('/group-pricing/user-management/users/assign_role', userRole)
   }
 }
