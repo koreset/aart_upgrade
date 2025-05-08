@@ -182,5 +182,8 @@ export default {
   },
   getRoleForUser(licenseId) {
     return Api.get('/group-pricing/user-management/users/license/' + licenseId + '/role')
+  },
+  deleteUserRole(roleId) {
+    return Api.delete('/group-pricing/user-management/roles/' + roleId)
   }
 }

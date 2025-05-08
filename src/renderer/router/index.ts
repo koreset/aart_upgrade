@@ -10,6 +10,12 @@ const checkPermissions = (to, from) => {
   const permissions: any = useGroupUserPermissionsStore()
   const flash = useFlashStore()
   const permToCheck = to.meta.required_permission
+  console.log('permissions validate: ', permissions.permissions.permissions)
+  if (permissions.permissions.permissions === undefined) {
+    // console.log('User does not have permission to access this route')
+    // flash.setMessage('You do not have permission to access this page.', 'info')
+    return true // No permissions, so allow access. This is a temporary fix.
+  }
   const hasPermission = permissions.permissions.permissions.some((permission) => {
     return permission.slug === permToCheck
   })

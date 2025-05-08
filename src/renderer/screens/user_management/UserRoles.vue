@@ -80,7 +80,7 @@
                         </v-btn>
                         <v-btn size="small" variant="text"> Assign Permissions </v-btn>
                         <v-btn size="small" variant="text"> Remove Permissions </v-btn>
-                        <v-btn size="small" variant="text" icon>
+                        <v-btn size="small" variant="text" icon @click="deleteRole(role)">
                           <v-icon>mdi-delete</v-icon>
                         </v-btn>
                       </td>
@@ -160,6 +160,18 @@ const saveRole = async () => {
     selectedPermissions.value = []
   } catch (error) {
     console.error('Error saving role:', error)
+  }
+}
+
+const deleteRole = async (role: any) => {
+  try {
+    const response = await GroupPricingService.deleteUserRole(role.id)
+    if (response.status !== 200) {
+      throw new Error('Network response was not ok')
+    }
+    userRoles.value = userRoles.value.filter((r: any) => r.id !== role.id)
+  } catch (error) {
+    console.error('Error deleting role:', error)
   }
 }
 
