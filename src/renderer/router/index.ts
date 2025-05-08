@@ -22,7 +22,7 @@ const checkPermissions = (to, from) => {
 
   if (!hasPermission) {
     console.log('User does not have permission to access this route')
-    flash.setMessage('You do not have permission to access this page.', 'info')
+    flash.show('You do not have permission to access this page.', 'error')
     return false
   }
   return true

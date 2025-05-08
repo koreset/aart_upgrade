@@ -31,7 +31,9 @@
                         <v-btn size="small" variant="text" @click="assignRole(user)">
                           Assign Role
                         </v-btn>
-                        <v-btn size="small" variant="text"> Remove Role </v-btn>
+                        <v-btn size="small" variant="text" @click="removeRole(user)">
+                          Remove Role
+                        </v-btn>
                       </td>
                     </tr>
                   </tbody>
@@ -126,6 +128,21 @@ const assignRole = (user) => {
   selectedRole.value = user.gp_role
   selectedUser.value = user
   dialog.value = true
+}
+
+const removeRole = (user) => {
+  console.log('Removing role from user:', user)
+  GroupPricingService.removeUserRole(user)
+    .then((response) => {
+      console.log('Response:', response)
+      if (response.status !== 200) {
+        throw new Error('Network response was not ok')
+      }
+      console.log('Role removed successfully:', response.data)
+    })
+    .catch((error) => {
+      console.error('Error removing role:', error)
+    })
 }
 
 onMounted(async () => {

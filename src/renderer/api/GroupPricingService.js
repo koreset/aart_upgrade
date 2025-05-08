@@ -185,5 +185,8 @@ export default {
   },
   deleteUserRole(roleId) {
     return Api.delete('/group-pricing/user-management/roles/' + roleId)
+  },
+  removeUserRole(userRole) {
+    return Api.post('/group-pricing/user-management/users/remove_role', userRole)
   }
 }

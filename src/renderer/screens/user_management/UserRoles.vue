@@ -78,7 +78,9 @@
                         <v-btn size="small" variant="text" @click="viewPermissions(role)">
                           View Permissions
                         </v-btn>
-                        <v-btn size="small" variant="text"> Assign Permissions </v-btn>
+                        <v-btn size="small" variant="text" @click="assignPermissions(role)">
+                          Assign Permissions
+                        </v-btn>
                         <v-btn size="small" variant="text"> Remove Permissions </v-btn>
                         <v-btn size="small" variant="text" icon @click="deleteRole(role)">
                           <v-icon>mdi-delete</v-icon>
@@ -89,10 +91,41 @@
                 </v-table>
               </v-col>
             </v-row>
+            <v-row v-if="rolePermissions.length > 0">
+              <v-col>
+                <v-table>
+                  <thead>
+                    <tr class="table-row">
+                      <th class="table-col text-left">Permission Name</th>
+                      <th class="table-col text-left">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="permission in rolePermissions" :key="permission.slug">
+                      <td>{{ permission.name }}</td>
+                      <td>{{ permission.description }}</td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr class="table-row">
+                      <td colspan="2" class="text-center">
+                        <v-btn size="small" variant="text" @click="closeTable">Close</v-btn>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </v-table>
+              </v-col>
+            </v-row>
           </template>
         </base-card>
       </v-col>
     </v-row>
+    <v-snackbar v-model="snackbar" :timeout="timeout">
+      {{ snackbarMessage }}
+      <template #actions>
+        <v-btn color="white" variant="text" @click="snackbar = false"> Close </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 <script setup lang="ts">
@@ -100,11 +133,16 @@ import BaseCard from '@/renderer/components/BaseCard.vue'
 import { onMounted, ref } from 'vue'
 import GroupPricingService from '@/renderer/api/GroupPricingService'
 
+const snackbar = ref(false)
+const snackbarMessage = ref('')
+const timeout = ref(3000)
+
 const addRole = ref(false)
 const roleName = ref('')
 const roleDescription = ref('')
 const permissions: any = ref([])
 const selectedPermissions: any = ref([])
+const rolePermissions: any = ref([])
 
 const userRoles: any = ref([
   { role_name: 'Admin', description: 'Administrator role with full access' },
@@ -116,6 +154,19 @@ onMounted(() => {
   fetchRoles()
   fetchPermissions()
 })
+
+const closeTable = () => {
+  rolePermissions.value = []
+}
+
+const assignPermissions = (role) => {
+  // Logic to assign permissions to the selected role
+  console.log('Assigning permissions')
+  selectedPermissions.value = role.permissions
+  roleName.value = role.role_name
+  roleDescription.value = role.description
+  addRole.value = true
+}
 
 const fetchRoles = async () => {
   try {
@@ -166,12 +217,15 @@ const saveRole = async () => {
 const deleteRole = async (role: any) => {
   try {
     const response = await GroupPricingService.deleteUserRole(role.id)
+    console.log('Delete response:', response)
     if (response.status !== 200) {
       throw new Error('Network response was not ok')
     }
     userRoles.value = userRoles.value.filter((r: any) => r.id !== role.id)
   } catch (error) {
     console.error('Error deleting role:', error)
+    snackbarMessage.value = 'cannot delete a role that is in use'
+    snackbar.value = true
   }
 }
 
@@ -180,10 +234,11 @@ const viewPermissions = (role: any) => {
   console.log('View permissions for role:', role)
   GroupPricingService.getRolePermissions(role.id)
     .then((response) => {
-      if (response.status !== 200) {
-        throw new Error('Network response was not ok')
-      }
+      // if (response.status !== 200) {
+      //   throw new Error('Network response was not ok')
+      // }
       console.log('Permissions for role:', response.data)
+      rolePermissions.value = response.data
     })
     .catch((error) => {
       console.error('Error fetching permissions:', error)
