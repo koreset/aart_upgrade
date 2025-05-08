@@ -21,6 +21,8 @@ export const useNetworkStatusStore = defineStore('networkStatus', {
       try {
         const apiServerUrl = await window.mainApi?.sendSync('msgGetBaseUrl')
 
+        console.log('Checking service availability at:', apiServerUrl + 'health')
+
         const response = await axios.get(apiServerUrl + 'health')
         this.isServiceAvailable = response.status === 200
       } catch (error) {

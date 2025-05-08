@@ -3,6 +3,25 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import App from '../App.vue'
 import AppLogin from '../AppLogin.vue'
 import AppSetup from '../AppSetup.vue'
+import { useGroupUserPermissionsStore } from '../store/group_user'
+import { useFlashStore } from '../store/flash'
+
+const checkPermissions = (to, from) => {
+  const permissions: any = useGroupUserPermissionsStore()
+  const flash = useFlashStore()
+  const permToCheck = to.meta.required_permission
+  const hasPermission = permissions.permissions.permissions.some((permission) => {
+    return permission.slug === permToCheck
+  })
+
+  if (!hasPermission) {
+    console.log('User does not have permission to access this route')
+    flash.setMessage('You do not have permission to access this page.', 'info')
+    return false
+  }
+  return true
+}
+
 export default createRouter({
   history: createWebHashHistory(),
   routes: [
@@ -362,67 +381,232 @@ export default createRouter({
     {
       path: '/group-pricing/quote-generation',
       name: 'group-pricing-quote-generation',
-      component: () => import('../screens/group_pricing/QuoteGeneration.vue')
+      component: () => import('../screens/group_pricing/QuoteGeneration.vue'),
+      meta: {
+        required_permission: 'navigation:view_gp_dashboard'
+      },
+      beforeEnter: (to, from) => {
+        if (checkPermissions(to, from)) {
+          return true
+        }
+        console.log('User does not have permission to access this route')
+        return false
+      }
     },
     {
       path: '/group-pricing/quote-generation/:id',
       name: 'group-pricing-quote-generation-edit',
-      component: () => import('../screens/group_pricing/QuoteGeneration.vue')
+      component: () => import('../screens/group_pricing/QuoteGeneration.vue'),
+      meta: {
+        required_permission: 'navigation:view_quotes'
+      },
+      beforeEnter: (to, from) => {
+        if (checkPermissions(to, from)) {
+          return true
+        }
+        console.log('User does not have permission to access this route')
+        return false
+      }
     },
     {
       path: '/group-pricing/metadata',
       name: 'group-pricing-metadata',
-      component: () => import('../screens/group_pricing/MetaData.vue')
+      component: () => import('../screens/group_pricing/MetaData.vue'),
+      meta: {
+        required_permission: 'navigation:view_metadata'
+      },
+      beforeEnter: (to, from) => {
+        if (checkPermissions(to, from)) {
+          return true
+        }
+        console.log('User does not have permission to access this route')
+        return false
+      }
     },
     {
       path: '/group-pricing/schemes',
       name: 'group-pricing-schemes',
-      component: () => import('../screens/group_pricing/GroupSchemeList.vue')
+      component: () => import('../screens/group_pricing/GroupSchemeList.vue'),
+      meta: {
+        required_permission: 'navigation:view_schemes'
+      },
+      beforeEnter: (to, from) => {
+        if (checkPermissions(to, from)) {
+          return true
+        }
+        console.log('User does not have permission to access this route')
+        return false
+      }
     },
     {
       path: '/group-pricing/schemes/:id',
       name: 'group-pricing-schemes-detail',
       props: true,
-      component: () => import('../screens/group_pricing/GroupSchemeDetail.vue')
+      component: () => import('../screens/group_pricing/GroupSchemeDetail.vue'),
+      meta: {
+        required_permission: 'navigation:view_schemes'
+      },
+      beforeEnter: (to, from) => {
+        if (checkPermissions(to, from)) {
+          return true
+        }
+        console.log('User does not have permission to access this route')
+        return false
+      }
     },
 
     {
       path: '/group-pricing/scheme-details/:id',
       name: 'group-pricing-scheme-details',
       props: true,
-      component: () => import('../screens/group_pricing/ViewQuoteDetail.vue')
+      component: () => import('../screens/group_pricing/ViewQuoteDetail.vue'),
+      meta: {
+        required_permission: 'navigation:view_schemes'
+      },
+      beforeEnter: (to, from) => {
+        if (checkPermissions(to, from)) {
+          return true
+        }
+        console.log('User does not have permission to access this route')
+        return false
+      }
     },
     {
       path: '/group-pricing/quotes',
       name: 'group-pricing-quotes',
-      component: () => import('../screens/group_pricing/GroupSchemeQuotes.vue')
+      component: () => import('../screens/group_pricing/GroupSchemeQuotes.vue'),
+      meta: {
+        required_permission: 'navigation:view_quotes'
+      },
+      beforeEnter: (to, from) => {
+        if (checkPermissions(to, from)) {
+          return true
+        }
+        console.log('User does not have permission to access this route')
+        return false
+      }
     },
     {
       path: '/group-pricing/quotes/output/:quoteId',
       name: 'group-pricing-quotes-generation',
       component: () => import('../screens/group_pricing/QuoteOutput.vue'),
-      props: true
+      props: true,
+      meta: {
+        required_permission: 'navigation:view_quotes'
+      },
+      beforeEnter: (to, from) => {
+        if (checkPermissions(to, from)) {
+          return true
+        }
+        console.log('User does not have permission to access this route')
+        return false
+      }
     },
 
     {
       path: '/group-pricing/tables',
       name: 'group-pricing-tables',
-      component: () => import('../screens/group_pricing/Tables.vue')
+      component: () => import('../screens/group_pricing/Tables.vue'),
+      meta: {
+        required_permission: 'navigation:view_tables'
+      },
+      beforeEnter: (to, from) => {
+        if (checkPermissions(to, from)) {
+          return true
+        }
+        console.log('User does not have permission to access this route')
+        return false
+      }
     },
     {
       path: '/group-pricing/dashboard',
       name: 'group-pricing-dashboard',
-      component: () => import('../screens/group_pricing/GPDashBoard.vue')
+      component: () => import('../screens/group_pricing/GPDashBoard.vue'),
+      meta: {
+        required_permission: 'navigation:view_gp_dashboard'
+      },
+      beforeEnter: (to, from) => {
+        if (checkPermissions(to, from)) {
+          return true
+        }
+        console.log('User does not have permission to access this route')
+        return false
+      }
     },
     {
       path: '/group-pricing/claims-list',
       name: 'group-pricing-claims-list',
-      component: () => import('../screens/group_pricing/ClaimsList.vue')
+      component: () => import('../screens/group_pricing/ClaimsList.vue'),
+      meta: {
+        required_permission: 'navigation:view_claims'
+      },
+      beforeEnter: (to, from) => {
+        if (checkPermissions(to, from)) {
+          return true
+        }
+        console.log('User does not have permission to access this route')
+        return false
+      }
     },
     {
       path: '/group-pricing/lodge-claim',
       name: 'group-pricing-lodge-claim',
-      component: () => import('../screens/group_pricing/LodgeClaim.vue')
+      component: () => import('../screens/group_pricing/LodgeClaim.vue'),
+      meta: {
+        required_permission: 'navigation:view_claims'
+      },
+      beforeEnter: (to, from) => {
+        if (checkPermissions(to, from)) {
+          return true
+        }
+        console.log('User does not have permission to access this route')
+        return false
+      }
+    },
+    {
+      path: '/user-management-list',
+      name: 'user-management-list',
+      component: () => import('../screens/user_management/UserList.vue'),
+      meta: {
+        required_permission: 'navigation:manage_users'
+      },
+      beforeEnter: (to, from) => {
+        if (checkPermissions(to, from)) {
+          return true
+        }
+        console.log('User does not have permission to access this route')
+        return false
+      }
+    },
+    {
+      path: '/user-management-roles',
+      name: 'user-management-roles',
+      component: () => import('../screens/user_management/UserRoles.vue'),
+      meta: {
+        required_permission: 'navigation:manage_users'
+      },
+      beforeEnter: (to, from) => {
+        if (checkPermissions(to, from)) {
+          return true
+        }
+        console.log('User does not have permission to access this route')
+        return false
+      }
+    },
+    {
+      path: '/user-management-permissions',
+      name: 'user-management-permissions',
+      component: () => import('../screens/user_management/UserPermissions.vue'),
+      meta: {
+        required_permission: 'navigation:manage_users'
+      },
+      beforeEnter: (to, from) => {
+        if (checkPermissions(to, from)) {
+          return true
+        }
+        console.log('User does not have permission to access this route')
+        return false
+      }
     },
     {
       path: '/tasks',
@@ -439,21 +623,7 @@ export default createRouter({
       name: 'app-settings',
       component: () => import('../screens/AppSettings.vue')
     },
-    {
-      path: '/user-management-list',
-      name: 'user-management-list',
-      component: () => import('../screens/user_management/UserList.vue')
-    },
-    {
-      path: '/user-management-roles',
-      name: 'user-management-roles',
-      component: () => import('../screens/user_management/UserRoles.vue')
-    },
-    {
-      path: '/user-management-permissions',
-      name: 'user-management-permissions',
-      component: () => import('../screens/user_management/UserPermissions.vue')
-    },
+
     {
       path: '/no-entitlements',
       name: 'no-entitlements',

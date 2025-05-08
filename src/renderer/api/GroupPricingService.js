@@ -179,5 +179,8 @@ export default {
   },
   updateUserRole(userRole) {
     return Api.put('/group-pricing/user-management/users/assign_role', userRole)
+  },
+  getRoleForUser(licenseId) {
+    return Api.get('/group-pricing/user-management/users/license/' + licenseId + '/role')
   }
 }

@@ -59,7 +59,7 @@
           ></v-list-item>
         </template>
         <v-list-item
-          v-bind="getNavigationProps('group-pricing-dashboard', 'group-pricing-dashboard')"
+          v-bind="getNavigationProps('navigation:view_dashboard', 'group-pricing-dashboard')"
         >
           <v-list-item-title>Dashboard</v-list-item-title>
         </v-list-item>
@@ -343,6 +343,8 @@
 <script setup lang="ts">
 import TaskService from '@/renderer/api/TaskService'
 import { watchEffect, defineProps, ref, onMounted } from 'vue'
+import { useGroupUserPermissionsStore } from '@/renderer/store/group_user'
+import GroupPricingService from '@/renderer/api/GroupPricingService'
 // import { useAppStore } from '@/renderer/store/app'
 // import ProductService from '@/renderer/api/ProductService' // Assuming the 'ProductService' module is located in the 'api' folder at the root of your project
 const navProps = defineProps({
@@ -353,9 +355,11 @@ const navProps = defineProps({
 })
 
 // const appStore = useAppStore()
+const permissionsStore = useGroupUserPermissionsStore()
 const snackbar = ref(false)
 const snackbarMessage = ref('')
 const timeout = ref(3000)
+const groupPermissions = ref({})
 
 // const showAccessMessage = (entitlement: string) => {
 //   console.log('Entitlement', entitlement)
@@ -401,8 +405,26 @@ const apiVersion: any = ref('')
 
 onMounted(async () => {
   appVersion.value = await window.mainApi?.sendSync('msgGetAppVersion')
+  const result = await window.mainApi?.sendSync('msgGetUserLicense')
+  console.log('App.vue License:', result)
+  GroupPricingService.getRoleForUser(result.data.id)
+    .then((response) => {
+      if (response.status !== 200) {
+        throw new Error('Network response was not ok')
+      }
+      console.log('User role response:', response.data)
+      groupPermissions.value = response.data
+      permissionsStore.setPermissions(response.data)
+      // appStore.setUserRole(response.data)
+      console.log('Permissions:', permissionsStore.permissions)
+    })
+    .catch((error) => {
+      console.error('Error fetching user role:', error)
+    })
+
   TaskService.getApiVersion().then((response) => {
     apiVersion.value = response.data
+    console.log('Mounted NavigationDrawer', permissionsStore.permissions)
   })
 })
 

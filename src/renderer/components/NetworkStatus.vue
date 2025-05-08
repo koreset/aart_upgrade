@@ -14,22 +14,13 @@ import { onMounted, onUnmounted, computed } from 'vue'
 import { useNetworkStatusStore } from '../store/network_status'
 
 const networkStatusStore = useNetworkStatusStore()
-// const isOnline = ref(networkStatusStore.isOnline);
-// const isServiceAvailable = ref(networkStatusStore.isServiceAvailable);
 
 const isOnline = computed(() => networkStatusStore.isOnline)
 const isServiceAvailable = computed(() => networkStatusStore.isServiceAvailable)
 
 const updateOnlineStatus = () => {
   networkStatusStore.updateOnlineStatus()
-  // isOnline.value = networkStatusStore.isOnline;
-  // isServiceAvailable.value = networkStatusStore.isServiceAvailable;
 }
-
-// const checkServiceAvailability = () => {
-//   networkStatusStore.checkServiceAvailability();
-//   isServiceAvailable.value = networkStatusStore.isServiceAvailable;
-// };
 
 onMounted(() => {
   window.addEventListener('online', updateOnlineStatus)

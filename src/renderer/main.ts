@@ -93,6 +93,6 @@ for (const path in comps) {
   app.component(name, comps[path])
 }
 
-app.use(vuetify).use(Vuelidate).use(i18n).use(router).use(createPinia())
+app.use(createPinia()).use(vuetify).use(Vuelidate).use(i18n).use(router)
 
 app.mount('#app')

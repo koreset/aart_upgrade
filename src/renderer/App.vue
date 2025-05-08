@@ -4,9 +4,12 @@ import { useAppStore } from '@/renderer/store/app'
 import { onBeforeMount, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import ProductService from '@/renderer/api/ProductService'
+import { useFlashStore } from '@/renderer/store/flash'
 
+const flash = useFlashStore()
 const router = useRouter()
 const appStore = useAppStore()
+
 // const licenseUrl = import.meta.env.VITE_APP_LICENSE_SERVER
 
 // const getEntitlements = async (licenseId) => {
@@ -35,8 +38,12 @@ const appStore = useAppStore()
 //   appStore.setEntitlements(entitlementList)
 // }
 
-onBeforeMount(() => {
-  window.mainApi?.send('msgResizeWindow', 1024, 600, true)
+onBeforeMount(async () => {
+  try {
+    window.mainApi?.send('msgResizeWindow', 1024, 600, true)
+  } catch (error) {
+    console.error('Error in onBeforeMount:', error)
+  }
 })
 
 onMounted(async () => {
@@ -47,6 +54,8 @@ onMounted(async () => {
   if (result) {
     appStore.setLicense(result)
   }
+
+  console.log('App.vue License:', result)
 
   console.log('Router:', router.currentRoute)
 
@@ -71,6 +80,10 @@ onMounted(async () => {
 
 <template>
   <DefaultLayout>
+    <!-- Global Flash Message -->
+    <v-alert v-if="flash.visible" :text="flash.message" :type="flash.type" class="ma-4" closable>
+    </v-alert>
+
     <router-view />
   </DefaultLayout>
 </template>

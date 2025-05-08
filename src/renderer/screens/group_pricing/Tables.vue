@@ -137,8 +137,10 @@ import GroupPricingService from '@/renderer/api/GroupPricingService'
 import formatValues from '@/renderer/utils/format_values'
 import { ref, onMounted } from 'vue'
 import { DataPayload } from '@/renderer/components/types'
+import { useGroupUserPermissionsStore } from '@/renderer/store/group_user'
 
 // data
+const permissionsStore: any = useGroupUserPermissionsStore()
 const yearsDialog: any = ref(false)
 const availableDataYears: any = ref([])
 const selectedYear: any = ref('')
@@ -168,11 +170,29 @@ const availableRiskRateCodes: any = ref([])
 const selectedRiskRateCode: any = ref('')
 
 onMounted(() => {
+  console.log('permissionsStore.permissions', permissionsStore.permissions)
   GroupPricingService.getTableMetaData().then((res) => {
     tables.value = res.data.associated_tables
     console.log('tables', tables.value)
   })
 })
+
+// const checkPermissions = (permission: string) => {
+// const perms = permissionsStore.permissions.permissions
+//   switch (permission) {
+//     case 'tables:view':
+//       if (perms.length > 0) {
+
+//         return permissionsStore.permissions.permissions.some((item: any) => item.slug === permission)
+//       }
+//       break
+//     default:
+//       return false
+//   }
+//   console.log('checkPermissions', permission)
+//   // return false
+//   return permissionsStore.permissions.permissions.some((item: any) => item.slug === permission)
+// }
 
 const closeDialog = () => {
   yearsDialog.value = false

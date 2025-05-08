@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" persistent max-width="550px">
-    <template #activator="{ props }">
-      <v-btn variant="outlined" rounded size="small" v-bind="props">
+    <template #activator="{ props: slotProps }">
+      <v-btn :disabled="disabled" variant="outlined" rounded size="small" v-bind="slotProps">
         <v-icon color="accent">mdi-upload</v-icon>
         <span>{{ actionName }}</span>
       </v-btn>
@@ -147,6 +147,7 @@ import { DataPayload } from './types'
 import BaseCard from './BaseCard.vue'
 
 const props = defineProps({
+  disabled: { type: Boolean, default: false },
   tableType: { type: String, default: '' },
   actionName: { type: String, default: 'Upload' },
   showYear: { type: Boolean, default: false },
