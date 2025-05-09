@@ -41,6 +41,9 @@
                               {{ job.status }} | Duration {{ toMinutes(job.run_time) }} | User:
                               {{ job.user }}
                             </v-list-item-subtitle>
+                            <v-list-item-subtitle v-else>
+                              Run Status: {{ job.status }}
+                            </v-list-item-subtitle>
                           </span>
                         </v-fade-transition>
                       </v-col>
