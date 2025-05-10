@@ -58,7 +58,6 @@ onMounted(async () => {
   // check if there are any entitlements
   const entitlements: any = appStore.entitlements
 
-
   if (entitlements.length === 0) {
     console.log('No entitlements found')
     // await router.push('/no-entitlements')

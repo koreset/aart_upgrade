@@ -41,7 +41,7 @@
                               {{ job.status }} | Duration {{ toMinutes(job.run_time) }} | User:
                               {{ job.user }}
                             </v-list-item-subtitle>
-                            <v-list-item-subtitle v-if="job.status == 'queued'" >
+                            <v-list-item-subtitle v-if="job.status == 'queued'">
                               Run Status: {{ job.status }}
                             </v-list-item-subtitle>
                           </span>

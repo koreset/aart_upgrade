@@ -49,11 +49,13 @@
               <v-row v-if="tableData.length > 0 && !loadingData">
                 <v-col>
                   <data-grid
+                    :show-close-button="true"
                     :columnDefs="columnDefs"
                     :rowData="tableData"
                     :table-title="selectedTable"
                     :pagination="true"
                     :rowCount="rowCount"
+                    @update:clear-data="clearData"
                   />
                 </v-col>
               </v-row>
@@ -256,6 +258,12 @@ const deleteTableData = async (table: any) => {
       console.log(error)
     }
   }
+}
+
+// methods
+const clearData = () => {
+  tableData.value = []
+  selectedTable.value = ''
 }
 
 const viewTable = (item: any) => {

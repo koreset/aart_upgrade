@@ -367,8 +367,8 @@ const addToRunJobs = () => {
     job.exp_configuration_id = selectedConfiguration.value.id
     job.run_date = formatDateString(runDate.value, true, true, false)
     job.run_type = selectedRunType.value.type
-    job.period_start_date = formatDateString(periodStartDate.value, true, true, false)
-    job.period_end_date = formatDateString(periodEndDate.value, true, true, false)
+    job.period_start_date = formatDateString(periodStartDate.value, true, true, true)
+    job.period_end_date = formatDateString(periodEndDate.value, true, true, true)
     job.exposure_data_year = selectedExposureYear.value
     job.exposure_data_version = selectedExposureVersion.value
     job.actual_data_year = selectedActualYear.value
