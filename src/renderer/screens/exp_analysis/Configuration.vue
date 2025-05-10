@@ -166,7 +166,7 @@
                                 ></data-grid>
                               </v-row>
 
-                              <v-divider class="my-5"></v-divider>
+                              <!-- <v-divider class="my-5"></v-divider>
                               <p class="mpc-border mb-5"><b>Actual Data Points</b></p>
                               <v-row
                                 v-if="item.actual_data_years == null || item.actual_data_years == 0"
@@ -241,7 +241,7 @@
                                     <span>Delete</span></v-btn
                                   >
                                 </v-col>
-                              </v-row>
+                              </v-row> -->
                               <loading-indicator :loading-data="loadingData"></loading-indicator>
                               <v-row v-if="actualRowData.length > 0 && !loadingData">
                                 <data-grid
@@ -288,7 +288,7 @@ const activePanel = ref([])
 const expansionColor = ref('')
 const selectedExpDataYear: any = ref(null)
 const yearVersions = ref([])
-const actualYearVersions = ref([])
+// const actualYearVersions = ref([])
 const selectedYearVersion: any = ref(null)
 const selectedActualYearVersion: any = ref(null)
 const selectedActualDataYear: any = ref(null)
@@ -319,15 +319,15 @@ const getExpDataVersions = (id: number, year: number) => {
   )
 }
 
-const getActualDataVersions = (id: number, year: number) => {
-  actualYearVersions.value = []
+// const getActualDataVersions = (id: number, year: number) => {
+//   actualYearVersions.value = []
 
-  const configData = configurations.value.filter((item) => item.id === id)
+//   const configData = configurations.value.filter((item) => item.id === id)
 
-  actualYearVersions.value = configData[0].actual_data_year_versions.filter(
-    (item: any) => item.year === year
-  )
-}
+//   actualYearVersions.value = configData[0].actual_data_year_versions.filter(
+//     (item: any) => item.year === year
+//   )
+// }
 
 const clearData = () => {
   actualRowData.value = []

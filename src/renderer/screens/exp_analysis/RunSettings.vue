@@ -68,7 +68,7 @@
                   label="Period End Date"
                 ></v-date-input>
               </v-col>
-              <v-col cols="3">
+              <!-- <v-col cols="3">
                 <v-select
                   v-model="selectedRunType"
                   variant="outlined"
@@ -80,9 +80,7 @@
                   item-value="name"
                   return-object
                 ></v-select>
-              </v-col>
-            </v-row>
-            <v-row>
+              </v-col> -->
               <v-col cols="3">
                 <v-select
                   v-model="selectedExposureYear"
@@ -104,7 +102,7 @@
                   :items="availableExposureVersions"
                 ></v-select>
               </v-col>
-              <v-col cols="3">
+              <!-- <v-col cols="3">
                 <v-select
                   v-model="selectedActualYear"
                   variant="outlined"
@@ -126,10 +124,7 @@
                   item-text="version_name"
                   item-value="version_name"
                 ></v-select>
-              </v-col>
-            </v-row>
-
-            <v-row>
+              </v-col> -->
               <v-col cols="3">
                 <v-select
                   v-model="selectedMortalityYear"
@@ -273,11 +268,11 @@ import formatDateString from '@/renderer/utils/helpers'
 
 // data
 const $router = useRouter()
-const runTypes = ref([
-  { name: 'Mortality', type: 'mortality' },
-  { name: 'Disability', type: 'disability' },
-  { name: 'Lapse', type: 'lapse' }
-])
+// const runTypes = ref([
+//   { name: 'Mortality', type: 'mortality' },
+//   { name: 'Disability', type: 'disability' },
+//   { name: 'Lapse', type: 'lapse' }
+// ])
 
 const configurations = ref([])
 const runName = ref(null)
@@ -318,14 +313,14 @@ onMounted(() => {
 })
 
 // methods
-const getAvailableActualVersions = () => {
-  ExpService.getAvailableActualVersions(
-    selectedConfiguration.value.id,
-    selectedActualYear.value
-  ).then((res) => {
-    availableActualVersions.value = res.data
-  })
-}
+// const getAvailableActualVersions = () => {
+//   ExpService.getAvailableActualVersions(
+//     selectedConfiguration.value.id,
+//     selectedActualYear.value
+//   ).then((res) => {
+//     availableActualVersions.value = res.data
+//   })
+// }
 const getAvailableExposureVersions = () => {
   ExpService.getAvailableExposureVersions(
     selectedConfiguration.value.id,
