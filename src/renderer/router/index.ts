@@ -389,7 +389,7 @@ export default createRouter({
       name: 'group-pricing-quote-generation',
       component: () => import('../screens/group_pricing/QuoteGeneration.vue'),
       meta: {
-        required_permission: 'navigation:view_gp_dashboard'
+        required_permission: 'navigation:view_quotes'
       },
       beforeEnter: (to, from) => {
         if (checkPermissions(to, from)) {

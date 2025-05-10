@@ -99,9 +99,9 @@
           <v-list-item class="second-level-item" :to="{ name: 'user-management-roles' }">
             <v-list-item-title>Roles</v-list-item-title>
           </v-list-item>
-          <v-list-item class="second-level-item" :to="{ name: 'user-management-permissions' }">
+          <!-- <v-list-item class="second-level-item" :to="{ name: 'user-management-permissions' }">
             <v-list-item-title>Permissions</v-list-item-title>
-          </v-list-item>
+          </v-list-item> -->
         </v-list-group>
       </v-list-group>
       <v-list-group value="Valuations">
@@ -345,7 +345,7 @@ import TaskService from '@/renderer/api/TaskService'
 import { watchEffect, defineProps, ref, onMounted } from 'vue'
 import { useGroupUserPermissionsStore } from '@/renderer/store/group_user'
 import GroupPricingService from '@/renderer/api/GroupPricingService'
-// import { useAppStore } from '@/renderer/store/app'
+import { useAppStore } from '@/renderer/store/app'
 // import ProductService from '@/renderer/api/ProductService' // Assuming the 'ProductService' module is located in the 'api' folder at the root of your project
 const navProps = defineProps({
   drawer: {
@@ -354,7 +354,7 @@ const navProps = defineProps({
   }
 })
 
-// const appStore = useAppStore()
+const appStore = useAppStore()
 const permissionsStore = useGroupUserPermissionsStore()
 const snackbar = ref(false)
 const snackbarMessage = ref('')
@@ -407,6 +407,7 @@ onMounted(async () => {
   appVersion.value = await window.mainApi?.sendSync('msgGetAppVersion')
   const result = await window.mainApi?.sendSync('msgGetUserLicense')
   console.log('App.vue License:', result)
+  console.log('Entitlements:', appStore.entitlements)
   GroupPricingService.getRoleForUser(result.data.id)
     .then((response) => {
       if (response.status !== 200) {

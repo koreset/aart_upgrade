@@ -12,9 +12,7 @@ const appStore = useAppStore()
 const licenseUrl = import.meta.env.VITE_APP_LICENSE_SERVER
 
 const getEntitlements = async (licenseId) => {
-  console.log('Fetching entitlements for license ID:', licenseId)
   if (!licenseId) {
-    console.error('License ID is required to fetch entitlements.')
     return
   }
   const validation = await fetch(licenseUrl + '/licenses/' + licenseId + '/get-entitlements', {
@@ -26,7 +24,6 @@ const getEntitlements = async (licenseId) => {
   })
 
   const rs = await validation.json()
-  console.log('Entitlements response', rs)
   const entitlementList: any = []
   if (rs && rs.data && rs.data.length > 0) {
     rs.data.forEach((entitlement: any) => {
@@ -60,7 +57,7 @@ onMounted(async () => {
 
   // check if there are any entitlements
   const entitlements: any = appStore.entitlements
-  console.log('Entitlements before:', entitlements)
+
 
   if (entitlements.length === 0) {
     console.log('No entitlements found')

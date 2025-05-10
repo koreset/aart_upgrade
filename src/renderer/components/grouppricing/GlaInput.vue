@@ -42,6 +42,16 @@
             label="Cover Termination Age"
           ></v-text-field>
         </v-col>
+        <v-col cols="4">
+          <v-select
+            v-model="groupStore.group_pricing_quote.gla.educator_benefit"
+            variant="outlined"
+            density="compact"
+            label="Educator Benefit"
+            placeholder="Enable Educator Benefit"
+            :items="groupStore.yesNoItems"
+          ></v-select>
+        </v-col>
       </v-row>
     </v-container>
   </v-form>

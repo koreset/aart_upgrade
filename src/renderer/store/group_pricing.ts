@@ -48,13 +48,13 @@ export const useGroupPricingStore = defineStore('groupPricing', {
       phi_benefit: false,
       ttd_benefit: false,
       gla_benefit: true,
-      edu_benefit: false,
       family_funeral_benefit: false,
       gla: {
         salary_multiple: 0,
         terminal_illness_benefit: '',
         waiting_period: 0,
-        cover_termination_age: 0
+        cover_termination_age: 0,
+        educator_benefit: ''
       },
       ptd: {
         risk_type: null,
@@ -63,7 +63,8 @@ export const useGroupPricingStore = defineStore('groupPricing', {
         cover_termination_age: 0,
         deferred_period: 0,
         waiting_period: 0,
-        disability_definition: null
+        disability_definition: null,
+        educator_benefit: ''
       },
       ci: {
         critical_illness_salary_multiple: 0,
@@ -90,7 +91,8 @@ export const useGroupPricingStore = defineStore('groupPricing', {
         cover_termination_age: 0,
         waiting_period: 0,
         deferred_period: 0,
-        disability_definition: null
+        disability_definition: null,
+        medical_aid_premium_waiver: ''
       },
       ttd: {
         benefit: null,
@@ -163,13 +165,13 @@ export const useGroupPricingStore = defineStore('groupPricing', {
         phi_benefit: false,
         ttd_benefit: false,
         gla_benefit: true,
-        edu_benefit: false,
         family_funeral_benefit: false,
         gla: {
           salary_multiple: 0,
           terminal_illness_benefit: '',
           waiting_period: 0,
-          cover_termination_age: 0
+          cover_termination_age: 0,
+          educator_benefit: ''
         },
         ptd: {
           risk_type: null,
@@ -178,7 +180,8 @@ export const useGroupPricingStore = defineStore('groupPricing', {
           cover_termination_age: 0,
           deferred_period: 0,
           waiting_period: 0,
-          disability_definition: null
+          disability_definition: null,
+          educator_benefit: ''
         },
         ci: {
           critical_illness_salary_multiple: 0,
@@ -205,7 +208,8 @@ export const useGroupPricingStore = defineStore('groupPricing', {
           cover_termination_age: 0,
           waiting_period: 0,
           deferred_period: 0,
-          disability_definition: null
+          disability_definition: null,
+          medical_aid_premium_waiver: ''
         },
         ttd: {
           benefit: null,

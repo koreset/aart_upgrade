@@ -108,6 +108,16 @@
                   :items="groupStore.disabilityDefinitions"
                 ></v-select>
               </v-col>
+              <v-col cols="4">
+                <v-select
+                  v-model="groupStore.group_pricing_quote.ptd.educator_benefit"
+                  variant="outlined"
+                  density="compact"
+                  label="Educator Benefit"
+                  placeholder="Enable Educator Benefit"
+                  :items="groupStore.yesNoItems"
+                ></v-select>
+              </v-col>
             </v-row>
           </template>
         </base-card>
@@ -271,16 +281,19 @@
                   :items="groupStore.yesNoItems"
                 ></v-select>
               </v-col>
-              <v-col v-if="groupStore.group_pricing_quote.phi.premium_waiver == 'Yes'" cols="4">
-                <v-text-field
-                  v-model:model-value="groupStore.group_pricing_quote.phi.premium_waiver_percentage"
-                  placeholder="Enter a value"
-                  label="Premium Waiver Percentage"
+              <v-col cols="4">
+                <v-select
+                  v-model:model-value="
+                    groupStore.group_pricing_quote.phi.medical_aid_premium_waiver
+                  "
+                  placeholder="Enable Medical Aid Premium Waiver Benefit?"
+                  label="Medical Aid Premium Waiver Benefit"
                   variant="outlined"
                   density="compact"
-                  type="number"
-                ></v-text-field>
+                  :items="groupStore.yesNoItems"
+                ></v-select>
               </v-col>
+
               <v-col cols="4">
                 <v-select
                   v-model:model-value="groupStore.group_pricing_quote.phi.escalation_percentage"
