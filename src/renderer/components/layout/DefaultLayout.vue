@@ -44,6 +44,10 @@ window.mainApi?.on('download_progress', (progress: any) => {
   console.log('Download Progress:', progress)
 })
 
+window.mainApi?.on('update_error', async (error: any) => {
+  log.error('Update Error:', error)
+})
+
 window.mainApi?.on('logout', async () => {
   log.info('Logout')
   const res = await confirmationDialog.value?.open('Logout', 'Are you sure you want to logout?')
