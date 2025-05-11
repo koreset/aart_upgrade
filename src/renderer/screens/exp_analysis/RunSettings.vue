@@ -197,8 +197,6 @@
                       <th class="table-col minwidth">Period End Date</th>
                       <th class="table-col minwidth">Exposure Data Year</th>
                       <th class="table-col minwidth">Exposure Data Version</th>
-                      <th class="table-col minwidth">Actual Data Year</th>
-                      <th class="table-col minwidth">Actual Data Version</th>
                       <th class="table-col min-width">Lapse Data Year</th>
                       <th class="table-col min-width">Lapse Data Version</th>
                       <th class="table-col min-width">Mortality Data Year</th>
@@ -215,8 +213,6 @@
                       <td>{{ item.period_end_date }}</td>
                       <td>{{ item.exposure_data_year }}</td>
                       <td>{{ item.exposure_data_version }}</td>
-                      <td>{{ item.actual_data_year }}</td>
-                      <td>{{ item.actual_data_version }}</td>
                       <td>{{ item.lapse_data_year }}</td>
                       <td>{{ item.lapse_data_version }}</td>
                       <td>{{ item.mortality_data_year }}</td>
@@ -294,9 +290,7 @@ const selectedLapseVersion = ref(null)
 const selectedExposureVersion = ref(null)
 const availableExposureVersions = ref([])
 const availableActualVersions = ref([])
-const selectedActualYear = ref(null)
 const selectedExposureYear = ref(null)
-const selectedActualVersion = ref(null)
 const selectedRunType: any = ref(null)
 const selectedConfiguration: any = ref(null)
 const snackbar = ref(false)
@@ -361,13 +355,10 @@ const addToRunJobs = () => {
     job.exp_configuration_name = selectedConfiguration.value.name
     job.exp_configuration_id = selectedConfiguration.value.id
     job.run_date = formatDateString(runDate.value, true, true, false)
-    job.run_type = selectedRunType.value.type
     job.period_start_date = formatDateString(periodStartDate.value, true, true, true)
     job.period_end_date = formatDateString(periodEndDate.value, true, true, true)
     job.exposure_data_year = selectedExposureYear.value
     job.exposure_data_version = selectedExposureVersion.value
-    job.actual_data_year = selectedActualYear.value
-    job.actual_data_version = selectedActualVersion.value
     job.mortality_data_year = selectedMortalityYear.value
     job.mortality_data_version = selectedMortalityVersion.value
     job.lapse_data_year = selectedLapseYear.value
@@ -383,8 +374,6 @@ const addToRunJobs = () => {
     selectedExposureYear.value = null
     selectedExposureVersion.value = null
     selectedRunType.value = null
-    selectedActualYear.value = null
-    selectedActualVersion.value = null
     availableActualVersions.value = []
     availableExposureVersions.value = []
     availableActualYears.value = []
