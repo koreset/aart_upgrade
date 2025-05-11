@@ -6,6 +6,7 @@ const log = require('electron-log')
 
 autoUpdater.logger = log
 autoUpdater.logger.transports.file.level = 'debug'
+autoUpdater.forceDevUpdateConfig = true
 
 const exitApp = (mainWindow: BrowserWindow): void => {
   if (mainWindow && !mainWindow.isDestroyed()) {
@@ -163,8 +164,6 @@ export const createMainWindow = async (mainWindow: BrowserWindow): Promise<Brows
     await mainWindow.loadFile(Constants.APP_INDEX_URL_PROD)
   }
 
-  autoUpdater.checkForUpdatesAndNotify()
-
   // Listen for update events
   autoUpdater.on('update-available', () => {
     mainWindow.webContents.send('update_available')
@@ -174,9 +173,15 @@ export const createMainWindow = async (mainWindow: BrowserWindow): Promise<Brows
     mainWindow.webContents.send('update_not_available')
   })
 
-  autoUpdater.on('update-downloaded', () => {
-    mainWindow.webContents.send('update_downloaded')
+  autoUpdater.on('download-progress', (progressObj) => {
+    mainWindow.webContents.send('download_progress', progressObj)
   })
+
+  autoUpdater.on('update-downloaded', (info) => {
+    mainWindow.webContents.send('update_downloaded', info)
+  })
+
+  autoUpdater.checkForUpdatesAndNotify()
 
   return mainWindow
 }

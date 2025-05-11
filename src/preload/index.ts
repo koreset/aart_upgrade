@@ -27,6 +27,7 @@ const rendererAvailChannels: string[] = [
   'update_available',
   'update_not_available',
   'update_downloaded',
+  'download_progress',
   'logout'
 ]
 

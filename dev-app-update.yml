@@ -1,0 +1,5 @@
+provider: github
+owner: koreset
+repo: aart_upgrade
+branch: main
+# token: your-personal-access-token # optional but needed for private repos

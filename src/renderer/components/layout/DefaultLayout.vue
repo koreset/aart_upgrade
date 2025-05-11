@@ -21,11 +21,27 @@ window.mainApi?.on('update_available', async () => {
   log.info('Update Available')
   const res = await confirmationDialog.value?.open(
     'Update Available',
-    'A new version of the application is available. Do you want to update now? This will restart the application.'
+    'A new version of the application is available. Do you want to update now? You will be notified when the download completes.'
+  )
+  if (res) {
+    window.mainApi?.send('msgRestartApplication', false)
+  }
+})
+
+window.mainApi?.on('update_downloaded', async () => {
+  log.info('Update Downloaded')
+  const res = await confirmationDialog.value?.open(
+    'Update Downloaded',
+    'The update has been downloaded. Do you want to restart the application now?'
   )
   if (res) {
     window.mainApi?.send('msgRestartApplication', true)
   }
+})
+
+window.mainApi?.on('download_progress', (progress: any) => {
+  log.info('Download Progress:', progress)
+  console.log('Download Progress:', progress)
 })
 
 window.mainApi?.on('logout', async () => {
