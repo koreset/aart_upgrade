@@ -44,7 +44,8 @@ window.mainApi?.on('download_progress', (progress: any) => {
   console.log('Download Progress:', progress)
 })
 
-window.mainApi?.on('update_error', async (error: any) => {
+window.mainApi?.on('update_error', async (event: any, error: any) => {
+  log.error('Update Error Event:', event)
   log.error('Update Error:', error)
 })
 
