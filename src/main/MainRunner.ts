@@ -6,7 +6,7 @@ const log = require('electron-log')
 
 autoUpdater.logger = log
 autoUpdater.logger.transports.file.level = 'debug'
-autoUpdater.forceDevUpdateConfig = true
+autoUpdater.forceDevUpdateConfig = false
 
 const exitApp = (mainWindow: BrowserWindow): void => {
   if (mainWindow && !mainWindow.isDestroyed()) {
