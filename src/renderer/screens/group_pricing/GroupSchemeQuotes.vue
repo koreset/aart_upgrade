@@ -37,9 +37,15 @@
                 >
                   <!-- Slot for Status-->
                   <template #[`item.status`]="{ item }">
-                    <span :style="{ color: getStatusColor(item.status) }">
+                    <v-chip
+                      :color="getStatusColor(item.status)"
+                      text-color="white"
+                      small
+                      class="ma-1"
+                      variant="flat"
+                    >
                       {{ item.status }}
-                    </span>
+                    </v-chip>
                   </template>
                   <!-- Slot for Actions Column -->
                   <template #[`item.actions`]="{ item }">
@@ -216,10 +222,11 @@ const headers = ref([
 ])
 
 const getStatusColor = (status) => {
+  console.log('STATUS:', status)
   switch (status) {
     case 'Pending Review':
       return 'orange'
-    case 'Approved':
+    case 'InForce':
       return 'green'
     case 'Declined':
       return 'red'
