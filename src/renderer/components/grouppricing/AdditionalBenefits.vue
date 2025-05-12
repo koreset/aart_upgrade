@@ -1,42 +1,8 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="2">
-        <v-checkbox
-          v-model="groupStore.group_pricing_quote.ptd_benefit"
-          :label="ptdLabel"
-        ></v-checkbox>
-      </v-col>
-      <v-col cols="2">
-        <v-checkbox
-          v-model="groupStore.group_pricing_quote.ci_benefit"
-          :label="ciLabel"
-        ></v-checkbox>
-      </v-col>
-      <v-col cols="2">
-        <v-checkbox
-          v-model="groupStore.group_pricing_quote.sgla_benefit"
-          :label="sglaLabel"
-        ></v-checkbox>
-      </v-col>
-      <v-col cols="2">
-        <v-checkbox
-          v-model="groupStore.group_pricing_quote.phi_benefit"
-          :label="phiLabel"
-        ></v-checkbox>
-      </v-col>
-      <v-col cols="2">
-        <v-checkbox
-          v-model="groupStore.group_pricing_quote.ttd_benefit"
-          :label="ttdLabel"
-        ></v-checkbox>
-      </v-col>
-
-      <v-col cols="2">
-        <v-checkbox
-          v-model="groupStore.group_pricing_quote.family_funeral_benefit"
-          :label="familyFuneralLabel"
-        ></v-checkbox>
+      <v-col v-for="benefit in benefitCheckboxes" :key="benefit.key" cols="2">
+        <v-checkbox v-model="groupStore.group_pricing_quote[benefit.key]" :label="benefit.label" />
       </v-col>
     </v-row>
     <v-divider v-if="anyBoxChecked" class="mb-7"></v-divider>
@@ -635,6 +601,15 @@ onBeforeMount(async () => {
   ttdLabel.value = getBenefitAlias('TTD')
   familyFuneralLabel.value = getBenefitAlias('GFF')
 })
+
+const benefitCheckboxes = [
+  { key: 'ptd_benefit', label: ptdLabel.value },
+  { key: 'ci_benefit', label: ciLabel.value },
+  { key: 'sgla_benefit', label: sglaLabel.value },
+  { key: 'phi_benefit', label: phiLabel.value },
+  { key: 'ttd_benefit', label: ttdLabel.value },
+  { key: 'family_funeral_benefit', label: familyFuneralLabel.value }
+]
 
 const getBenefitAlias = (benefit: any) => {
   console.log('Benefit', benefit)

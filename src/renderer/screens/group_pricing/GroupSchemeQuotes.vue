@@ -35,6 +35,12 @@
                   :items="quotes"
                   :search="search"
                 >
+                  <!-- Slot for Status-->
+                  <template #[`item.status`]="{ item }">
+                    <span :style="{ color: getStatusColor(item.status) }">
+                      {{ item.status }}
+                    </span>
+                  </template>
                   <!-- Slot for Actions Column -->
                   <template #[`item.actions`]="{ item }">
                     <v-btn
@@ -146,11 +152,31 @@ import ProductService from '@/renderer/api/ProductService'
 import { useGroupPricingStore } from '@/renderer/store/group_pricing'
 import ConfirmDialog from '@/renderer/components/ConfirmDialog.vue'
 
+interface Quote {
+  id: number
+  scheme_name: string
+  quote_type: string
+  commencement_date: string
+  basis: string
+  status: string
+  quote_broker: { name: string }
+  obligation_type: string
+  sgla_benefit: number
+  phi_benefit: number
+  ttd_benefit: number
+  ptd_benefit: number
+  ci_benefit: number
+  family_funeral_benefit: number
+  creation_date: string
+  created_by: string
+  reviewer: string
+}
+
 const confirmDeleteDialog = ref()
 const groupStore = useGroupPricingStore()
 const router = useRouter()
 const appStore = useAppStore()
-const quotes = ref([])
+const quotes = ref<Quote[]>([])
 const search = ref('')
 const selectedReviewer = ref('')
 const reviewers: any = ref([])
@@ -188,6 +214,19 @@ const headers = ref([
   { title: 'Submitted By', value: 'created_by' },
   { title: 'Reviewer', value: 'reviewer' }
 ])
+
+const getStatusColor = (status) => {
+  switch (status) {
+    case 'Pending Review':
+      return 'orange'
+    case 'Approved':
+      return 'green'
+    case 'Declined':
+      return 'red'
+    default:
+      return 'black'
+  }
+}
 
 const parseDateString = (dateString) => {
   const date = new Date(dateString)
