@@ -21,7 +21,8 @@ const mainAvailChannels: string[] = [
   'msgActivateLicense',
   'msgGetEnvironment',
   'msgGetEntitlements',
-  'msgLogout'
+  'msgLogout',
+  'log-message'
 ]
 const rendererAvailChannels: string[] = [
   'update_available',

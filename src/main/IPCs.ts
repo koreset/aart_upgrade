@@ -6,6 +6,7 @@ import { encrypt, decrypt } from './utils/encryption'
 import { machine } from 'node-unique-machine-id'
 import axios from 'axios'
 const { autoUpdater } = require('electron-updater')
+const log = require('electron-log')
 
 // import { generateMachineFingerprint } from './utils/fingerprint'
 const store = new Store()
@@ -223,6 +224,15 @@ export default class IPCs {
 
     ipcMain.on('msgGetUserLicense', (event: IpcMainEvent) => {
       event.returnValue = JSON.parse(decrypt(store.get('license', null)))
+    })
+
+    // logging messages
+    ipcMain.on('log-message', (event, { level, message }) => {
+      if (log[level]) {
+        log[level](...message)
+      } else {
+        log.info('[Renderer]', ...message)
+      }
     })
 
     // activate license
