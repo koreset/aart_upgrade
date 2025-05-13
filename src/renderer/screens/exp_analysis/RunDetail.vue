@@ -72,7 +72,7 @@
                     </v-tab>
                   </v-tabs>
                   <v-tabs-window v-model="tab">
-                    <v-tab-window-item
+                    <v-tabs-window-item
                       v-for="data in tableData"
                       :key="data.table_name"
                       active-class="active-tab"
@@ -124,7 +124,7 @@
                           </v-card>
                         </v-col>
                       </v-row>
-                    </v-tab-window-item>
+                    </v-tabs-window-item>
                   </v-tabs-window>
                 </v-col>
               </v-row>
