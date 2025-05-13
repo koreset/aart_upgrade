@@ -219,9 +219,9 @@ const runSettings: any = ref(null)
 // const rerunFile = ref(null)
 const resultList = ref([
   { text: 'Model Points', value: 'exp_modelpoints' },
-  { text: 'Crude Results', value: 'exp_crude_results' },
+  { text: 'Mortality Crude Results', value: 'exp_crude_results' },
   { text: 'Lapse Crude Results', value: 'exp_lapse_crude_results' },
-  { text: 'Actuals vs Expected', value: 'exp_actuals_expected' }
+  { text: 'Mortality: Actuals vs Expected', value: 'exp_actuals_expected' }
 ])
 const chartOptions: any = ref({
   credits: {
