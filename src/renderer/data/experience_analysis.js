@@ -266,5 +266,21 @@ export const experienceAnalysis = [
     data_source:
       'Max(TotalDurationExposure - DurationInYear1,2,3_4, 0)',
     data_source_type: 'Calculation Engine'
+  },
+  {
+    data_variable: 'monthly_crude_lapse_rate',
+    data_type: 'number',
+    data_description: 'Monthly Lapse Crude Rate',
+    data_source:
+      '1 - Exp(-Lapses/CentralExposure)',
+    data_source_type: 'Calculation Engine'
+  },
+  {
+    data_variable: 'annual_crude_lapse_rate',
+    data_type: 'number',
+    data_description: 'Annual Crude Lapse Rate',
+    data_source:
+      '1 - Pow(1 - monthlyCrudeLapseRate, 12)',
+    data_source_type: 'Calculation Engine'
   }
 ]
