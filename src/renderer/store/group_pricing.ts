@@ -175,6 +175,7 @@ export const useGroupPricingStore = defineStore('groupPricing', {
         industry: '',
         scheme_type: '',
         occupation_class: 0,
+        enforce_fcl: false,
         free_cover_limit: 0,
         currency: null,
         exchangeRate: 0,
