@@ -36,6 +36,7 @@ export const useGroupPricingStore = defineStore('groupPricing', {
       industry: '',
       scheme_type: '',
       occupation_class: 0,
+      enforce_fcl: false,
       free_cover_limit: 0,
       currency: null,
       exchangeRate: 0,
@@ -137,6 +138,27 @@ export const useGroupPricingStore = defineStore('groupPricing', {
     //   this.groupPricing = groupPricing
     // }
     // reset group_pricing_quote
+    updateGroupPricingQuote(payload: any) {
+      this.group_pricing_quote = { ...this.group_pricing_quote, ...payload }
+    },
+    getInitialQuoteData() {
+      return {
+        quote_type: null,
+        scheme_name: undefined,
+        scheme_contact: undefined,
+        scheme_email: undefined,
+        quote_broker: undefined,
+        obligation_type: undefined,
+        commencement_date: undefined,
+        industry: undefined,
+        scheme_type: undefined,
+        currency: undefined,
+        exchangeRate: undefined,
+        experience_rating: undefined,
+        free_cover_limit: undefined,
+        normal_retirement_age: undefined
+      }
+    },
     resetGroupPricingQuote() {
       this.group_pricing_quote = {
         reviewer: null,
