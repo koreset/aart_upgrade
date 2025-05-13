@@ -86,6 +86,28 @@
                         :rowData="data.row_data"
                         :pagination="true"
                       />
+                      <data-grid
+                        v-if="maleRowData.length > 0"
+                        :tableName="data.table_name"
+                        :columnDefs="analysisColumnDefs"
+                        :rowData="maleRowData"
+                        :pagination="true"
+                      />
+                      <data-grid
+                        v-if="femaleRowData.length > 0"
+                        :tableName="data.table_name"
+                        :columnDefs="analysisColumnDefs"
+                        :rowData="femaleRowData"
+                        :pagination="true"
+                      />
+                      <data-grid
+                        v-if="combinedRowData.length > 0"
+                        :tableName="data.table_name"
+                        :columnDefs="analysisColumnDefs"
+                        :rowData="combinedRowData"
+                        :pagination="true"
+                      />
+
                       <v-row
                         v-if="
                           options.data.length > 0 &&
@@ -202,6 +224,7 @@ import { useRoute } from 'vue-router'
 import DataGrid from '@/renderer/components/tables/DataGrid.vue'
 import BaseCard from '@/renderer/components/BaseCard.vue'
 // data
+// const showTable = ref(true)
 const backButton = '< Back to Run Results'
 const $route = useRoute()
 const tab = ref(null)
@@ -211,6 +234,10 @@ const errorMessage: any = ref([])
 const loadingResults = ref(false)
 const selectedProduct = ref(null)
 const productList: any = ref([])
+const analysisColumnDefs = ref([])
+const maleRowData = ref([])
+const femaleRowData = ref([])
+const combinedRowData = ref([])
 // const columnDefs = ref([])
 const tableData: any = ref([])
 // const developmentFactorGraph = ref('')
@@ -386,6 +413,11 @@ const getResults = () => {
     otherResultTypes.value = false
     loadingResults.value = true
     if (resultType.value === 'exp_modelpoints') {
+      analysisColumnDefs.value = []
+      maleRowData.value = []
+      femaleRowData.value = []
+      combinedRowData.value = []
+
       ExpService.getExpModelPointsByRunId($route.params.id).then((res) => {
         if (res.data.table_data.length > 0) {
           res.data.table_data.forEach((item) => {
@@ -400,6 +432,11 @@ const getResults = () => {
       })
     }
     if (resultType.value === 'exp_crude_results') {
+      analysisColumnDefs.value = []
+      maleRowData.value = []
+      femaleRowData.value = []
+      combinedRowData.value = []
+
       ExpService.getExpCrudeResultsByRunId($route.params.id).then((res) => {
         if (res.data.table_data.length > 0) {
           res.data.table_data.forEach((item) => {
@@ -414,6 +451,11 @@ const getResults = () => {
       })
     }
     if (resultType.value === 'exp_lapse_crude_results') {
+      analysisColumnDefs.value = []
+      maleRowData.value = []
+      femaleRowData.value = []
+      combinedRowData.value = []
+
       ExpService.getExpLapseCrudeResultsByRunId($route.params.id).then((res) => {
         if (res.data.table_data.length > 0) {
           res.data.table_data.forEach((item) => {
@@ -428,7 +470,16 @@ const getResults = () => {
       })
     }
     if (resultType.value === 'exp_actuals_expected') {
+      analysisColumnDefs.value = []
+      maleRowData.value = []
+      femaleRowData.value = []
+      combinedRowData.value = []
       ExpService.getExpActualsVsExpectedByRunId($route.params.id).then((res) => {
+        console.log('AvE results', res.data)
+        analysisColumnDefs.value = res.data.summary_data.columnDefs
+        maleRowData.value = res.data.summary_data.maleRowData
+        femaleRowData.value = res.data.summary_data.femaleRowData
+        combinedRowData.value = res.data.summary_data.combinedRowData
         if (res.data.table_data.length > 0) {
           res.data.table_data.forEach((item) => {
             const tableDef: any = {}

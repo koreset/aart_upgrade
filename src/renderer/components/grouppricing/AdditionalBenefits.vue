@@ -575,6 +575,8 @@ import { useGroupPricingStore } from '@/renderer/store/group_pricing'
 import { computed, onBeforeMount, ref } from 'vue'
 import BaseCard from '../BaseCard.vue'
 import GroupPricingService from '@/renderer/api/GroupPricingService'
+// import { useForm } from 'vee-validate'
+// import * as yup from 'yup'
 
 const groupStore = useGroupPricingStore()
 const benefitMaps: any = ref([])
@@ -586,6 +588,27 @@ const phiLabel = ref('PHI')
 const ttdLabel = ref('TTD')
 const familyFuneralLabel = ref('Family Funeral')
 const benefitDefinitions: any = ref(['Lump Sum', 'Monthly'])
+
+// const validationSchema = yup.object({
+//   ptd_benefit: yup.boolean().nullable(),
+//   ci_benefit: yup.boolean().nullable(),
+//   sgla_benefit: yup.boolean().nullable(),
+//   phi_benefit: yup.boolean().nullable(),
+//   ttd_benefit: yup.boolean().nullable(),
+//   family_funeral_benefit: yup.boolean().nullable()
+// })
+
+// const { handleSubmit, errors, defineField } = useForm({
+//   validationSchema,
+//   initialValues: {
+//     ptd_benefit: groupStore.group_pricing_quote.ptd_benefit,
+//     ci_benefit: groupStore.group_pricing_quote.ci_benefit,
+//     sgla_benefit: groupStore.group_pricing_quote.sgla_benefit,
+//     phi_benefit: groupStore.group_pricing_quote.phi_benefit,
+//     ttd_benefit: groupStore.group_pricing_quote.ttd_benefit,
+//     family_funeral_benefit: groupStore.group_pricing_quote.family_funeral_benefit
+//   }
+// })
 
 onBeforeMount(async () => {
   // get benefit definitions from the API
