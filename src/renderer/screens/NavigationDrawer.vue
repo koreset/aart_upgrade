@@ -213,7 +213,7 @@
           <v-list-item
             v-bind="props"
             prepend-icon="mdi-file-table-box-multiple-outline"
-            title="Exp Analysis"
+            title="Experience Analysis"
           ></v-list-item>
         </template>
         <v-list-item :to="{ name: 'exp-analysis-configuration' }">
