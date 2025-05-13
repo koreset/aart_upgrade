@@ -400,6 +400,22 @@ export default createRouter({
       }
     },
     {
+      path: '/group-pricing/form-validation',
+      name: 'group-pricing-form-validation',
+      component: () => import('../components/FormValidTest.vue'),
+      meta: {
+        required_permission: 'navigation:view_quotes'
+      },
+      beforeEnter: (to, from) => {
+        if (checkPermissions(to, from)) {
+          return true
+        }
+        console.log('User does not have permission to access this route')
+        return false
+      }
+    },
+
+    {
       path: '/group-pricing/quote-generation/:id',
       name: 'group-pricing-quote-generation-edit',
       component: () => import('../screens/group_pricing/QuoteGeneration.vue'),
