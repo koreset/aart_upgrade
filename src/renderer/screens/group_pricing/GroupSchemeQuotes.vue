@@ -228,8 +228,10 @@ const getStatusColor = (status) => {
       return 'orange'
     case 'InForce':
       return 'green'
-    case 'Declined':
-      return 'red'
+    case 'Approved':
+      return 'darkgreen'
+    case 'In Progress':
+      return 'limegreen'
     default:
       return 'black'
   }
