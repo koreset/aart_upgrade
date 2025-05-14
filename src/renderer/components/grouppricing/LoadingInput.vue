@@ -4,7 +4,9 @@
       <v-row>
         <v-col cols="4"
           ><v-text-field
-            v-model="groupStore.group_pricing_quote.loadings.accelerated_benefit_discount"
+            v-model="acceleratedBenefitDiscount"
+            v-bind="acceleratedBenefitDiscountAttrs"
+            :error-messages="errors.accelerated_benefit_discount"
             variant="outlined"
             density="compact"
             type="number"
@@ -14,7 +16,9 @@
         </v-col>
         <v-col cols="4"
           ><v-text-field
-            v-model="groupStore.group_pricing_quote.loadings.commission_loading"
+            v-model="commissionLoading"
+            v-bind="commissionLoadingAttrs"
+            :error-messages="errors.commission_loading"
             variant="outlined"
             density="compact"
             type="number"
@@ -24,7 +28,9 @@
         </v-col>
         <v-col cols="4"
           ><v-text-field
-            v-model="groupStore.group_pricing_quote.loadings.profit_loading"
+            v-model="profitLoading"
+            v-bind="profitLoadingAttrs"
+            :error-messages="errors.profit_loading"
             variant="outlined"
             density="compact"
             type="number"
@@ -34,7 +40,9 @@
         </v-col>
         <v-col cols="4"
           ><v-text-field
-            v-model="groupStore.group_pricing_quote.loadings.expense_loading"
+            v-model="expenseLoading"
+            v-bind="expenseLoadingAttrs"
+            :error-messages="errors.expense_loading"
             variant="outlined"
             density="compact"
             type="number"
@@ -44,7 +52,9 @@
         </v-col>
         <v-col cols="4"
           ><v-text-field
-            v-model="groupStore.group_pricing_quote.loadings.discount"
+            v-model="loadingsDiscount"
+            v-bind="loadingsDiscountAttrs"
+            :error-messages="errors.loadings_discount"
             variant="outlined"
             density="compact"
             type="number"
@@ -58,13 +68,56 @@
 </template>
 <script setup lang="ts">
 import { useGroupPricingStore } from '@/renderer/store/group_pricing'
-
+import { useForm } from 'vee-validate'
+import * as yup from 'yup'
 const groupStore = useGroupPricingStore()
 
-const validateForm = () => {
-  console.log('Validating form')
+const validationSchema = yup.object({
+  accelerated_benefit_discount: yup
+    .number()
+    .required('Accelerated Benefit Discount is required')
+    .min(0, 'Value must be greater than or equal to 0'),
+  commission_loading: yup
+    .number()
+    .required('Commission Rate is required')
+    .min(0, 'Value must be greater than or equal to 0'),
+  profit_loading: yup
+    .number()
+    .required('Profit Loading is required')
+    .min(0, 'Value must be greater than or equal to 0'),
+  expense_loading: yup
+    .number()
+    .required('Expense Loading is required')
+    .min(0, 'Value must be greater than or equal to 0'),
+  discount: yup
+    .number()
+    .required('Overall Premium Discount is required')
+    .min(0, 'Value must be greater than or equal to 0')
+})
+
+const { handleSubmit, errors, defineField } = useForm({
+  validationSchema,
+  initialValues: {
+    accelerated_benefit_discount:
+      groupStore.group_pricing_quote.loadings.accelerated_benefit_discount,
+    commission_loading: groupStore.group_pricing_quote.loadings.commission_loading,
+    profit_loading: groupStore.group_pricing_quote.loadings.profit_loading,
+    expense_loading: groupStore.group_pricing_quote.loadings.expense_loading,
+    loadings_discount: groupStore.group_pricing_quote.loadings.discount
+  }
+})
+
+const [acceleratedBenefitDiscount, acceleratedBenefitDiscountAttrs] = defineField(
+  'accelerated_benefit_discount'
+)
+const [commissionLoading, commissionLoadingAttrs] = defineField('commission_loading')
+const [profitLoading, profitLoadingAttrs] = defineField('profit_loading')
+const [expenseLoading, expenseLoadingAttrs] = defineField('expense_loading')
+const [loadingsDiscount, loadingsDiscountAttrs] = defineField('loadings_discount')
+
+const validateForm = handleSubmit((values) => {
   return true
-}
+})
 
 defineExpose({
   validateForm
