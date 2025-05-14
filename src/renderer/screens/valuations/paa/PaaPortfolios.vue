@@ -320,6 +320,7 @@ const handleUpload = (event: any, item: any) => {
   ModifiedGMMService.uploadGmmModelpointTables(formData)
     .then((res) => {
       console.log(res)
+      loadDataComplete.value = true
       // this.uploadSuccess = true;
       // this.resetErrorState();
       // this.$emit("successUpload", this.tableId);
@@ -327,6 +328,7 @@ const handleUpload = (event: any, item: any) => {
     })
     .catch((err) => {
       console.log(err)
+      loadDataComplete.value = true
       // this.errorMessages.push(err.data.error);
       // this.uploadSuccess = false;
       // this.selectedYear = null;

@@ -132,9 +132,10 @@
             variant="outlined"
             density="compact"
             :items="reviewers"
-            item-title="user"
-            item-value="user"
+            item-title="name"
+            item-value="name"
             label="Select Reviewer"
+            return-object
           ></v-select>
         </template>
         <template #actions>
@@ -153,7 +154,7 @@ import BaseCard from '@/renderer/components/BaseCard.vue'
 import GroupPricingService from '@/renderer/api/GroupPricingService'
 import { useAppStore } from '@/renderer/store/app'
 import { useRouter } from 'vue-router'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watchEffect } from 'vue'
 import ProductService from '@/renderer/api/ProductService'
 import { useGroupPricingStore } from '@/renderer/store/group_pricing'
 import ConfirmDialog from '@/renderer/components/ConfirmDialog.vue'
@@ -184,7 +185,7 @@ const router = useRouter()
 const appStore = useAppStore()
 const quotes = ref<Quote[]>([])
 const search = ref('')
-const selectedReviewer = ref('')
+const selectedReviewer = ref(null)
 const reviewers: any = ref([])
 const dialog = ref(false)
 const selectedQuote: any = ref({})
@@ -293,38 +294,108 @@ const submitQuoteGeneration = (item) => {
 }
 
 onMounted(() => {
-  try {
-    organization.value = appStore.getLicenseData.data.attributes.metadata.organization
-
-    ProductService.getOrgUsers({ name: organization.value }).then((res) => {
-      const uniqueData = Array.from(new Map(res.data.map((entry) => [entry.user, entry])).values())
-      reviewers.value = uniqueData
-      console.log('Org Users:', reviewers.value)
-    })
-    GroupPricingService.getBenefitMaps().then((res) => {
-      benefitMaps.value = res.data
-      headers.value = headers.value.map((header) => {
-        const bff = benefitMaps.value.find((map) => map.benefit_code === header.title)
-        if (bff && bff.benefit_alias !== '') {
-          return {
-            ...header,
-            title: bff.benefit_alias
-          }
+  // Start fetching data that doesn't depend on organization.value immediately
+  GroupPricingService.getBenefitMaps().then((res) => {
+    benefitMaps.value = res.data
+    headers.value = headers.value.map((header) => {
+      const bff = benefitMaps.value.find((map) => map.benefit_code === header.title)
+      if (bff && bff.benefit_alias !== '') {
+        return {
+          ...header,
+          title: bff.benefit_alias
         }
-        return header
-      })
-    })
-    GroupPricingService.getAllQuotes().then((res) => {
-      if (res.data.length > 0) {
-        quotes.value = res.data
-        console.log('Quotes:', quotes.value)
-      } else {
-        quotes.value = []
       }
+      return header
     })
-  } catch (error) {
-    console.log('Error:', error)
-  }
+  }).catch(error => {
+    console.error('Error fetching benefit maps:', error);
+    // Handle error appropriately, e.g., set default headers or show a message
+  });
+
+  GroupPricingService.getAllQuotes().then((res) => {
+    if (res.data && res.data.length > 0) {
+      quotes.value = res.data
+      console.log('Quotes:', quotes.value)
+    } else {
+      quotes.value = []
+      console.log('No quotes found or error in response:', res);
+    }
+  }).catch(error => {
+    console.error('Error fetching all quotes:', error);
+    quotes.value = []; // Ensure quotes is an array on error
+  });
+
+  // Watch for appStore.getLicenseData to be populated
+  watchEffect(() => {
+    const licenseData = appStore.getLicenseData; // Access it once
+    if (licenseData && licenseData.data && licenseData.data.attributes && licenseData.data.attributes.metadata && licenseData.data.attributes.metadata.organization) {
+      const orgName = licenseData.data.attributes.metadata.organization;
+      if (organization.value !== orgName) { // Only update and fetch if it changed or was null
+        organization.value = orgName;
+        console.log('Organization successfully set:', organization.value);
+
+        // Now that organization.value is reliably set, fetch dependent data
+        ProductService.getOrgUsers({ name: organization.value }).then((res) => {
+          // Ensure res.data is an array before processing
+          if (res && Array.isArray(res.data)) {
+            const uniqueData = Array.from(new Map(res.data.map((entry) => [entry.user, entry])).values());
+            reviewers.value = uniqueData;
+            console.log('Org Users:', reviewers.value);
+          } else {
+            console.warn('Org Users response is not as expected or data is missing:', res);
+            reviewers.value = [];
+          }
+        }).catch(error => {
+          console.error('Error fetching org users:', error);
+          reviewers.value = []; // Ensure reviewers is an array on error
+        });
+      }
+    } else {
+      // This will log until the data is available
+      console.log('Waiting for license data or license data structure is incomplete...');
+      // Avoid resetting organization.value to null if it was already set and watchEffect
+      // is re-running for another reason, unless that's desired behavior.
+    }
+  });
+  // The broad try-catch here might hide specific errors.
+  // It's often better to have .catch() on individual promises.
+  // If you keep it, ensure it doesn't mask the actual problem source.
+
+
+
+// onMounted(() => {
+//   try {
+//     organization.value = appStore.getLicenseData.data.attributes.metadata.organization
+
+//     ProductService.getOrgUsers({ name: organization.value }).then((res) => {
+//       const uniqueData = Array.from(new Map(res.data.map((entry) => [entry.user, entry])).values())
+//       reviewers.value = uniqueData
+//       console.log('Org Users:', reviewers.value)
+//     })
+//     GroupPricingService.getBenefitMaps().then((res) => {
+//       benefitMaps.value = res.data
+//       headers.value = headers.value.map((header) => {
+//         const bff = benefitMaps.value.find((map) => map.benefit_code === header.title)
+//         if (bff && bff.benefit_alias !== '') {
+//           return {
+//             ...header,
+//             title: bff.benefit_alias
+//           }
+//         }
+//         return header
+//       })
+//     })
+//     GroupPricingService.getAllQuotes().then((res) => {
+//       if (res.data.length > 0) {
+//         quotes.value = res.data
+//         console.log('Quotes:', quotes.value)
+//       } else {
+//         quotes.value = []
+//       }
+//     })
+//   } catch (error) {
+//     console.log('Error:', error)
+//   }
 
   // ProductService.getOrgUsers({ name: organization.value }).then((res) => {
   //   const uniqueData = Array.from(new Map(res.data.map((entry) => [entry.user, entry])).values())
