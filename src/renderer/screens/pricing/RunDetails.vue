@@ -250,15 +250,11 @@ onMounted(async () => {
   const resp = await ProductService.getProductById(pricingRun.value.product_id)
   product.value = resp.data
 
-  console.log('Product', product.value)
-  console.log('Pricing Run', pricingRun.value)
 })
 
 // methods
 const deleteScenario = () => {
-  console.log('Deleting scenario', selectedScenario.value)
   PricingService.deleteScenario(runId.value, selectedScenario.value.id).then((res) => {
-    console.log('Scenario deleted', res)
     pricingRun.value.pricing_config = pricingRun.value.pricing_config.filter(
       (item) => item.id !== selectedScenario.value.id
     )
@@ -328,7 +324,6 @@ const loadScenario = () => {
   pricingDistribution.value = null
   options.value = null
   PricingService.getScenarioData(selectedScenario.value.id, runId).then((res) => {
-    console.log('Scenario data', res.data)
     profitabilities.value = res.data.profitability
     pricingDistribution.value = res.data.pricing_distribution
     filteredData.value = res.data.filtered
@@ -472,16 +467,12 @@ const generatePdf = () => {
     // var height = doc.internal.pageSize.getHeight();
     doc.addImage(imgData, 'PNG', 10, 15, width - 20, imgHeight - 10)
     doc.addPage('l')
-    console.log('PDF Headers', headers.value)
-    console.log('Filtered Data', filteredData.value)
     // const headers = [pdfHeaders]
     const body: any = []
     const reorderedData = rearrangeRates(filteredData.value)
     reorderedData.forEach((item) => {
       const row: any = []
       Object.entries(item).forEach(([key, value]) => {
-        // console.log('Key', key)
-        // console.log('Value', value)
         row.push(value)
         // if (key !== 'age') {
 

@@ -108,7 +108,6 @@ const canvasRef = ref<HTMLCanvasElement | null>(null)
 onMounted(() => {
   GroupPricingService.getBenefitMaps().then((res) => {
     benefitMaps.value = res.data
-    console.log('Benefit Maps:', benefitMaps.value)
     const glaBenefit = benefitMaps.value.find((item) => item.benefit_code === 'GLA')
     if (glaBenefit.benefit_alias !== '') {
       glaBenefitTitle.value = glaBenefit.benefit_alias
@@ -139,17 +138,13 @@ onMounted(() => {
     }
   })
 
-  console.log('quoteId', props.quoteId)
   GroupPricingService.getQuote(props.quoteId).then((res) => {
-    console.log('Quote:', res.data)
     quote.value = res.data
   })
   GroupPricingService.getResultSummary(props.quoteId).then((res) => {
-    console.log('Result Summary:', res.data)
     resultSummary.value = res.data
   })
   GroupPricingService.getInsurer().then((res) => {
-    console.log('Insurer:', res.data)
     insurer.value = res.data
   })
 })
@@ -179,7 +174,6 @@ const savePdf = () => {
 const loadPdf = async () => {
   if (!pdfSrc.value || !canvasRef.value) return
 
-  console.log('Loading PDF', pdfSrc.value)
   pdfGenerated.value = true
 
   pdfjsLib.GlobalWorkerOptions.workerSrc = `./js/pdf.worker.min.mjs`
@@ -268,11 +262,10 @@ const wrapText = (text, font, fontSize, maxWidth) => {
   return lines
 }
 
-const getImageType = (base64String: string): string | null => {
-  const match = base64String.match(/^data:image\/(png|jpeg|jpg|gif|bmp|webp);base64,/)
-  console.log('match', match)
-  return match ? match[1] : null
-}
+// const getImageType = (base64String: string): string | null => {
+//   const match = base64String.match(/^data:image\/(png|jpeg|jpg|gif|bmp|webp);base64,/)
+//   return match ? match[1] : null
+// }
 
 // const embedAndResizeImage = async (pdfDoc: PDFDocument, base64Image: string) => {
 //   const imageType = getImageType(base64Image);
@@ -309,8 +302,6 @@ const createQuotePdf = async () => {
 
   // const bottomMargin = 30
 
-  console.log('width', width)
-  console.log('height', height)
 
   const font = await pdfDoc.embedFont(StandardFonts.Helvetica)
   const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold)
@@ -319,7 +310,6 @@ const createQuotePdf = async () => {
   let logoDims: any = null
   // embed insurer logo
   if (insurer.value.logo) {
-    console.log('image type', getImageType(insurer.value.logo))
     if (insurer.value.logo_mime_type === 'image/jpeg') {
       logoImage = await pdfDoc.embedJpg(insurer.value.logo)
     }
@@ -330,7 +320,6 @@ const createQuotePdf = async () => {
     logoDims = logoImage.scale(0.2)
   }
 
-  console.log('font', font)
   const fontSize = 10
 
   // Start Y position
@@ -588,8 +577,6 @@ const createQuotePdf = async () => {
     })
     tableTopY -= 5
 
-    console.log('tableTopY', tableTopY)
-    console.log('y', y)
 
     // Draw the horizontal lines
     for (let i = 0; i <= table.tableRows.length; i++) {
@@ -601,8 +588,6 @@ const createQuotePdf = async () => {
       })
     }
 
-    console.log('tableTopY', tableTopY)
-    console.log('y', y)
 
     // Draw the table rows
     table.tableRows.forEach((row, i) => {
@@ -617,14 +602,10 @@ const createQuotePdf = async () => {
       })
     })
 
-    console.log('tableTopY', tableTopY)
-    console.log('y', y)
 
     // add the table height to y
     y -= table.tableRows.length * fontSize * 2 + table.tableHeaders.length * fontSize * 2
 
-    console.log('tableTopY', tableTopY)
-    console.log('y', y)
   }
   drawTable(table)
 
@@ -828,7 +809,6 @@ const createQuotePdf = async () => {
 
   y -= fontSize * 2
 
-  console.log('y', y)
 
   if (y < 70) {
     currentPage = page2

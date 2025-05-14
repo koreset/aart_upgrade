@@ -137,10 +137,8 @@ import GroupPricingService from '@/renderer/api/GroupPricingService'
 import formatValues from '@/renderer/utils/format_values'
 import { ref, onMounted } from 'vue'
 import { DataPayload } from '@/renderer/components/types'
-import { useGroupUserPermissionsStore } from '@/renderer/store/group_user'
 
 // data
-const permissionsStore: any = useGroupUserPermissionsStore()
 const yearsDialog: any = ref(false)
 const availableDataYears: any = ref([])
 const selectedYear: any = ref('')
@@ -170,10 +168,8 @@ const availableRiskRateCodes: any = ref([])
 const selectedRiskRateCode: any = ref('')
 
 onMounted(() => {
-  console.log('permissionsStore.permissions', permissionsStore.permissions)
   GroupPricingService.getTableMetaData().then((res) => {
     tables.value = res.data.associated_tables
-    console.log('tables', tables.value)
   })
 })
 
@@ -209,7 +205,6 @@ const getRiskRateCodes = async () => {
   const tableType = selectedTable.value.replace(/\s+/g, '').toLowerCase()
   const response = await GroupPricingService.getRiskRateCodes(tableType, selectedYear.value)
   availableRiskRateCodes.value = response.data
-  console.log('availableRiskRateCodes', availableRiskRateCodes.value)
 }
 
 const chooseYear = async (item: any) => {
@@ -218,7 +213,6 @@ const chooseYear = async (item: any) => {
   selectedRiskRateCode.value = null
 
   if (item !== null) {
-    console.log('item', item)
     selectedTableText.value = item.table_type
     selectedTable.value = item.table_type.replace(/\s+/g, '').toLowerCase()
     const response = await GroupPricingService.getTableYears(selectedTable.value)
@@ -253,7 +247,6 @@ const chooseYear = async (item: any) => {
 }
 
 const handleUpload = (payload: DataPayload) => {
-  console.log('payload', payload)
   uploadComplete.value = false
   const formdata: any = new FormData()
   formdata.append('file', payload.file)
@@ -318,7 +311,6 @@ const viewTable = (item: any) => {
       snackbar.value = true
     } else {
       tableData.value = res.data
-      console.log('table data value', tableData.value)
       if (tableData.value.length > 0) {
         createColumnDefs(tableData.value)
       }

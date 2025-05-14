@@ -293,7 +293,6 @@ const showTableData = (item) => {
 }
 
 const removeFromConfigs = async (item) => {
-  console.log(item)
   try {
     const res = await confirmAction.value.open(
       'Deleting AOS Configuraton',
@@ -316,7 +315,6 @@ const getManualSapList = () => {
 
 const getValuationJobList = () => {
   ProductService.getValuationJobs().then((response) => {
-    console.log(response.data)
     valuationRuns.value = response.data
   })
 }
@@ -337,7 +335,6 @@ const createColumnDefs = (data) => {
 }
 
 const uniqueRuns = () => {
-  console.log('uniqueRuns')
   if (!useManualSap.value) {
     filteredRuns.value = []
     aosVars.value.forEach((item) => {
@@ -349,7 +346,6 @@ const uniqueRuns = () => {
       }
     })
   }
-  console.log(filteredRuns.value)
 }
 
 const saveConfiguration = () => {

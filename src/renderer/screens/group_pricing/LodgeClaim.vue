@@ -204,17 +204,13 @@ const paymentTypes = [
 ]
 
 const getSchemeMembers = async (scheme: any) => {
-  console.log('Selected Scheme:', scheme)
   const response = await GroupPricingService.getMembersInForce(scheme.id)
   groupSchemeMembers.value = response.data
-  console.log('Scheme Members:', groupSchemeMembers.value)
 }
 
 onMounted(() => {
-  console.log('Mounted')
   GroupPricingService.getSchemesInforce().then((response) => {
     groupSchemes.value = response.data
-    console.log('Schemes:', groupSchemes.value)
   })
 })
 
@@ -243,10 +239,8 @@ const submitClaim = async () => {
     !amountClaimed.value ||
     !selectedClaimCause.value
   ) {
-    console.log('Please fill in all fields')
     return
   }
-  console.log('Submitting Claim')
 
   const transformDateString = (dateString: string) => {
     const date = new Date(dateString)
@@ -283,10 +277,8 @@ const submitClaim = async () => {
     repudiation_reason: ''
   }
 
-  console.log('Claim Data:', data)
+  await GroupPricingService.submitClaim(data)
 
-  const response = await GroupPricingService.submitClaim(data)
-  console.log('Claim Response:', response)
   resetFields()
 }
 
@@ -296,19 +288,11 @@ const getClaimAmount = async () => {
     selectedMemberType.value !== null &&
     selectedMember.value !== null
   ) {
-    console.log('Getting Claim Amount')
-    console.log('Selected Claim Type:', selectedClaimType.value)
-    console.log('Selected Member Type:', selectedMemberType.value)
-    console.log('Selected Member:', selectedMember.value)
-    console.log('Selected Scheme:', selectedScheme.value)
-
-    console.log('Calculating Claim Amount')
     GroupPricingService.getMemberRating(
       selectedScheme.value.name,
       selectedScheme.value.quote_id,
       selectedMember.value.id
     ).then((response) => {
-      console.log('Member Rating:', response.data)
       if (selectedClaimType.value === 'gla') {
         amountClaimed.value = response.data.gla_capped_sum_assured //* response.data.gla_sum_assured
       } else if (selectedClaimType.value === 'sgla') {
@@ -352,7 +336,6 @@ const resetFields = () => {
 }
 
 const closeForm = () => {
-  console.log('Discarding Claim')
   resetFields()
   router.push({ name: 'group-pricing-claims-list' })
 }

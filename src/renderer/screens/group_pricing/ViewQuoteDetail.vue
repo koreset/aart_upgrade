@@ -943,7 +943,6 @@ const relatedTables = computed(() => {
 })
 
 const openDialog = (item: any) => {
-  console.log('Open Dialog:', item)
   selectedTable.value = item
   yearLabel.value = 'Select a year'
   uploadTitle.value = 'Upload Data for ' + item.table_type + ' Table (csv)'
@@ -952,7 +951,6 @@ const openDialog = (item: any) => {
 
 const closeBasisDialog = (value) => {
   if (value) {
-    console.log('Close Basis Dialog:', quote.value.basis)
     runQuoteCalculations()
   }
   basisDialog.value = false
@@ -985,14 +983,12 @@ const acceptQuote = async () => {
 }
 
 const handleUpload = async (payload: any) => {
-  console.log('Handle Upload:', payload)
   const formdata = new FormData()
   formdata.append('file', payload.file)
   formdata.append('quote_id', quote.value.id)
   formdata.append('table_type', selectedTable.value.table_type)
   GroupPricingService.uploadQuoteTable(formdata)
     .then((res) => {
-      console.log('Response:', res.data)
       const count = res.data
       snackbarText.value = 'Upload Successful'
       snackbar.value = true
@@ -1016,7 +1012,6 @@ const handleUpload = async (payload: any) => {
 onMounted(async () => {
   GroupPricingService.getBenefitMaps().then((res) => {
     benefitMaps.value = res.data
-    console.log('Benefit Maps:', benefitMaps.value)
     const glaBenefit = benefitMaps.value.find((item) => item.benefit_code === 'GLA')
     if (glaBenefit.benefit_alias !== '') {
       glaBenefitTitle.value = glaBenefit.benefit_alias
@@ -1051,13 +1046,9 @@ onMounted(async () => {
 
 const loadQuote = async () => {
   try {
-    console.log('Group Life Assurance Pricing')
-    console.log(props.id)
     const res = await GroupPricingService.getQuote(props.id)
     quote.value = res.data
     broker.value = quote.value.quoteBroker
-    console.log('Broker:', quote.value)
-    console.log(res)
 
     const res1 = await GroupPricingService.getQuoteTable(quote.value.id, 'group_pricing_parameters')
 
@@ -1068,9 +1059,7 @@ const loadQuote = async () => {
         }
       })
     }
-    console.log('Parameter Bases:', parameterBases.value)
     GroupPricingService.getResultSummary(props.id).then((res) => {
-      console.log('Result Summary:', res.data)
       resultSummary.value = res.data
     })
   } catch (error) {
@@ -1151,9 +1140,7 @@ const viewTable = async (item: any) => {
     return
   }
   try {
-    console.log('View Table:', item)
     const res = await GroupPricingService.getQuoteTable(quote.value.id, item.value)
-    console.log(res.data)
     if (res.data.data !== null && res.data.data.length > 0) {
       const orderedData = res.data.data.map((item) =>
         _.fromPairs(res.data.json_tags.map((key) => [key, item[key]]))
@@ -1195,7 +1182,6 @@ const createColumnDefs = (data: any) => {
   columnDefs.value = []
   Object.keys(data[0]).forEach((element) => {
     const header: any = {}
-    console.log('Header:', element)
     if (element.includes('ci')) {
       header.headerName = replaceSubstring(element, 'ci', 'severe')
     } else if (element.includes('phi')) {

@@ -216,7 +216,6 @@ const imagePreview: any = ref(null)
 const imageToCrop = ref(null)
 
 const createBroker = () => {
-  console.log('Creating Portfolio')
   const brokerPayload = {
     name: brokerName.value
   }
@@ -227,34 +226,25 @@ const createBroker = () => {
 }
 
 // const deleteBroker = async (id: number) => {
-//   console.log('Deleting Portfolio', id)
 // }
 
-const submitBenefits = (benefits: any) => {
-  console.log('Benefits', benefits)
-  GroupPricingService.saveBenefitMap(benefits).then((res) => {
-    console.log('Benefits Created', res.data)
-  })
+const submitBenefits = async (benefits: any) => {
+  await GroupPricingService.saveBenefitMap(benefits)
 }
 
-const createInsurer = () => {
-  console.log('Creating Insurer')
+const createInsurer = async () => {
   const formData = new FormData()
   formData.append('insurer', JSON.stringify(insurerData.value))
   formData.append('logo', logoFile.value)
-  console.log('Form Data', formData)
   // insurerData.value.logo = imagePreview.value
 
-  GroupPricingService.createInsurer(formData).then((res) => {
-    console.log('Insurer Created', res.data)
-  })
+  await GroupPricingService.createInsurer(formData)
 }
 
 onMounted(() => {
   GroupPricingService.getBrokers().then((res) => {
     if (res.data.length > 0) {
       brokers.value = res.data
-      console.log('Brokers', res.data)
       rowData.value = res.data
       createColumnDefs(res.data)
     } else {
@@ -264,7 +254,6 @@ onMounted(() => {
   GroupPricingService.getInsurer().then((res) => {
     if (res.data) {
       insurerData.value = res.data
-      console.log('Insurer Data', res.data)
       imagePreview.value = `data:image/*;base64,${insurerData.value.logo}`
     }
   })
@@ -272,14 +261,12 @@ onMounted(() => {
 
 const onFileChange = (e: any) => {
   const file = e.target.files[0]
-  console.log('File Changed', file)
 
   if (file) {
     const reader = new FileReader()
     reader.onload = (e) => {
       if (e.target) {
         imagePreview.value = e.target.result
-        console.log('Image Preview', imagePreview.value)
       }
     }
     reader.readAsDataURL(file)

@@ -78,10 +78,8 @@ const quoteId = ref(route.params.id)
 const benefitMaps: any = ref([])
 
 const getBenefitAlias = (benefit: any) => {
-  console.log('Benefit', benefit)
-  console.log('Benefit Maps', benefitMaps.value)
+
   const benefitMap = benefitMaps.value.find((map: any) => map.benefit_code === benefit)
-  console.log('Benefit Map', benefitMap)
   return benefitMap.benefit_alias !== '' ? benefitMap.benefit_alias : benefit
   // return 'WORK'
 }
@@ -90,7 +88,6 @@ const steps: any = shallowRef([])
 onBeforeMount(async () => {
   const res = await GroupPricingService.getBenefitMaps()
   benefitMaps.value = res.data
-  console.log('Benefit Maps', benefitMaps.value)
   steps.value = [
     { title: 'General', value: 1, component: Generalnput },
     { title: `${getBenefitAlias('GLA')}`, value: 2, component: GlaInput },
@@ -107,7 +104,6 @@ const currentStep: any = ref(null)
 
 const moveNext = async () => {
   try {
-    console.log(currentStep.value)
     const isValid = currentStep.value
       ? await currentStep.value[position.value - 1].validateForm()
       : false
@@ -135,12 +131,8 @@ const goToQuotes = () => {
 // }
 
 const generateQuote = () => {
-  console.log('Generating quote')
-  console.log(groupStore.group_pricing_quote)
   const formData = new FormData()
-  console.log(groupStore.group_pricing_quote)
   groupStore.group_pricing_quote.occupation_class = 0
-  console.log(JSON.stringify(groupStore.group_pricing_quote))
 
   formData.append('group_pricing_quote', JSON.stringify(groupStore.group_pricing_quote))
 
@@ -164,7 +156,6 @@ onMounted(() => {
   })
   if (quoteId.value) {
     GroupPricingService.getQuote(quoteId.value).then((res) => {
-      console.log(res.data)
       groupStore.group_pricing_quote = res.data
       groupStore.group_pricing_quote.commencement_date = null
     })

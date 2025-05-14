@@ -241,7 +241,6 @@ const closeInfoBox = (value: boolean) => {
 }
 
 const handleUpload = (payload: any) => {
-  console.log(payload)
   // uploadComplete.value = false
   // const formdata = new FormData()
   // formdata.append('file', payload.file)
@@ -360,7 +359,6 @@ const createColumnDefs = (data: any) => {
 const loadData = (tableName: string) => {
   CsmEngine.getDataForTable(tableName).then((res) => {
     tableData.value = res.data.table_data
-    console.log('table data: ', tableData.value)
     if (tableData.value !== null) {
       rowData.value = []
       createColumnDefs(tableData.value)
@@ -390,7 +388,6 @@ const loadSapData = (runName: string) => {
   selectedTable.value = runName
   CsmEngine.getSapResultsForRun(runName).then((res) => {
     tableData.value = res.data
-    console.log('table data: ', tableData.value)
 
     if (tableData.value !== null) {
       rowData.value = []
@@ -420,7 +417,6 @@ const loadSapData = (runName: string) => {
 const showTableData = (tableType: string) => {
   selectedTable.value = tableType
   tableType = tableType.replace(/ /g, '')
-  console.log('table type: ', tableType)
   loadData(tableType.toLowerCase())
 }
 

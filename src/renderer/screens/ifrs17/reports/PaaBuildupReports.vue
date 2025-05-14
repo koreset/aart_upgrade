@@ -99,7 +99,6 @@ const selectedPortfolio: any = ref(null)
 const getRunPortfolios = () => {
   portfolioList.value = []
   loadingData.value = true
-  console.log(selectedRun.value)
   CsmEngine.getRunPortfolios(selectedRun.value).then((res) => {
     portfolioList.value = res.data.list
     stepResults.value = res.data.portfolios
@@ -113,13 +112,10 @@ const getRunPortfolios = () => {
 const getPortfolioProducts = () => {
   loadingData.value = true
   if (selectedPortfolio.value !== 'All Portfolios') {
-    console.log('portfolio: ', selectedPortfolio.value)
-    console.log('run: ', selectedRun.value)
     selectedProduct.value = null
     selectedGroup.value = null
     groups.value = []
     CsmEngine.getRunPortfolioProducts(selectedRun.value, selectedPortfolio.value).then((res) => {
-      console.log('res: ', res)
       productList.value = res.data.list
       stepResults.value = res.data.portfolios
       createColumnDefs(stepResults.value)

@@ -98,10 +98,8 @@ const getReportsByGroup = () => {
 
 const getReportGroups = () => {
   if (selectedProduct.value !== 'All Products') {
-    console.log(selectedRun.value, selectedProduct.value)
     CsmEngine.getBalanceSheetSummaryByProduct(selectedRun.value, selectedProduct.value).then(
       (res) => {
-        console.log(res.data)
         groups.value = res.data.groups
         groups.value.unshift('All Groups')
         selectedGroup.value = 'All Groups'

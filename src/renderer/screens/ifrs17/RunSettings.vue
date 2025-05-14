@@ -473,7 +473,6 @@ onMounted(() => {
     aosConfigs.value = res.data
   })
   CsmEngine.getPAARuns().then((res) => {
-    console.log('respaa', res.data)
     paaRuns.value = res.data
   })
 })
@@ -491,7 +490,6 @@ const getTitle = () => {
 
 const getConfigTitle = () => {
   return (item: any) => {
-    console.log('item', item)
     return `${item.configuration_name}`
   }
 }
@@ -502,7 +500,6 @@ const runNameDuplicate = async (value) => {
     //   return true
     // }
     const result = await CsmEngine.checkRunName(value)
-    console.log('result', result.data.result)
     return result.data.result
   }
 }
@@ -537,7 +534,6 @@ const getAvailableFinanceAndRaYears = () => {
   availableFinanceYears.value = []
   availableRiskAdjustmentYears.value = []
   let paaRunId = 0
-  console.log('selectedPAARun', selectedPAARun.value.value)
   if (selectedPAARun.value.value) {
     paaRunId = (selectedPAARun.value.value as { id: number }).id
   }
@@ -567,7 +563,6 @@ const showPAAFinanceBlock = () => {
 
 const showFinanceFile = () => {
   if (selectedMeasure.value.value !== null) {
-    console.log('clearing fields')
 
     if (selectedMeasure.value.value === 'GMM' || selectedMeasure.value.value === 'VFA') {
       showGMMBlocks.value = true
@@ -584,7 +579,6 @@ const showFinanceFile = () => {
       }
     }
   } else {
-    console.log('clearing fields 2')
     handleReset()
 
     showGMMBlocks.value = false
@@ -657,11 +651,9 @@ const addToJobs = handleSubmit(async (values) => {
   }
 
   // Check if run_name, measurement_type already exists
-  console.log('body', body)
   const exists = await CsmEngine.checkExistingRun(body)
   if (exists.data.result) {
     existingBody.value = body
-    console.log('existingBody', existingBody)
     dialog.value = true
   } else {
     csmRuns.value.push(body)

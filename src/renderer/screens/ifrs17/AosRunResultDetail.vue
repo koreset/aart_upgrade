@@ -114,7 +114,6 @@ const columnDefs: any = ref([])
 onMounted(() => {
   csmRunId.value = $route.params.id
   csmRunDate.value = $route.params.run_date
-  console.log(csmRunId.value, csmRunDate.value)
   CsmEngine.getAosSingleRunProductList(csmRunId.value, csmRunDate.value).then((res) => {
     stepResults.value = res.data.steps
     productList.value = res.data.products
