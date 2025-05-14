@@ -82,7 +82,6 @@ export default {
     return Api.get('/group-pricing/get-quotes')
   },
   changeQuoteStatus(quote) {
-    console.log('quote', quote)
     return Api.post('/group-pricing/quotes/' + quote.id + '/update-status', quote)
   },
   getQuote(quoteId) {
@@ -118,7 +117,6 @@ export default {
     return Api.get('/group-pricing/dashboard/year/' + year)
   },
   getExposureData(year, benefit) {
-    console.log('year and benefit', year, benefit)
     return Api.get('/group-pricing/dashboard/exposures/year/' + year + '/benefit/' + benefit)
   },
   checkDuplicateSchemeName(scheme) {

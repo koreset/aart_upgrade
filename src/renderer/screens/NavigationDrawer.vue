@@ -345,7 +345,7 @@ import TaskService from '@/renderer/api/TaskService'
 import { watchEffect, defineProps, ref, onMounted } from 'vue'
 import { useGroupUserPermissionsStore } from '@/renderer/store/group_user'
 import GroupPricingService from '@/renderer/api/GroupPricingService'
-import { useAppStore } from '@/renderer/store/app'
+// import { useAppStore } from '@/renderer/store/app'
 // import ProductService from '@/renderer/api/ProductService' // Assuming the 'ProductService' module is located in the 'api' folder at the root of your project
 const navProps = defineProps({
   drawer: {
@@ -354,7 +354,7 @@ const navProps = defineProps({
   }
 })
 
-const appStore = useAppStore()
+// const appStore = useAppStore()
 const permissionsStore = useGroupUserPermissionsStore()
 const snackbar = ref(false)
 const snackbarMessage = ref('')
@@ -362,8 +362,6 @@ const timeout = ref(3000)
 const groupPermissions = ref({})
 
 // const showAccessMessage = (entitlement: string) => {
-//   console.log('Entitlement', entitlement)
-//   console.log('You are not entitled to access this feature.')
 //   snackbarMessage.value = `You are not entitled to access this feature: ${entitlement}`
 //   snackbar.value = true
 // }
@@ -385,7 +383,6 @@ const getNavigationProps = (feature: string, routeName: string) => {
 
 // const checkEntitlement = (entitlement: string) => {
 //   const entitlements: any = appStore.getEntitlements()
-//   console.log('Entitlements', entitlements)
 //   return false
 
 //   // if (entitlements && entitlements.length > 0) {
@@ -406,18 +403,14 @@ const apiVersion: any = ref('')
 onMounted(async () => {
   appVersion.value = await window.mainApi?.sendSync('msgGetAppVersion')
   const result = await window.mainApi?.sendSync('msgGetUserLicense')
-  console.log('App.vue License:', result)
-  console.log('Entitlements:', appStore.entitlements)
   GroupPricingService.getRoleForUser(result.data.id)
     .then((response) => {
       if (response.status !== 200) {
         throw new Error('Network response was not ok')
       }
-      console.log('User role response:', response.data)
       groupPermissions.value = response.data
       permissionsStore.setPermissions(response.data)
       // appStore.setUserRole(response.data)
-      console.log('Permissions:', permissionsStore.permissions)
     })
     .catch((error) => {
       console.error('Error fetching user role:', error)
@@ -425,7 +418,6 @@ onMounted(async () => {
 
   TaskService.getApiVersion().then((response) => {
     apiVersion.value = response.data
-    console.log('Mounted NavigationDrawer', permissionsStore.permissions)
   })
 })
 

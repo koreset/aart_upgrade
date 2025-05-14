@@ -73,7 +73,6 @@ onMounted(() => {
 })
 
 function submitBenefits() {
-  console.log('Submitting benefits:', benefits.value)
   emit('submit', benefits.value)
 }
 </script>

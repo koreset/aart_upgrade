@@ -165,7 +165,6 @@ import { storeToRefs } from 'pinia'
 const myFormStore = useMyFormStore()
 const { formData: myStoreFormData } = storeToRefs(myFormStore)
 
-console.log('Initial Form Data from Store:', myStoreFormData.value)
 
 // VeeValidate Form Handling
 const {
@@ -247,11 +246,9 @@ onMounted(() => {
 })
 
 const onSubmit = handleSubmit(async (values) => {
-  console.log('Form Submitted:', values)
   submittedValues.value = values
   myFormStore.updateFormData(JSON.parse(JSON.stringify(values)) as MyFormData)
   alert('Form submitted successfully! Check the console.')
-  console.log('Form Data in Store:', myFormStore.formData)
   // Optionally, reset the form to a pristine state after submission
   // resetForm({
   //   values: JSON.parse(JSON.stringify(myFormStore.formData)), // Or to a new clean state

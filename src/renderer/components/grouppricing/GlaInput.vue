@@ -102,7 +102,6 @@ const { handleSubmit, errors, defineField } = useForm({
 })
 
 const validateForm = handleSubmit((values) => {
-  console.log('Form values:', values)
   return true
 })
 

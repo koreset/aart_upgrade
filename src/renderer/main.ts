@@ -27,9 +27,6 @@ declare global {
   }
 }
 
-window.node?.setImmediate(() => {
-  console.log('setImmediate is working!')
-})
 
 // save the license server url to the store. temp fix for now. This should be done in setup.
 window.mainApi?.sendSync('msgSetLicenseServerUrl', import.meta.env.VITE_APP_LICENSE_SERVER)
@@ -39,10 +36,7 @@ const activated = window.mainApi?.sendSync('msgGetAppStatus')
 let activeApp: any
 
 if (activated) {
-  console.log('Checking for internet access and the validate the license')
   const validLicense = window.mainApi?.sendSync('msgCheckLicenseValidity')
-
-  console.log('validLicense: ', validLicense)
 
   switch (validLicense) {
     case 'NO_INTERNET':

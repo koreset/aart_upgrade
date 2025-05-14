@@ -264,7 +264,6 @@ const groupStore = useGroupPricingStore()
 const industries = ['Administration', 'NGO', 'Banks']
 const brokerList = ref([])
 
-console.log('Group store:', groupStore)
 
 // validation schema
 const validationSchema = yup.object({
@@ -282,7 +281,6 @@ const validationSchema = yup.object({
     .test('unique', 'Scheme name must be unique', async (value) => {
       // const existingSchemes = groupStore.groupSchemes.map((scheme) => scheme.name)
       // return !existingSchemes.includes(value)
-      console.log(value)
       return true
     }),
   scheme_contact: yup.string().when('quote_type', {
@@ -354,8 +352,6 @@ const { handleSubmit, defineField, errors } = useForm({
 })
 
 const validateForm = handleSubmit(async (values) => {
-  console.log('Form submitted with values:', values)
-  console.log('Validating form', errors)
   groupStore.group_pricing_quote.scheme_name = values.scheme_name
   return true
   // Perform any additional actions with the form values
@@ -377,8 +373,6 @@ const [exchangeRate, exchangeRateAttrs] = defineField('exchange_rate')
 const [enforceFCL, enforceFCLAttrs] = defineField('enforce_fcl')
 
 const chooseQuoteFlow = (value: string | null) => {
-  console.log('Choosing quote flow')
-  console.log(value)
   if (value !== null) {
     groupStore.group_pricing_quote.quote_type = value
   }

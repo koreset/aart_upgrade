@@ -201,7 +201,6 @@ const handleUpload = (data: {
   formdata.append('year', data.year?.toString() as string)
   formdata.append('table_id', selectedTableId.value)
   formdata.append('product_code', props.product.product.product_code)
-  console.log(selectedTableId)
 
   ProductService.uploadProductTable({
     formdata,
@@ -209,7 +208,6 @@ const handleUpload = (data: {
   }).then((response) => {
     if (response.status === 200) {
       // update populated status
-      console.log('response', response)
       const index = associatedTables.value.findIndex((table) => table.id === selectedTableId.value)
       associatedTables.value[index].populated = true
 
@@ -228,7 +226,6 @@ associatedTables.value = props.product.product.product_tables
 watch(
   () => props.product.product.product_tables,
   (newValue) => {
-    // console.log('Updating associated tables', newValue)
     // associatedTables.value = []
     // associatedTables.value = newValue
     //   .map((table) => ({

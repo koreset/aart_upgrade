@@ -67,7 +67,6 @@ const organization = computed(() => appStore.getLicenseData.data.attributes.meta
 const parameterBases = ref([])
 
 const validateForm = () => {
-  console.log('Validating form')
   return true
 }
 
@@ -76,7 +75,6 @@ onMounted(() => {
     ProductService.getOrgUsers({ name: organization.value }).then((res) => {
       const uniqueData = Array.from(new Map(res.data.map((entry) => [entry.user, entry])).values())
       orgUsers.value = uniqueData
-      console.log('Org Users:', orgUsers.value)
     })
     GroupPricingService.getParameterBases().then((res) => {
       parameterBases.value = res.data

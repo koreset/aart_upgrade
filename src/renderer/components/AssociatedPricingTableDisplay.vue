@@ -178,7 +178,6 @@ const deleteTableData = async (productId: number, item: any) => {
 
   if (!res) return
   ProductService.deletePricingProductTable(productId, item.id).then((res) => {
-    console.log(res)
     updateUnpopulatedTables(item.id)
   })
 }

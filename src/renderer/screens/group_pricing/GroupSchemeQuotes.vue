@@ -223,7 +223,6 @@ const headers = ref([
 ])
 
 const getStatusColor = (status) => {
-  console.log('STATUS:', status)
   switch (status) {
     case 'Pending Review':
       return '#FFE699'
@@ -249,7 +248,6 @@ const goToQuoteCreation = () => {
 }
 
 const editItem = (item) => {
-  console.log('Editing:', item)
   router.push({ name: 'group-pricing-quote-generation-edit', params: { id: item.id } })
 }
 
@@ -260,30 +258,24 @@ const deleteItem = async (item) => {
       'Are you sure you want to delete this quote?'
     )
     if (res) {
-      console.log('Deleting:', item)
-      // console.log('Deleting:', item)
       GroupPricingService.deleteQuote(item.id)
       quotes.value = quotes.value.filter((quote: any) => quote.id !== item.id)
     }
-    console.log('Deleting:', item)
   } catch (error) {
     console.log('Error:', error)
   }
 }
 
 const viewItem = (item) => {
-  console.log('Viewing:', item)
   groupStore.selectedQuote = item
   router.push({ name: 'group-pricing-scheme-details', params: { id: item.id } })
 }
 const submitReview = (item) => {
   selectedQuote.value = item
-  console.log('Submitting for Review:', item)
   dialog.value = true
 }
 
 const submitForReview = () => {
-  console.log('Submitting for Review:', selectedQuote.value)
   selectedQuote.value.reviewer = selectedReviewer.value.name
   selectedQuote.value.status = 'Pending Review'
   GroupPricingService.changeQuoteStatus(selectedQuote.value)
@@ -291,7 +283,6 @@ const submitForReview = () => {
 }
 
 const submitQuoteGeneration = (item) => {
-  console.log('Submitting for Quote Generation:', item)
   router.push({ name: 'group-pricing-quotes-generation', params: { quoteId: item.id } })
 }
 
@@ -320,10 +311,8 @@ onMounted(() => {
     .then((res) => {
       if (res.data && res.data.length > 0) {
         quotes.value = res.data
-        console.log('Quotes:', quotes.value)
       } else {
         quotes.value = []
-        console.log('No quotes found or error in response:', res)
       }
     })
     .catch((error) => {
@@ -345,19 +334,16 @@ onMounted(() => {
       if (organization.value !== orgName) {
         // Only update and fetch if it changed or was null
         organization.value = orgName
-        console.log('Organization successfully set:', organization.value)
 
         // Now that organization.value is reliably set, fetch dependent data
         ProductService.getOrgUsers({ name: organization.value })
           .then((res) => {
             // Ensure res.data is an array before processing
-            console.log('Org Users Before:', res.data)
             if (res && Array.isArray(res.data)) {
               const uniqueData = Array.from(
                 new Map(res.data.map((entry) => [entry.name, entry])).values()
               )
               reviewers.value = uniqueData
-              console.log('Org Users:', reviewers.value)
             } else {
               console.warn('Org Users response is not as expected or data is missing:', res)
               reviewers.value = []
@@ -370,7 +356,6 @@ onMounted(() => {
       }
     } else {
       // This will log until the data is available
-      console.log('Waiting for license data or license data structure is incomplete...')
       // Avoid resetting organization.value to null if it was already set and watchEffect
       // is re-running for another reason, unless that's desired behavior.
     }

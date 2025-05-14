@@ -161,7 +161,6 @@ export default class IPCs {
 
       const isOnline = await hasInternetConnection()
       if (!isOnline) {
-        console.log('No internet connection')
         event.returnValue = 'NO_INTERNET'
         return
       }

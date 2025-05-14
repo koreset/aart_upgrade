@@ -2,37 +2,37 @@
 import { DefaultLayout } from '@/renderer/components/layout'
 import { useAppStore } from '@/renderer/store/app'
 import { onBeforeMount, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+// import { useRouter } from 'vue-router'
 import ProductService from '@/renderer/api/ProductService'
 import Toast from './components/Toast.vue'
 
-const router = useRouter()
+// const router = useRouter()
 const appStore = useAppStore()
 
-const licenseUrl = import.meta.env.VITE_APP_LICENSE_SERVER
+// const licenseUrl = import.meta.env.VITE_APP_LICENSE_SERVER
 
-const getEntitlements = async (licenseId) => {
-  if (!licenseId) {
-    return
-  }
-  const validation = await fetch(licenseUrl + '/licenses/' + licenseId + '/get-entitlements', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json'
-    }
-  })
+// const getEntitlements = async (licenseId) => {
+//   if (!licenseId) {
+//     return
+//   }
+//   const validation = await fetch(licenseUrl + '/licenses/' + licenseId + '/get-entitlements', {
+//     method: 'GET',
+//     headers: {
+//       'Content-Type': 'application/json',
+//       Accept: 'application/json'
+//     }
+//   })
 
-  const rs = await validation.json()
-  const entitlementList: any = []
-  if (rs && rs.data && rs.data.length > 0) {
-    rs.data.forEach((entitlement: any) => {
-      entitlementList.push(entitlement.attributes.name)
-    })
-  }
+//   const rs = await validation.json()
+//   const entitlementList: any = []
+//   if (rs && rs.data && rs.data.length > 0) {
+//     rs.data.forEach((entitlement: any) => {
+//       entitlementList.push(entitlement.attributes.name)
+//     })
+//   }
 
-  appStore.setEntitlements(entitlementList)
-}
+//   appStore.setEntitlements(entitlementList)
+// }
 
 onBeforeMount(async () => {
   try {
@@ -51,22 +51,17 @@ onMounted(async () => {
     appStore.setLicense(result)
   }
 
-  console.log('App.vue License:', result)
-
-  console.log('Router:', router.currentRoute)
 
   // check if there are any entitlements
-  const entitlements: any = appStore.entitlements
+  // const entitlements: any = appStore.entitlements
 
-  if (entitlements.length === 0) {
-    console.log('No entitlements found')
-    // await router.push('/no-entitlements')
-    await getEntitlements(result.data.id)
-    const entitlements: any = appStore.entitlements
-    console.log('Entitlements after:', entitlements)
-  } else {
-    console.log('Entitlements found:', entitlements)
-  }
+  // if (entitlements.length === 0) {
+  //   // await router.push('/no-entitlements')
+  //   await getEntitlements(result.data.id)
+  //   const entitlements: any = appStore.entitlements
+  // } else {
+  //   console.log('Entitlements found:', entitlements)
+  // }
   // if (entitlements && entitlements.length > 0) {
   //   if (entitlements.includes('dashboard') || entitlements.includes('all-features')) {
   //     await router.push('/')

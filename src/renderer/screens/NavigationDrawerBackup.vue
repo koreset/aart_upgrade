@@ -572,8 +572,6 @@ const snackbarMessage = ref('')
 const timeout = ref(3000)
 
 const showAccessMessage = (entitlement: string) => {
-  console.log('Entitlement', entitlement)
-  console.log('You are not entitled to access this feature.')
   snackbarMessage.value = `You are not entitled to access this feature: ${entitlement}`
   snackbar.value = true
 }
@@ -594,8 +592,7 @@ const getNavigationProps = (feature: string, routeName: string) => {
 }
 
 const checkEntitlement = (entitlement: string) => {
-  const entitlements: any = appStore.getEntitlements()
-  console.log('Entitlements', entitlements)
+  // const entitlements: any = appStore.getEntitlements()
   return false
 
   // if (entitlements && entitlements.length > 0) {

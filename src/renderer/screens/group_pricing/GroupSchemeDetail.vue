@@ -464,11 +464,11 @@ const addMember = () => {
   member.value.date_of_birth = member.value.date_of_birth
     ? formatDateString(member.value.date_of_birth, true, true, true)
     : null
-  console.log('Adding member:', member)
+
 
   GroupPricingService.addMember(member.value)
     .then((res) => {
-      console.log('Response:', res.data)
+
       snackbarText.value = 'Member added successfully'
       snackbar.value = true
       addMemberDialog.value = false
@@ -495,10 +495,8 @@ const addMember = () => {
 }
 
 const removeMember = () => {
-  console.log('Removing member:', member)
   GroupPricingService.removeMember(member.value)
     .then((res) => {
-      console.log('Response:', res.data)
       snackbarText.value = 'Member removed successfully'
       snackbar.value = true
       removeMemberDialog.value = false
@@ -546,10 +544,8 @@ const deleteTable = (item) => {
 }
 
 onMounted(() => {
-  console.log(route.params.id)
   GroupPricingService.getScheme(route.params.id).then((response) => {
     scheme.value = response.data
-    console.log('Scheme found: ', scheme.value)
     schemes.value.push(scheme.value)
   })
 })
@@ -560,7 +556,6 @@ const clearData = () => {
 }
 
 const handleUpload = async (payload: any) => {
-  console.log('Handle Upload:', payload)
   // const formdata = new FormData()
   // formdata.append('file', payload.file)
   // formdata.append('quote_id', quote.value.id)
@@ -634,7 +629,6 @@ const fetchItems = async (query: string) => {
     // Replace this with your actual API call
     const response = await fetch(`https://dummyjson.com/users/search?q=${query}`)
     const result = await response.json()
-    console.log('Result:', result)
     items.value = result.users || []
   } catch (err) {
     console.error('Error fetching items:', err)
@@ -645,7 +639,6 @@ const fetchItems = async (query: string) => {
 }
 
 const displayUser = (val: any) => {
-  console.log('Selected:', val)
   // if (val) {
   //   member.value.member_name = val.firstName + ' ' + val.lastName
   //   member.value.date_of_birth = val.dateOfBirth

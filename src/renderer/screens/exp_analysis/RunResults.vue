@@ -175,7 +175,6 @@ const getRunResults = async (isBackgroundRefresh = false) => {
   if (!isBackgroundRefresh) {
     loading.value = true
   }
-  console.log('Fetching experience analysis runs...')
   try {
     const response = await ExpService.getRunResults()
     runResults.value = response.data
@@ -222,7 +221,6 @@ onMounted(async () => {
     clearInterval(refreshIntervalId.value)
   }
   refreshIntervalId.value = setInterval(async () => {
-    console.log('Periodically refreshing experience analysis runs...')
     await getRunResults(true) // Pass true for background refresh
   }, REFRESH_INTERVAL_MS)
 })
@@ -232,7 +230,6 @@ onUnmounted(() => {
   if (refreshIntervalId.value) {
     clearInterval(refreshIntervalId.value)
     refreshIntervalId.value = null
-    console.log('Cleared experience analysis runs refresh interval.')
   }
 })
 

@@ -152,8 +152,6 @@
   </v-form>
 </template>
 <script setup lang="ts">
-import { required } from '@vuelidate/validators'
-import { useVuelidate } from '@vuelidate/core'
 import ProductService from '../../api/ProductService'
 import { ref, onMounted, computed, toRaw, inject, Ref, watch } from 'vue'
 import { useProductStore } from '@/renderer/store/product_config'
@@ -199,22 +197,11 @@ onMounted(() => {
   })
 })
 
-// validations
-const rules = {
-  selectedTable: { required },
-  fd1: {
-    factor: { required },
-    dimension: { required }
-  }
-}
 
-const v$ = useVuelidate(rules, { selectedTable, fd1 })
 
 // methods
 const addToRatingFactors = async () => {
-  const result = await v$.value.$validate()
 
-  console.log('Result:', result)
 
   selectedTableErrors.value = []
   fd1FactorErrors.value = []

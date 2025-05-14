@@ -1181,7 +1181,6 @@ onBeforeMount(async () => {
   benefitDefinitions.value = benefitResponse.data
   const res = await GroupPricingService.getBenefitMaps()
   benefitMaps.value = res.data
-  console.log('Benefit Maps', benefitMaps.value)
   ptdLabel.value = getBenefitAlias('PTD')
   ciLabel.value = getBenefitAlias('CI')
   sglaLabel.value = getBenefitAlias('SGLA')
@@ -1200,21 +1199,16 @@ onBeforeMount(async () => {
 // ]
 
 const getBenefitAlias = (benefit: any) => {
-  console.log('Benefit', benefit)
-  console.log('Benefit Maps', benefitMaps.value)
   const benefitMap = benefitMaps.value.find((map: any) => map.benefit_code === benefit)
-  console.log('Benefit Map', benefitMap)
   return benefitMap.benefit_alias !== '' ? benefitMap.benefit_alias : benefit
   // return 'WORK'
 }
 
 const validateForm = handleSubmit((values) => {
-  console.log('Form values:', values)
   return true
 })
 
 const anyBoxChecked = computed(() => {
-  console.log('Any Box Checked')
   return (
     ptdBenefit.value ||
     ciBenefit.value ||

@@ -418,7 +418,6 @@ const rerunManualDevelopmentFactors = () => {
   rerunDialog.value = true
 }
 const getResults = () => {
-  console.log('resultType', resultType.value)
   tableData.value = []
   if (
     resultType.value === 'exp_modelpoints' ||
@@ -491,7 +490,6 @@ const getResults = () => {
       femaleRowData.value = []
       combinedRowData.value = []
       ExpService.getExpActualsVsExpectedByRunId($route.params.id).then((res) => {
-        console.log('AvE results', res.data)
         analysisColumnDefs.value = res.data.summary_data.columnDefs
         maleRowData.value = res.data.summary_data.maleRowData
         femaleRowData.value = res.data.summary_data.femaleRowData
@@ -516,7 +514,6 @@ const getResults = () => {
   }
 }
 const createColumnGroupDefs = (data) => {
-  console.log(data)
   const cDefs = [
     {
       headerName: 'Male',

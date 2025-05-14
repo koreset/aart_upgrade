@@ -281,14 +281,11 @@ const uploadToServer = async () => {
     )
     formData.append('editMode', props.editMode.value)
     const user = await window.mainApi?.sendSync('msgGetAuthenticatedUser')
-    console.log('User:', user)
     formData.append('user', user.email)
     formData.append('reviewer', selectedReviewer.value)
     uploadInProgress.value = true
-    console.log('formData:', formData)
     ProductService.postConfiguredProduct(formData)
       .then((res) => {
-        console.log('Response:', res.data)
         uploadDisabled.value = false
         // $emit('productComplete', res.data)
         uploadInProgress.value = false

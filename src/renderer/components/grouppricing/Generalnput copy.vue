@@ -221,13 +221,10 @@ const industries = ['Administration', 'NGO', 'Banks']
 
 // methods
 const validateForm = async () => {
-  console.log('Validating form')
   return true
 }
 
 const chooseQuoteFlow = (value: string | null) => {
-  console.log('Choosing quote flow')
-  console.log(value)
   if (value !== null) {
     groupStore.group_pricing_quote.quote_type = value
   }

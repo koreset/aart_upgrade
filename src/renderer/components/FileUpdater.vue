@@ -243,7 +243,6 @@ const uploadFile = () => {
 watch(
   () => props.uploadComplete,
   (value) => {
-    console.log('value', value)
     if (value) {
       closeDialog()
       uploadInProgress.value = false

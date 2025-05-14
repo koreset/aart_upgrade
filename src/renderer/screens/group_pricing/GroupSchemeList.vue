@@ -95,7 +95,6 @@ const headers = computed(() => {
   return baseHeaders
 })
 
-console.log('headers:', headers)
 
 const parseDateString = (dateString) => {
   const date = new Date(dateString)
@@ -104,7 +103,6 @@ const parseDateString = (dateString) => {
 }
 
 // const createScheme = () => {
-//   console.log('Creating Portfolio')
 //   const schemPayload = {
 //     name: schemeName.value
 //   }
@@ -115,11 +113,9 @@ const parseDateString = (dateString) => {
 // }
 
 // const deleteBroker = async (id: number) => {
-//   console.log('Deleting Portfolio', id)
 // }
 
 const editScheme = (item) => {
-  console.log('editing:', item)
   router.push({ name: 'group-pricing-schemes-detail', params: { id: item.id } })
 }
 
@@ -128,7 +124,6 @@ onMounted(() => {
     if (res.data.length > 0) {
       rowData.value = res.data
       schemes.value = res.data
-      console.log('schemes:', res.data)
       createColumnDefs(res.data)
     } else {
       schemes.value = []

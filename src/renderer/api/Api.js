@@ -2,7 +2,6 @@ import axios from 'axios'
 
 const baseUrl = window.mainApi.sendSync('msgGetBaseUrl')
 const accessToken = window.mainApi.sendSync('msgGetAccessToken')
-console.log('======', window.mainApi.sendSync('msgGetEnvironment') === 'development')
 
 const instance = axios.create({
   baseURL: baseUrl,

@@ -167,7 +167,6 @@ const exportDataCsv = () => {
 }
 
 const exportDataExcel = async () => {
-  console.log('exportDataExcel', props.runId, props.productCode)
   exportLoader.value = true
   const response = await ValuationService.getExcelResults(props.runId, null)
   exportLoader.value = false

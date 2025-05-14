@@ -31,20 +31,16 @@ import GroupPricingService from '@/renderer/api/GroupPricingService'
 import DataGrid from '@/renderer/components/tables/DataGrid.vue'
 import formatValues from '@/renderer/utils/format_values'
 const router = useRouter()
-const claims = ref([])
 const rowData: any = ref([])
 const columnDefs: any = ref([])
 
 const lodgeClaim = () => {
-  console.log('Lodge Claim')
   router.push({ name: 'group-pricing-lodge-claim' })
 }
 
 onMounted(() => {
-  console.log('Claims List')
   GroupPricingService.getClaims().then((response) => {
     rowData.value = response.data
-    console.log('Claims', claims.value)
     createColumnDefs(rowData.value)
   })
 })

@@ -39,9 +39,8 @@ window.mainApi?.on('update_downloaded', async () => {
   }
 })
 
-window.mainApi?.on('download_progress', (progress: any) => {
+window.mainApi?.on('download_progress', (event: any, progress: any) => {
   log.info('Download Progress:', progress)
-  console.log('Download Progress:', progress)
 })
 
 window.mainApi?.on('update_error', async (event: any, error: any) => {
