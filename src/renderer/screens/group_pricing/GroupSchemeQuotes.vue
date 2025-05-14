@@ -225,13 +225,13 @@ const getStatusColor = (status) => {
   console.log('STATUS:', status)
   switch (status) {
     case 'Pending Review':
-      return 'orange'
+      return 'yellow'
     case 'InForce':
       return 'green'
     case 'Approved':
-      return 'darkgreen'
+      return 'red'
     case 'In Progress':
-      return 'limegreen'
+      return 'blue'
     default:
       return 'black'
   }

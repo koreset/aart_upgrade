@@ -28,6 +28,10 @@
                   @update:modelValue="getResults"
                 ></v-select>
               </v-col>
+              <v-col v-if="resultType == 'exp_actuals_expected'" cols="3">
+                <v-btn class="mr-4" rounded size="small" @click="showActuals">Button 1</v-btn>
+                <v-btn rounded size="small" @click="showSummaries">Button 2</v-btn>
+              </v-col>
               <v-col v-if="otherResultTypes" cols="3">
                 <v-select
                   v-model="selectedProduct"
@@ -225,6 +229,8 @@ import DataGrid from '@/renderer/components/tables/DataGrid.vue'
 import BaseCard from '@/renderer/components/BaseCard.vue'
 // data
 // const showTable = ref(true)
+const displayActuals = ref(false)
+const displaySummaries = ref(false)
 const backButton = '< Back to Run Results'
 const $route = useRoute()
 const tab = ref(null)
@@ -321,6 +327,15 @@ const checkCandidateGraphTable = (tableName) => {
   }
 }
 
+const showActuals = () => {
+  displayActuals.value = true
+  displaySummaries.value = false
+}
+const showSummaries = () => {
+  displayActuals.value = false
+  displaySummaries.value = true
+}
+
 const getProductsForPortfolio = () => {
   productList.value = []
   selectedProduct.value = null
@@ -403,6 +418,7 @@ const rerunManualDevelopmentFactors = () => {
   rerunDialog.value = true
 }
 const getResults = () => {
+  console.log('resultType', resultType.value)
   tableData.value = []
   if (
     resultType.value === 'exp_modelpoints' ||
@@ -489,7 +505,7 @@ const getResults = () => {
             tableData.value.push(tableDef)
           })
         }
-
+        showActuals()
         loadingResults.value = false
       })
     }

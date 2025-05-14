@@ -5,11 +5,6 @@ import { onBeforeMount, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import ProductService from '@/renderer/api/ProductService'
 import Toast from './components/Toast.vue'
-import { devtools } from '@vue/devtools'
-
-if (import.meta.env.MODE === 'development') {
-  devtools.connect('localhost', 8098)
-}
 
 const router = useRouter()
 const appStore = useAppStore()
