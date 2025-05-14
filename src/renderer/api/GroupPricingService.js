@@ -81,8 +81,9 @@ export default {
   getAllQuotes() {
     return Api.get('/group-pricing/get-quotes')
   },
-  changeQuoteStatus(quoteId, status) {
-    return Api.put('/group-pricing/quotes/' + quoteId + '/update-status/' + status)
+  changeQuoteStatus(quote) {
+    console.log('quote', quote)
+    return Api.post('/group-pricing/quotes/' + quote.id + '/update-status', quote)
   },
   getQuote(quoteId) {
     return Api.get('/group-pricing/get-quote/' + quoteId)
