@@ -21,6 +21,8 @@
                     </td>
                     <td style="text-align: center">
                       <file-updater
+                        :show-year="true"
+                        :show-version="true"
                         :uploadComplete="uploadComplete"
                         :tableType="item.table_type"
                         @uploadFile="handleUpload"
@@ -241,21 +243,25 @@ const closeInfoBox = (value: boolean) => {
 }
 
 const handleUpload = (payload: any) => {
-  // uploadComplete.value = false
-  // const formdata = new FormData()
-  // formdata.append('file', payload.file)
-  // formdata.append('table_type', payload.selectedType)
-  // CsmEngine.uploadIfrs17EngineTables(formdata)
-  //   .then((res) => {
-  //     if (res.status === 200) {
-  //       file.value = null
-  //       // selectedType.value = null
-  //       text.value = 'The data has been successfully updated'
-  //       timeout.value = 3000
-  //       snackbar.value = true
-  //     }
-  //   })
-  //   .catch(() => {})
+  console.log('payload', payload)
+  uploadComplete.value = false
+  const formdata = new FormData()
+  formdata.append('file', payload.file)
+  formdata.append('table_type', payload.selectedType)
+  formdata.append('year', payload.selectedYear)
+  formdata.append('version', payload.version)
+  CsmEngine.uploadIfrs17EngineTables(formdata)
+    .then((res) => {
+      if (res.status === 200) {
+        file.value = null
+        // selectedType.value = null
+        text.value = 'The data has been successfully updated'
+        timeout.value = 3000
+        snackbar.value = true
+        uploadComplete.value = true
+      }
+    })
+    .catch(() => {})
 }
 
 const removeTimePortion = (value: string) => {

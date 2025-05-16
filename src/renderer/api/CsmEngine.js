@@ -434,5 +434,13 @@ export default {
   },
   getAvailableGMMFinanceVersions(financeYear) {
     return Api.get('csm-engine/available-gmm-finance-versions/year/' + financeYear)
+  },
+  uploadIfrs17EngineTables(payload) {
+    return Api.post('csm-engine/upload-ifrs17-engine-tables', payload, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Accept: 'multipart/form-data'
+      }
+    })
   }
 }
