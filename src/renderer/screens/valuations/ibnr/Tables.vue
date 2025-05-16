@@ -24,11 +24,12 @@
                           </v-btn>
                         </td>
                         <td style="text-align: center">
-                          <bulk-file-updater
+                          <file-updater
+                            :show-year="true"
                             :uploadComplete="uploadComplete"
                             :tableType="item.table_type"
                             @uploadFile="handleUpload"
-                          ></bulk-file-updater>
+                          ></file-updater>
                         </td>
                         <td style="text-align: center">
                           <v-btn
@@ -154,7 +155,7 @@
 <script setup lang="ts">
 import ConfirmationDialog from '../../../components/ConfirmDialog.vue'
 import DataGrid from '../../../components/tables/DataGrid.vue'
-import BulkFileUpdater from '../../../components/BulkFileUpdater.vue'
+import FileUpdater from '../../../components/FileUpdater.vue'
 import BaseCard from '../../../components/BaseCard.vue'
 
 import IbnrService from '../../../api/IbnrService'
