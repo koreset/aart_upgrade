@@ -39,7 +39,7 @@
                 >
               </v-col></v-row
             >
-            <loading-indicator :loading-data="loading"></loading-indicator>
+            <!-- <loading-indicator :loading-data="loading"></loading-indicator> -->
 
             <v-row v-if="runJobs.length > 0 && !loading">
               <v-col>
@@ -220,7 +220,7 @@ import ModifiedGMMService from '../../../api/ModifiedGMMService'
 import { onMounted, ref, computed } from 'vue'
 import { DateTime } from 'luxon'
 import BaseCard from '../../../components/BaseCard.vue'
-import LoadingIndicator from '@/renderer/components/LoadingIndicator.vue'
+// import LoadingIndicator from '@/renderer/components/LoadingIndicator.vue'
 
 const toMinutes = (number) => {
   number = number * 60
@@ -325,7 +325,7 @@ onMounted(async () => {
   ) {
     pollTimer = setInterval(() => {
       if (runJobs.value.some((job: any) => job.processing_status === 'processing')) {
-        ModifiedGMMService.getProjectionJobs().then((response) => {
+        ModifiedGMMService.getProjectionJobsv2().then((response) => {
           runJobs.value = response.data
         })
       } else {
