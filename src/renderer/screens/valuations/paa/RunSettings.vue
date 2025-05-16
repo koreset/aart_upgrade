@@ -286,6 +286,19 @@ const executeJobs = () => {
 const validatePortfolios = async () => {
   console.log('Validating portfolios')
   if (selectedPortfolios.value.length === 0) {
+    // clear the fields
+    availableParameterYears.value = []
+    availablePremiumYears.value = []
+    availableYears.value = []
+    selectedYear.value = null
+    selectedMpVersion.value = null
+    selectedParameterYear.value = null
+    selectedPremiumEarningYear.value = null
+    selectedShock.value = null
+    selectedAggregationOption.value = null
+    runSingle.value = false
+    useIndividualResults.value = false
+
     return false
   }
 
@@ -301,11 +314,19 @@ const validatePortfolios = async () => {
       selectedPortfolios.value[selectedPortfolios.value.length - 1].name
     )
 
+    console.log('res', res.data)
+    console.log('resparams', resparams.data)
+    console.log('resprem', resprem.data)
+
     if (res.data.length === 0) {
+      snackbar.value = true
+      text.value = 'There are no valid model points for the selected portfolio.'
       return false
     }
 
     if (resparams.data.length === 0) {
+      snackbar.value = true
+      text.value = 'There are no valid parameters for the selected portfolio.'
       return false
     }
 
@@ -355,16 +376,17 @@ const validatePortfolios = async () => {
 }
 
 const checkPaaFinanceYear = async () => {
+  console.log('Checking PAA Finance Year')
   if (selectedPortfolios.value.length > 0 && selectedYear.value !== null) {
-    const res = await ModifiedGMMService.checkPaaFinanceYear(
-      selectedPortfolios.value[0].name,
-      selectedYear.value
-    )
-    if (!res.data) {
-      text.value =
-        'PAA Finance data is not available for the selected portfolio and year. This run will not be executed.'
-      snackbar.value = true
-    }
+    // const res = await ModifiedGMMService.checkPaaFinanceYear(
+    //   selectedPortfolios.value[0].name,
+    //   selectedYear.value
+    // )
+    // if (!res.data) {
+    //   text.value =
+    //     'PAA Finance data is not available for the selected portfolio and year. This run will not be executed.'
+    //   snackbar.value = true
+    // }
     // get available model point versions
     const resMp = await ModifiedGMMService.getAvailableMpVersions(
       selectedPortfolios.value[0].name,
