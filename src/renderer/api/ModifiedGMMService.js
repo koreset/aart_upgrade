@@ -162,5 +162,10 @@ export default {
   },
   getYieldCurveMonths(year, code) {
     return Api.get('gmm-engine/yield-curve-months/' + year + '/' + code)
+  },
+  deletePaModelPointData(portfolioId, year, version) {
+    return Api.delete(
+      'gmm-engine/portfolios/' + portfolioId + '/modelpoints/' + year + '/version/' + version
+    )
   }
 }
