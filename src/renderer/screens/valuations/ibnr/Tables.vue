@@ -25,6 +25,8 @@
                         </td>
                         <td style="text-align: center">
                           <file-updater
+                            :show-yield-curve-code="item.table_type === 'Yield Curve'"
+                            :show-month="item.table_type === 'Yield Curve'"
                             :show-year="true"
                             :uploadComplete="uploadComplete"
                             :tableType="item.table_type"

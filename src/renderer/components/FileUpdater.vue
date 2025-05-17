@@ -26,7 +26,7 @@
             </v-file-input>
           </v-col>
         </v-row>
-        <v-row v-if="showYieldCurveCode">
+        <v-row v-if="showYieldCurveCode && tableType === 'Yield Curve'">
           <v-col>
             <v-text-field
               v-model="yieldCurveCode"
@@ -62,7 +62,7 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col v-if="showMonth">
+          <v-col v-if="showMonth && tableType === 'Yield Curve'">
             <v-select
               v-model="selectedMonth"
               variant="outlined"

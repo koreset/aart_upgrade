@@ -24,11 +24,14 @@
                           </v-btn>
                         </td>
                         <td style="text-align: center">
-                          <bulk-file-updater
+                          <file-updater
+                            :show-year="true"
+                            :show-yield-curve-code="item.table_type === 'Yield Curve'"
+                            :show-month="item.table_type === 'Yield Curve'"
                             :uploadComplete="uploadComplete"
                             :tableType="item.table_type"
                             @uploadFile="handleUpload"
-                          ></bulk-file-updater>
+                          ></file-updater>
                         </td>
                         <td style="text-align: center">
                           <v-btn
@@ -154,7 +157,7 @@
 <script setup lang="ts">
 import ConfirmationDialog from '@/renderer/components/ConfirmDialog.vue'
 import DataGrid from '@/renderer/components/tables/DataGrid.vue'
-import BulkFileUpdater from '@/renderer/components/BulkFileUpdater.vue'
+import FileUpdater from '@/renderer/components/FileUpdater.vue'
 import BaseCard from '@/renderer/components/BaseCard.vue'
 
 import ModifiedGMMService from '@/renderer/api/ModifiedGMMService'
