@@ -1,29 +1,29 @@
 // stores/myFormStore.ts
-import { defineStore } from 'pinia';
-import { ref, Ref } from 'vue';
+import { defineStore } from 'pinia'
+import { ref, Ref } from 'vue'
 
 // Define types for your nested structure (remains the same)
 export interface Address {
-  street: string;
-  city: string;
-  postalCode: string;
-  country: string;
+  street: string
+  city: string
+  postalCode: string
+  country: string
 }
 
 export interface UserProfile {
-  firstName: string;
-  lastName: string;
-  email: string;
-  address: Address;
+  firstName: string
+  lastName: string
+  email: string
+  address: Address
   preferences: {
-    newsletter: boolean;
-    language: string;
-  };
+    newsletter: boolean
+    language: string
+  }
 }
 
 export interface MyFormData {
-  user: UserProfile;
-  orderNumber: string;
+  user: UserProfile
+  orderNumber: string
 }
 
 export const useMyFormStore = defineStore('myForm', () => {
@@ -37,21 +37,21 @@ export const useMyFormStore = defineStore('myForm', () => {
         street: '',
         city: '',
         postalCode: '',
-        country: '',
+        country: ''
       },
       preferences: {
         newsletter: false,
-        language: '',
-      },
-    },
-  });
+        language: ''
+      }
+    }
+  })
 
   function updateFormData(payload: Partial<MyFormData>) {
-    formData.value = { ...formData.value, ...payload };
+    formData.value = { ...formData.value, ...payload }
   }
 
   function setInitialData(data: MyFormData) {
-    formData.value = JSON.parse(JSON.stringify(data));
+    formData.value = JSON.parse(JSON.stringify(data))
   }
 
   function resetStore() {
@@ -65,14 +65,14 @@ export const useMyFormStore = defineStore('myForm', () => {
           street: '',
           city: '',
           postalCode: '',
-          country: '',
+          country: ''
         },
         preferences: {
           newsletter: false,
-          language: '',
-        },
-      },
-    };
+          language: ''
+        }
+      }
+    }
   }
 
   return {
@@ -80,5 +80,5 @@ export const useMyFormStore = defineStore('myForm', () => {
     updateFormData,
     setInitialData,
     resetStore
-  };
-});
+  }
+})

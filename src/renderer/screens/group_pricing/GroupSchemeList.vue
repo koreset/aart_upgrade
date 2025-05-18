@@ -95,7 +95,6 @@ const headers = computed(() => {
   return baseHeaders
 })
 
-
 const parseDateString = (dateString) => {
   const date = new Date(dateString)
   const formattedDate = date.toISOString().split('T')[0]

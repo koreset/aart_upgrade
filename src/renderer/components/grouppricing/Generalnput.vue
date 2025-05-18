@@ -264,7 +264,6 @@ const groupStore = useGroupPricingStore()
 const industries = ['Administration', 'NGO', 'Banks']
 const brokerList = ref([])
 
-
 // validation schema
 const validationSchema = yup.object({
   quote_type: yup

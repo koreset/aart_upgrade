@@ -563,7 +563,6 @@ const showPAAFinanceBlock = () => {
 
 const showFinanceFile = () => {
   if (selectedMeasure.value.value !== null) {
-
     if (selectedMeasure.value.value === 'GMM' || selectedMeasure.value.value === 'VFA') {
       showGMMBlocks.value = true
       showPAARuns.value = false

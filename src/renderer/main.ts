@@ -27,7 +27,6 @@ declare global {
   }
 }
 
-
 // save the license server url to the store. temp fix for now. This should be done in setup.
 window.mainApi?.sendSync('msgSetLicenseServerUrl', import.meta.env.VITE_APP_LICENSE_SERVER)
 
