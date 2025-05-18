@@ -88,6 +88,7 @@
                       class="tab-item-border"
                     >
                       <data-grid
+                        v-if="displayActuals"
                         :chartXAxisTitle="'Year'"
                         :chartTitle="data.table_name"
                         :tableName="data.table_name"
@@ -98,21 +99,21 @@
                       <data-grid
                         v-if="maleRowData.length > 0 && displaySummaries"
                         :tableName="data.table_name"
-                        :columnDefs="analysisColumnDefs"
+                        :columnDefs="processedColumnDefs"
                         :rowData="maleRowData"
                         :pagination="true"
                       />
                       <data-grid
                         v-if="femaleRowData.length > 0 && displaySummaries"
                         :tableName="data.table_name"
-                        :columnDefs="analysisColumnDefs"
+                        :columnDefs="processedColumnDefs"
                         :rowData="femaleRowData"
                         :pagination="true"
                       />
                       <data-grid
                         v-if="combinedRowData.length > 0 && displaySummaries"
                         :tableName="data.table_name"
-                        :columnDefs="analysisColumnDefs"
+                        :columnDefs="processedColumnDefs"
                         :rowData="combinedRowData"
                         :pagination="true"
                       />
@@ -146,11 +147,11 @@
                         <v-col>
                           <v-card>
                             <v-card-text>
-                              <highcharts
+                              <Chart
                                 class="chart"
                                 :options="chartOptions"
                                 :updateArgs="updateArgs"
-                              ></highcharts>
+                              ></Chart>
                             </v-card-text>
                           </v-card>
                         </v-col>
@@ -228,10 +229,12 @@ import IbnrService from '@/renderer/api/IbnrService'
 import ExpService from '@/renderer/api/ExpAnalysisService'
 // import { AgChartsVue } from 'ag-charts-vue3'
 import formatValues from '@/renderer/utils/format_values'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import DataGrid from '@/renderer/components/tables/DataGrid.vue'
 import BaseCard from '@/renderer/components/BaseCard.vue'
+import { Chart } from 'highcharts-vue'
+
 // data
 // const showTable = ref(true)
 const displayActuals = ref(true)
@@ -245,7 +248,8 @@ const errorMessage: any = ref([])
 const loadingResults = ref(false)
 const selectedProduct = ref(null)
 const productList: any = ref([])
-const analysisColumnDefs = ref([])
+const analysisColumnDefs: any = ref([])
+
 const maleRowData = ref([])
 const femaleRowData = ref([])
 const combinedRowData = ref([])
@@ -310,6 +314,38 @@ const digit3Formatter = (params) => {
     return params.value.toFixed(3)
   } else {
     return params.value
+  }
+}
+
+const universalValueFormatter = (params) => {
+  if (params.value == null || params.data == null || params.data.metric == null) {
+    return '' // Return empty string for null/undefined values
+  }
+  const metric = params.data.metric // Relies on 'metric' field being in rowData
+  const value = parseFloat(params.value)
+
+  if (isNaN(value)) {
+    return params.value != null ? String(params.value) : ''
+  }
+
+  switch (metric) {
+    case 'A/E - Lives':
+    case 'A/E - Lives Basis':
+      return value.toFixed(9) // 9 decimal places
+    case 'Lives Exposure':
+    case 'Expected # Claims':
+    case 'Actual # Claims':
+      return Math.round(value).toLocaleString() // Integer, locale-specific formatting
+    case 'Crude Rate - Lives':
+      return value.toFixed(5)
+    case 'Expected Crude mortality rate':
+    case 'Actual Crude mortality rate':
+      return value.toFixed(2)
+    default:
+      if (typeof value === 'number') {
+        return value.toLocaleString() // Generic number formatting
+      }
+      return String(params.value)
   }
 }
 
@@ -478,6 +514,7 @@ const getResults = () => {
       combinedRowData.value = []
 
       ExpService.getExpLapseCrudeResultsByRunId($route.params.id).then((res) => {
+        console.log('lapse crude results:', res.data)
         if (res.data.table_data.length > 0) {
           res.data.table_data.forEach((item) => {
             const tableDef: any = {}
@@ -496,6 +533,7 @@ const getResults = () => {
       femaleRowData.value = []
       combinedRowData.value = []
       ExpService.getExpActualsVsExpectedByRunId($route.params.id).then((res) => {
+        console.log('actuals vs expected:', res.data)
         analysisColumnDefs.value = res.data.summary_data.columnDefs
         maleRowData.value = res.data.summary_data.maleRowData
         femaleRowData.value = res.data.summary_data.femaleRowData
@@ -675,6 +713,28 @@ const createColumnDefs = (data, tableName) => {
   }
   return cDefs
 }
+
+const processedColumnDefs = computed(() => {
+  if (!analysisColumnDefs.value) return []
+  return analysisColumnDefs.value.map((apiColDef) => {
+    const colDef = { ...apiColDef } // Start with properties from API
+
+    // Apply the universal formatter to all columns that are not the 'metric' display column
+    if (apiColDef.field !== 'metric') {
+      colDef.valueFormatter = universalValueFormatter
+    }
+
+    // You can add other client-side AG-Grid column properties here:
+    // - cellClassRules for conditional styling (e.g., borders for 'Lives Exposure' row)
+    // - sorting, filtering options, etc.
+    // Example:
+    // if (apiColDef.field === 'Total') {
+    //   colDef.cellStyle = { fontWeight: 'bold', ...apiColDef.cellStyle }; // API already sends this, but you could override/add
+    // }
+
+    return colDef
+  })
+})
 </script>
 
 <style>
