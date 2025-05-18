@@ -29,8 +29,12 @@
                 ></v-select>
               </v-col>
               <v-col v-if="resultType == 'exp_actuals_expected'" cols="3">
-                <v-btn class="mr-4" rounded size="small" @click="showActuals">Button 1</v-btn>
-                <v-btn rounded size="small" @click="showSummaries">Button 2</v-btn>
+                <v-btn class="mr-4 mt-2" color="primary" rounded size="small" @click="showActuals"
+                  >Show Actuals</v-btn
+                >
+                <v-btn class="mt-2" rounded size="small" color="primary" @click="showSummaries"
+                  >Show Summaries</v-btn
+                >
               </v-col>
               <v-col v-if="otherResultTypes" cols="3">
                 <v-select
@@ -64,6 +68,7 @@
               <v-row>
                 <v-col>
                   <v-tabs
+                    v-if="displayActuals"
                     v-model="tab"
                     center-active
                     dark
@@ -91,21 +96,21 @@
                         :pagination="true"
                       />
                       <data-grid
-                        v-if="maleRowData.length > 0"
+                        v-if="maleRowData.length > 0 && displaySummaries"
                         :tableName="data.table_name"
                         :columnDefs="analysisColumnDefs"
                         :rowData="maleRowData"
                         :pagination="true"
                       />
                       <data-grid
-                        v-if="femaleRowData.length > 0"
+                        v-if="femaleRowData.length > 0 && displaySummaries"
                         :tableName="data.table_name"
                         :columnDefs="analysisColumnDefs"
                         :rowData="femaleRowData"
                         :pagination="true"
                       />
                       <data-grid
-                        v-if="combinedRowData.length > 0"
+                        v-if="combinedRowData.length > 0 && displaySummaries"
                         :tableName="data.table_name"
                         :columnDefs="analysisColumnDefs"
                         :rowData="combinedRowData"
@@ -229,7 +234,7 @@ import DataGrid from '@/renderer/components/tables/DataGrid.vue'
 import BaseCard from '@/renderer/components/BaseCard.vue'
 // data
 // const showTable = ref(true)
-const displayActuals = ref(false)
+const displayActuals = ref(true)
 const displaySummaries = ref(false)
 const backButton = '< Back to Run Results'
 const $route = useRoute()
@@ -419,6 +424,7 @@ const rerunManualDevelopmentFactors = () => {
 }
 const getResults = () => {
   tableData.value = []
+  displayActuals.value = true
   if (
     resultType.value === 'exp_modelpoints' ||
     resultType.value === 'exp_crude_results' ||
