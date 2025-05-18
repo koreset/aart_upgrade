@@ -101,7 +101,7 @@
                               <v-col cols="9">
                                 {{ run.name }}
                               </v-col>
-                              <v-col cols="3">
+                              <v-col class="text-right" cols="3">
                                 <v-btn
                                   v-if="run.status !== 'Failed'"
                                   variant="outlined"
@@ -110,16 +110,6 @@
                                   color="primary"
                                   :to="'/valuations/paa/run-detail/' + run.id"
                                   >View Results</v-btn
-                                >
-                                <v-btn
-                                  v-if="run.status !== 'Failed'"
-                                  variant="outlined"
-                                  rounded
-                                  class="ml-2"
-                                  size="small"
-                                  color="red"
-                                  @click.stop="confirmDelete(run.id)"
-                                  >Delete</v-btn
                                 >
                               </v-col>
                             </v-row>
@@ -298,10 +288,10 @@ const formatDateString = (dateString: any) => {
   return DateTime.fromISO(dateString).toLocaleString(DateTime.DATETIME_MED)
 }
 
-const confirmDelete = (jobId: any) => {
-  dialog.value = true
-  selectedRunId.value = jobId
-}
+// const confirmDelete = (jobId: any) => {
+//   dialog.value = true
+//   selectedRunId.value = jobId
+// }
 
 const deleteRun = async (itemId: any) => {
   ModifiedGMMService.deleteRun(itemId)

@@ -518,74 +518,83 @@ const createColumnGroupDefs = (data) => {
     {
       headerName: 'Male',
       children: [
-        { headerName: 'Age Next Birthday', field: 'age_next' },
+        { headerName: 'Age Next Birthday', field: 'age_next', filter: true },
         { headerName: '#Deaths', field: 'num_deaths_male' },
         { headerName: 'Expected Num Deaths', field: 'expected_num_deaths_male' },
         {
           headerName: 'Lives Exposure',
           field: 'lives_exposure_male',
+          filter: true,
           valueFormatter: digit9Formatter
         },
         {
           headerName: 'Crude Rate',
           field: 'crude_rate_male',
+          filter: true,
           valueFormatter: digit9Formatter
         },
         {
           headerName: 'Expected Rate',
           field: 'expected_rate_male',
+          filter: true,
           valueFormatter: digit9Formatter
         },
-        { headerName: 'AvE', field: 'ave_male', valueFormatter: digit3Formatter }
+        { headerName: 'AvE', field: 'ave_male', filter: true, valueFormatter: digit3Formatter }
       ]
     },
     {
       headerName: 'Female',
       children: [
-        { headerName: 'Age Next Birthday', field: 'age_next' },
-        { headerName: '#Deaths', field: 'num_deaths_female' },
-        { headerName: 'Expected Num Deaths', field: 'expected_num_deaths_female' },
+        { headerName: 'Age Next Birthday', field: 'age_next', filter: true },
+        { headerName: '#Deaths', field: 'num_deaths_female', filter: true },
+        { headerName: 'Expected Num Deaths', field: 'expected_num_deaths_female', filter: true },
         {
           headerName: 'Lives Exposure',
           field: 'lives_exposure_female',
+          filter: true,
           valueFormatter: digit9Formatter
         },
         {
           headerName: 'Crude Rate',
           field: 'crude_rate_female',
+          filter: true,
           valueFormatter: digit9Formatter
         },
         {
           headerName: 'Expected Rate',
           field: 'expected_rate_female',
+          filter: true,
           valueFormatter: digit9Formatter
         },
-        { headerName: 'AvE', field: 'ave_female', valueFormatter: digit3Formatter }
+        { headerName: 'AvE', field: 'ave_female', filter: true, valueFormatter: digit3Formatter }
       ]
     },
     {
       headerName: 'Total',
       children: [
-        { headerName: 'Age Next Birthday', field: 'age_next' },
-        { headerName: '#Deaths', field: 'num_deaths_total' },
-        { headerName: 'Expected Num Deaths', field: 'expected_num_deaths_total' },
+        { headerName: 'Age Next Birthday', field: 'age_next', filter: true },
+        { headerName: '#Deaths', field: 'num_deaths_total', filter: true },
+        { headerName: 'Expected Num Deaths', field: 'expected_num_deaths_total', filter: true },
         {
           headerName: 'Lives Exposure',
           field: 'lives_exposure_total',
+          filter: true,
           valueFormatter: digit9Formatter
         },
         {
           headerName: 'Crude Rate',
           field: 'crude_rate_total',
+          filter: true,
           valueFormatter: digit9Formatter
         },
         {
           headerName: 'Expected Rate',
           field: 'expected_rate_total',
+          filter: true,
           valueFormatter: digit9Formatter
         },
 
-        { headerName: 'AvE', field: 'ave_total', valueFormatter: digit3Formatter }
+        { headerName: 'AvE', field: 'ave_total', filter: true, valueFormatter: digit3Formatter }
       ]
     }
   ]
@@ -648,6 +657,8 @@ const createColumnDefs = (data, tableName) => {
               column.valueFormatter = formatValues
             }
           }
+          column.sortable = true
+          column.filter = true
 
           cDefs.push(column)
           break

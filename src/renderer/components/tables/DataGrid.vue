@@ -56,6 +56,7 @@
           class="ag-theme-quartz"
           :rowData="localRowData"
           :columnDefs="localColumnDefs"
+          :autoSizeStrategy="autoSizeStrategy"
           @row-selected="onRowSelected"
           @grid-ready="onGridReady"
         >
@@ -115,9 +116,27 @@ const localShowExport = ref(true)
 const gridApi: any = ref(null)
 const columnApi: any = ref(null)
 
+// Define the autoSizeStrategy
+const autoSizeStrategy = ref({
+  type: 'fitCellContents'
+  // You can also provide 'skipHeader: false' here, but it's the default.
+  // skipHeader: false
+})
+
+const autoSizeAll = (skipHeader: boolean) => {
+  const allColumnIds: string[] = []
+  gridApi.value!.getColumns()!.forEach((column) => {
+    allColumnIds.push(column.getId())
+  })
+  gridApi.value!.autoSizeColumns(allColumnIds, skipHeader)
+}
+
 const onGridReady = (params) => {
   gridApi.value = params.api
   columnApi.value = params.columnApi
+  gridApi.value.autoSizeAllColumns()
+
+  autoSizeAll(false)
 }
 
 // watch(

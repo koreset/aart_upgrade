@@ -176,9 +176,10 @@
                                     variant="outlined"
                                     @click="
                                       deleteData(
-                                        item.id,
+                                        item.name,
+                                        'claims_data',
                                         selectedPortfolioMpYear,
-                                        selectedYearVersion.mp_version
+                                        selectedYearVersion.version_name
                                       )
                                     "
                                   >
@@ -274,7 +275,8 @@
                                     variant="outlined"
                                     @click="
                                       deleteData(
-                                        item.id,
+                                        item.name,
+                                        'earned_premium',
                                         selectedEarnedPremiumYear,
                                         selectedEarnedPremiumYearVersion.version_name
                                       )
@@ -325,7 +327,6 @@
 <script setup lang="ts">
 import BaseCard from '../../../components/BaseCard.vue'
 import { onMounted, ref, computed } from 'vue'
-import ModifiedGMMService from '../../../api/ModifiedGMMService'
 import IbnrService from '../../../api/IbnrService'
 import ConfirmationDialog from '../../../components/ConfirmDialog.vue'
 import DataGrid from '../../../components/tables/DataGrid.vue'
@@ -403,10 +404,10 @@ const handleUpload = (event: any, item: any) => {
   IbnrService.uploadLicModelpoints(formData)
     .then((res) => {
       console.log('Response', res)
-      // this.uploadSuccess = true
+      loadDataComplete.value = true
       // this.resetErrorState()
       // this.$emit('successUpload', this.tableId)
-      // this.loading = false
+      // loading.value = false
     })
     .catch((err) => {
       console.log('Error', err)
@@ -414,6 +415,7 @@ const handleUpload = (event: any, item: any) => {
       // this.uploadSuccess = false
       // this.selectedYear = null
       // this.loading = false
+      loadDataComplete.value = true
     })
 }
 
@@ -464,7 +466,7 @@ const deletePortfolio = async (id: number) => {
     )
     console.log('Result', result)
     if (result) {
-      ModifiedGMMService.deletePortfolio(id).then((res) => {
+      IbnrService.deletePortfolio(id).then((res) => {
         if (res.status === 200) {
           portfolios.value = portfolios.value.filter((elem) => {
             return elem.id !== id
@@ -477,8 +479,25 @@ const deletePortfolio = async (id: number) => {
   }
 }
 
-const deleteData = (id: number, year: number, version: number) => {
-  console.log('Deleting Data', id, year, version)
+const deleteData = async (portfolio: string, tableType: string, year: number, version: string) => {
+  try {
+    const result = await confirmDialog.value.open(
+      'Delete Data',
+      'Are you sure you want to delete this data?'
+    )
+    console.log('Result', result)
+    console.log('Deleting Data', portfolio, year, version, tableType)
+    IbnrService.deleteTableData(tableType, portfolio, year, version).then((res) => {
+      if (res.status === 200) {
+        rowData.value = []
+        columnDefs.value = []
+        loadDataComplete.value = false
+        // this.$emit('successUpload', this.tableId)
+      }
+    })
+  } catch (err) {
+    console.log('Error', err)
+  }
 }
 
 const showData = async (name: string, type: string, year: number, version: number) => {

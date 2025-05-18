@@ -20,7 +20,7 @@ export default {
     return Api.get('ibnr/table-metadata')
   },
   uploadLicModelpoints(formdata) {
-    return Api.post('ibnr/claims-data', formdata, {
+    return Api.post('ibnr/portfolio-data', formdata, {
       headers: {
         'Content-Type': 'multipart/form-data',
         Accept: 'multipart/form-data'

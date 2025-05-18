@@ -77,6 +77,7 @@
                             size="small"
                             variant="outlined"
                             rounded
+                            color="red"
                             @click="deleteJob(item.id, item.measurement_type, item.run_date)"
                             >Delete Run</v-btn
                           >
