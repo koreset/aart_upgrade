@@ -33,7 +33,7 @@
                         variant="outlined"
                         size="small"
                         rounded
-                        @click.stop="confirmTableDelete(item.table_type)"
+                        @click.stop="initiateDeleteProcess(item.table_type)"
                         ><v-icon color="red">mdi-delete</v-icon>
                         <span>Delete</span>
                       </v-btn>
@@ -180,7 +180,13 @@
       {{ text }}
       <v-btn rounded color="red" variant="plain" @click="snackbar = false">Close</v-btn>
     </v-snackbar>
-    <confirmation-dialog ref="confirmDelete" />
+    <confirmation-dialog ref="confirmDialogRef" />
+    <year-version-selector
+      v-model="showYearVersionDialog"
+      :table-name="tableForYearVersionSelection"
+      @selected="handleVersionSelected"
+      @cancelled="handleSelectionCancelled"
+    />
   </v-container>
 </template>
 
@@ -192,10 +198,11 @@ import BaseCard from '@/renderer/components/BaseCard.vue'
 import FileUpdater from '@/renderer/components/FileUpdater.vue'
 import FileInfo from '@/renderer/components/FileInfo.vue'
 import ConfirmationDialog from '@/renderer/components/ConfirmDialog.vue'
+import YearVersionSelector from '@/renderer/components/YearVersionSelector.vue'
 // import createColumnDefs from "../../utils/format_values";
 
 // data
-const confirmDelete = ref()
+const confirmDialogRef = ref()
 const infoDialog = ref(false)
 const uploadComplete = ref(false)
 const searchQuery = ref('')
@@ -207,7 +214,7 @@ const tableData = ref([])
 const columnDefs: any = ref([])
 const rowData: any = ref([])
 const ifrs17EngineTables = ref([
-  { table_type: 'Finance File' },
+  { table_type: 'Finance Variables' },
   { table_type: 'PAA Finance' },
   { table_type: 'RA Factors' },
   { table_type: 'Transition Adjustments' }
@@ -223,12 +230,18 @@ const snackbar = ref(false)
 const text = ref('')
 const sapFileList = ref([])
 const selectedRun = ref(null)
+const showYearVersionDialog = ref(false)
+const tableForYearVersionSelection = ref<null | string>(null)
 
 const filteredSapList: any = computed(() => {
   return sapFileList.value.filter((item: any) => {
     return item.run_name.toLowerCase().includes(searchQuery.value.toLowerCase())
   })
 })
+
+const lowerCaseAndSnakeCase = (value: string): string => {
+  return value.toLowerCase().replace(/ /g, '_')
+}
 
 onMounted(() => {
   CsmEngine.getSapFileList().then((res) => {
@@ -264,6 +277,59 @@ const handleUpload = (payload: any) => {
     .catch(() => {})
 }
 
+const initiateDeleteProcess = (tableName: string) => {
+  tableForYearVersionSelection.value = tableName
+  showYearVersionDialog.value = true // This will trigger the YearVersionSelector dialog
+}
+
+const handleVersionSelected = async (selection: {
+  year: number
+  version: string
+  tableName: string
+}) => {
+  console.log('Version selected in parent:', selection)
+  showYearVersionDialog.value = false // Ensure dialog is closed
+
+  // Now, open your final confirmation dialog
+  if (confirmDialogRef.value && typeof confirmDialogRef.value.open === 'function') {
+    const result = await confirmDialogRef.value.open(
+      'Confirm Deletion',
+      `Are you sure you want to delete data for table "${selection.tableName}", year ${selection.year}, version "${selection.version}"? This action cannot be undone.`
+    )
+
+    if (result) {
+      try {
+        const lowerTableType = lowerCaseAndSnakeCase(selection.tableName)
+        // Call your actual delete API
+        await CsmEngine.deleteTableVersion(lowerTableType, selection.year, selection.version) // Uncomment and use actual API
+
+        text.value = `Data for ${selection.tableName} (Year: ${selection.year}, Version: ${selection.version}) was successfully DELETED (simulated).`
+        snackbar.value = true
+        console.log(
+          `DELETING: ${lowerTableType}, Year: ${selection.year}, Version: ${selection.version}`
+        )
+      } catch (error) {
+        console.error('Error deleting table version:', error)
+        text.value = `Error deleting data for ${selection.tableName}. Please try again.`
+        snackbar.value = true
+      }
+    } else {
+      text.value = 'Deletion cancelled.'
+      snackbar.value = true
+    }
+  } else {
+    text.value = 'Confirmation dialog is not available.'
+    snackbar.value = true
+    console.error('confirmDeleteDialogRef.value.open is not a function or ref is not set.')
+  }
+}
+
+const handleSelectionCancelled = () => {
+  showYearVersionDialog.value = false
+  text.value = 'Year/Version selection was cancelled.'
+  snackbar.value = true
+}
+
 const removeTimePortion = (value: string) => {
   if (value) {
     const [datePart, timePartWithOffset] = value.split('T')
@@ -273,36 +339,40 @@ const removeTimePortion = (value: string) => {
   }
 }
 
-const confirmTableDelete = async (tableType: string) => {
-  try {
-    const result = await confirmDelete.value.open(
-      'Delete Confirmationsssss',
-      `Are you sure you want to delete ${tableType}? This will delete all data and is no undoable.`
-    )
+// const confirmTableDelete = async (tableType: string) => {
+//   try {
+//     const lowerTableType = tableType.toLowerCase().replace(/ /g, '_')
+//     const resp = await CsmEngine.getTableYearVersions(lowerTableType)
+//     console.log('resp', resp.data)
 
-    if (result) {
-      const tableType = selectedTable.value.replace(/ /g, '')
-      CsmEngine.deleteTable(tableType.toLowerCase()).then(() => {
-        text.value = 'Table was successfully deleted'
-        snackbar.value = true
-        // deleteTableDialog.value = false
-      })
-    } else {
-      text.value = 'Table was not deleted'
-      snackbar.value = true
-      // deleteTableDialog.value = false
-    }
+//     const result = await confirmDialogRef.value.open(
+//       'Delete Confirmation',
+//       `Are you sure you want to delete ${tableType}? This will delete all data and is no undoable.`
+//     )
 
-    // selectedTable.value = tableType
-    // deleteTableDialog.value = true
-  } catch (e) {
-    console.log(e)
-  }
-}
+//     if (result) {
+//       const tableType = selectedTable.value.replace(/ /g, '')
+//       CsmEngine.deleteTable(tableType.toLowerCase()).then(() => {
+//         text.value = 'Table was successfully deleted'
+//         snackbar.value = true
+//         // deleteTableDialog.value = false
+//       })
+//     } else {
+//       text.value = 'Table was not deleted'
+//       snackbar.value = true
+//       // deleteTableDialog.value = false
+//     }
+
+//     // selectedTable.value = tableType
+//     // deleteTableDialog.value = true
+//   } catch (e) {
+//     console.log(e)
+//   }
+// }
 
 const confirmSapDelete = async (runName: string) => {
   try {
-    const value = await confirmDelete.value.open(
+    const value = await confirmDialogRef.value.open(
       'Delete Confirmation',
       `Are you sure you want to delete ${runName}? This will delete all data and is no undoable.`
     )

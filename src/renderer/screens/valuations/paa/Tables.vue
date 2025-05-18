@@ -231,6 +231,10 @@ const handleUpload = (payload: DataPayload) => {
 }
 
 const deleteTableData = async (table: any) => {
+  const res = await ModifiedGMMService.getTableYearVersions(table.table_type)
+  if (res.data !== null) {
+    console.log('table year versions', res.data)
+  }
   if (table.table_type === 'Yield Curve') {
     ModifiedGMMService.getYieldCurveYears().then((response) => {
       yieldCurveYears.value = response.data

@@ -25,7 +25,7 @@ interface Props {
   isDialogOpen: boolean
   rowData: any
   columnDefs: any
-  tableTitle: string
+  tableTitle: string | null
   showExport?: boolean
 }
 

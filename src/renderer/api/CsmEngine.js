@@ -400,6 +400,9 @@ export default {
   deleteTable(table) {
     return Api.delete('csm-engine/delete-table/' + table)
   },
+  deleteTableVersion(table, year, version) {
+    return Api.delete('csm-engine/delete-table/' + table + '/year/' + year + '/version/' + version)
+  },
   uploadSAPFile(payload) {
     return Api.post('csm-engine/upload-sap-file', payload, {
       headers: {
@@ -442,5 +445,8 @@ export default {
         Accept: 'multipart/form-data'
       }
     })
+  },
+  getTableYearVersions(tableType) {
+    return Api.get('data-tables/' + tableType + '/year-versions')
   }
 }

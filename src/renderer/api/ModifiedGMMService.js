@@ -167,5 +167,8 @@ export default {
     return Api.delete(
       'gmm-engine/portfolios/' + portfolioId + '/modelpoints/' + year + '/version/' + version
     )
+  },
+  getTableYearVersions(tableType) {
+    return Api.get('data-tables/' + tableType + '/year-versions')
   }
 }
