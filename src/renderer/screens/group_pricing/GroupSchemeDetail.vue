@@ -465,10 +465,8 @@ const addMember = () => {
     ? formatDateString(member.value.date_of_birth, true, true, true)
     : null
 
-
   GroupPricingService.addMember(member.value)
     .then((res) => {
-
       snackbarText.value = 'Member added successfully'
       snackbar.value = true
       addMemberDialog.value = false

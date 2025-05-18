@@ -78,7 +78,6 @@ const quoteId = ref(route.params.id)
 const benefitMaps: any = ref([])
 
 const getBenefitAlias = (benefit: any) => {
-
   const benefitMap = benefitMaps.value.find((map: any) => map.benefit_code === benefit)
   return benefitMap.benefit_alias !== '' ? benefitMap.benefit_alias : benefit
   // return 'WORK'

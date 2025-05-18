@@ -249,7 +249,6 @@ onMounted(async () => {
 
   const resp = await ProductService.getProductById(pricingRun.value.product_id)
   product.value = resp.data
-
 })
 
 // methods

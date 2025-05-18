@@ -302,7 +302,6 @@ const createQuotePdf = async () => {
 
   // const bottomMargin = 30
 
-
   const font = await pdfDoc.embedFont(StandardFonts.Helvetica)
   const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold)
 
@@ -577,7 +576,6 @@ const createQuotePdf = async () => {
     })
     tableTopY -= 5
 
-
     // Draw the horizontal lines
     for (let i = 0; i <= table.tableRows.length; i++) {
       currentPage.drawLine({
@@ -587,7 +585,6 @@ const createQuotePdf = async () => {
         color: rgb(0, 0, 0)
       })
     }
-
 
     // Draw the table rows
     table.tableRows.forEach((row, i) => {
@@ -602,10 +599,8 @@ const createQuotePdf = async () => {
       })
     })
 
-
     // add the table height to y
     y -= table.tableRows.length * fontSize * 2 + table.tableHeaders.length * fontSize * 2
-
   }
   drawTable(table)
 
@@ -808,7 +803,6 @@ const createQuotePdf = async () => {
   })
 
   y -= fontSize * 2
-
 
   if (y < 70) {
     currentPage = page2

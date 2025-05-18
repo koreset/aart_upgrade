@@ -51,7 +51,6 @@ onMounted(async () => {
     appStore.setLicense(result)
   }
 
-
   // check if there are any entitlements
   // const entitlements: any = appStore.entitlements
 

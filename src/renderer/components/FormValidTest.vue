@@ -165,7 +165,6 @@ import { storeToRefs } from 'pinia'
 const myFormStore = useMyFormStore()
 const { formData: myStoreFormData } = storeToRefs(myFormStore)
 
-
 // VeeValidate Form Handling
 const {
   handleSubmit,

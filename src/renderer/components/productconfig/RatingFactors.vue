@@ -197,12 +197,8 @@ onMounted(() => {
   })
 })
 
-
-
 // methods
 const addToRatingFactors = async () => {
-
-
   selectedTableErrors.value = []
   fd1FactorErrors.value = []
   if (!selectedTable.value) {
