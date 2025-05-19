@@ -212,10 +212,13 @@ import { DateTime } from 'luxon'
 import BaseCard from '../../../components/BaseCard.vue'
 // import LoadingIndicator from '@/renderer/components/LoadingIndicator.vue'
 
-const toMinutes = (number) => {
-  number = number * 60
+const toMinutes = (number: any) => {
+  // the number is in seconds
+  console.log('number in seconds', number)
+
+  // number = number / 60
   const minutes = Math.floor(number / 60) // 7
-  let seconds = ((number % 60) / 100) * 60 // 30
+  let seconds = number % 60 // 30
   seconds = Math.round(seconds)
   return minutes + ' m, ' + seconds + ' s'
 }
