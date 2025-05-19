@@ -159,9 +159,12 @@ const formatDateString = (dateString: any) => {
 }
 
 const toMinutes = (number: any) => {
-  number = number * 60
+  // the number is in seconds
+  console.log('number in seconds', number)
+
+  // number = number / 60
   const minutes = Math.floor(number / 60) // 7
-  let seconds = ((number % 60) / 100) * 60 // 30
+  let seconds = number % 60 // 30
   seconds = Math.round(seconds)
   return minutes + ' m, ' + seconds + ' s'
 }
