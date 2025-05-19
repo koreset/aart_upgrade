@@ -98,21 +98,22 @@
                       />
                       <data-grid
                         v-if="maleRowData.length > 0 && displaySummaries"
-                        :tableName="data.table_name"
+                        :show-title="true"
+                        :table-title="'Male Summary'"
                         :columnDefs="processedColumnDefs"
                         :rowData="maleRowData"
                         :pagination="true"
                       />
                       <data-grid
                         v-if="femaleRowData.length > 0 && displaySummaries"
-                        :tableName="data.table_name"
+                        :table-title="'Female Summary'"
                         :columnDefs="processedColumnDefs"
                         :rowData="femaleRowData"
                         :pagination="true"
                       />
                       <data-grid
                         v-if="combinedRowData.length > 0 && displaySummaries"
-                        :tableName="data.table_name"
+                        :table-title="'Combined Gender Summary'"
                         :columnDefs="processedColumnDefs"
                         :rowData="combinedRowData"
                         :pagination="true"
