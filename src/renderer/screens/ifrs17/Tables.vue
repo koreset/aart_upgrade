@@ -274,7 +274,13 @@ const handleUpload = (payload: any) => {
         uploadComplete.value = true
       }
     })
-    .catch(() => {})
+    .catch((err) => {
+      console.error('Error uploading file:', err.data)
+      text.value = 'Error: ' + err.data
+      timeout.value = 3000
+      snackbar.value = true
+      uploadComplete.value = true
+    })
 }
 
 const initiateDeleteProcess = (tableName: string) => {
