@@ -28,7 +28,7 @@
                   @update:modelValue="getResults"
                 ></v-select>
               </v-col>
-              <v-col v-if="resultType == 'exp_actuals_expected'" cols="3">
+              <v-col v-if="resultType == 'exp_actuals_expected'" cols="4">
                 <v-btn class="mr-4 mt-2" color="primary" rounded size="small" @click="showActuals"
                   >Show Actuals</v-btn
                 >
