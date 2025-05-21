@@ -165,8 +165,18 @@
                   label="Lapse Data Version"
                   placeholder="Select a lapse year version"
                   :items="availableLapseVersions"
-                  item-text="version_name"
+                  item-title="version_name"
                   item-value="version_name"
+                ></v-select>
+              </v-col>
+              <v-col cols="3">
+                <v-select
+                  v-model="selectedAgeBand"
+                  variant="outlined"
+                  density="compact"
+                  label="Age Band Version"
+                  placeholder="Select an age band version"
+                  :items="availableAgeBands"
                 ></v-select>
               </v-col>
             </v-row>
@@ -292,6 +302,8 @@ const availableExposureVersions = ref([])
 const availableActualVersions = ref([])
 const selectedExposureYear = ref(null)
 const selectedRunType: any = ref(null)
+const availableAgeBands: any = ref([])
+const selectedAgeBand = ref(null)
 const selectedConfiguration: any = ref(null)
 const snackbar = ref(false)
 const timeout = ref(5000)
@@ -304,6 +316,7 @@ onMounted(() => {
   IbnrService.getYieldCurveYears().then((res) => {
     availableYieldCurveYears.value = res.data
   })
+  getAgeBands()
 })
 
 // methods
@@ -315,6 +328,14 @@ onMounted(() => {
 //     availableActualVersions.value = res.data
 //   })
 // }
+
+const getAgeBands = () => {
+  ExpService.getAgeBands().then((res) => {
+    availableAgeBands.value = res.data
+    console.log('availableAgeBands', availableAgeBands.value)
+  })
+}
+
 const getAvailableExposureVersions = () => {
   ExpService.getAvailableExposureVersions(
     selectedConfiguration.value.id,
@@ -363,6 +384,7 @@ const addToRunJobs = () => {
     job.mortality_data_version = selectedMortalityVersion.value
     job.lapse_data_year = selectedLapseYear.value
     job.lapse_data_version = selectedLapseVersion.value
+    job.age_band_version = selectedAgeBand.value
 
     runJobs.value.push(job)
 
@@ -382,6 +404,7 @@ const addToRunJobs = () => {
     selectedMortalityVersion.value = null
     selectedLapseYear.value = null
     selectedLapseVersion.value = null
+    selectedAgeBand.value = null
     availableMortalityVersions.value = []
     availableLapseVersions.value = []
   }
