@@ -87,7 +87,7 @@ interface YearVersion {
 interface Props {
   modelValue: boolean // For v-model:dialogVisible or similar
   tableName: string | null
-  tableType: string // Used for display purposes
+  tableType: string | null // Used for display purposes
 }
 
 interface Emits {

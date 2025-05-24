@@ -184,6 +184,7 @@
     <year-version-selector
       v-model="showYearVersionDialog"
       :table-name="tableForYearVersionSelection"
+      :table-type="tableForYearVersionSelection"
       @selected="handleVersionSelected"
       @cancelled="handleSelectionCancelled"
     />
