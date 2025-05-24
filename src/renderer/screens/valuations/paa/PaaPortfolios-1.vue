@@ -292,12 +292,14 @@ const discountTypes = [
 
 const earningPatterns = [
   { text: 'Passage of Time', value: 'passageoftime' },
-  { text: 'Specified by User', value: 'userdefined' }
+  { text: 'Specified by User', value: 'userdefined' },
+  { text: 'Daily Passage of Time', value: 'dailypassageoftime' }
 ]
 
 const insuranceTypes = [
   { text: 'Reinsurance', value: 'reinsurance' },
-  { text: 'Direct', value: 'direct' }
+  { text: 'Direct', value: 'direct' },
+  { text: 'Proportional Reinsurance', value: 'proportionalreinsurance' }
 ]
 
 const portfolioNameErrors = ref([])
