@@ -201,10 +201,16 @@ const saveRole = async () => {
       description: roleDescription.value,
       permissions: selectedPermissions.value
     })
-    if (response.status !== 200) {
-      throw new Error('Network response was not ok')
+
+    console.log('Save response:', response)
+
+    const newRole = {
+      role_name: roleName.value,
+      description: roleDescription.value,
+      permissions: selectedPermissions.value
     }
-    userRoles.value.push(response.data)
+
+    userRoles.value.push(newRole)
     addRole.value = false
     roleName.value = ''
     roleDescription.value = ''
