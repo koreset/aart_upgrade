@@ -230,7 +230,7 @@ import IbnrService from '@/renderer/api/IbnrService'
 import ExpService from '@/renderer/api/ExpAnalysisService'
 // import { AgChartsVue } from 'ag-charts-vue3'
 import formatValues from '@/renderer/utils/format_values'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import DataGrid from '@/renderer/components/tables/DataGrid.vue'
 import BaseCard from '@/renderer/components/BaseCard.vue'
@@ -298,6 +298,11 @@ const options: any = ref({
 })
 
 // methods
+
+onMounted(() => {
+  // console.log('mounted')
+  console.log($route.params)
+})
 const digit9Formatter = (params) => {
   if (params.value > 0) {
     return params.value.toFixed(9)

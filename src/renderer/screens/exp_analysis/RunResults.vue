@@ -67,6 +67,7 @@
                             class="primary"
                             size="small"
                             variant="outlined"
+                            color="red"
                             rounded
                             @click="deleteRun(item.id)"
                             >Delete Run</v-btn

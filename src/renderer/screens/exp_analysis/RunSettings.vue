@@ -388,9 +388,9 @@ const addToRunJobs = () => {
 
     runJobs.value.push(job)
 
-    runName.value = null
+    // runName.value = null
     selectedConfiguration.value = null
-    runDate.value = null
+    // runDate.value = null
     periodStartDate.value = null
     periodEndDate.value = null
     selectedExposureYear.value = null
