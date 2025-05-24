@@ -78,7 +78,7 @@
         <v-list-item v-bind="getNavigationProps('group-pricing-schemes', 'group-pricing-schemes')">
           <v-list-item-title>Schemes</v-list-item-title>
         </v-list-item>
-        <v-list-group subgroup class="first-level-group" value="Claims">
+        <v-list-group class="first-level-group" value="Claims">
           <template #activator="{ props }">
             <v-list-item v-bind="props" title="Claims"></v-list-item>
           </template>
@@ -89,7 +89,7 @@
             <v-list-item-title>Claims List</v-list-item-title>
           </v-list-item>
         </v-list-group>
-        <v-list-group subgroup class="first-level-group" value="User Management">
+        <v-list-group class="first-level-group" value="User Management">
           <template #activator="{ props }">
             <v-list-item v-bind="props" title="User Management"></v-list-item>
           </template>

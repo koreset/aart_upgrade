@@ -38,7 +38,7 @@
                             variant="outlined"
                             rounded
                             size="small"
-                            @click.stop="deleteTableData(item)"
+                            @click.stop="initiateDeleteProcess(item)"
                           >
                             <v-icon color="error">mdi-delete</v-icon>
                             <span>Delete</span>
@@ -88,6 +88,13 @@
       <v-btn rounded color="red" variant="text" @click="snackbar = false">Close</v-btn>
     </v-snackbar>
     <confirmation-dialog ref="confirmDeleteDialog" />
+    <year-version-selector
+      v-model="showYearVersionDialog"
+      :table-name="tableNameForYearVersionSelection"
+      :table-type="tableTypeForYearVersionSelection"
+      @selected="handleVersionSelected"
+      @cancelled="handleSelectionCancelled"
+    />
   </v-container>
 </template>
 
@@ -101,7 +108,12 @@ import formatValues from '@/renderer/utils/format_values'
 import { ref, onMounted } from 'vue'
 import { DataPayload } from '@/renderer/components/types'
 import IbnrService from '@/renderer/api/IbnrService'
+import YearVersionSelector from '@/renderer/components/YearVersionSelector.vue'
+
 // data
+const showYearVersionDialog: any = ref(false)
+const tableNameForYearVersionSelection: any = ref('')
+const tableTypeForYearVersionSelection: any = ref('')
 const viewHeader: string = 'Experience Analysis Tables'
 const confirmDeleteDialog: any = ref()
 const loadingData: any = ref(false)
@@ -126,10 +138,60 @@ const snackbar: any = ref(false)
 onMounted(() => {
   ExpService.getExpTableMetadata().then((res) => {
     tables.value = res.data.exp_tables
+    console.log('Tables:', tables.value)
   })
 })
 
 // methods
+const initiateDeleteProcess = (table: any) => {
+  console.log('Initiating delete process for table:', table)
+  tableNameForYearVersionSelection.value = table.table_name
+  tableTypeForYearVersionSelection.value = table.table_type
+  showYearVersionDialog.value = true // This will trigger the YearVersionSelector dialog
+}
+
+const handleVersionSelected = async (payload: any) => {
+  showYearVersionDialog.value = false
+
+  console.log('Selected Year:', payload.year)
+  console.log('Selected Version:', payload.version)
+  const result = await confirmDeleteDialog.value.open(
+    'Confirming Data Deletion',
+    `Are you sure you want to delete data from ${tableTypeForYearVersionSelection.value}?`
+  )
+  console.log('Confirmation result:', result)
+  if (result) {
+    ExpService.deleteTableData(
+      tableNameForYearVersionSelection.value,
+      payload.year,
+      payload.version
+    )
+      .then((res: any) => {
+        if (res.status === 200) {
+          snackbarText.value = 'Table data deleted successfully'
+          snackbar.value = true
+          timeout.value = 3000
+        }
+      })
+      .catch(() => {
+        snackbarText.value = 'An error occurred while deleting the table data'
+        snackbar.value = true
+        timeout.value = 3000
+      })
+  } else {
+    console.log('Deletion cancelled')
+  }
+  tableNameForYearVersionSelection.value = ''
+  tableTypeForYearVersionSelection.value = ''
+  showYearVersionDialog.value = false
+}
+
+const handleSelectionCancelled = () => {
+  showYearVersionDialog.value = false
+  tableNameForYearVersionSelection.value = ''
+  tableTypeForYearVersionSelection.value = ''
+}
+
 const clearData = () => {
   tableData.value = []
   columnDefs.value = []
@@ -160,19 +222,19 @@ const handleUpload = (event, payload: DataPayload) => {
     })
 }
 
-const deleteTableData = async (table: any) => {
-  if (table.table_type !== '' && table.table_type !== null) {
-    ExpService.deleteTableData(table.table_type).then(() => {
-      // this.text = res.data.message;
-      text.value = 'Table was successfully deleted'
-      snackbar.value = true
-      // this.gmmTables = res.data.associated_tables;
-    })
-  } else {
-    text.value = 'Table was not deleted'
-    snackbar.value = true
-  }
-}
+// const deleteTableData = async (table: any) => {
+//   if (table.table_type !== '' && table.table_type !== null) {
+//     ExpService.deleteTableData(table.table_type).then(() => {
+//       // this.text = res.data.message;
+//       text.value = 'Table was successfully deleted'
+//       snackbar.value = true
+//       // this.gmmTables = res.data.associated_tables;
+//     })
+//   } else {
+//     text.value = 'Table was not deleted'
+//     snackbar.value = true
+//   }
+// }
 
 const viewTable = (item: any) => {
   loadingData.value = true
@@ -184,8 +246,10 @@ const viewTable = (item: any) => {
       res.data = []
     }
 
+    console.log('Table Data:', res.data)
+
     if (res.data.length === 0) {
-      text.value = 'No data available for this table'
+      snackbarText.value = 'No data available for this table'
       snackbar.value = true
     } else {
       tableData.value = res.data
