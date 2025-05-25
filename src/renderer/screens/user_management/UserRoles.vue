@@ -83,7 +83,7 @@
                         </v-btn>
                         <v-btn size="small" variant="text"> Remove Permissions </v-btn>
                         <v-btn size="small" variant="text" icon @click="deleteRole(role)">
-                          <v-icon>mdi-delete</v-icon>
+                          <v-icon color="red">mdi-delete</v-icon>
                         </v-btn>
                       </td>
                     </tr>
@@ -126,16 +126,19 @@
         <v-btn color="white" variant="text" @click="snackbar = false"> Close </v-btn>
       </template>
     </v-snackbar>
+    <confirm-dialog ref="confirmDeleteAction" />
   </v-container>
 </template>
 <script setup lang="ts">
 import BaseCard from '@/renderer/components/BaseCard.vue'
 import { onMounted, ref } from 'vue'
 import GroupPricingService from '@/renderer/api/GroupPricingService'
+import ConfirmDialog from '@/renderer/components/ConfirmDialog.vue'
 
 const snackbar = ref(false)
 const snackbarMessage = ref('')
 const timeout = ref(3000)
+const confirmDeleteAction = ref()
 
 const addRole = ref(false)
 const roleName = ref('')
@@ -210,18 +213,27 @@ const saveRole = async () => {
       permissions: selectedPermissions.value
     }
 
-    userRoles.value.push(newRole)
+    userRoles.value.push(response.data || newRole)
     addRole.value = false
     roleName.value = ''
     roleDescription.value = ''
     selectedPermissions.value = []
-  } catch (error) {
-    console.error('Error saving role:', error)
+  } catch (error: any) {
+    console.error('Error saving role:', error.data)
+    snackbarMessage.value = 'Error: ' + error.data + '. Please try again.'
+    snackbar.value = true
   }
 }
 
 const deleteRole = async (role: any) => {
   try {
+    const confirm = await confirmDeleteAction.value.open(
+      'Delete Role',
+      `Are you sure you want to delete the role "${role.role_name}"?`
+    )
+    if (!confirm) {
+      return
+    }
     const response = await GroupPricingService.deleteUserRole(role.id)
     console.log('Delete response:', response)
     if (response.status !== 200) {
