@@ -38,7 +38,7 @@
                             variant="outlined"
                             rounded
                             size="small"
-                            @click.stop="deleteTableData(item)"
+                            @click.stop="initiateDeleteProcess(item)"
                           >
                             <v-icon color="error">mdi-delete</v-icon>
                             <span>Delete</span>
@@ -151,6 +151,16 @@
       <v-btn rounded color="red" variant="text" @click="snackbar = false">Close</v-btn>
     </v-snackbar>
     <confirmation-dialog ref="confirmDeleteDialog" />
+    <year-version-selector
+      :model-value="isDialogOpen"
+      :table-name="tableNameForYearVersionSelection"
+      :table-type="tableTypeForYearVersionSelection"
+      fetch-mode="yearsOnly"
+      @update:model-value="isDialogOpen = $event"
+      @selected="handleYearSelected"
+      @cancelled="handleDialogCancelled"
+    >
+    </year-version-selector>
   </v-container>
 </template>
 
@@ -164,8 +174,11 @@ import ModifiedGMMService from '@/renderer/api/ModifiedGMMService'
 import formatValues from '@/renderer/utils/format_values'
 import { ref, onMounted } from 'vue'
 import { DataPayload } from '@/renderer/components/types'
+import YearVersionSelector from '@/renderer/components/YearVersionSelector.vue'
 
 // data
+const tableNameForYearVersionSelection: any = ref('')
+const tableTypeForYearVersionSelection: any = ref('')
 const viewHeader: string = 'PAA Assumption Tables'
 const confirmDeleteDialog: any = ref()
 const selectedYieldCurveYear: any = ref(null)
@@ -205,6 +218,41 @@ onMounted(() => {
 })
 
 // methods
+
+const isDialogOpen = ref(false)
+
+const initiateDeleteProcess = (table: any) => {
+  console.log('Initiating delete process for table:', table)
+  tableNameForYearVersionSelection.value = table.table_name
+  tableTypeForYearVersionSelection.value = table.table_type
+  isDialogOpen.value = true
+
+  // selectedTable.value = table.table_type
+  // if (table.table_type === 'Yield Curve') {
+  //   ModifiedGMMService.getYieldCurveYears().then((response) => {
+  //     yieldCurveYears.value = response.data
+  //     if (yieldCurveYears.value === null) {
+  //       yieldCurveYears.value = []
+  //     }
+  //     if (yieldCurveYears.value.length > 0) {
+  //       yieldCurveDataDialog.value = true
+  //     }
+  //   })
+  // } else {
+  //   dialog.value = true
+  // }
+}
+
+const handleYearSelected = (payload: any) => {
+  isDialogOpen.value = false
+  console.log('Selected Year:', payload)
+  deleteTableData(payload)
+}
+const handleDialogCancelled = () => {
+  isDialogOpen.value = false
+  console.log('Dialog cancelled')
+}
+
 const handleUpload = (payload: DataPayload) => {
   uploadComplete.value = false
   const formdata: any = new FormData()
@@ -231,7 +279,7 @@ const handleUpload = (payload: DataPayload) => {
 }
 
 const deleteTableData = async (table: any) => {
-  const res = await ModifiedGMMService.getTableYearVersions(table.table_type)
+  const res = await ModifiedGMMService.getTableYears(table.table_name)
   if (res.data !== null) {
     console.log('table year versions', res.data)
   }

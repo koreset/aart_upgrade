@@ -170,5 +170,8 @@ export default {
   },
   getTableYearVersions(tableType) {
     return Api.get('data-tables/' + tableType + '/year-versions')
+  },
+  getTableYears(tableType) {
+    return Api.get('data-tables/' + tableType + '/years')
   }
 }

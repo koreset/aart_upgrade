@@ -7,7 +7,7 @@
   >
     <v-card>
       <v-card-title>
-        <span class="text-h5">Select Year and Version</span>
+        <span class="text-h5">{{ dialogTitle }}</span>
       </v-card-title>
       <v-card-subtitle>
         For table: <strong>{{ tableType }}</strong>
@@ -17,7 +17,7 @@
         <v-container v-if="isLoading">
           <v-row justify="center" class="py-6">
             <v-progress-circular indeterminate color="primary" size="64"></v-progress-circular>
-            <p class="text-center mt-4 grey--text text--darken-1">Loading available versions...</p>
+            <p class="text-center mt-4 grey--text text--darken-1">Loading available data...</p>
           </v-row>
         </v-container>
 
@@ -27,9 +27,17 @@
           </v-alert>
         </v-container>
 
-        <v-container v-else-if="!allYearVersionsData.length">
+        <v-container
+          v-else-if="!allYearVersionsData.length && props.fetchMode === 'yearsAndVersions'"
+        >
           <v-alert type="info" prominent border="start" variant="tonal">
             No specific year/version data found for the table "{{ tableType }}".
+          </v-alert>
+        </v-container>
+
+        <v-container v-else-if="!availableYears.length && props.fetchMode === 'yearsOnly'">
+          <v-alert type="info" prominent border="start" variant="tonal">
+            No specific year data found for the table "{{ tableType }}".
           </v-alert>
         </v-container>
 
@@ -46,6 +54,7 @@
             @update:model-value="onYearSelectedInternal"
           ></v-select>
           <v-select
+            v-if="props.fetchMode === 'yearsAndVersions'"
             v-model="selectedVersionRef"
             :items="availableVersionsForSelectedYear"
             label="Select Version"
@@ -62,11 +71,7 @@
         <v-btn rounded size="small" variant="plain" :disabled="isLoading" @click="handleCancel"
           >Cancel</v-btn
         >
-        <v-btn
-          color="primary"
-          :disabled="isLoading || !selectedYearRef || !selectedVersionRef"
-          @click="handleConfirmSelection"
-        >
+        <v-btn color="primary" :disabled="isConfirmDisabled" @click="handleConfirmSelection">
           Confirm Selection
         </v-btn>
       </v-card-actions>
@@ -78,54 +83,77 @@
 import { ref, watch, computed, onMounted } from 'vue'
 import CsmEngine from '@/renderer/api/CsmEngine' // Adjust path as needed
 
-// Updated interface to match the new API response structure
+// Interface for year and its versions
 interface YearVersion {
   year: number
-  version: string[] // Changed from string to string[]
+  version: string[] // Array of version strings for a given year
 }
 
+// Props definition
 interface Props {
-  modelValue: boolean // For v-model:dialogVisible or similar
+  modelValue: boolean // For v-model for dialog visibility
   tableName: string | null
   tableType: string | null // Used for display purposes
+  fetchMode?: 'yearsOnly' | 'yearsAndVersions' // New prop
 }
 
+// Emits definition
 interface Emits {
   (e: 'update:modelValue', value: boolean): void
-  (e: 'selected', payload: { year: number; version: string; tableName: string }): void
+  (e: 'selected', payload: { year: number; version?: string; tableName: string }): void // Version is now optional
   (e: 'cancelled'): void
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  fetchMode: 'yearsAndVersions' // Default to fetching years and versions
+})
 const emit = defineEmits<Emits>()
 
 const isLoading = ref(false)
 const fetchError = ref<string | null>(null)
-const allYearVersionsData = ref<YearVersion[]>([]) // This will now hold the new structure
+// This will hold YearVersion objects regardless of fetchMode.
+// For 'yearsOnly', version array will be empty.
+const allYearVersionsData = ref<YearVersion[]>([])
 const selectedYearRef = ref<number | null>(null)
 const selectedVersionRef = ref<string | null>(null)
 
 const lowerCaseAndSnakeCase = (value: string): string => {
+  if (!value) return ''
   return value.toLowerCase().replace(/ /g, '_')
 }
 
+const dialogTitle = computed(() => {
+  return props.fetchMode === 'yearsOnly' ? 'Select Year' : 'Select Year and Version'
+})
+
 const availableYears = computed(() => {
   if (!allYearVersionsData.value.length) return []
-  // This logic remains the same as 'item.year' is still directly accessible
+  // Extracts unique years from allYearVersionsData
   const years = new Set(allYearVersionsData.value.map((item) => item.year))
   return Array.from(years).sort((a, b) => b - a) // Sort descending
 })
 
-// Updated computed property for available versions
 const availableVersionsForSelectedYear = computed(() => {
-  if (!selectedYearRef.value || !allYearVersionsData.value.length) return []
-
-  // Find the data for the selected year
+  if (
+    props.fetchMode === 'yearsOnly' ||
+    !selectedYearRef.value ||
+    !allYearVersionsData.value.length
+  ) {
+    return []
+  }
   const yearData = allYearVersionsData.value.find((item) => item.year === selectedYearRef.value)
+  // Returns sorted versions if yearData and its versions exist, otherwise an empty array
+  return yearData && yearData.version ? yearData.version.slice().sort() : []
+})
 
-  // If yearData is found, its 'version' property is the array of version strings
-  // We return a sorted copy of this array
-  return yearData ? yearData.version.slice().sort() : []
+const isConfirmDisabled = computed(() => {
+  if (isLoading.value || !selectedYearRef.value) {
+    return true
+  }
+  if (props.fetchMode === 'yearsAndVersions' && !selectedVersionRef.value) {
+    return true
+  }
+  return false
 })
 
 const resetComponentState = () => {
@@ -136,7 +164,7 @@ const resetComponentState = () => {
   selectedVersionRef.value = null
 }
 
-const fetchYearVersions = async (nameOfTable: string) => {
+const fetchData = async (nameOfTable: string) => {
   if (!nameOfTable) {
     fetchError.value = 'Table name is not provided.'
     isLoading.value = false
@@ -145,30 +173,38 @@ const fetchYearVersions = async (nameOfTable: string) => {
 
   isLoading.value = true
   fetchError.value = null
+  // Reset data and selections before fetching
   allYearVersionsData.value = []
   selectedYearRef.value = null
   selectedVersionRef.value = null
 
   try {
     const lowerTableType = lowerCaseAndSnakeCase(nameOfTable)
-    // Ensure CsmEngine.getTableYearVersions returns data in the new format:
-    // Promise<{ data: YearVersion[] } | null | undefined>
-    const resp = await CsmEngine.getTableYearVersions(lowerTableType)
 
-    // Assuming resp.data is now of type YearVersion[]
-    // e.g., [ { year: 2023, version: ["January"] }, { year: 2024, version: ["Mar", "April"] } ]
-    allYearVersionsData.value = resp?.data || []
-    console.log('Fetched year/versions data:', allYearVersionsData.value)
-
-    if (!allYearVersionsData.value.length) {
-      console.warn(`No year/versions found for table: ${props.tableType}`)
-      // You might want to set an info message here if not handled by the template's
-      // "!allYearVersionsData.length" condition specifically for "no versions" vs "fetch error".
-      // The current template already handles this specific case.
+    if (props.fetchMode === 'yearsOnly') {
+      // Fetch only distinct years
+      // Assuming CsmEngine.getTableYears returns Promise<{ data: number[] } | null | undefined>
+      const resp = await CsmEngine.getTableYears(lowerTableType)
+      const yearsArray = resp?.data || []
+      // Transform to YearVersion[] format with empty versions
+      allYearVersionsData.value = yearsArray.map((year) => ({ year, version: [] }))
+      console.log('Fetched years data:', allYearVersionsData.value)
+      if (!allYearVersionsData.value.length) {
+        console.warn(`No years found for table: ${props.tableType}`)
+      }
+    } else {
+      // Fetch years and versions
+      // Assuming CsmEngine.getTableYearVersions returns Promise<{ data: YearVersion[] } | null | undefined>
+      const resp = await CsmEngine.getTableYearVersions(lowerTableType)
+      allYearVersionsData.value = resp?.data || []
+      console.log('Fetched year/versions data:', allYearVersionsData.value)
+      if (!allYearVersionsData.value.length) {
+        console.warn(`No year/versions found for table: ${props.tableType}`)
+      }
     }
   } catch (e: any) {
-    console.error('Error fetching table year versions:', e)
-    fetchError.value = `Failed to fetch versions for ${props.tableType}. ${e.message || 'Please try again.'}`
+    console.error(`Error fetching data for table ${props.tableType} (mode: ${props.fetchMode}):`, e)
+    fetchError.value = `Failed to fetch data for ${props.tableType}. ${e.message || 'Please try again.'}`
     allYearVersionsData.value = [] // Ensure data is cleared on error
   } finally {
     isLoading.value = false
@@ -179,36 +215,55 @@ watch(
   () => props.modelValue,
   (newValue) => {
     if (newValue && props.tableName) {
-      fetchYearVersions(props.tableName)
+      fetchData(props.tableName)
     } else if (!newValue) {
-      // Reset when dialog is closed externally or via internal actions that set modelValue to false
       resetComponentState()
     }
   }
 )
 
-// Also watch tableName in case it changes while dialog is open
 watch(
   () => props.tableName,
   (newTableName, oldTableName) => {
     if (props.modelValue && newTableName && newTableName !== oldTableName) {
-      fetchYearVersions(newTableName)
+      fetchData(newTableName)
+    }
+  }
+)
+
+// Watch for changes in fetchMode as well, if the dialog might stay open and mode changes
+watch(
+  () => props.fetchMode,
+  (newMode) => {
+    if (props.modelValue && props.tableName) {
+      console.log(`Workspace mode changed to: ${newMode}. Refetching data.`)
+      fetchData(props.tableName) // Refetch data if mode changes while dialog is open
     }
   }
 )
 
 const onYearSelectedInternal = () => {
-  selectedVersionRef.value = null // Reset version when year changes, this is still correct
+  // Reset version only if in 'yearsAndVersions' mode
+  if (props.fetchMode === 'yearsAndVersions') {
+    selectedVersionRef.value = null
+  }
 }
 
 const handleConfirmSelection = () => {
-  if (selectedYearRef.value && selectedVersionRef.value && props.tableName) {
-    emit('selected', {
+  if (selectedYearRef.value && props.tableName) {
+    const payload: { year: number; version?: string; tableName: string } = {
       year: selectedYearRef.value,
-      version: selectedVersionRef.value, // This will be one of the strings from the version array
       tableName: props.tableName
-    })
-    closeDialog(false) // Close dialog after selection
+    }
+    if (props.fetchMode === 'yearsAndVersions' && selectedVersionRef.value) {
+      payload.version = selectedVersionRef.value
+    } else if (props.fetchMode === 'yearsAndVersions' && !selectedVersionRef.value) {
+      // Should not happen if isConfirmDisabled is working correctly
+      console.warn('Version not selected in yearsAndVersions mode.')
+      return
+    }
+    emit('selected', payload)
+    closeDialog(false)
   }
 }
 
@@ -217,21 +272,17 @@ const handleCancel = () => {
   closeDialog(false)
 }
 
-// This function is called to update the v-model and also when actions explicitly close the dialog
 const closeDialog = (value: boolean) => {
   emit('update:modelValue', value)
-  // The watch on props.modelValue will handle the reset if newValue is false.
-  // Explicitly calling resetComponentState() here might be redundant if props.modelValue
-  // watcher is guaranteed to fire immediately after this emit.
-  // However, to be absolutely sure state is reset if closed programmatically via this function:
   if (!value) {
+    // The watch on props.modelValue handles reset, but ensure it for explicit close.
     resetComponentState()
   }
 }
 
 onMounted(() => {
   if (props.modelValue && props.tableName) {
-    fetchYearVersions(props.tableName)
+    fetchData(props.tableName)
   }
 })
 </script>

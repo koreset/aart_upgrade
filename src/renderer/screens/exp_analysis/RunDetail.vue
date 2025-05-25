@@ -28,11 +28,24 @@
                   @update:modelValue="getResults"
                 ></v-select>
               </v-col>
-              <v-col v-if="resultType == 'exp_actuals_expected'" cols="4">
+              <v-col v-if="resultType == 'exp_actuals_expected'" cols="5">
                 <v-btn class="mr-4 mt-2" color="primary" rounded size="small" @click="showActuals"
                   >Show Actuals</v-btn
                 >
                 <v-btn class="mt-2" rounded size="small" color="primary" @click="showSummaries"
+                  >Show Summaries</v-btn
+                >
+              </v-col>
+              <v-col v-if="resultType == 'exp_lapse_crude_results'" cols="5">
+                <v-btn
+                  class="mr-4 mt-2"
+                  color="primary"
+                  rounded
+                  size="small"
+                  @click="showLapseActuals"
+                  >Show Actual/Expected</v-btn
+                >
+                <v-btn class="mt-2" rounded size="small" color="primary" @click="showLapseSummaries"
                   >Show Summaries</v-btn
                 >
               </v-col>
@@ -68,7 +81,7 @@
               <v-row>
                 <v-col>
                   <v-tabs
-                    v-if="displayActuals"
+                    v-if="displayActuals || displayLapseActuals"
                     v-model="tab"
                     center-active
                     dark
@@ -116,6 +129,13 @@
                         :table-title="'Combined Gender Summary'"
                         :columnDefs="processedColumnDefs"
                         :rowData="combinedRowData"
+                        :pagination="true"
+                      />
+                      <data-grid
+                        v-if="lapseSummaryRowData.length > 0 && displayLapseSummaries"
+                        :table-title="'Lapse Crude Summary'"
+                        :columnDefs="lapseSummaryColumnDefs"
+                        :rowData="lapseSummaryRowData"
                         :pagination="true"
                       />
 
@@ -240,6 +260,9 @@ import { Chart } from 'highcharts-vue'
 // const showTable = ref(true)
 const displayActuals = ref(true)
 const displaySummaries = ref(false)
+const displayLapseActuals = ref(true)
+const displayLapseSummaries = ref(false)
+
 const backButton = '< Back to Run Results'
 const $route = useRoute()
 const tab = ref(null)
@@ -250,6 +273,8 @@ const loadingResults = ref(false)
 const selectedProduct = ref(null)
 const productList: any = ref([])
 const analysisColumnDefs: any = ref([])
+const lapseSummaryColumnDefs: any = ref([])
+const lapseSummaryRowData: any = ref([])
 
 const maleRowData = ref([])
 const femaleRowData = ref([])
@@ -376,11 +401,24 @@ const checkCandidateGraphTable = (tableName) => {
 
 const showActuals = () => {
   displayActuals.value = true
+  displayLapseActuals.value = true
   displaySummaries.value = false
 }
 const showSummaries = () => {
   displayActuals.value = false
+  displayLapseActuals.value = false
   displaySummaries.value = true
+}
+const showLapseActuals = () => {
+  displayLapseActuals.value = true
+  displayActuals.value = true
+  displayLapseSummaries.value = false
+}
+
+const showLapseSummaries = () => {
+  displayLapseActuals.value = false
+  displayActuals.value = false
+  displayLapseSummaries.value = true
 }
 
 const getProductsForPortfolio = () => {
@@ -529,6 +567,13 @@ const getResults = () => {
             tableDef.table_name = item.table_name
             tableData.value.push(tableDef)
           })
+        }
+
+        if (res.data.summary_data.length > 0) {
+          lapseSummaryColumnDefs.value = createColumnDefs(res.data.summary_data[0], '')
+          lapseSummaryRowData.value = res.data.summary_data
+          console.log('lapse summary data:', lapseSummaryRowData.value)
+          console.log('lapse summary column defs:', lapseSummaryColumnDefs.value)
         }
         loadingResults.value = false
       })
