@@ -61,11 +61,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr
-                  v-for="item in reportItems"
-                  :key="item.line_item"
-                  :class="item.style == 'bold' ? 'sub-total' : ''"
-                >
+                <tr v-for="item in reportItems" :key="item.line_item" :class="getClass(item)">
                   <td>{{ item.type == 'empty' ? '' : item.line_item }}</td>
                   <td>
                     {{ item.type == 'empty' || item.type == 'sub-total' ? '' : item.index }}
@@ -108,6 +104,20 @@ onMounted(() => {
 })
 
 // methods
+
+const getClass = (item) => {
+  if (item.type === 'empty') {
+    return ''
+  } else if (item.type === 'sub-total') {
+    return 'sub-total'
+  } else if (item.type === 'bold') {
+    return 'bold'
+  } else if (item.type === 'sub-total-reinsurance') {
+    return 'sub-total-reinsurance'
+  }
+  return ''
+}
+
 const formatNumber = (num) => {
   return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
 }
@@ -178,93 +188,6 @@ const exportToExcel = () => {
     window.URL.revokeObjectURL(url)
   })
 }
-
-// export default {
-//   data() {
-//     return {
-//       selectedRun: null,
-//       runList: [],
-//       selectedProduct: null,
-//       reportItems: [],
-//       products: []
-//     }
-//   },
-//   mounted() {
-//     CsmService.getCsmRunList().then((res) => {
-//       this.runList = res.data
-//     })
-//   },
-//   methods: {
-//     // function to format numbers with commas
-//     formatNumber(num) {
-//       return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
-//     },
-//     getProducts() {
-//       this.selectedProduct = null
-//       this.clearReport()
-//       this.products = []
-//       CsmService.getCsmProductList(this.selectedRun.run_date).then((res) => {
-//         this.products = res.data
-//         this.products.unshift({ product_code: 'ALL' })
-//       })
-//     },
-
-//     clearReport() {
-//       this.reportItems = []
-//     },
-//     getReport() {
-//       if (this.selectedProduct !== null) {
-//         CsmService.getFinancialReports(this.selectedRun.run_date, this.selectedProduct).then(
-//           (res) => {
-//             this.reportItems = []
-//             this.reportItems = res.data
-//           }
-//         )
-//       }
-//     },
-//     exportToExcel() {
-//       const workbook = new ExcelJS.Workbook()
-
-//       const worksheet = workbook.addWorksheet('Financial Report')
-//       worksheet.columns = [
-//         { header: 'IASB format of Income Statement', key: 'line_item', width: 30 },
-//         { header: 'Index', key: 'index', width: 10 },
-//         { header: 'Current Year', key: 'current_year', width: 20 },
-//         { header: 'Previous Year', key: 'past_year', width: 20 },
-//         { header: 'Notes', key: 'notes', width: 20 },
-//         { header: 'Reference', key: 'reference2', width: 20 }
-//       ]
-
-//       this.reportItems.forEach((item) => {
-//         console.log(item)
-//         worksheet.addRow(item)
-//       })
-
-//       worksheet.getRow(1).font = { bold: true }
-//       worksheet.getRow(1).fill = {
-//         type: 'pattern',
-//         pattern: 'solid',
-//         fgColor: { argb: 'FF38546C' }
-//       }
-//       worksheet.getRow(1).font = { color: { argb: 'FFFFFFFF' } }
-//       worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'center' }
-//       worksheet.getRow(1).height = 30
-
-//       // Generate a blob from the workbook and create a download link
-//       workbook.xlsx.writeBuffer().then((data) => {
-//         const blob = new Blob([data], {
-//           type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-//         })
-//         const url = window.URL.createObjectURL(blob)
-//         const a = document.createElement('a')
-//         a.href = url
-//         a.download = 'table_data.xlsx'
-//         a.click()
-//         window.URL.revokeObjectURL(url)
-//       })
-//     }
-//   }
-// }
 </script>
 
 <style scoped>
@@ -281,6 +204,13 @@ const exportToExcel = () => {
   font-style: italic;
   border-top: 1px solid black;
   background-color: cadetblue;
+}
+
+.sub-total-reinsurance {
+  font-weight: 900;
+  font-style: italic;
+  border-top: 1px solid black;
+  background-color: rgb(195, 211, 144);
 }
 
 /* class, text-right to align text to the right */
