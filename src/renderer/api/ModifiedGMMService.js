@@ -118,8 +118,8 @@ export default {
   checkRunName(runName) {
     return Api.get('gmm-engine/run-name-check/' + runName)
   },
-  deleteTable(tableType) {
-    return Api.delete('gmm-engine/tables/' + tableType)
+  deleteTable(tableType, year) {
+    return Api.delete('gmm-engine/tables/' + tableType + '/year/' + year)
   },
   deletePAAYieldTable(tableType, yieldCurveCode, yieldYear, yieldMonth) {
     return Api.delete(
