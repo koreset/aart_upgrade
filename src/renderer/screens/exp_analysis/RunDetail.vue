@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col>
-        <base-card>
+        <base-card :show-actions="false">
           <template #header>
             <span class="headline">Experience Analysis Run Results</span>
           </template>
@@ -183,56 +183,44 @@
               </v-row>
             </v-container>
             <v-row v-if="runSettings !== null" class="mx-1">
+              <v-divider class="my-4"></v-divider>
+              <h4>Run Settings</h4>
               <v-col>
                 <v-table class="trans-tables">
                   <thead>
                     <tr class="table-row">
-                      <th class="table-col minwidth-name">Run Name</th>
-                      <th class="minwidth table-col">Portfolio</th>
+                      <th class="table-col minwidth-name">Run Group Name</th>
+                      <th class="minwidth table-col">Run Name</th>
                       <th class="minwidth table-col">Run Date</th>
-                      <th class="minwidth table-col">Claims Data Year</th>
-                      <th class="minwidth table-col">Claims Data Version</th>
-                      <th class="minwidth table-col">Parameter Year</th>
-                      <th class="minwidth table-col">Yield Curve Year</th>
-                      <th class="minwidth table-col">Yield Curve Month</th>
-                      <th class="minwidth table-col">IBNR Method</th>
-                      <th class="minwidth table-col">Calculation Interval</th>
-                      <th class="minwidth table-col">Inflation Indicator</th>
-                      <th class="minwidth table-col">Inflation Date</th>
-                      <th class="minwidth table-col">Data Input Start Date</th>
-                      <th class="minwidth table-col">Data Input End Date</th>
-                      <th class="minwidth table-col">Bootstrap Indicator</th>
-                      <th class="minwidth table-col">Simulations</th>
-                      <th class="minwidth table-col">Manual Rerun</th>
-                      <th class="minwidth table-col">Mack Model Indicator</th>
-                      <th class="minwidth table-col">Mack Model Simulations</th>
-                      <th class="minwidth table-col">Mack Model Distribution</th>
-                      <th class="minwidth table-col">User</th>
+                      <th class="minwidth table-col">Configuration Used</th>
+                      <th class="minwidth table-col">Age Band Version</th>
+                      <th class="minwidth table-col">Period Start </th>
+                      <th class="minwidth table-col">Period End</th>
+                      <th class="minwidth table-col">Exposure Year</th>
+                      <th class="minwidth table-col">Exposure Version</th>
+                      <th class="minwidth table-col">Lapse Year</th>
+                      <th class="minwidth table-col">Lapse Version</th>
+                      <th class="minwidth table-col">Mortality Year</th>
+                      <th class="minwidth table-col">Mortality Version</th>
+                      <th class="minwidth table-col">Run By</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>{{ runSettings.run_name }}</td>
-                      <td>{{ runSettings.portfolio_name }}</td>
-                      <td>{{ runSettings.run_date }}</td>
-                      <td>{{ runSettings.claims_data_year }}</td>
-                      <td>{{ runSettings.claims_input_version }}</td>
-                      <td>{{ runSettings.parameter_year }}</td>
-                      <td>{{ runSettings.yield_curve_year }}</td>
-                      <td>{{ runSettings.yield_curve_month }}</td>
-                      <td>{{ runSettings.ibnr_method }}</td>
-                      <td>{{ runSettings.calculation_interval }}</td>
-                      <td>{{ runSettings.inflation_indicator }}</td>
-                      <td>{{ runSettings.inflation_date }}</td>
-                      <td>{{ runSettings.data_input_start_date }}</td>
-                      <td>{{ runSettings.data_input_end_date }}</td>
-                      <td>{{ runSettings.bootstrap_indicator }}</td>
-                      <td>{{ runSettings.simulations }}</td>
-                      <td>{{ runSettings.rerun_indicator }}</td>
-                      <td>{{ runSettings.mack_model_indicator }}</td>
-                      <td>{{ runSettings.mack_model_simulations }}</td>
-                      <td>{{ runSettings.distribution_model }}</td>
-                      <td>{{ runSettings.user_name }}</td>
+                    <tr v-for="runSetting in runSettings" :key="runSetting.run_id">
+                      <td>{{ runSetting.run_group_name }}</td>
+                      <td>{{ runSetting.run_name }}</td>
+                      <td>{{ runSetting.run_date }}</td>
+                      <td>{{ runSetting.exp_configuration_name }}</td>
+                      <td>{{ runSetting.age_band_version }}</td>
+                      <td>{{ runSetting.period_start_date }}</td>
+                      <td>{{ runSetting.period_end_date }}</td>
+                      <td>{{ runSetting.exposure_data_year }}</td>
+                      <td>{{ runSetting.exposure_data_version }}</td>
+                      <td>{{ runSetting.lapse_data_year }}</td>
+                      <td>{{ runSetting.lapse_data_version }}</td>
+                      <td>{{ runSetting.mortality_data_year }}</td>
+                      <td>{{ runSetting.mortality_data_version }}</td>
+                      <td>{{ runSetting.user_name }}</td>
                     </tr>
                   </tbody>
                 </v-table>
@@ -327,6 +315,14 @@ const options: any = ref({
 onMounted(() => {
   // console.log('mounted')
   console.log($route.params)
+  // get run settings
+  ExpService.getRunSettings($route.params.id).then((res) => {
+    runSettings.value = res.data
+    console.log('run settings:', runSettings.value)
+    if (runSettings.value === null) {
+      errorMessage.value = ['No run settings found for the selected run']
+    }
+  })
 })
 const digit9Formatter = (params) => {
   if (params.value > 0) {
@@ -790,11 +786,11 @@ const processedColumnDefs = computed(() => {
 
 <style>
 .minwidth {
-  min-width: 110px !important;
+  min-width: 150px !important;
 }
 
 .minwidth-name {
-  min-width: 150px !important;
+  min-width: 200px !important;
 }
 
 .tab-rounded {

@@ -205,8 +205,14 @@ const deleteRun = async (runId: string) => {
   }
 
   try {
-    await ExpService.deleteRun(runId)
-    await getRunResults() // Refresh results after delete
+    ExpService.deleteRun(runId)
+    // remove the deleted run from the local state
+    console.log('All runs before deletion:', runResults.value) // Log before deletion
+    console.log('Run deleted:', runResults.value.length) // Log successful deletion
+    runResults.value = runResults.value.filter((run: any) => run.id !== runId)
+    console.log('Run deleted:', runResults.value.length) // Log successful deletion
+
+    getRunResults() // Refresh results after delete
     dialog.value = false
   } catch (error) {
     console.error('Error deleting run:', error) // Log error
@@ -233,83 +239,6 @@ onUnmounted(() => {
     refreshIntervalId.value = null
   }
 })
-
-// import ExpService from '@/renderer/api/ExpAnalysisService.js'
-// import { onMounted, ref, computed } from 'vue'
-// import BaseCard from '@/renderer/components/BaseCard.vue'
-// import { DateTime } from 'luxon'
-// import ConfirmationDialog from '@/renderer/components/ConfirmDialog.vue'
-
-// // data
-// const runResults: any = ref([])
-// const loading = ref(false)
-// const dialog = ref(false)
-// const confirmAction = ref()
-
-// const pageSize = 10
-// const currentPage = ref(1)
-// const totalPages = ref(3)
-
-// const paginatedJobs: any = computed(() => {
-//   const start = (currentPage.value - 1) * pageSize
-//   const end = start + pageSize
-//   return runResults.value.slice(start, end)
-// })
-
-// const formatDateString = (dateString: any) => {
-//   return DateTime.fromISO(dateString).toLocaleString(DateTime.DATETIME_MED)
-// }
-
-// const toMinutes = (number) => {
-//   let minutes, seconds
-//   if (number < 60) {
-//     minutes = 0
-//     seconds = Math.floor(number)
-//   } else {
-//     // TODO
-//     minutes = Math.floor(number / 60)
-//     seconds = number % 60
-//     seconds = Math.round(seconds)
-//   }
-//   return minutes + ' m, ' + seconds + ' s'
-// }
-
-// const roundPercent = (number) => {
-//   return number.toFixed(2)
-// }
-
-// const getRunResults = async () => {
-//   loading.value = true
-//   try {
-//     const response = await ExpService.getRunResults()
-//     runResults.value = response.data
-//     loading.value = false
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
-
-// const deleteRun = async (runId) => {
-//   const resConfirm = await confirmAction.value.open(
-//     'Delete Confirmation',
-//     'Are you sure you want to delete this run?'
-//   )
-//   if (!resConfirm) {
-//     return
-//   }
-
-//   try {
-//     await ExpService.deleteRun(runId)
-//     getRunResults()
-//     dialog.value = false
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
-
-// onMounted(() => {
-//   getRunResults()
-// })
 </script>
 
 <style lang="scss" scoped></style>

@@ -50,14 +50,6 @@
                     :onUpdate:isInfoDialogOpen="closeInfoBox"
                     :isDialogOpen="infoDialog"
                   />
-
-                  <!-- <gmm-file-info
-                    :tableDialog="tableDialog"
-                    :tableType="selectedTable"
-                    :selectedRowData="rowData"
-                    :selectedColumnDefs="columnDefs"
-                    @resetTableDialog="dismissTableDialog"
-                  /> -->
                 </v-col>
               </v-row>
             </v-container>

@@ -125,5 +125,8 @@ export default {
   },
   getAgeBands() {
     return Api.get('exp-analysis/age-band-versions')
+  },
+  getRunSettings(runId) {
+    return Api.get(`exp-analysis/get-exp-analysis-runsettings/${runId}`)
   }
 }

@@ -38,7 +38,7 @@
                             variant="outlined"
                             rounded
                             size="small"
-                            @click.stop="initiateDeleteProcess(item)"
+                            @click.stop="deleteTableData(item)"
                           >
                             <v-icon color="error">mdi-delete</v-icon>
                             <span>Delete</span>
@@ -151,16 +151,37 @@
       <v-btn rounded color="red" variant="text" @click="snackbar = false">Close</v-btn>
     </v-snackbar>
     <confirmation-dialog ref="confirmDeleteDialog" />
-    <year-version-selector
-      :model-value="isDialogOpen"
-      :table-name="tableNameForYearVersionSelection"
-      :table-type="tableTypeForYearVersionSelection"
-      fetch-mode="yearsOnly"
-      @update:model-value="isDialogOpen = $event"
-      @selected="handleYearSelected"
-      @cancelled="handleDialogCancelled"
-    >
-    </year-version-selector>
+    <!-- <v-dialog v-model="otherTableDialog" persistent max-width="600">
+      <base-card>
+        <template #header
+          ><span class="headline">Available years for {{ otherTable }}</span></template
+        >
+        <template #default>
+          <v-row v-if="availableTableYears.length > 0" class="mt-5">
+            <v-col>
+              <v-select
+                v-model="selectedTableYear"
+                variant="outlined"
+                density="compact"
+                label="Year Data"
+                placeholder="Select an existing Year"
+                :items="availableTableYears"
+                item-title="Year"
+                item-value="Year"
+              ></v-select>
+            </v-col>
+          </v-row>
+        </template>
+        <template #actions>
+          <v-btn color="primary darken-1" variant="text" @click="deleteOtherTableData()"
+            >Proceed</v-btn
+          >
+          <v-btn color="primary darken-1" variant="text" @click="cancelOtherTableDialog()"
+            >Cancel</v-btn
+          >
+        </template>
+      </base-card>
+    </v-dialog> -->
   </v-container>
 </template>
 
@@ -174,11 +195,9 @@ import ModifiedGMMService from '@/renderer/api/ModifiedGMMService'
 import formatValues from '@/renderer/utils/format_values'
 import { ref, onMounted } from 'vue'
 import { DataPayload } from '@/renderer/components/types'
-import YearVersionSelector from '@/renderer/components/YearVersionSelector.vue'
 
 // data
-const tableNameForYearVersionSelection: any = ref('')
-const tableTypeForYearVersionSelection: any = ref('')
+// const otherTableDialog: any = ref(false)
 const viewHeader: string = 'PAA Assumption Tables'
 const confirmDeleteDialog: any = ref()
 const selectedYieldCurveYear: any = ref(null)
@@ -203,7 +222,7 @@ const modelPoints: any = ref([])
 const text: any = ref('')
 const yieldCurveDataDialog: any = ref(false)
 const columnDefs: any = ref([])
-const dialog: any = ref(false)
+// const dialog: any = ref(false)
 
 const uploadComplete = ref(false)
 const snackbarText: any = ref(null)
@@ -218,39 +237,6 @@ onMounted(() => {
 })
 
 // methods
-
-const isDialogOpen = ref(false)
-
-const initiateDeleteProcess = (table: any) => {
-  selectedTable.value = table.table_type
-  if (table.table_type === 'Yield Curve') {
-    ModifiedGMMService.getYieldCurveYears().then((response) => {
-      yieldCurveYears.value = response.data
-      if (yieldCurveYears.value === null) {
-        yieldCurveYears.value = []
-      }
-      if (yieldCurveYears.value.length > 0) {
-        yieldCurveDataDialog.value = true
-      }
-    })
-  } else {
-    console.log('Initiating delete process for table:', table)
-    tableNameForYearVersionSelection.value = table.table_name
-    tableTypeForYearVersionSelection.value = table.table_type
-    isDialogOpen.value = true
-  }
-}
-
-const handleYearSelected = (payload: any) => {
-  isDialogOpen.value = false
-  console.log('Selected Year:', payload)
-  deleteTableData(selectedTable.value, payload)
-}
-const handleDialogCancelled = () => {
-  isDialogOpen.value = false
-  console.log('Dialog cancelled')
-}
-
 const handleUpload = (payload: DataPayload) => {
   uploadComplete.value = false
   const formdata: any = new FormData()
@@ -276,25 +262,122 @@ const handleUpload = (payload: DataPayload) => {
     })
 }
 
-const deleteTableData = async (table: any, payload: any) => {
-  try {
-    console.log('Deleting data for table:', table, 'for year:', payload.year)
-    const result = await confirmDeleteDialog.value.open(
-      'Deleting Data for ' + table + ' table',
-      'Are you sure you want to delete this data?'
-    )
-    if (result) {
-      ModifiedGMMService.deleteTable(table, payload.year).then((response) => {
-        text.value = response.data
-        snackbar.value = true
-        dialog.value = false
-        tableData.value = []
-        selectedTable.value = ''
-      })
-    }
-  } catch (error) {
-    console.log(error)
+// const deleteTableData = async (table: any) => {
+//   try {
+//     let tableName = table.name.toLowerCase()
+//     tableName = tableName.replace(/\s/g, '-')
+
+//     let resp: any = null
+//     if (tableName === 'shocks') {
+//       resp = await ValuationService.getAvailableShockBases()
+//       availableShockBases.value = resp.data
+//       shocksDialog.value = true
+//     } else {
+//       resp = await ValuationService.getAvailableYears(tableName)
+
+//       if (table.name === 'Yield Curve') {
+//         yieldCurveYears.value = resp.data
+//         if (yieldCurveYears.value.length > 0) {
+//           yieldCurveDataDialog.value = true
+//         }
+//       } else {
+//         otherTable.value = table.name
+//         availableTableYears.value = resp.data
+//         otherTableDialog.value = true
+//       }
+//     }
+//   } catch (error) {
+//     console.log(error)
+//   }
+// }
+
+const deleteTableData = async (table: any) => {
+  console.log('deleting table data for', table)
+
+  if (table.table_type === 'Yield Curve') {
+    console.log('deleting yield curve data')
+    yieldCurveDataDialog.value = true
   }
+  if (table.table_type === 'Shocks') {
+    console.log('deleting shocks data')
+    // shocksDialog.value = true
+  }
+
+  if (table.table_type !== 'Yield Curve' && table.table_type !== 'Shocks') {
+    try {
+      const result = await confirmDeleteDialog.value.open(
+        'Deleting Data for ' + table.table_type + ' table',
+        'Are you sure you want to delete this data?'
+      )
+      if (result) {
+        ModifiedGMMService.deleteTable(table.table_type).then((response) => {
+          text.value = response.data
+          snackbar.value = true
+          tableData.value = []
+          selectedTable.value = ''
+        })
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  // if (table.tableType !== 'Shocks' && table.tableType !== 'Yield Curve') {
+  //   try {
+  //     const res = await ModifiedGMMService.getTableYears(table.table_name)
+  //     if (res.data !== null) {
+  //       console.log('table year versions', res.data)
+  //     }
+
+  //     const result = await confirmDeleteDialog.value.open(
+  //       'Deleting Data for ' + table.table_type + ' table',
+  //       'Are you sure you want to delete this data?'
+  //     )
+  //     if (result) {
+  //       ModifiedGMMService.deleteTable(table.table_type).then((response) => {
+  //         text.value = response.data
+  //         snackbar.value = true
+  //         dialog.value = false
+  //         tableData.value = []
+  //         selectedTable.value = ''
+  //       })
+  //     }
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  //   return
+  // }
+
+  // if (table.table_type === 'Yield Curve') {
+  //   ModifiedGMMService.getYieldCurveYears().then((response) => {
+  //     yieldCurveYears.value = response.data
+  //     selectedTable.value = table.table_type
+  //     if (yieldCurveYears.value === null) {
+  //       yieldCurveYears.value = []
+  //     }
+  //     if (yieldCurveYears.value.length > 0) {
+  //       yieldCurveDataDialog.value = true
+  //     }
+  //   })
+  // } else {
+  //   try {
+  //     const result = await confirmDeleteDialog.value.open(
+  //       'Deleting Data for ' + table.table_type + ' table',
+  //       'Are you sure you want to delete this data?'
+  //     )
+  //     if (result) {
+  //       ModifiedGMMService.deleteTable(table.table_type).then((response) => {
+  //         text.value = response.data
+  //         snackbar.value = true
+  //         dialog.value = false
+  //         tableData.value = []
+  //         selectedTable.value = ''
+  //       })
+  //     }
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
 }
 
 // methods
@@ -332,8 +415,6 @@ const viewTable = (item: any) => {
 
 const deleteYieldCurveData = () => {
   console.log(selectedYieldCurveMonth.value)
-  console.log(selectedYieldCurveCode.value)
-  console.log(selectedYieldCurveYear.value)
   ModifiedGMMService.deletePAAYieldTable(
     selectedTable.value,
     selectedYieldCurveYear.value,
