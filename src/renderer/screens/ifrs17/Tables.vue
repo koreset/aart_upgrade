@@ -289,35 +289,31 @@ const initiateDeleteProcess = (tableName: string) => {
   showYearVersionDialog.value = true // This will trigger the YearVersionSelector dialog
 }
 
-const handleVersionSelected = async (selection: {
-  year: number
-  version: string
-  tableName: string
-}) => {
-  console.log('Version selected in parent:', selection)
+const handleVersionSelected = async (payload: any) => {
+  console.log('Version selected in parent:', payload)
   showYearVersionDialog.value = false // Ensure dialog is closed
 
   // Now, open your final confirmation dialog
   if (confirmDialogRef.value && typeof confirmDialogRef.value.open === 'function') {
     const result = await confirmDialogRef.value.open(
       'Confirm Deletion',
-      `Are you sure you want to delete data for table "${selection.tableName}", year ${selection.year}, version "${selection.version}"? This action cannot be undone.`
+      `Are you sure you want to delete data for table "${payload.tableName}", year ${payload.year}, version "${payload.version}"? This action cannot be undone.`
     )
 
     if (result) {
       try {
-        const lowerTableType = lowerCaseAndSnakeCase(selection.tableName)
+        const lowerTableType = lowerCaseAndSnakeCase(payload.tableName)
         // Call your actual delete API
-        await CsmEngine.deleteTableVersion(lowerTableType, selection.year, selection.version) // Uncomment and use actual API
+        await CsmEngine.deleteTableVersion(lowerTableType, payload.year, payload.version) // Uncomment and use actual API
 
-        text.value = `Data for ${selection.tableName} (Year: ${selection.year}, Version: ${selection.version}) was successfully DELETED (simulated).`
+        text.value = `Data for ${payload.tableName} (Year: ${payload.year}, Version: ${payload.version}) was successfully DELETED (simulated).`
         snackbar.value = true
         console.log(
-          `DELETING: ${lowerTableType}, Year: ${selection.year}, Version: ${selection.version}`
+          `DELETING: ${lowerTableType}, Year: ${payload.year}, Version: ${payload.version}`
         )
       } catch (error) {
         console.error('Error deleting table version:', error)
-        text.value = `Error deleting data for ${selection.tableName}. Please try again.`
+        text.value = `Error deleting data for ${payload.tableName}. Please try again.`
         snackbar.value = true
       }
     } else {
