@@ -842,6 +842,7 @@ const getYieldCurveMonths = async () => {
 }
 
 const getRunBasis = async () => {
+  availableBases.value = []
   const res = await ValuationService.getAvailableBases(
     selectedProducts.value[selectedProducts.value.length - 1].product_code,
     selectedParameterYear.value
@@ -1167,8 +1168,8 @@ const addToRunJobs = async () => {
 }
 
 const resetFields = () => {
-  settingRunName.value = ''
-  runDate.value = null
+  // settingRunName.value = ''
+  // runDate.value = null
   selectedProducts.value = []
   selectedModelPointYear.value = null
   selectedModelPointVersion.value = null
@@ -1178,6 +1179,7 @@ const resetFields = () => {
   selectedMorbidityYear.value = null
   selectedRetrenchmentYear.value = null
   availableYieldCurveMonths.value = []
+  availableBases.value = []
   selectedLapseYear.value = null
   selectedMortalityYear.value = null
   selectedShock.value = null
