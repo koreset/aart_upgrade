@@ -852,9 +852,7 @@ const validationSchema = yup.object({
   phi_deferred_period: yup.number().when('phi_benefit', {
     is: true,
     then: (schema) =>
-      schema
-        .required('Deferred period is required')
-        .positive('Deferred period must be a positive number'),
+      schema.required('Deferred period is required').min(0, 'Deferred period must be at least 0'),
     otherwise: (schema) => schema.nullable()
   }),
   phi_disability_definition: yup.string().when('phi_benefit', {
@@ -934,9 +932,7 @@ const validationSchema = yup.object({
   ttd_deferred_period: yup.number().when('ttd_benefit', {
     is: true,
     then: (schema) =>
-      schema
-        .required('Deferred period is required')
-        .positive('Deferred period must be a positive number'),
+      schema.required('Deferred period is required').min(0, 'Deferred period must be at least 0'),
     otherwise: (schema) => schema.nullable()
   }),
   ttd_disability_definition: yup.string().when('ttd_benefit', {
