@@ -968,7 +968,8 @@ const validationSchema = yup.object({
     then: (schema) =>
       schema
         .required('Spouse funeral sum assured is required')
-        .positive('Spouse funeral sum assured must be a positive number'),
+        .min(0, 'Spouse funeral sum assured must be at least 0'),
+
     otherwise: (schema) => schema.nullable()
   }),
   family_funeral_children_funeral_sum_assured: yup.number().when('family_funeral_benefit', {
@@ -976,7 +977,8 @@ const validationSchema = yup.object({
     then: (schema) =>
       schema
         .required('Children funeral sum assured is required')
-        .positive('Children funeral sum assured must be a positive number'),
+        .min(0, 'Children funeral sum assured must be at least 0'),
+
     otherwise: (schema) => schema.nullable()
   }),
   family_funeral_adult_dependant_sum_assured: yup.number().when('family_funeral_benefit', {
@@ -984,7 +986,7 @@ const validationSchema = yup.object({
     then: (schema) =>
       schema
         .required('Adult dependant sum assured is required')
-        .positive('Adult dependant sum assured must be a positive number'),
+        .min(0, 'Adult dependant sum assured must be at least 0'),
     otherwise: (schema) => schema.nullable()
   }),
   family_funeral_parent_funeral_sum_assured: yup.number().when('family_funeral_benefit', {
@@ -992,7 +994,7 @@ const validationSchema = yup.object({
     then: (schema) =>
       schema
         .required('Parent funeral sum assured is required')
-        .positive('Parent funeral sum assured must be a positive number'),
+        .min(0, 'Parent funeral sum assured must be at least 0'),
     otherwise: (schema) => schema.nullable()
   }),
   family_funeral_max_number_children: yup.number().when('family_funeral_benefit', {
@@ -1000,7 +1002,7 @@ const validationSchema = yup.object({
     then: (schema) =>
       schema
         .required('Maximum number of children is required')
-        .positive('Maximum number of children must be a positive number'),
+        .min(0, 'Maximum number of children must be at least 0'),
     otherwise: (schema) => schema.nullable()
   }),
   family_funeral_max_number_adult_dependants: yup.number().when('family_funeral_benefit', {
@@ -1008,7 +1010,7 @@ const validationSchema = yup.object({
     then: (schema) =>
       schema
         .required('Maximum number of adult dependants is required')
-        .positive('Maximum number of adult dependants must be a positive number'),
+        .min(0, 'Maximum number of adult dependants must be at least 0'),
     otherwise: (schema) => schema.nullable()
   })
 })

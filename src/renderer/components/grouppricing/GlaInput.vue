@@ -82,7 +82,7 @@ const validationSchema = yup.object({
   waiting_period: yup
     .number()
     .required('Waiting period is required')
-    .positive('Waiting period must be a positive number'),
+    .min(0, 'Waiting period must be at least 0'),
   cover_termination_age: yup
     .number()
     .required('Cover termination age is required')
