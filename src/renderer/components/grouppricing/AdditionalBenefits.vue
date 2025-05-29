@@ -717,9 +717,7 @@ const validationSchema = yup.object({
   ptd_deferred_period: yup.number().when('ptd_benefit', {
     is: true,
     then: (schema) =>
-      schema
-        .required('Deferred period is required')
-        .positive('Deferred period must be a positive number'),
+      schema.required('Deferred period is required').min(0, 'Deferred period must be at least 0'),
     otherwise: (schema) => schema.nullable()
   }),
   ptd_disability_definition: yup.string().when('ptd_benefit', {
@@ -840,9 +838,7 @@ const validationSchema = yup.object({
   phi_waiting_period: yup.number().when('phi_benefit', {
     is: true,
     then: (schema) =>
-      schema
-        .required('Waiting period is required')
-        .positive('Waiting period must be a positive number'),
+      schema.required('Waiting period is required').min(0, 'Waiting period must be at least 0'),
     otherwise: (schema) => schema.nullable()
   }),
   phi_number_monthly_payments: yup.number().when('phi_benefit', {
@@ -924,9 +920,7 @@ const validationSchema = yup.object({
   ttd_waiting_period: yup.number().when('ttd_benefit', {
     is: true,
     then: (schema) =>
-      schema
-        .required('Waiting period is required')
-        .positive('Waiting period must be a positive number'),
+      schema.required('Waiting period is required').min(0, 'Waiting period must be at least 0'),
     otherwise: (schema) => schema.nullable()
   }),
   ttd_number_monthly_payments: yup.number().when('ttd_benefit', {
@@ -1211,16 +1205,8 @@ const validateForm = handleSubmit((values) => {
   groupStore.group_pricing_quote.ttd_benefit = !!values.ttd_benefit
   groupStore.group_pricing_quote.family_funeral_benefit = !!values.family_funeral_benefit
 
-  // Helper to initialize nested objects in store if they don't exist
-  // const ensureBenefitObject = (benefitKey: string) => {
-  //   if (!groupStore.group_pricing_quote[benefitKey]) {
-  //     groupStore.group_pricing_quote[benefitKey] = {}
-  //   }
-  // }
-
   // --- PTD Benefit Details ---
   if (values.ptd_benefit) {
-    // ensureBenefitObject('ptd')
     const ptdStore = groupStore.group_pricing_quote.ptd
     ptdStore.risk_type = values.ptd_risk_type
     ptdStore.benefit_type = values.ptd_benefit_type
@@ -1233,7 +1219,6 @@ const validateForm = handleSubmit((values) => {
 
   // --- CI Benefit Details ---
   if (values.ci_benefit) {
-    // ensureBenefitObject('ci')
     const ciStore = groupStore.group_pricing_quote.ci
     ciStore.benefit_structure = values.ci_benefit_structure
     ciStore.benefit_definition = values.ci_benefit_definition
@@ -1244,7 +1229,6 @@ const validateForm = handleSubmit((values) => {
 
   // --- SGLA Benefit Details ---
   if (values.sgla_benefit) {
-    // ensureBenefitObject('sgla')
     const sglaStore = groupStore.group_pricing_quote.sgla
     sglaStore.sgla_salary_multiple = values.sgla_salary_multiple
     sglaStore.max_benefit = values.sgla_max_benefit
@@ -1253,7 +1237,6 @@ const validateForm = handleSubmit((values) => {
 
   // --- PHI Benefit Details ---
   if (values.phi_benefit) {
-    // ensureBenefitObject('phi')
     const phiStore = groupStore.group_pricing_quote.phi
     phiStore.risk_type = values.phi_risk_type
     phiStore.maximum_benefit = values.phi_maximum_benefit
@@ -1271,7 +1254,6 @@ const validateForm = handleSubmit((values) => {
 
   // --- TTD Benefit Details ---
   if (values.ttd_benefit) {
-    // ensureBenefitObject('ttd')
     const ttdStore = groupStore.group_pricing_quote.ttd
     ttdStore.risk_type = values.ttd_risk_type
     ttdStore.maximum_benefit = values.ttd_maximum_benefit
@@ -1303,7 +1285,6 @@ const validateForm = handleSubmit((values) => {
     ffStore.max_number_adult_dependants = values.family_funeral_max_number_adult_dependants
   }
 
-  // console.log('Updated groupStore.group_pricing_quote:', JSON.parse(JSON.stringify(groupStore.group_pricing_quote)));
   return true
 })
 
