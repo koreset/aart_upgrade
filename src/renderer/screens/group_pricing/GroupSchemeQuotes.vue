@@ -311,6 +311,7 @@ onMounted(() => {
     .then((res) => {
       if (res.data && res.data.length > 0) {
         quotes.value = res.data
+        console.log('Quotes:', quotes.value)
       } else {
         quotes.value = []
       }

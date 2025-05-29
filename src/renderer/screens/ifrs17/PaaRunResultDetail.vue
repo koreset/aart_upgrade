@@ -194,8 +194,8 @@ const getGroupSteps = () => {
     CsmEngine.getPaaSingleRunProductGroup(
       csmRunId.value,
       selectedProduct.value,
-      selectedGroup,
-      csmRunDate
+      selectedGroup.value,
+      csmRunDate.value
     ).then((res) => {
       stepResults.value = res.data.steps
       createColumnDefs(stepResults.value)

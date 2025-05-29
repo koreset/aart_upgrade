@@ -157,6 +157,7 @@ onMounted(() => {
     GroupPricingService.getQuote(quoteId.value).then((res) => {
       groupStore.group_pricing_quote = res.data
       groupStore.group_pricing_quote.commencement_date = null
+      console.log('group_pricing_quote', groupStore.group_pricing_quote)
     })
   }
 })
