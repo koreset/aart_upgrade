@@ -350,10 +350,64 @@ const { handleSubmit, defineField, errors } = useForm({
   }
 })
 
+// const validateForm = handleSubmit(async (values) => {
+//   groupStore.group_pricing_quote.scheme_name = values.scheme_name
+//   return true
+//   // Perform any additional actions with the form values
+// })
+
 const validateForm = handleSubmit(async (values) => {
+  // 'values' contains all the validated form fields
+  // Assign them to your Pinia store state
+
+  console.log('Form values:', values)
+
+  // Quote Type is already handled by chooseQuoteFlow, but can be set here for consistency
+  if (values.quote_type !== undefined) {
+    // Check if defined, as it might be null
+    groupStore.group_pricing_quote.quote_type = values.quote_type
+  }
+
   groupStore.group_pricing_quote.scheme_name = values.scheme_name
-  return true
-  // Perform any additional actions with the form values
+
+  // Conditionally update New Business fields
+  if (groupStore.group_pricing_quote.quote_type === 'New Business') {
+    groupStore.group_pricing_quote.scheme_contact = values.scheme_contact
+    groupStore.group_pricing_quote.scheme_email = values.scheme_email
+  } else {
+    // Optionally clear them if not New Business
+    groupStore.group_pricing_quote.scheme_contact = null
+    groupStore.group_pricing_quote.scheme_email = null
+  }
+
+  // Fields common to all quote types (if a quote_type is selected)
+  if (values.quote_type !== '' && values.quote_type !== null) {
+    groupStore.group_pricing_quote.quote_broker = values.quote_broker // This is an object
+    groupStore.group_pricing_quote.obligation_type = values.obligation_type
+    groupStore.group_pricing_quote.commencement_date = values.commencement_date
+    groupStore.group_pricing_quote.industry = values.industry
+    groupStore.group_pricing_quote.scheme_type = values.scheme_type
+    groupStore.group_pricing_quote.currency = values.currency
+    groupStore.group_pricing_quote.experience_rating = values.experience_rating
+    groupStore.group_pricing_quote.enforce_fcl = values.enforce_fcl
+
+    if (values.enforce_fcl) {
+      groupStore.group_pricing_quote.free_cover_limit = values.free_cover_limit
+    } else {
+      groupStore.group_pricing_quote.free_cover_limit = 0 // Or appropriate default
+    }
+
+    if (values.currency === 'USD') {
+      // Assuming your defineField for exchangeRate is ('exchange_rate')
+      // and your store property is groupStore.group_pricing_quote.exchangeRate
+      groupStore.group_pricing_quote.exchangeRate = values.exchange_rate
+    } else {
+      groupStore.group_pricing_quote.exchangeRate = 0 // Or appropriate default
+    }
+  }
+
+  // console.log('Updated groupStore.group_pricing_quote:', groupStore.group_pricing_quote);
+  return true // Indicate successful handling
 })
 
 const [schemeName, schemeNameAttrs] = defineField('scheme_name')

@@ -144,9 +144,6 @@ const generateQuote = () => {
 }
 
 onMounted(() => {
-  GroupPricingService.getBenefitMaps().then((res) => {
-    groupStore.brokers = res.data
-  })
   GroupPricingService.getIndustries().then((res) => {
     groupStore.industries = res.data
   })

@@ -70,6 +70,82 @@
 import { useGroupPricingStore } from '@/renderer/store/group_pricing'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
+
+const groupStore = useGroupPricingStore()
+
+const validationSchema = yup.object({
+  accelerated_benefit_discount: yup
+    .number()
+    .typeError('Value must be a number')
+    .required('Accelerated Benefit Discount is required')
+    .min(0, 'Value must be greater than or equal to 0'),
+  commission_loading: yup
+    .number()
+    .typeError('Value must be a number')
+    .required('Commission Rate is required')
+    .min(0, 'Value must be greater than or equal to 0'),
+  profit_loading: yup
+    .number()
+    .typeError('Value must be a number')
+    .required('Profit Loading is required')
+    .min(0, 'Value must be greater than or equal to 0'),
+  expense_loading: yup
+    .number()
+    .typeError('Value must be a number')
+    .required('Expense Loading is required')
+    .min(0, 'Value must be greater than or equal to 0'),
+  loadings_discount: yup // Corrected from 'discount'
+    .number()
+    .typeError('Value must be a number')
+    .required('Overall Premium Discount is required')
+    .min(0, 'Value must be greater than or equal to 0')
+})
+
+const { handleSubmit, errors, defineField } = useForm({
+  validationSchema,
+  initialValues: {
+    accelerated_benefit_discount:
+      groupStore.group_pricing_quote.loadings?.accelerated_benefit_discount, // Added optional chaining for safety
+    commission_loading: groupStore.group_pricing_quote.loadings?.commission_loading,
+    profit_loading: groupStore.group_pricing_quote.loadings?.profit_loading,
+    expense_loading: groupStore.group_pricing_quote.loadings?.expense_loading,
+    loadings_discount: groupStore.group_pricing_quote.loadings?.discount // form field 'loadings_discount' maps to store 'discount'
+  }
+})
+
+const [acceleratedBenefitDiscount, acceleratedBenefitDiscountAttrs] = defineField(
+  'accelerated_benefit_discount'
+)
+const [commissionLoading, commissionLoadingAttrs] = defineField('commission_loading')
+const [profitLoading, profitLoadingAttrs] = defineField('profit_loading')
+const [expenseLoading, expenseLoadingAttrs] = defineField('expense_loading')
+const [loadingsDiscount, loadingsDiscountAttrs] = defineField('loadings_discount') // This is the vee-validate field name
+
+const validateForm = handleSubmit((values) => {
+  // Ensure the 'loadings' object exists in the store
+
+  const loadingsStore = groupStore.group_pricing_quote.loadings
+
+  loadingsStore.accelerated_benefit_discount = values.accelerated_benefit_discount
+  loadingsStore.commission_loading = values.commission_loading
+  loadingsStore.profit_loading = values.profit_loading
+  loadingsStore.expense_loading = values.expense_loading
+  // 'values' will have a key 'loadings_discount' because of defineField('loadings_discount')
+  // The store property is 'discount'
+  loadingsStore.discount = values.loadings_discount
+
+  // console.log('Updated groupStore.group_pricing_quote.loadings:', loadingsStore);
+  return true // Indicate successful handling
+})
+
+defineExpose({
+  validateForm
+})
+</script>
+<!-- <script setup lang="ts">
+import { useGroupPricingStore } from '@/renderer/store/group_pricing'
+import { useForm } from 'vee-validate'
+import * as yup from 'yup'
 const groupStore = useGroupPricingStore()
 
 const validationSchema = yup.object({
@@ -122,5 +198,5 @@ const validateForm = handleSubmit((values) => {
 defineExpose({
   validateForm
 })
-</script>
+</script> -->
 <style lang="css" scoped></style>

@@ -1191,22 +1191,119 @@ onBeforeMount(async () => {
   familyFuneralLabel.value = getBenefitAlias('GFF')
 })
 
-// const benefitCheckboxes = [
-//   { key: 'ptd_benefit', label: ptdLabel.value },
-//   { key: 'ci_benefit', label: ciLabel.value },
-//   { key: 'sgla_benefit', label: sglaLabel.value },
-//   { key: 'phi_benefit', label: phiLabel.value },
-//   { key: 'ttd_benefit', label: ttdLabel.value },
-//   { key: 'family_funeral_benefit', label: familyFuneralLabel.value }
-// ]
-
 const getBenefitAlias = (benefit: any) => {
   const benefitMap = benefitMaps.value.find((map: any) => map.benefit_code === benefit)
   return benefitMap.benefit_alias !== '' ? benefitMap.benefit_alias : benefit
   // return 'WORK'
 }
 
+// const validateForm = handleSubmit((values) => {
+//   return true
+// })
+
 const validateForm = handleSubmit((values) => {
+  console.log('Handling form values:', values)
+  // --- Update boolean flags for benefits ---
+  groupStore.group_pricing_quote.ptd_benefit = !!values.ptd_benefit // Ensure boolean
+  groupStore.group_pricing_quote.ci_benefit = !!values.ci_benefit
+  groupStore.group_pricing_quote.sgla_benefit = !!values.sgla_benefit
+  groupStore.group_pricing_quote.phi_benefit = !!values.phi_benefit
+  groupStore.group_pricing_quote.ttd_benefit = !!values.ttd_benefit
+  groupStore.group_pricing_quote.family_funeral_benefit = !!values.family_funeral_benefit
+
+  // Helper to initialize nested objects in store if they don't exist
+  // const ensureBenefitObject = (benefitKey: string) => {
+  //   if (!groupStore.group_pricing_quote[benefitKey]) {
+  //     groupStore.group_pricing_quote[benefitKey] = {}
+  //   }
+  // }
+
+  // --- PTD Benefit Details ---
+  if (values.ptd_benefit) {
+    // ensureBenefitObject('ptd')
+    const ptdStore = groupStore.group_pricing_quote.ptd
+    ptdStore.risk_type = values.ptd_risk_type
+    ptdStore.benefit_type = values.ptd_benefit_type
+    ptdStore.salary_multiple = values.ptd_salary_multiple
+    ptdStore.cover_termination_age = values.ptd_cover_termination_age
+    ptdStore.deferred_period = values.ptd_deferred_period
+    ptdStore.disability_definition = values.ptd_disability_definition
+    ptdStore.educator_benefit = values.ptd_educator_benefit
+  }
+
+  // --- CI Benefit Details ---
+  if (values.ci_benefit) {
+    // ensureBenefitObject('ci')
+    const ciStore = groupStore.group_pricing_quote.ci
+    ciStore.benefit_structure = values.ci_benefit_structure
+    ciStore.benefit_definition = values.ci_benefit_definition
+    ciStore.max_benefit = values.ci_max_benefit
+    ciStore.critical_illness_salary_multiple = values.ci_critical_illness_salary_multiple
+    ciStore.cover_termination_age = values.ci_cover_termination_age
+  }
+
+  // --- SGLA Benefit Details ---
+  if (values.sgla_benefit) {
+    // ensureBenefitObject('sgla')
+    const sglaStore = groupStore.group_pricing_quote.sgla
+    sglaStore.sgla_salary_multiple = values.sgla_salary_multiple
+    sglaStore.max_benefit = values.sgla_max_benefit
+    sglaStore.cover_termination_age = values.sgla_cover_termination_age
+  }
+
+  // --- PHI Benefit Details ---
+  if (values.phi_benefit) {
+    // ensureBenefitObject('phi')
+    const phiStore = groupStore.group_pricing_quote.phi
+    phiStore.risk_type = values.phi_risk_type
+    phiStore.maximum_benefit = values.phi_maximum_benefit
+    phiStore.income_replacement_percentage = values.phi_income_replacement_percentage
+    phiStore.premium_waiver = values.phi_premium_waiver
+    phiStore.medical_aid_premium_waiver = values.phi_medical_aid_premium_waiver
+    phiStore.escalation_percentage = values.phi_escalation_percentage
+    phiStore.max_premium_waiver = values.phi_max_premium_waiver
+    phiStore.cover_termination_age = values.phi_cover_termination_age
+    phiStore.waiting_period = values.phi_waiting_period
+    phiStore.number_monthly_payments = values.phi_number_monthly_payments
+    phiStore.deferred_period = values.phi_deferred_period
+    phiStore.disability_definition = values.phi_disability_definition
+  }
+
+  // --- TTD Benefit Details ---
+  if (values.ttd_benefit) {
+    // ensureBenefitObject('ttd')
+    const ttdStore = groupStore.group_pricing_quote.ttd
+    ttdStore.risk_type = values.ttd_risk_type
+    ttdStore.maximum_benefit = values.ttd_maximum_benefit
+    ttdStore.income_replacement_percentage = values.ttd_income_replacement_percentage
+    ttdStore.premium_waiver = values.ttd_premium_waiver
+    // Only save ttd_premium_waiver_percentage if premium_waiver is 'Yes'
+    if (values.ttd_premium_waiver === 'Yes') {
+      ttdStore.premium_waiver_percentage = values.ttd_premium_waiver_percentage
+    }
+    ttdStore.escalation_percentage = values.ttd_escalation_percentage
+    ttdStore.max_premium_waiver = values.ttd_max_premium_waiver
+    ttdStore.cover_termination_age = values.ttd_cover_termination_age
+    ttdStore.waiting_period = values.ttd_waiting_period
+    ttdStore.number_monthly_payments = values.ttd_number_monthly_payments
+    ttdStore.deferred_period = values.ttd_deferred_period
+    ttdStore.disability_definition = values.ttd_disability_definition
+  }
+
+  // --- Family Funeral Benefit Details ---
+  if (values.family_funeral_benefit) {
+    // ensureBenefitObject('family_funeral')
+    const ffStore = groupStore.group_pricing_quote.family_funeral
+    ffStore.main_member_funeral_sum_assured = values.family_funeral_main_member_funeral_sum_assured
+    ffStore.spouse_funeral_sum_assured = values.family_funeral_spouse_funeral_sum_assured
+    ffStore.children_funeral_sum_assured = values.family_funeral_children_funeral_sum_assured
+    ffStore.adult_dependant_sum_assured = values.family_funeral_adult_dependant_sum_assured
+    ffStore.parent_funeral_sum_assured = values.family_funeral_parent_funeral_sum_assured
+    ffStore.max_number_children = values.family_funeral_max_number_children
+    ffStore.max_number_adult_dependants = values.family_funeral_max_number_adult_dependants
+  }
+
+  // console.log('Updated groupStore.group_pricing_quote:', JSON.parse(JSON.stringify(groupStore.group_pricing_quote)));
   return true
 })
 

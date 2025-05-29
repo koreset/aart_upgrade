@@ -70,6 +70,7 @@
 import { useGroupPricingStore } from '@/renderer/store/group_pricing'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
+import { onMounted } from 'vue'
 
 const groupStore = useGroupPricingStore()
 
@@ -101,8 +102,20 @@ const { handleSubmit, errors, defineField } = useForm({
   }
 })
 
+onMounted(() => {
+  console.log('filled quote: ', groupStore.group_pricing_quote)
+})
+
 const validateForm = handleSubmit((values) => {
-  return true
+  // Assign validated values to the Pinia store
+  groupStore.group_pricing_quote.gla.salary_multiple = values.salary_multiple
+  groupStore.group_pricing_quote.gla.terminal_illness_benefit = values.terminal_illness_benefit
+  groupStore.group_pricing_quote.gla.waiting_period = values.waiting_period
+  groupStore.group_pricing_quote.gla.cover_termination_age = values.cover_termination_age
+  groupStore.group_pricing_quote.gla.educator_benefit = values.educator_benefit
+
+  // console.log('Updated groupStore.group_pricing_quote.gla:', groupStore.group_pricing_quote.gla);
+  return true // Indicate successful handling
 })
 
 const [salaryMultiple, salaryMultipleAttrs] = defineField('salary_multiple')
