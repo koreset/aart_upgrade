@@ -886,14 +886,6 @@ const validationSchema = yup.object({
     then: (schema) => schema.required('Premium waiver is required'),
     otherwise: (schema) => schema.nullable()
   }),
-  ttd_premium_waiver_percentage: yup.number().when('ttd_benefit', {
-    is: true,
-    then: (schema) =>
-      schema
-        .required('Premium waiver percentage is required')
-        .positive('Premium waiver percentage must be a positive number'),
-    otherwise: (schema) => schema.nullable()
-  }),
   ttd_escalation_percentage: yup.string().when('ttd_benefit', {
     is: true,
     then: (schema) => schema.required('Escalation percentage is required'),
@@ -1192,6 +1184,7 @@ const getBenefitAlias = (benefit: any) => {
 // })
 
 const validateForm = handleSubmit((values) => {
+  console.log('Errors:', errors)
   console.log('Handling form values:', values)
   // --- Update boolean flags for benefits ---
   groupStore.group_pricing_quote.ptd_benefit = !!values.ptd_benefit // Ensure boolean
