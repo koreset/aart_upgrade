@@ -68,7 +68,7 @@ import GroupPricingService from '@/renderer/api/GroupPricingService'
 import Generalnput from '@/renderer/components/grouppricing/Generalnput.vue'
 import AdditionalBenefits from '@/renderer/components/grouppricing/AdditionalBenefits.vue'
 import GlaInput from '@/renderer/components/grouppricing/GlaInput.vue'
-import LoadingInput from '@/renderer/components/grouppricing/LoadingInput.vue'
+// import LoadingInput from '@/renderer/components/grouppricing/LoadingInput.vue'
 // import UploadData from '@/renderer/components/grouppricing/UploadData.vue'
 
 const groupStore = useGroupPricingStore()
@@ -90,8 +90,8 @@ onBeforeMount(async () => {
   steps.value = [
     { title: 'General', value: 1, component: Generalnput },
     { title: `${getBenefitAlias('GLA')}`, value: 2, component: GlaInput },
-    { title: 'Additional Benefits', value: 3, component: AdditionalBenefits },
-    { title: 'Loading', value: 4, component: LoadingInput }
+    { title: 'Additional Benefits', value: 3, component: AdditionalBenefits }
+    // { title: 'Loading', value: 4, component: LoadingInput }
   ]
 })
 
@@ -124,11 +124,6 @@ const goToQuotes = () => {
   router.push({ name: 'group-pricing-quotes' })
 }
 
-// const getBenefitCode = (benefit: any) => {
-//   const benefitMap = benefitMaps.value.find((map: any) => map.id === benefit.benefit_id)
-//   return benefitMap ? benefitMap.benefit_code : ''
-// }
-
 const generateQuote = () => {
   const formData = new FormData()
   groupStore.group_pricing_quote.occupation_class = 0
@@ -153,7 +148,7 @@ onMounted(() => {
   if (quoteId.value) {
     GroupPricingService.getQuote(quoteId.value).then((res) => {
       groupStore.group_pricing_quote = res.data
-      groupStore.group_pricing_quote.commencement_date = null
+      // groupStore.group_pricing_quote.commencement_date = null
       console.log('group_pricing_quote', groupStore.group_pricing_quote)
     })
   }

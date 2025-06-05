@@ -60,7 +60,7 @@
                   :items="groupStore.benefitTypes"
                 ></v-select>
               </v-col>
-              <v-col cols="4">
+              <v-col v-if="groupStore.group_pricing_quote.use_global_salary_multiple" cols="4">
                 <v-text-field
                   v-model:model-value="ptdSalaryMultiple"
                   v-bind="ptdSalaryMultipleAttrs"
@@ -70,18 +70,6 @@
                   density="compact"
                   placeholder="Enter a value"
                   label="PTD Salary Multiple"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="4">
-                <v-text-field
-                  v-model:model-value="ptdCoverTerminationAge"
-                  v-bind="ptdCoverTerminationAgeAttrs"
-                  :error-messages="errors.ptd_cover_termination_age"
-                  type="number"
-                  variant="outlined"
-                  density="compact"
-                  placeholder="Enter a value"
-                  label="Cover Termination Age"
                 ></v-text-field>
               </v-col>
               <v-col cols="4">
@@ -181,18 +169,6 @@
                   density="compact"
                   type="number"
                 ></v-text-field>
-              </v-col>
-              <v-col cols="4">
-                <v-text-field
-                  v-model:model-value="ciCoverTerminationAge"
-                  v-bind="ciCoverTerminationAgeAttrs"
-                  :error-messages="errors.ci_cover_termination_age"
-                  placeholder="Enter a value"
-                  label="Cover Termination Age"
-                  variant="outlined"
-                  density="compact"
-                  type="number"
-                ></v-text-field>
               </v-col> </v-row
           ></template>
         </base-card>
@@ -225,18 +201,6 @@
                   :error-messages="errors.sgla_max_benefit"
                   placeholder="Enter a value"
                   label="Maximum Benefit"
-                  variant="outlined"
-                  density="compact"
-                  type="number"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="4">
-                <v-text-field
-                  v-model:model-value="sglaCoverTerminationAge"
-                  v-bind="sglaCoverTerminationAgeAttrs"
-                  :error-messages="errors.sgla_cover_termination_age"
-                  placeholder="Enter a value"
-                  label="Cover Termination Age"
                   variant="outlined"
                   density="compact"
                   type="number"
@@ -325,7 +289,7 @@
                   label="PHI Escalation Percentage"
                   variant="outlined"
                   density="compact"
-                  :items="groupStore.phiEscalationPercentages"
+                  :items="incomeEscalations"
                 ></v-select>
               </v-col>
               <v-col cols="4">
@@ -335,18 +299,6 @@
                   :error-messages="errors.phi_max_premium_waiver"
                   placeholder="Enter a value"
                   label="Maximum Premium Waiver"
-                  variant="outlined"
-                  density="compact"
-                  type="number"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="4">
-                <v-text-field
-                  v-model:model-value="phiCoverTerminationAge"
-                  v-bind="phiCoverTerminationAgeAttrs"
-                  :error-messages="errors.phi_cover_termination_age"
-                  placeholder="Enter a value"
-                  label="Cover Termination Age"
                   variant="outlined"
                   density="compact"
                   type="number"
@@ -397,7 +349,7 @@
                   label="Disability Definition"
                   variant="outlined"
                   density="compact"
-                  :items="groupStore.disabilityDefinitions"
+                  :items="ptdDisabilityDefinitions"
                 ></v-select>
               </v-col>
             </v-row>
@@ -482,7 +434,7 @@
                   label="TTD Escalation Percentage"
                   variant="outlined"
                   density="compact"
-                  :items="groupStore.phiEscalationPercentages"
+                  :items="incomeEscalations"
                 ></v-select>
               </v-col>
               <v-col cols="4">
@@ -492,18 +444,6 @@
                   :error-messages="errors.ttd_max_premium_waiver"
                   placeholder="Enter a value"
                   label="Maximum Premium Waiver"
-                  variant="outlined"
-                  density="compact"
-                  type="number"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="4">
-                <v-text-field
-                  v-model:model-value="ttdCoverTerminationAge"
-                  v-bind="ttdCoverTerminationAgeAttrs"
-                  :error-messages="errors.ttd_cover_termination_age"
-                  placeholder="Enter a value"
-                  label="Cover Termination Age"
                   variant="outlined"
                   density="compact"
                   type="number"
@@ -554,7 +494,7 @@
                   label="Disability Definition"
                   variant="outlined"
                   density="compact"
-                  :items="groupStore.disabilityDefinitions"
+                  :items="ttdDisabilityDefinitions"
                 ></v-select>
               </v-col>
             </v-row>
@@ -664,7 +604,7 @@
 </template>
 <script setup lang="ts">
 import { useGroupPricingStore } from '@/renderer/store/group_pricing'
-import { computed, onBeforeMount, ref } from 'vue'
+import { computed, onBeforeMount, onMounted, ref } from 'vue'
 import BaseCard from '../BaseCard.vue'
 import GroupPricingService from '@/renderer/api/GroupPricingService'
 import { useForm } from 'vee-validate'
@@ -680,6 +620,9 @@ const phiLabel = ref('PHI')
 const ttdLabel = ref('TTD')
 const familyFuneralLabel = ref('Family Funeral')
 const benefitDefinitions: any = ref(['Lump Sum', 'Monthly'])
+const incomeEscalations: any = ref([])
+const ptdDisabilityDefinitions: any = ref([])
+const ttdDisabilityDefinitions: any = ref([])
 
 const validationSchema = yup.object({
   ptd_benefit: yup.boolean().nullable(),
@@ -704,14 +647,6 @@ const validationSchema = yup.object({
   ptd_benefit_type: yup.string().when('ptd_benefit', {
     is: true,
     then: (schema) => schema.required('Benefit type is required'),
-    otherwise: (schema) => schema.nullable()
-  }),
-  ptd_cover_termination_age: yup.number().when('ptd_benefit', {
-    is: true,
-    then: (schema) =>
-      schema
-        .required('Cover termination age is required')
-        .positive('Cover termination age must be a positive number'),
     otherwise: (schema) => schema.nullable()
   }),
   ptd_deferred_period: yup.number().when('ptd_benefit', {
@@ -756,14 +691,6 @@ const validationSchema = yup.object({
         .positive('Critical illness salary multiple must be a positive number'),
     otherwise: (schema) => schema.nullable()
   }),
-  ci_cover_termination_age: yup.number().when('ci_benefit', {
-    is: true,
-    then: (schema) =>
-      schema
-        .required('Cover termination age is required')
-        .positive('Cover termination age must be a positive number'),
-    otherwise: (schema) => schema.nullable()
-  }),
   sgla_salary_multiple: yup.number().when('sgla_benefit', {
     is: true,
     then: (schema) =>
@@ -778,14 +705,6 @@ const validationSchema = yup.object({
       schema
         .required('Maximum benefit is required')
         .positive('Maximum benefit must be a positive number'),
-    otherwise: (schema) => schema.nullable()
-  }),
-  sgla_cover_termination_age: yup.number().when('sgla_benefit', {
-    is: true,
-    then: (schema) =>
-      schema
-        .required('Cover termination age is required')
-        .positive('Cover termination age must be a positive number'),
     otherwise: (schema) => schema.nullable()
   }),
   phi_maximum_benefit: yup.number().when('phi_benefit', {
@@ -825,14 +744,6 @@ const validationSchema = yup.object({
       schema
         .required('Maximum premium waiver is required')
         .positive('Maximum premium waiver must be a positive number'),
-    otherwise: (schema) => schema.nullable()
-  }),
-  phi_cover_termination_age: yup.number().when('phi_benefit', {
-    is: true,
-    then: (schema) =>
-      schema
-        .required('Cover termination age is required')
-        .positive('Cover termination age must be a positive number'),
     otherwise: (schema) => schema.nullable()
   }),
   phi_waiting_period: yup.number().when('phi_benefit', {
@@ -897,14 +808,6 @@ const validationSchema = yup.object({
       schema
         .required('Maximum premium waiver is required')
         .positive('Maximum premium waiver must be a positive number'),
-    otherwise: (schema) => schema.nullable()
-  }),
-  ttd_cover_termination_age: yup.number().when('ttd_benefit', {
-    is: true,
-    then: (schema) =>
-      schema
-        .required('Cover termination age is required')
-        .positive('Cover termination age must be a positive number'),
     otherwise: (schema) => schema.nullable()
   }),
   ttd_waiting_period: yup.number().when('ttd_benefit', {
@@ -1000,6 +903,7 @@ const validationSchema = yup.object({
 const { handleSubmit, defineField, errors } = useForm({
   validationSchema,
   initialValues: {
+    use_global_salary_multiple: groupStore.group_pricing_quote.use_global_salary_multiple,
     ptd_benefit: groupStore.group_pricing_quote.ptd_benefit,
     ci_benefit: groupStore.group_pricing_quote.ci_benefit,
     sgla_benefit: groupStore.group_pricing_quote.sgla_benefit,
@@ -1009,7 +913,6 @@ const { handleSubmit, defineField, errors } = useForm({
     ptd_risk_type: groupStore.group_pricing_quote.ptd.risk_type,
     ptd_benefit_type: groupStore.group_pricing_quote.ptd.benefit_type,
     ptd_salary_multiple: groupStore.group_pricing_quote.ptd.salary_multiple,
-    ptd_cover_termination_age: groupStore.group_pricing_quote.ptd.cover_termination_age,
     ptd_deferred_period: groupStore.group_pricing_quote.ptd.deferred_period,
     ptd_disability_definition: groupStore.group_pricing_quote.ptd.disability_definition,
     ptd_educator_benefit: groupStore.group_pricing_quote.ptd.educator_benefit,
@@ -1018,10 +921,8 @@ const { handleSubmit, defineField, errors } = useForm({
     ci_max_benefit: groupStore.group_pricing_quote.ci.max_benefit,
     ci_critical_illness_salary_multiple:
       groupStore.group_pricing_quote.ci.critical_illness_salary_multiple,
-    ci_cover_termination_age: groupStore.group_pricing_quote.ci.cover_termination_age,
     sgla_salary_multiple: groupStore.group_pricing_quote.sgla.sgla_salary_multiple,
     sgla_max_benefit: groupStore.group_pricing_quote.sgla.max_benefit,
-    sgla_cover_termination_age: groupStore.group_pricing_quote.sgla.cover_termination_age,
     phi_maximum_benefit: groupStore.group_pricing_quote.phi.maximum_benefit,
     phi_income_replacement_percentage:
       groupStore.group_pricing_quote.phi.income_replacement_percentage,
@@ -1029,7 +930,6 @@ const { handleSubmit, defineField, errors } = useForm({
     phi_medical_aid_premium_waiver: groupStore.group_pricing_quote.phi.medical_aid_premium_waiver,
     phi_escalation_percentage: groupStore.group_pricing_quote.phi.escalation_percentage,
     phi_max_premium_waiver: groupStore.group_pricing_quote.phi.max_premium_waiver,
-    phi_cover_termination_age: groupStore.group_pricing_quote.phi.cover_termination_age,
     phi_waiting_period: groupStore.group_pricing_quote.phi.waiting_period,
     phi_number_monthly_payments: groupStore.group_pricing_quote.phi.number_monthly_payments,
     phi_deferred_period: groupStore.group_pricing_quote.phi.deferred_period,
@@ -1042,7 +942,6 @@ const { handleSubmit, defineField, errors } = useForm({
     ttd_premium_waiver_percentage: groupStore.group_pricing_quote.ttd.premium_waiver_percentage,
     ttd_escalation_percentage: groupStore.group_pricing_quote.ttd.escalation_percentage,
     ttd_max_premium_waiver: groupStore.group_pricing_quote.ttd.max_premium_waiver,
-    ttd_cover_termination_age: groupStore.group_pricing_quote.ttd.cover_termination_age,
     ttd_waiting_period: groupStore.group_pricing_quote.ttd.waiting_period,
     ttd_number_monthly_payments: groupStore.group_pricing_quote.ttd.number_monthly_payments,
     ttd_deferred_period: groupStore.group_pricing_quote.ttd.deferred_period,
@@ -1074,9 +973,6 @@ const [familyFuneralBenefit, familyFuneralBenefitAttrs] = defineField('family_fu
 const [ptdRiskType, ptdRiskTypeAttrs] = defineField('ptd_risk_type')
 const [ptdBenefitType, ptdBenefitTypeAttrs] = defineField('ptd_benefit_type')
 const [ptdSalaryMultiple, ptdSalaryMultipleAttrs] = defineField('ptd_salary_multiple')
-const [ptdCoverTerminationAge, ptdCoverTerminationAgeAttrs] = defineField(
-  'ptd_cover_termination_age'
-)
 const [ptdDeferredPeriod, ptdDeferredPeriodAttrs] = defineField('ptd_deferred_period')
 const [ptdDisabilityDefinition, ptdDisabilityDefinitionAttrs] = defineField(
   'ptd_disability_definition'
@@ -1088,12 +984,8 @@ const [ciMaxBenefit, ciMaxBenefitAttrs] = defineField('ci_max_benefit')
 const [ciCriticalIllnessSalaryMultiple, ciCriticalIllnessSalaryMultipleAttrs] = defineField(
   'ci_critical_illness_salary_multiple'
 )
-const [ciCoverTerminationAge, ciCoverTerminationAgeAttrs] = defineField('ci_cover_termination_age')
 const [sglaSalaryMultiple, sglaSalaryMultipleAttrs] = defineField('sgla_salary_multiple')
 const [sglaMaxBenefit, sglaMaxBenefitAttrs] = defineField('sgla_max_benefit')
-const [sglaCoverTerminationAge, sglaCoverTerminationAgeAttrs] = defineField(
-  'sgla_cover_termination_age'
-)
 
 const [phiMaximumBenefit, phiMaximumBenefitAttrs] = defineField('phi_maximum_benefit')
 const [phiIncomeReplacementPercentage, phiIncomeReplacementPercentageAttrs] = defineField(
@@ -1107,9 +999,7 @@ const [phiEscalationPercentage, phiEscalationPercentageAttrs] = defineField(
   'phi_escalation_percentage'
 )
 const [phiMaxPremiumWaiver, phiMaxPremiumWaiverAttrs] = defineField('phi_max_premium_waiver')
-const [phiCoverTerminationAge, phiCoverTerminationAgeAttrs] = defineField(
-  'phi_cover_termination_age'
-)
+
 const [phiWaitingPeriod, phiWaitingPeriodAttrs] = defineField('phi_waiting_period')
 const [phiNumberMonthlyPayments, phiNumberMonthlyPaymentsAttrs] = defineField(
   'phi_number_monthly_payments'
@@ -1131,9 +1021,7 @@ const [ttdEscalationPercentage, ttdEscalationPercentageAttrs] = defineField(
   'ttd_escalation_percentage'
 )
 const [ttdMaxPremiumWaiver, ttdMaxPremiumWaiverAttrs] = defineField('ttd_max_premium_waiver')
-const [ttdCoverTerminationAge, ttdCoverTerminationAgeAttrs] = defineField(
-  'ttd_cover_termination_age'
-)
+
 const [ttdWaitingPeriod, ttdWaitingPeriodAttrs] = defineField('ttd_waiting_period')
 const [ttdNumberMonthlyPayments, ttdNumberMonthlyPaymentsAttrs] = defineField(
   'ttd_number_monthly_payments'
@@ -1200,7 +1088,6 @@ const validateForm = handleSubmit((values) => {
     ptdStore.risk_type = values.ptd_risk_type
     ptdStore.benefit_type = values.ptd_benefit_type
     ptdStore.salary_multiple = values.ptd_salary_multiple
-    ptdStore.cover_termination_age = values.ptd_cover_termination_age
     ptdStore.deferred_period = values.ptd_deferred_period
     ptdStore.disability_definition = values.ptd_disability_definition
     ptdStore.educator_benefit = values.ptd_educator_benefit
@@ -1213,7 +1100,6 @@ const validateForm = handleSubmit((values) => {
     ciStore.benefit_definition = values.ci_benefit_definition
     ciStore.max_benefit = values.ci_max_benefit
     ciStore.critical_illness_salary_multiple = values.ci_critical_illness_salary_multiple
-    ciStore.cover_termination_age = values.ci_cover_termination_age
   }
 
   // --- SGLA Benefit Details ---
@@ -1221,7 +1107,6 @@ const validateForm = handleSubmit((values) => {
     const sglaStore = groupStore.group_pricing_quote.sgla
     sglaStore.sgla_salary_multiple = values.sgla_salary_multiple
     sglaStore.max_benefit = values.sgla_max_benefit
-    sglaStore.cover_termination_age = values.sgla_cover_termination_age
   }
 
   // --- PHI Benefit Details ---
@@ -1234,7 +1119,6 @@ const validateForm = handleSubmit((values) => {
     phiStore.medical_aid_premium_waiver = values.phi_medical_aid_premium_waiver
     phiStore.escalation_percentage = values.phi_escalation_percentage
     phiStore.max_premium_waiver = values.phi_max_premium_waiver
-    phiStore.cover_termination_age = values.phi_cover_termination_age
     phiStore.waiting_period = values.phi_waiting_period
     phiStore.number_monthly_payments = values.phi_number_monthly_payments
     phiStore.deferred_period = values.phi_deferred_period
@@ -1254,7 +1138,6 @@ const validateForm = handleSubmit((values) => {
     }
     ttdStore.escalation_percentage = values.ttd_escalation_percentage
     ttdStore.max_premium_waiver = values.ttd_max_premium_waiver
-    ttdStore.cover_termination_age = values.ttd_cover_termination_age
     ttdStore.waiting_period = values.ttd_waiting_period
     ttdStore.number_monthly_payments = values.ttd_number_monthly_payments
     ttdStore.deferred_period = values.ttd_deferred_period
@@ -1275,6 +1158,20 @@ const validateForm = handleSubmit((values) => {
   }
 
   return true
+})
+
+onMounted(() => {
+  console.log('Quote Benefits Mounted', groupStore.group_pricing_quote)
+  // Load income escalations from the store
+  GroupPricingService.getIncomeEscalations().then((response) => {
+    incomeEscalations.value = response.data
+  })
+  GroupPricingService.getPtdDisabilityDefinitions().then((response) => {
+    ptdDisabilityDefinitions.value = response.data
+  })
+  GroupPricingService.getTtdDisabilityDefinitions().then((response) => {
+    ttdDisabilityDefinitions.value = response.data
+  })
 })
 
 const anyBoxChecked = computed(() => {

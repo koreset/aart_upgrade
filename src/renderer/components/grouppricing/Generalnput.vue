@@ -248,6 +248,22 @@
           >
           </v-text-field>
         </v-col>
+        <v-col
+          v-if="
+            groupStore.group_pricing_quote.quote_type !== '' &&
+            groupStore.group_pricing_quote.quote_type !== null
+          "
+          cols="4"
+        >
+          <v-checkbox
+            v-model="useGlobalSalaryMultiple"
+            v-bind="useGlobalSalaryMultipleAttrs"
+            variant="outlined"
+            density="compact"
+            label="Use Global Salary Multiple"
+            :error-messages="errors.use_global_salary_multiple"
+          ></v-checkbox>
+        </v-col>
       </v-row>
     </v-container>
   </v-form>
@@ -258,10 +274,10 @@ import { VDateInput } from 'vuetify/labs/VDateInput'
 import GroupPricingService from '@/renderer/api/GroupPricingService'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 
 const groupStore = useGroupPricingStore()
-const industries = ['Administration', 'NGO', 'Banks']
+const industries = ref(['Administration', 'NGO', 'Banks'])
 const brokerList = ref([])
 
 // validation schema
@@ -308,6 +324,7 @@ const validationSchema = yup.object({
     otherwise: (schema) => schema.nullable()
   }),
   enforce_fcl: yup.boolean().nullable(),
+  use_global_salary_multiple: yup.boolean().required('Use global salary multiple is required'),
   free_cover_limit: yup.number().when('enforce_fcl', {
     is: (val) => val === true,
     then: (schema) =>
@@ -329,7 +346,7 @@ const validationSchema = yup.object({
 })
 
 // methods
-const { handleSubmit, defineField, errors } = useForm({
+const { handleSubmit, defineField, errors, resetForm } = useForm({
   validationSchema,
   initialValues: {
     scheme_name: groupStore.group_pricing_quote.scheme_name,
@@ -346,7 +363,8 @@ const { handleSubmit, defineField, errors } = useForm({
     free_cover_limit: groupStore.group_pricing_quote.free_cover_limit,
     normal_retirement_age: groupStore.group_pricing_quote.normal_retirement_age,
     exchange_rate: groupStore.group_pricing_quote.exchangeRate,
-    enforce_fcl: groupStore.group_pricing_quote.enforce_fcl
+    enforce_fcl: groupStore.group_pricing_quote.enforce_fcl,
+    use_global_salary_multiple: groupStore.group_pricing_quote.use_global_salary_multiple
   }
 })
 
@@ -390,6 +408,7 @@ const validateForm = handleSubmit(async (values) => {
     groupStore.group_pricing_quote.currency = values.currency
     groupStore.group_pricing_quote.experience_rating = values.experience_rating
     groupStore.group_pricing_quote.enforce_fcl = values.enforce_fcl
+    groupStore.group_pricing_quote.use_global_salary_multiple = values.use_global_salary_multiple
 
     if (values.enforce_fcl) {
       groupStore.group_pricing_quote.free_cover_limit = values.free_cover_limit
@@ -424,6 +443,9 @@ const [experienceRating, experienceRatingAttrs] = defineField('experience_rating
 const [freeCoverLimit, freeCoverLimitAttrs] = defineField('free_cover_limit')
 const [exchangeRate, exchangeRateAttrs] = defineField('exchange_rate')
 const [enforceFCL, enforceFCLAttrs] = defineField('enforce_fcl')
+const [useGlobalSalaryMultiple, useGlobalSalaryMultipleAttrs] = defineField(
+  'use_global_salary_multiple'
+)
 
 const chooseQuoteFlow = (value: string | null) => {
   if (value !== null) {
@@ -435,6 +457,39 @@ defineExpose({
   validateForm
 })
 
+watch(
+  () => groupStore.group_pricing_quote,
+  (newQuoteData) => {
+    console.log('New quote data:', newQuoteData)
+    // Ensure newQuoteData is what you expect, e.g., not null or empty
+    // before resetting the form. You might want a more specific trigger,
+    // like an `isLoaded` flag or watching a specific ID property.
+    if (newQuoteData && newQuoteData.quote_type) {
+      // Example condition
+      resetForm({
+        values: {
+          quote_type: newQuoteData.quote_type,
+          scheme_name: newQuoteData.scheme_name,
+          scheme_contact: newQuoteData.scheme_contact,
+          scheme_email: newQuoteData.scheme_email,
+          quote_broker: newQuoteData.quote_broker,
+          obligation_type: newQuoteData.obligation_type,
+          commencement_date: newQuoteData.commencement_date,
+          industry: newQuoteData.industry,
+          scheme_type: newQuoteData.scheme_type,
+          currency: newQuoteData.currency,
+          experience_rating: newQuoteData.experience_rating,
+          enforce_fcl: newQuoteData.enforce_fcl || false,
+          free_cover_limit: newQuoteData.free_cover_limit,
+          exchange_rate: newQuoteData.exchangeRate,
+          use_global_salary_multiple: newQuoteData.use_global_salary_multiple
+        }
+      })
+    }
+  },
+  { deep: true, immediate: false }
+)
+
 onMounted(async () => {
   // Fetch brokers from the API
   try {
@@ -442,6 +497,11 @@ onMounted(async () => {
     if (response) {
       brokerList.value = response.data
       groupStore.brokers = response.data
+    }
+    const industryResponse = await GroupPricingService.getIndustries()
+    if (industryResponse) {
+      industries.value = industryResponse.data
+      groupStore.industries = industryResponse.data
     }
   } catch (error) {
     console.error('Error fetching brokers:', error)

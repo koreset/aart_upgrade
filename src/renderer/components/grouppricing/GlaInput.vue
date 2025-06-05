@@ -2,7 +2,7 @@
   <v-form>
     <v-container>
       <v-row>
-        <v-col cols="4">
+        <v-col v-if="groupStore.group_pricing_quote.use_global_salary_multiple" cols="4">
           <v-text-field
             v-model:model-value="salaryMultiple"
             v-bind="salaryMultipleAttrs"
@@ -39,18 +39,6 @@
           ></v-text-field>
         </v-col>
         <v-col cols="4">
-          <v-text-field
-            v-model:model-value="coverTerminationAge"
-            v-bind="coverTerminationAgeAttrs"
-            type="number"
-            variant="outlined"
-            density="compact"
-            placeholder="Enter a value"
-            :error-messages="errors.cover_termination_age"
-            label="Cover Termination Age"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="4">
           <v-select
             v-model="educatorBenefit"
             v-bind="educatorBenefitAttrs"
@@ -75,29 +63,28 @@ import { onMounted } from 'vue'
 const groupStore = useGroupPricingStore()
 
 const validationSchema = yup.object({
-  salary_multiple: yup
-    .number()
-    .required('Salary multiple is required')
-    .positive('Salary multiple must be a positive number'),
+  salary_multiple: yup.number().when('use_global_salary_multiple', {
+    is: true,
+    then: (schema) =>
+      schema
+        .required('Salary multiple is required')
+        .positive('Salary multiple must be a positive number')
+  }),
   terminal_illness_benefit: yup.string().required('Terminal illness benefit is required'),
   waiting_period: yup
     .number()
     .required('Waiting period is required')
     .min(0, 'Waiting period must be at least 0'),
-  cover_termination_age: yup
-    .number()
-    .required('Cover termination age is required')
-    .positive('Cover termination age must be a positive number'),
   educator_benefit: yup.string().required('Educator benefit is required')
 })
 
 const { handleSubmit, errors, defineField } = useForm({
   validationSchema,
   initialValues: {
+    use_global_salary_multiple: groupStore.group_pricing_quote.use_global_salary_multiple,
     salary_multiple: groupStore.group_pricing_quote.gla.salary_multiple,
     terminal_illness_benefit: groupStore.group_pricing_quote.gla.terminal_illness_benefit,
     waiting_period: groupStore.group_pricing_quote.gla.waiting_period,
-    cover_termination_age: groupStore.group_pricing_quote.gla.cover_termination_age,
     educator_benefit: groupStore.group_pricing_quote.gla.educator_benefit
   }
 })
@@ -111,7 +98,6 @@ const validateForm = handleSubmit((values) => {
   groupStore.group_pricing_quote.gla.salary_multiple = values.salary_multiple
   groupStore.group_pricing_quote.gla.terminal_illness_benefit = values.terminal_illness_benefit
   groupStore.group_pricing_quote.gla.waiting_period = values.waiting_period
-  groupStore.group_pricing_quote.gla.cover_termination_age = values.cover_termination_age
   groupStore.group_pricing_quote.gla.educator_benefit = values.educator_benefit
 
   // console.log('Updated groupStore.group_pricing_quote.gla:', groupStore.group_pricing_quote.gla);
@@ -123,7 +109,6 @@ const [terminalIllnessBenefit, terminalIllnessBenefitAttrs] = defineField(
   'terminal_illness_benefit'
 )
 const [waitingPeriod, waitingPeriodAttrs] = defineField('waiting_period')
-const [coverTerminationAge, coverTerminationAgeAttrs] = defineField('cover_termination_age')
 const [educatorBenefit, educatorBenefitAttrs] = defineField('educator_benefit')
 
 defineExpose({

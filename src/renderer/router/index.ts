@@ -528,7 +528,7 @@ export default createRouter({
       name: 'group-pricing-tables',
       component: () => import('../screens/group_pricing/Tables.vue'),
       meta: {
-        required_permission: 'navigation:view_tables'
+        required_permission: 'navigation:group_tables'
       },
       beforeEnter: (to, from) => {
         if (checkPermissions(to, from)) {

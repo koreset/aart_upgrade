@@ -187,5 +187,14 @@ export default {
   },
   removeUserRole(userRole) {
     return Api.post('/group-pricing/user-management/users/remove_role', userRole)
+  },
+  getIncomeEscalations() {
+    return Api.get('/group-pricing/quotes/income-escalations')
+  },
+  getTtdDisabilityDefinitions() {
+    return Api.get('/group-pricing/quotes/ttd-disability-definitions')
+  },
+  getPtdDisabilityDefinitions() {
+    return Api.get('/group-pricing/quotes/ptd-disability-definitions')
   }
 }
