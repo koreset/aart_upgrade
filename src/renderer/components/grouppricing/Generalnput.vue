@@ -324,7 +324,7 @@ const validationSchema = yup.object({
     otherwise: (schema) => schema.nullable()
   }),
   enforce_fcl: yup.boolean().nullable(),
-  use_global_salary_multiple: yup.boolean().required('Use global salary multiple is required'),
+  use_global_salary_multiple: yup.boolean().nullable(),
   free_cover_limit: yup.number().when('enforce_fcl', {
     is: (val) => val === true,
     then: (schema) =>

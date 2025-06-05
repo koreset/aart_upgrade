@@ -2,7 +2,7 @@
   <v-form>
     <v-container>
       <v-row>
-        <v-col v-if="groupStore.group_pricing_quote.use_global_salary_multiple" cols="4">
+        <v-col cols="4">
           <v-text-field
             v-model:model-value="salaryMultiple"
             v-bind="salaryMultipleAttrs"
@@ -63,13 +63,10 @@ import { onMounted } from 'vue'
 const groupStore = useGroupPricingStore()
 
 const validationSchema = yup.object({
-  salary_multiple: yup.number().when('use_global_salary_multiple', {
-    is: true,
-    then: (schema) =>
-      schema
-        .required('Salary multiple is required')
-        .positive('Salary multiple must be a positive number')
-  }),
+  salary_multiple: yup
+    .number()
+    .required('Salary multiple is required')
+    .positive('Salary multiple must be a positive number'),
   terminal_illness_benefit: yup.string().required('Terminal illness benefit is required'),
   waiting_period: yup
     .number()
@@ -81,7 +78,6 @@ const validationSchema = yup.object({
 const { handleSubmit, errors, defineField } = useForm({
   validationSchema,
   initialValues: {
-    use_global_salary_multiple: groupStore.group_pricing_quote.use_global_salary_multiple,
     salary_multiple: groupStore.group_pricing_quote.gla.salary_multiple,
     terminal_illness_benefit: groupStore.group_pricing_quote.gla.terminal_illness_benefit,
     waiting_period: groupStore.group_pricing_quote.gla.waiting_period,
