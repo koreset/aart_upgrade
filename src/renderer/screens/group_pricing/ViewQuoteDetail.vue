@@ -747,7 +747,7 @@
                   </v-row>
                   <v-row v-if="resultTableData.length > 0 && !loadingData">
                     <v-col>
-                      <data-grid
+                      <group-pricing-data-grid
                         :columnDefs="columnDefs"
                         :show-close-button="true"
                         :rowData="resultTableData"
@@ -755,6 +755,7 @@
                         :pagination="true"
                         :rowCount="rowCount"
                         @update:clear-data="clearData"
+                        @update-column="handleColumnUpdate"
                       />
                     </v-col>
                   </v-row>
@@ -814,6 +815,7 @@ import { computed, onMounted, ref } from 'vue'
 import GroupPricingService from '@/renderer/api/GroupPricingService'
 import formatValues from '@/renderer/utils/format_values'
 import DataGrid from '@/renderer/components/tables/DataGrid.vue'
+import GroupPricingDataGrid from '@/renderer/components/tables/GroupPricingDataGrid.vue'
 import { useRouter } from 'vue-router'
 import FileUploadDialog from '@/renderer/components/FileUploadDialog.vue'
 import ConfirmDialog from '@/renderer/components/ConfirmDialog.vue'
@@ -860,7 +862,7 @@ const timeout = 2000
 const snackbarText = ref('')
 
 const tableData = ref([])
-const resultTableData = ref([])
+const resultTableData: any = ref([])
 const selectedTable: any = ref(null)
 const loadingData = ref(false)
 const quote: any = ref(null)
@@ -1073,6 +1075,30 @@ const clearData = () => {
   selectedTable.value = ''
 }
 
+const handleColumnUpdate = ({ colId, newValue }: { colId: string; newValue: any }) => {
+  console.log('Column Update:', colId, newValue)
+  const manualAddedCredibility: any = 'manual_added_credibility'
+  const updatedData = resultTableData.value.map((row) => {
+    // Return a new object for each row to ensure reactivity
+    return {
+      ...row,
+      [manualAddedCredibility]: newValue // Example of updating another column
+    }
+  })
+
+  // Update the application's state.
+  // Vue's reactivity will pass the new data down to YourGridComponent via the prop.
+  resultTableData.value = updatedData
+
+  // if (colId === 'exp_credibility') {
+  //   GroupPricingService.updateExpCredibility(quote.value.id, colId).then((res) => {
+  //     console.log('Response:', res.data)
+  //     snackbarText.value = 'Exp Credibility Updated Successfully'
+  //     snackbar.value = true
+  //   })
+  // }
+}
+
 const dashIfEmpty = (value: any) => {
   return value || '-'
 }
@@ -1181,33 +1207,42 @@ const replaceSubstring = (input, search, replacement) => {
 const createColumnDefs = (data: any) => {
   columnDefs.value = []
   Object.keys(data[0]).forEach((element) => {
-    const header: any = {}
+    const column: any = {}
     if (element.includes('ci')) {
-      header.headerName = replaceSubstring(element, 'ci', 'severe')
+      column.headerName = replaceSubstring(element, 'ci', 'severe')
     } else if (element.includes('phi')) {
-      header.headerName = replaceSubstring(element, 'phi', 'phi2')
+      column.headerName = replaceSubstring(element, 'phi', 'phi2')
     } else if (element.includes('gla')) {
-      header.headerName = replaceSubstring(element, 'gla', 'gla2')
+      column.headerName = replaceSubstring(element, 'gla', 'gla2')
     } else if (element.includes('sgla')) {
-      header.headerName = replaceSubstring(element, 'sgla', 'sgla2')
+      column.headerName = replaceSubstring(element, 'sgla', 'sgla2')
     } else if (element.includes('ptd')) {
-      header.headerName = replaceSubstring(element, 'ptd', 'ptd2')
+      column.headerName = replaceSubstring(element, 'ptd', 'ptd2')
     } else if (element.includes('ttd')) {
-      header.headerName = replaceSubstring(element, 'ttd', 'ttd2')
+      column.headerName = replaceSubstring(element, 'ttd', 'ttd2')
     } else if (element.includes('gff')) {
-      header.headerName = replaceSubstring(element, 'gff', 'gff2')
+      column.headerName = replaceSubstring(element, 'gff', 'gff2')
     } else {
-      header.headerName = element
+      column.headerName = element
     }
 
     // header.headerName = element
-    header.field = element
-    header.valueFormatter = formatValues
-    header.minWidth = 200
-    header.sortable = true
-    header.filter = true
-    header.resizable = true
-    columnDefs.value.push(header)
+    column.field = element
+    column.valueFormatter = formatValues
+    column.minWidth = 200
+    column.sortable = true
+    column.filter = true
+    column.resizable = true
+    if (column.field === 'id' || column.field === 'quote_id') {
+      column.hide = true
+    }
+    // if column.field is exp_credibility, then set it to editable
+    if (column.field === 'exp_credibility') {
+      column.editable = true
+    } else {
+      column.editable = false
+    }
+    columnDefs.value.push(column)
   })
 }
 </script>

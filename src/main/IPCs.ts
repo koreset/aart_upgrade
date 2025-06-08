@@ -1,4 +1,4 @@
-import { ipcMain, shell, IpcMainEvent, BrowserWindow } from 'electron'
+import { ipcMain, shell, IpcMainEvent, BrowserWindow, app } from 'electron'
 import Constants from './utils/Constants'
 import Store from 'electron-store'
 import _ from 'lodash'
@@ -110,11 +110,10 @@ export default class IPCs {
 
       if (updateIndicator) {
         autoUpdater.quitAndInstall()
+      } else {
+        app.relaunch()
+        app.exit()
       }
-      // } else {
-      //   app.relaunch()
-      //   app.exit()
-      // }
     })
 
     // resize window

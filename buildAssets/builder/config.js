@@ -13,7 +13,7 @@ const baseConfig = {
   },
   mac: {
     bundleVersion: '1.0',
-    identity: 'Onajome Akpoduado (KYR2TJ3Z3M)',
+    identity: 'Actuaries and Digital Solutions (Pty) Ltd',
     hardenedRuntime: true,
     gatekeeperAssess: false,
     notarize: false,
@@ -52,10 +52,11 @@ const baseConfig = {
         type: 'file'
       }
     ],
-    sign: false
+    sign: true
   },
   win: {
     icon: 'buildAssets/icons/icon.ico',
+    certificateSubjectName: 'Actuaries and Digital Solutions (Pty) Ltd',
     target: [
       // {
       //   target: 'appx',
