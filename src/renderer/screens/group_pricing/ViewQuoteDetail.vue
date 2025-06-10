@@ -1090,7 +1090,7 @@ const handleColumnUpdate = async ({ colId, newValue }: { colId: string; newValue
   // // Vue's reactivity will pass the new data down to YourGridComponent via the prop.
   // resultTableData.value = updatedData
 
-  if (colId === 'manual_added_credibility') {
+  if (colId === 'manually_added_credibility') {
     const resp = await GroupPricingService.runQuoteCalculationsWithCredibility(
       quote.value.id,
       quote.value.basis,
