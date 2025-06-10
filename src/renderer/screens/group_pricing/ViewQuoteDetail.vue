@@ -1090,7 +1090,7 @@ const handleColumnUpdate = async ({ colId, newValue }: { colId: string; newValue
   // // Vue's reactivity will pass the new data down to YourGridComponent via the prop.
   // resultTableData.value = updatedData
 
-  if (colId === 'exp_credibility') {
+  if (colId === 'manual_added_credibility') {
     const resp = await GroupPricingService.runQuoteCalculationsWithCredibility(
       quote.value.id,
       quote.value.basis,
@@ -1240,7 +1240,7 @@ const createColumnDefs = (data: any) => {
       column.hide = true
     }
     // if column.field is exp_credibility, then set it to editable
-    if (column.field === 'exp_credibility') {
+    if (column.field === 'manual_added_credibility') {
       column.editable = true
     } else {
       column.editable = false
