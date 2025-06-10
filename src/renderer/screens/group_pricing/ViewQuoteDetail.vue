@@ -1240,7 +1240,7 @@ const createColumnDefs = (data: any) => {
       column.hide = true
     }
     // if column.field is exp_credibility, then set it to editable
-    if (column.field === 'manual_added_credibility') {
+    if (column.field === 'manually_added_credibility') {
       column.editable = true
     } else {
       column.editable = false
