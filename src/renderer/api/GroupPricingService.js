@@ -12,6 +12,16 @@ export default {
   runQuoteCalculations(quoteId, basis) {
     return Api.post('/group-pricing/calculate-quote/' + quoteId + '/basis/' + basis)
   },
+  runQuoteCalculationsWithCredibility(quoteId, basis, credibility) {
+    return Api.post(
+      '/group-pricing/calculate-quote/' +
+        quoteId +
+        '/basis/' +
+        basis +
+        '/credibility/' +
+        credibility
+    )
+  },
   getTableMetaData() {
     return Api.get('/group-pricing/rate-tables')
   },

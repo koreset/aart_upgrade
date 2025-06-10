@@ -1075,28 +1075,31 @@ const clearData = () => {
   selectedTable.value = ''
 }
 
-const handleColumnUpdate = ({ colId, newValue }: { colId: string; newValue: any }) => {
+const handleColumnUpdate = async ({ colId, newValue }: { colId: string; newValue: any }) => {
   console.log('Column Update:', colId, newValue)
-  const manualAddedCredibility: any = 'manual_added_credibility'
-  const updatedData = resultTableData.value.map((row) => {
-    // Return a new object for each row to ensure reactivity
-    return {
-      ...row,
-      [manualAddedCredibility]: newValue // Example of updating another column
-    }
-  })
+  // const manualAddedCredibility: any = 'manual_added_credibility'
+  // const updatedData = resultTableData.value.map((row) => {
+  //   // Return a new object for each row to ensure reactivity
+  //   return {
+  //     ...row,
+  //     [manualAddedCredibility]: newValue // Example of updating another column
+  //   }
+  // })
 
-  // Update the application's state.
-  // Vue's reactivity will pass the new data down to YourGridComponent via the prop.
-  resultTableData.value = updatedData
+  // // Update the application's state.
+  // // Vue's reactivity will pass the new data down to YourGridComponent via the prop.
+  // resultTableData.value = updatedData
 
-  // if (colId === 'exp_credibility') {
-  //   GroupPricingService.updateExpCredibility(quote.value.id, colId).then((res) => {
-  //     console.log('Response:', res.data)
-  //     snackbarText.value = 'Exp Credibility Updated Successfully'
-  //     snackbar.value = true
-  //   })
-  // }
+  if (colId === 'exp_credibility') {
+    const resp = await GroupPricingService.runQuoteCalculationsWithCredibility(
+      quote.value.id,
+      quote.value.basis,
+      newValue
+    )
+    console.log('Response:', resp.data)
+    snackbarText.value = 'Exp Credibility Updated Successfully'
+    snackbar.value = true
+  }
 }
 
 const dashIfEmpty = (value: any) => {
