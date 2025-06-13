@@ -361,47 +361,6 @@ onMounted(() => {
       // is re-running for another reason, unless that's desired behavior.
     }
   })
-  // The broad try-catch here might hide specific errors.
-  // It's often better to have .catch() on individual promises.
-  // If you keep it, ensure it doesn't mask the actual problem source.
-
-  // onMounted(() => {
-  //   try {
-  //     organization.value = appStore.getLicenseData.data.attributes.metadata.organization
-
-  //     ProductService.getOrgUsers({ name: organization.value }).then((res) => {
-  //       const uniqueData = Array.from(new Map(res.data.map((entry) => [entry.user, entry])).values())
-  //       reviewers.value = uniqueData
-  //     })
-  //     GroupPricingService.getBenefitMaps().then((res) => {
-  //       benefitMaps.value = res.data
-  //       headers.value = headers.value.map((header) => {
-  //         const bff = benefitMaps.value.find((map) => map.benefit_code === header.title)
-  //         if (bff && bff.benefit_alias !== '') {
-  //           return {
-  //             ...header,
-  //             title: bff.benefit_alias
-  //           }
-  //         }
-  //         return header
-  //       })
-  //     })
-  //     GroupPricingService.getAllQuotes().then((res) => {
-  //       if (res.data.length > 0) {
-  //         quotes.value = res.data
-  //         console.log('Quotes:', quotes.value)
-  //       } else {
-  //         quotes.value = []
-  //       }
-  //     })
-  //   } catch (error) {
-  //     console.log('Error:', error)
-  //   }
-
-  // ProductService.getOrgUsers({ name: organization.value }).then((res) => {
-  //   const uniqueData = Array.from(new Map(res.data.map((entry) => [entry.user, entry])).values())
-  //   reviewers.value = uniqueData
-  // })
 })
 </script>
 <style lang="css" scoped>

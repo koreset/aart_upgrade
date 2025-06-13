@@ -70,9 +70,9 @@
             label="Choose a reviewer in your organisation"
             variant="outlined"
             density="compact"
-            :items="orgUsers"
-            item-title="user"
-            item-value="user"
+            :items="reviewers"
+            item-title="name"
+            item-value="name"
           ></v-select>
         </v-col>
       </v-row>
@@ -106,7 +106,7 @@
 <script setup lang="ts">
 import ProductService from '@/renderer/api/ProductService'
 // import Papa from 'papaparse'
-import { computed, inject, onMounted, Ref, ref, watch } from 'vue'
+import { computed, inject, onMounted, Ref, ref, watch, watchEffect } from 'vue'
 import { useAppStore } from '@/renderer/store/app'
 import { useProductStore } from '@/renderer/store/product_config'
 import { useRouter } from 'vue-router'
@@ -124,23 +124,65 @@ const uploadDisabled = ref(false)
 const uploadInProgress = ref(false)
 const selectedReviewer: any = ref(null)
 const file: any = ref(null)
-const orgUsers = ref([])
+const reviewers: any = ref([])
 const files: any = ref([])
 const fileDescriptors: any = ref([])
 const tableClass = ref('')
 const table = ref('')
 const commonFilesAdded = ref(false)
 const classifications = ref([{ name: 'Transition Rates', value: 'TransitionRates' }])
+const organization = ref<string | null>(null)
 
 // lifecycle
 onMounted(() => {
-  try {
-    ProductService.getOrgUsers({ name: organization.value }).then((res) => {
-      orgUsers.value = res.data
-    })
-  } catch (error) {
-    console.log('Error:', error)
-  }
+  // try {
+  //   console.log('Organization:', organization.value)
+  //   ProductService.getOrgUsers({ name: organization.value }).then((res) => {
+  //     orgUsers.value = res.data
+  //   })
+  // } catch (error) {
+  //   console.log('Error:', error)
+  // }
+
+  watchEffect(() => {
+    const licenseData = appStore.getLicenseData // Access it once
+    if (
+      licenseData &&
+      licenseData.data &&
+      licenseData.data.attributes &&
+      licenseData.data.attributes.metadata &&
+      licenseData.data.attributes.metadata.organization
+    ) {
+      const orgName = licenseData.data.attributes.metadata.organization
+      if (organization.value !== orgName) {
+        // Only update and fetch if it changed or was null
+        organization.value = orgName
+
+        // Now that organization.value is reliably set, fetch dependent data
+        ProductService.getOrgUsers({ name: organization.value })
+          .then((res) => {
+            // Ensure res.data is an array before processing
+            if (res && Array.isArray(res.data)) {
+              const uniqueData = Array.from(
+                new Map(res.data.map((entry) => [entry.name, entry])).values()
+              )
+              reviewers.value = uniqueData
+            } else {
+              console.warn('Org Users response is not as expected or data is missing:', res)
+              reviewers.value = []
+            }
+          })
+          .catch((error) => {
+            console.error('Error fetching org users:', error)
+            reviewers.value = [] // Ensure reviewers is an array on error
+          })
+      }
+    } else {
+      // This will log until the data is available
+      // Avoid resetting organization.value to null if it was already set and watchEffect
+      // is re-running for another reason, unless that's desired behavior.
+    }
+  })
 })
 
 const validateForm = async () => {
@@ -166,7 +208,7 @@ watch(resetFields, (value) => {
 // computed
 const selectedFeatures: any = computed(() => productStore.getSelectedFeatures)
 // const ratingFactors = computed(() => productStore.getProductRatingFactors)
-const organization = computed(() => appStore.getLicenseData.data.attributes.metadata.organization)
+
 const allTables = computed(() => {
   let tables: any = []
   productStore.getProductTransitions.forEach((element) => {
