@@ -493,7 +493,7 @@
                       <v-col cols="3"
                         ><p class="text-center content-bg">{{
                           dashIfEmpty(
-                            roundUpToTwoDecimals(resultSummary.total_gla_capped_sum_assured)
+                            roundUpToTwoDecimals(resultSummary.total_ptd_capped_sum_assured)
                           )
                         }}</p></v-col
                       >
