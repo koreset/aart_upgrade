@@ -138,6 +138,26 @@
                   density="compact"
                 ></v-text-field>
               </v-col>
+              <v-col cols="3">
+                <v-text-field
+                  v-model="brokerContactEmail"
+                  class="mr-9"
+                  placeholder="Contact Email"
+                  label="Contact Email"
+                  variant="outlined"
+                  density="compact"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="3">
+                <v-text-field
+                  v-model="brokerContactNumber"
+                  class="mr-9"
+                  placeholder="Contact Number"
+                  label="Contact Number"
+                  variant="outlined"
+                  density="compact"
+                ></v-text-field>
+              </v-col>
               <v-col class="d-flex align-baseline" cols="3">
                 <v-btn
                   rounded
@@ -190,6 +210,8 @@ const confirmDialog = ref()
 
 // broker data
 const brokerName: any = ref('')
+const brokerContactEmail: any = ref('')
+const brokerContactNumber: any = ref('')
 const brokers: any = ref([])
 const rowData: any = ref([])
 const columnDefs: any = ref([])
@@ -217,11 +239,15 @@ const imageToCrop = ref(null)
 
 const createBroker = () => {
   const brokerPayload = {
-    name: brokerName.value
+    name: brokerName.value,
+    contact_email: brokerContactEmail.value,
+    contact_number: brokerContactNumber.value
   }
   GroupPricingService.createBroker(brokerPayload).then((res) => {
     brokers.value.push(res.data)
     brokerName.value = null
+    brokerContactEmail.value = null
+    brokerContactNumber.value = null
   })
 }
 
