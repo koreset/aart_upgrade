@@ -60,7 +60,7 @@
                   :items="groupStore.benefitTypes"
                 ></v-select>
               </v-col>
-              <v-col v-if="groupStore.group_pricing_quote.use_global_salary_multiple" cols="4">
+              <v-col v-if="!groupStore.group_pricing_quote.use_global_salary_multiple" cols="4">
                 <v-text-field
                   v-model:model-value="ptdSalaryMultiple"
                   v-bind="ptdSalaryMultipleAttrs"
@@ -158,7 +158,7 @@
                   type="number"
                 ></v-text-field>
               </v-col>
-              <v-col cols="4">
+              <v-col v-if="!groupStore.group_pricing_quote.use_global_salary_multiple" cols="4">
                 <v-text-field
                   v-model:model-value="ciCriticalIllnessSalaryMultiple"
                   v-bind="ciCriticalIllnessSalaryMultipleAttrs"
@@ -182,7 +182,7 @@
           </template>
           <template #default>
             <v-row>
-              <v-col cols="4">
+              <v-col v-if="!groupStore.group_pricing_quote.use_global_salary_multiple" cols="4">
                 <v-text-field
                   v-model:model-value="sglaSalaryMultiple"
                   v-bind="sglaSalaryMultipleAttrs"
@@ -631,8 +631,11 @@ const validationSchema = yup.object({
   phi_benefit: yup.boolean().nullable(),
   ttd_benefit: yup.boolean().nullable(),
   family_funeral_benefit: yup.boolean().nullable(),
-  ptd_salary_multiple: yup.number().when('ptd_benefit', {
-    is: true,
+  ptd_salary_multiple: yup.number().when(['ptd_benefit'], {
+    is: (ptdBenefit) => {
+      // Access groupStore directly for the second condition
+      return ptdBenefit === true && !groupStore.group_pricing_quote.use_global_salary_multiple
+    },
     then: (schema) =>
       schema
         .required('Salary multiple is required')
@@ -683,16 +686,20 @@ const validationSchema = yup.object({
         .positive('Maximum benefit must be a positive number'),
     otherwise: (schema) => schema.nullable()
   }),
-  ci_critical_illness_salary_multiple: yup.number().when('ci_benefit', {
-    is: true,
+  ci_critical_illness_salary_multiple: yup.number().when(['ci_benefit'], {
+    is: (ciBenefit) => {
+      return ciBenefit === true && !groupStore.group_pricing_quote.use_global_salary_multiple
+    },
     then: (schema) =>
       schema
         .required('Critical illness salary multiple is required')
         .positive('Critical illness salary multiple must be a positive number'),
     otherwise: (schema) => schema.nullable()
   }),
-  sgla_salary_multiple: yup.number().when('sgla_benefit', {
-    is: true,
+  sgla_salary_multiple: yup.number().when(['sgla_benefit'], {
+    is: (sglaBenefit) => {
+      return sglaBenefit === true && !groupStore.group_pricing_quote.use_global_salary_multiple
+    },
     then: (schema) =>
       schema
         .required('SGLA salary multiple is required')

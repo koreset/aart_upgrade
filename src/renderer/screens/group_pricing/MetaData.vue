@@ -244,7 +244,17 @@ const createBroker = () => {
     contact_number: brokerContactNumber.value
   }
   GroupPricingService.createBroker(brokerPayload).then((res) => {
-    brokers.value.push(res.data)
+    // Instead of just pushing, fetch the updated list from backend
+    GroupPricingService.getBrokers().then((res) => {
+      if (res.data.length > 0) {
+        brokers.value = res.data
+        rowData.value = res.data
+        createColumnDefs(res.data)
+      } else {
+        brokers.value = []
+        rowData.value = []
+      }
+    })
     brokerName.value = null
     brokerContactEmail.value = null
     brokerContactNumber.value = null

@@ -26,11 +26,17 @@
                   >Run Calculations</v-btn
                 >
 
-                <v-btn class="mr-3" size="small" rounded color="primary" @click="approveQuote"
+                <v-btn
+                  class="mr-3"
+                  size="small"
+                  rounded
+                  color="primary"
+                  :disabled="quote.member_data_count === 0"
+                  @click="approveQuote"
                   >Approve</v-btn
                 >
                 <v-btn
-                  :disabled="quote.status === 'InForce'"
+                  :disabled="quote.status === 'InForce' || quote.member_data_count === 0"
                   size="small"
                   rounded
                   color="primary"
@@ -745,6 +751,7 @@
                       </v-table>
                     </v-col>
                   </v-row>
+                  <loading-indicator v-if="loadingData" class="my-3" />
                   <v-row v-if="resultTableData.length > 0 && !loadingData">
                     <v-col>
                       <group-pricing-data-grid
@@ -761,7 +768,7 @@
                   </v-row>
                 </v-container>
                 <p v-if="displaySummary" class="text-right mb-n5"
-                  ><v-btn variant="plain" @click="displaySummary = false">close</v-btn></p
+                  ><v-btn variant="plain" @click="displaySummary = false">Close</v-btn></p
                 >
                 <output-summary
                   v-if="quote !== null && displaySummary"
@@ -821,6 +828,7 @@ import FileUploadDialog from '@/renderer/components/FileUploadDialog.vue'
 import ConfirmDialog from '@/renderer/components/ConfirmDialog.vue'
 import OutputSummary from './OutputSummary.vue'
 import _ from 'lodash'
+import LoadingIndicator from '@/renderer/components/LoadingIndicator.vue'
 
 const confirmAction = ref()
 const router = useRouter()
@@ -1164,7 +1172,9 @@ const deleteTable = async (item: any) => {
 
 const viewTable = async (item: any) => {
   // special case for output summary
+  loadingData.value = true
   if (item.table_type === 'Output Summary') {
+    resultTableData.value = []
     displaySummary.value = true
     return
   }
@@ -1175,7 +1185,14 @@ const viewTable = async (item: any) => {
         _.fromPairs(res.data.json_tags.map((key) => [key, item[key]]))
       )
 
-      if (item.value === 'member_rating_results' || item.value === 'member_premium_schedules') {
+      console.log('Item Value:', item.value)
+      displaySummary.value = false
+
+      if (
+        item.value === 'member_rating_results' ||
+        item.value === 'member_premium_schedules' ||
+        item.value === 'bordereaux'
+      ) {
         resultTableData.value = orderedData
       } else {
         tableData.value = orderedData
@@ -1183,6 +1200,7 @@ const viewTable = async (item: any) => {
 
       selectedTable.value = item.table_type
       createColumnDefs(orderedData)
+      loadingData.value = false
     } else {
       tableData.value = []
       resultTableData.value = []
