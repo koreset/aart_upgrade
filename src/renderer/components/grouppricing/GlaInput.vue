@@ -40,6 +40,19 @@
         </v-col>
         <v-col cols="4">
           <v-select
+            v-model="waitingPeriod"
+            v-bind="waitingPeriodAttrs"
+            variant="outlined"
+            density="compact"
+            label="Waiting Period"
+            placeholder="Select Waiting Period"
+            :error-messages="errors.waiting_period"
+            :items="waitingPeriods"
+          ></v-select>
+        </v-col>
+
+        <v-col cols="4">
+          <v-select
             v-model="educatorBenefit"
             v-bind="educatorBenefitAttrs"
             variant="outlined"
@@ -58,9 +71,11 @@
 import { useGroupPricingStore } from '@/renderer/store/group_pricing'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
+import GroupPricingService from '@/renderer/api/GroupPricingService'
 
 const groupStore = useGroupPricingStore()
+const waitingPeriods: any = ref([])
 
 const validationSchema = yup.object({
   salary_multiple: yup.number().when([], {
@@ -91,6 +106,12 @@ const { handleSubmit, errors, defineField } = useForm({
 
 onMounted(() => {
   console.log('filled quote: ', groupStore.group_pricing_quote)
+  // get waiting periods for gla_rates
+  const tableType = 'gla_rates'
+  GroupPricingService.getWaitingPeriods(tableType).then((response) => {
+    waitingPeriods.value = response.data
+    console.log('waiting periods: ', waitingPeriods.value)
+  })
 })
 
 const validateForm = handleSubmit((values) => {

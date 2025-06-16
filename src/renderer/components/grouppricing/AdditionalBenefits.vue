@@ -305,16 +305,16 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="4">
-                <v-text-field
+                <v-select
                   v-model:model-value="phiWaitingPeriod"
                   v-bind="phiWaitingPeriodAttrs"
                   :error-messages="errors.phi_waiting_period"
-                  placeholder="Enter a value"
+                  placeholder="Select Waiting Period"
                   label="Waiting Period (Months)"
                   variant="outlined"
                   density="compact"
-                  type="number"
-                ></v-text-field>
+                  :items="phiWaitingPeriods"
+                ></v-select>
               </v-col>
               <v-col cols="4">
                 <v-text-field
@@ -450,16 +450,16 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="4">
-                <v-text-field
+                <v-select
                   v-model:model-value="ttdWaitingPeriod"
                   v-bind="ttdWaitingPeriodAttrs"
                   :error-messages="errors.ttd_waiting_period"
-                  placeholder="Enter a value"
+                  placeholder="Select Waiting Period"
                   label="Waiting Period (Months)"
                   variant="outlined"
                   density="compact"
-                  type="number"
-                ></v-text-field>
+                  :items="ttdWaitingPeriods"
+                ></v-select>
               </v-col>
               <v-col cols="4">
                 <v-text-field
@@ -623,6 +623,10 @@ const benefitDefinitions: any = ref(['Lump Sum', 'Monthly'])
 const incomeEscalations: any = ref([])
 const ptdDisabilityDefinitions: any = ref([])
 const ttdDisabilityDefinitions: any = ref([])
+const ciWaitingPeriods: any = ref([])
+const ptdWaitingPeriods: any = ref([])
+const ttdWaitingPeriods: any = ref([])
+const phiWaitingPeriods: any = ref([])
 
 const validationSchema = yup.object({
   ptd_benefit: yup.boolean().nullable(),
@@ -1178,6 +1182,22 @@ onMounted(() => {
   })
   GroupPricingService.getTtdDisabilityDefinitions().then((response) => {
     ttdDisabilityDefinitions.value = response.data
+  })
+  GroupPricingService.getWaitingPeriods('ci_rates').then((response) => {
+    ciWaitingPeriods.value = response.data
+    console.log('CI Waiting Periods:', ciWaitingPeriods.value)
+  })
+  GroupPricingService.getWaitingPeriods('ptd_rates').then((response) => {
+    ptdWaitingPeriods.value = response.data
+    console.log('PTD Waiting Periods:', ptdWaitingPeriods.value)
+  })
+  GroupPricingService.getWaitingPeriods('ttd_rates').then((response) => {
+    ttdWaitingPeriods.value = response.data
+    console.log('TTD Waiting Periods:', ttdWaitingPeriods.value)
+  })
+  GroupPricingService.getWaitingPeriods('phi_rates').then((response) => {
+    phiWaitingPeriods.value = response.data
+    console.log('PHI Waiting Periods:', phiWaitingPeriods.value)
   })
 })
 

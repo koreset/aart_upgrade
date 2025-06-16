@@ -206,5 +206,8 @@ export default {
   },
   getPtdDisabilityDefinitions() {
     return Api.get('/group-pricing/quotes/ptd-disability-definitions')
+  },
+  getWaitingPeriods(tableType) {
+    return Api.get('/group-pricing/rate-tables/' + tableType + '/waiting-periods')
   }
 }
