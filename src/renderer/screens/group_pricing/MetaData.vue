@@ -90,6 +90,21 @@
             </v-row>
             <v-row class="mx-5">
               <v-col cols="4">
+                <v-select
+                  v-model="insurerData.year_end_month"
+                  placeholder="Select a tear end month"
+                  label="Year End Month"
+                  :items="yearEndMonths"
+                  variant="outlined"
+                  density="compact"
+                  item-title="name"
+                  item-value="month_number"
+                ></v-select>
+              </v-col>
+            </v-row>
+
+            <v-row class="mx-5">
+              <v-col cols="4">
                 <v-file-input
                   v-model="logoFile"
                   density="compact"
@@ -215,6 +230,20 @@ const brokerContactNumber: any = ref('')
 const brokers: any = ref([])
 const rowData: any = ref([])
 const columnDefs: any = ref([])
+const yearEndMonths: any = ref([
+  { name: 'January', month_number: 1 },
+  { name: 'February', month_number: 2 },
+  { name: 'March', month_number: 3 },
+  { name: 'April', month_number: 4 },
+  { name: 'May', month_number: 5 },
+  { name: 'June', month_number: 6 },
+  { name: 'July', month_number: 7 },
+  { name: 'August', month_number: 8 },
+  { name: 'September', month_number: 9 },
+  { name: 'October', month_number: 10 },
+  { name: 'November', month_number: 11 },
+  { name: 'December', month_number: 12 }
+])
 
 // insurer data
 const insurerData: any = ref({
@@ -227,7 +256,8 @@ const insurerData: any = ref({
   country: '',
   telephone: '',
   email: '',
-  logo: ''
+  logo: '',
+  year_end_month: null
 })
 
 const logoFile: any = ref(null)
