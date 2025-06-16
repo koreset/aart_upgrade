@@ -63,16 +63,14 @@ import { onMounted } from 'vue'
 const groupStore = useGroupPricingStore()
 
 const validationSchema = yup.object({
-  salary_multiple: yup
-    .number()
-    .when([], {
-      is: () => !groupStore.group_pricing_quote.use_global_salary_multiple,
-      then: (schema) =>
-        schema
-          .required('Salary multiple is required')
-          .positive('Salary multiple must be a positive number'),
-      otherwise: (schema) => schema.nullable()
-    }),
+  salary_multiple: yup.number().when([], {
+    is: () => !groupStore.group_pricing_quote.use_global_salary_multiple,
+    then: (schema) =>
+      schema
+        .required('Salary multiple is required')
+        .positive('Salary multiple must be a positive number'),
+    otherwise: (schema) => schema.nullable()
+  }),
   terminal_illness_benefit: yup.string().required('Terminal illness benefit is required'),
   waiting_period: yup
     .number()

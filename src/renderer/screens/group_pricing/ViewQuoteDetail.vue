@@ -751,7 +751,7 @@
                       </v-table>
                     </v-col>
                   </v-row>
-                  <loading-indicator v-if="loadingData" class="my-3" />
+                  <loading-indicator :loadingData="loadingData" />
                   <v-row v-if="resultTableData.length > 0 && !loadingData">
                     <v-col>
                       <group-pricing-data-grid

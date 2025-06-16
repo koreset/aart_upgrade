@@ -1,7 +1,9 @@
 # AART (Analysis and Actuarial Reporting Tool)
+
 Version 5.2.0
 
 ## Table of Contents
+
 1. [Introduction](#introduction)
 2. [Core Features](#core-features)
 3. [Technical Architecture](#technical-architecture)
@@ -13,12 +15,15 @@ Version 5.2.0
 9. [Development and Deployment](#development-and-deployment)
 
 ## Introduction
+
 AART is a comprehensive actuarial analysis and reporting tool designed for insurance and financial professionals. It provides a robust platform for performing complex actuarial calculations, generating reports, and managing data in compliance with industry standards.
 
 ## Core Features
 
 ### 1. IFRS 17 Compliance
+
 - **AOS (Accumulation of Other Sources) Configuration**
+
   - Detailed configuration settings
   - Risk adjustment drivers
   - Run settings management
@@ -31,7 +36,9 @@ AART is a comprehensive actuarial analysis and reporting tool designed for insur
   - Detailed reporting capabilities
 
 ### 2. Pricing and Valuation
+
 - **Product Configuration**
+
   - Individual product pricing
   - Group pricing capabilities
   - Product comparison tools
@@ -44,6 +51,7 @@ AART is a comprehensive actuarial analysis and reporting tool designed for insur
   - Sensitivity analysis
 
 ### 3. Experience Analysis
+
 - **Data Analysis Tools**
   - Statistical analysis
   - Trend identification
@@ -51,6 +59,7 @@ AART is a comprehensive actuarial analysis and reporting tool designed for insur
   - Data validation
 
 ### 4. Reporting System
+
 - **Comprehensive Reporting**
   - Custom report generation
   - Multiple export formats
@@ -60,7 +69,9 @@ AART is a comprehensive actuarial analysis and reporting tool designed for insur
 ## Technical Architecture
 
 ### 1. Frontend Components
+
 - **Core Components**
+
   - YearVersionSelector
   - FileUpdater
   - AssociatedPricingTableDisplay
@@ -70,6 +81,7 @@ AART is a comprehensive actuarial analysis and reporting tool designed for insur
   - LoadingIndicator
 
 - **Data Management**
+
   - FileUpload
   - BulkFileUpdater
   - FileInfo
@@ -84,6 +96,7 @@ AART is a comprehensive actuarial analysis and reporting tool designed for insur
   - DatePicker
 
 ### 2. Data Visualization
+
 - **Charting Components**
   - Interactive charts
   - Custom dashboards
@@ -91,6 +104,7 @@ AART is a comprehensive actuarial analysis and reporting tool designed for insur
   - Multiple chart types
 
 ### 3. Data Processing
+
 - **File Handling**
   - Excel file processing
   - CSV import/export
@@ -100,6 +114,7 @@ AART is a comprehensive actuarial analysis and reporting tool designed for insur
 ## User Interface
 
 ### 1. Navigation
+
 - **Main Navigation**
   - Dashboard
   - Product Configuration
@@ -108,6 +123,7 @@ AART is a comprehensive actuarial analysis and reporting tool designed for insur
   - Settings
 
 ### 2. Data Display
+
 - **Tables and Grids**
   - AG Grid integration
   - Custom table displays
@@ -115,6 +131,7 @@ AART is a comprehensive actuarial analysis and reporting tool designed for insur
   - Sorting capabilities
 
 ### 3. User Experience
+
 - **Responsive Design**
   - Dark/Light themes
   - Multi-language support
@@ -124,6 +141,7 @@ AART is a comprehensive actuarial analysis and reporting tool designed for insur
 ## Data Management
 
 ### 1. File Operations
+
 - **Upload/Download**
   - Single file upload
   - Bulk file operations
@@ -131,6 +149,7 @@ AART is a comprehensive actuarial analysis and reporting tool designed for insur
   - Progress tracking
 
 ### 2. Data Validation
+
 - **Validation Rules**
   - Schema validation
   - Data type checking
@@ -138,6 +157,7 @@ AART is a comprehensive actuarial analysis and reporting tool designed for insur
   - Error reporting
 
 ### 3. Data Storage
+
 - **Storage Management**
   - Local storage
   - Data persistence
@@ -147,6 +167,7 @@ AART is a comprehensive actuarial analysis and reporting tool designed for insur
 ## Security and Access Control
 
 ### 1. Authentication
+
 - **User Authentication**
   - Login system
   - Session management
@@ -154,6 +175,7 @@ AART is a comprehensive actuarial analysis and reporting tool designed for insur
   - Security tokens
 
 ### 2. Authorization
+
 - **Access Control**
   - Role-based access
   - Permission management
@@ -161,6 +183,7 @@ AART is a comprehensive actuarial analysis and reporting tool designed for insur
   - Audit logging
 
 ### 3. Data Security
+
 - **Security Measures**
   - Data encryption
   - Secure communication
@@ -170,6 +193,7 @@ AART is a comprehensive actuarial analysis and reporting tool designed for insur
 ## System Requirements
 
 ### 1. Software Requirements
+
 - Node.js >= 18.0.0
 - Modern web browser
 - Operating System:
@@ -178,6 +202,7 @@ AART is a comprehensive actuarial analysis and reporting tool designed for insur
   - Linux (Ubuntu 20.04+)
 
 ### 2. Hardware Requirements
+
 - Processor: 2.0 GHz or higher
 - RAM: 8GB minimum (16GB recommended)
 - Storage: 1GB minimum free space
@@ -186,6 +211,7 @@ AART is a comprehensive actuarial analysis and reporting tool designed for insur
 ## Development and Deployment
 
 ### 1. Development Tools
+
 - **Development Environment**
   - TypeScript
   - Vue 3
@@ -194,6 +220,7 @@ AART is a comprehensive actuarial analysis and reporting tool designed for insur
   - Prettier
 
 ### 2. Build Process
+
 - **Build Configuration**
   - Vite build system
   - Electron builder
@@ -201,6 +228,7 @@ AART is a comprehensive actuarial analysis and reporting tool designed for insur
   - Automated testing
 
 ### 3. Deployment
+
 - **Deployment Options**
   - Desktop installer
   - Auto-updates
@@ -210,6 +238,7 @@ AART is a comprehensive actuarial analysis and reporting tool designed for insur
 ## Support and Maintenance
 
 ### 1. Technical Support
+
 - **Support Services**
   - Bug reporting
   - Feature requests
@@ -217,6 +246,7 @@ AART is a comprehensive actuarial analysis and reporting tool designed for insur
   - User guides
 
 ### 2. Updates and Maintenance
+
 - **Maintenance Services**
   - Regular updates
   - Security patches
@@ -224,6 +254,7 @@ AART is a comprehensive actuarial analysis and reporting tool designed for insur
   - Feature enhancements
 
 ## License and Distribution
+
 - Private application
 - Licensed software
 - Version-controlled releases
