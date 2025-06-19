@@ -754,6 +754,14 @@
                   <loading-indicator :loadingData="loadingData" />
                   <v-row v-if="resultTableData.length > 0 && !loadingData">
                     <v-col>
+                      <v-btn
+                        class="mb-2"
+                        variant="outlined"
+                        rounded
+                        color="primary"
+                        @click="credibilityDialog = true"
+                        >Credibility Chart</v-btn
+                      >
                       <group-pricing-data-grid
                         :columnDefs="columnDefs"
                         :show-close-button="true"
@@ -814,6 +822,7 @@
       </v-col>
     </v-row>
     <confirm-dialog ref="confirmAction" />
+    <historical-credibility-chart-dialog v-model="credibilityDialog" :quote-id="quote?.id" />
   </v-container>
 </template>
 <script setup lang="ts">
@@ -829,6 +838,7 @@ import ConfirmDialog from '@/renderer/components/ConfirmDialog.vue'
 import OutputSummary from './OutputSummary.vue'
 import _ from 'lodash'
 import LoadingIndicator from '@/renderer/components/LoadingIndicator.vue'
+import HistoricalCredibilityChartDialog from '@/renderer/components/charts/HistoricalCredibilityChartDialog.vue'
 
 const confirmAction = ref()
 const router = useRouter()
@@ -875,6 +885,7 @@ const selectedTable: any = ref(null)
 const loadingData = ref(false)
 const quote: any = ref(null)
 const broker = ref(null)
+const credibilityDialog = ref(false)
 
 const relatedResultTables = computed(() => {
   const tables: any = []

@@ -27,18 +27,6 @@
           ></v-select>
         </v-col>
         <v-col cols="4">
-          <v-text-field
-            v-model:model-value="waitingPeriod"
-            v-bind="waitingPeriodAttrs"
-            type="number"
-            variant="outlined"
-            density="compact"
-            placeholder="Enter a value"
-            :error-messages="errors.waiting_period"
-            label="Waiting Period"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="4">
           <v-select
             v-model="waitingPeriod"
             v-bind="waitingPeriodAttrs"

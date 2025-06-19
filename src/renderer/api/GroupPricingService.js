@@ -209,5 +209,8 @@ export default {
   },
   getWaitingPeriods(tableType) {
     return Api.get('/group-pricing/rate-tables/' + tableType + '/waiting-periods')
+  },
+  getHistoricalCredibilityData() {
+    return Api.get('/group-pricing/historical-credibility-data')
   }
 }
