@@ -183,18 +183,6 @@
             :items="groupStore.currencies"
           ></v-select>
         </v-col>
-        <v-col v-if="groupStore.group_pricing_quote.currency === 'USD'" cols="4">
-          <v-text-field
-            v-model:model-value="exchangeRate"
-            v-bind="exchangeRateAttrs"
-            type="number"
-            variant="outlined"
-            density="compact"
-            placeholder="Enter a value"
-            :error-messages="errors.exchange_rate"
-            label="Exchange Rate for USD"
-          ></v-text-field>
-        </v-col>
         <v-col
           v-if="
             groupStore.group_pricing_quote.quote_type !== '' &&
@@ -333,15 +321,6 @@ const validationSchema = yup.object({
         .min(1, 'Free cover limit must be greater than 0')
         .typeError('Free cover limit must be a number'),
     otherwise: (schema) => schema.nullable()
-  }),
-  exchangeRate: yup.number().when('currency', {
-    is: (val) => val === 'USD',
-    then: (schema) =>
-      schema
-        .required('Exchange rate is required')
-        .typeError('Exchange rate must be a number')
-        .min(0, 'Exchange rate must be at least 0'),
-    otherwise: (schema) => schema.nullable()
   })
 })
 
@@ -441,7 +420,6 @@ const [schemeType, schemeTypeAttrs] = defineField('scheme_type')
 const [currency, currencyAttrs] = defineField('currency')
 const [experienceRating, experienceRatingAttrs] = defineField('experience_rating')
 const [freeCoverLimit, freeCoverLimitAttrs] = defineField('free_cover_limit')
-const [exchangeRate, exchangeRateAttrs] = defineField('exchange_rate')
 const [enforceFCL, enforceFCLAttrs] = defineField('enforce_fcl')
 const [useGlobalSalaryMultiple, useGlobalSalaryMultipleAttrs] = defineField(
   'use_global_salary_multiple'
