@@ -116,10 +116,6 @@
                     <v-col cols="3"
                       ><p class="text-right content-bg">{{ quote.currency }}</p></v-col
                     >
-                    <v-col cols="3"><p>Exchange Rate</p></v-col>
-                    <v-col cols="3"
-                      ><p class="text-right content-bg">{{ quote.exchangeRate }}</p></v-col
-                    >
                   </v-row>
                   <v-row>
                     <v-col cols="3"><p>Expense Loading</p></v-col>
@@ -1187,6 +1183,7 @@ const viewTable = async (item: any) => {
   if (item.table_type === 'Output Summary') {
     resultTableData.value = []
     displaySummary.value = true
+    loadingData.value = false
     return
   }
   try {
