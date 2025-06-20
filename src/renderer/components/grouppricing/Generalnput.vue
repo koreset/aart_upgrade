@@ -180,7 +180,9 @@
             variant="outlined"
             density="compact"
             :error-messages="errors.currency"
-            :items="groupStore.currencies"
+            :items="currencyOptions"
+            item-title="label"
+            item-value="value"
           ></v-select>
         </v-col>
         <v-col
@@ -485,5 +487,19 @@ onMounted(async () => {
     console.error('Error fetching brokers:', error)
   }
 })
+
+// Currency options for the dropdown
+const currencyOptions = [
+  { label: 'South African Rand', value: 'ZAR' },
+  { label: 'US Dollar', value: 'USD' },
+  { label: 'Euro', value: 'EUR' },
+  { label: 'British Pound', value: 'GBP' },
+  { label: 'Japanese Yen', value: 'JPY' },
+  { label: 'Swiss Franc', value: 'CHF' },
+  { label: 'Canadian Dollar', value: 'CAD' },
+  { label: 'Australian Dollar', value: 'AUD' },
+  { label: 'Chinese Yuan', value: 'CNY' }
+  // Add more as needed
+]
 </script>
 <style lang="css" scoped></style>
