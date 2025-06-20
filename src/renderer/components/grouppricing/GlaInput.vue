@@ -2,7 +2,7 @@
   <v-form>
     <v-container>
       <v-row>
-        <v-col v-if="!groupStore.group_pricing_quote.use_global_salary_multiple" cols="4">
+        <v-col v-if="groupStore.group_pricing_quote.use_global_salary_multiple" cols="4">
           <v-text-field
             v-model:model-value="salaryMultiple"
             v-bind="salaryMultipleAttrs"
@@ -67,7 +67,7 @@ const waitingPeriods: any = ref([])
 
 const validationSchema = yup.object({
   salary_multiple: yup.number().when([], {
-    is: () => !groupStore.group_pricing_quote.use_global_salary_multiple,
+    is: () => groupStore.group_pricing_quote.use_global_salary_multiple,
     then: (schema) =>
       schema
         .required('Salary multiple is required')

@@ -60,7 +60,7 @@
                   :items="groupStore.benefitTypes"
                 ></v-select>
               </v-col>
-              <v-col v-if="!groupStore.group_pricing_quote.use_global_salary_multiple" cols="4">
+              <v-col v-if="groupStore.group_pricing_quote.use_global_salary_multiple" cols="4">
                 <v-text-field
                   v-model:model-value="ptdSalaryMultiple"
                   v-bind="ptdSalaryMultipleAttrs"
@@ -158,7 +158,7 @@
                   type="number"
                 ></v-text-field>
               </v-col>
-              <v-col v-if="!groupStore.group_pricing_quote.use_global_salary_multiple" cols="4">
+              <v-col v-if="groupStore.group_pricing_quote.use_global_salary_multiple" cols="4">
                 <v-text-field
                   v-model:model-value="ciCriticalIllnessSalaryMultiple"
                   v-bind="ciCriticalIllnessSalaryMultipleAttrs"
@@ -182,7 +182,7 @@
           </template>
           <template #default>
             <v-row>
-              <v-col v-if="!groupStore.group_pricing_quote.use_global_salary_multiple" cols="4">
+              <v-col v-if="groupStore.group_pricing_quote.use_global_salary_multiple" cols="4">
                 <v-text-field
                   v-model:model-value="sglaSalaryMultiple"
                   v-bind="sglaSalaryMultipleAttrs"
@@ -638,7 +638,7 @@ const validationSchema = yup.object({
   ptd_salary_multiple: yup.number().when(['ptd_benefit'], {
     is: (ptdBenefit) => {
       // Access groupStore directly for the second condition
-      return ptdBenefit === true && !groupStore.group_pricing_quote.use_global_salary_multiple
+      return ptdBenefit === true && groupStore.group_pricing_quote.use_global_salary_multiple
     },
     then: (schema) =>
       schema
@@ -692,7 +692,7 @@ const validationSchema = yup.object({
   }),
   ci_critical_illness_salary_multiple: yup.number().when(['ci_benefit'], {
     is: (ciBenefit) => {
-      return ciBenefit === true && !groupStore.group_pricing_quote.use_global_salary_multiple
+      return ciBenefit === true && groupStore.group_pricing_quote.use_global_salary_multiple
     },
     then: (schema) =>
       schema
@@ -702,7 +702,7 @@ const validationSchema = yup.object({
   }),
   sgla_salary_multiple: yup.number().when(['sgla_benefit'], {
     is: (sglaBenefit) => {
-      return sglaBenefit === true && !groupStore.group_pricing_quote.use_global_salary_multiple
+      return sglaBenefit === true && groupStore.group_pricing_quote.use_global_salary_multiple
     },
     then: (schema) =>
       schema
