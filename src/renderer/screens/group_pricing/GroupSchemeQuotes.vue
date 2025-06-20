@@ -252,6 +252,12 @@ const editItem = (item) => {
 }
 
 const deleteItem = async (item) => {
+  console.log('Deleting item:', item)
+  if (item.status === 'InForce') {
+    console.warn('Cannot delete quote that is InForce')
+
+    return
+  }
   try {
     const res = await confirmDeleteDialog.value.open(
       'Delete Quote',
