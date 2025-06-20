@@ -91,7 +91,6 @@ onBeforeMount(async () => {
     { title: 'General', value: 1, component: Generalnput },
     { title: `${getBenefitAlias('GLA')}`, value: 2, component: GlaInput },
     { title: 'Additional Benefits', value: 3, component: AdditionalBenefits }
-    // { title: 'Loading', value: 4, component: LoadingInput }
   ]
 })
 
@@ -103,8 +102,11 @@ const currentStep: any = ref(null)
 
 const moveNext = async () => {
   try {
-    const isValid = currentStep.value
-      ? await currentStep.value[position.value - 1].validateForm()
+    // Always treat currentStep.value as an array of component refs
+    const stepRefs = Array.isArray(currentStep.value) ? currentStep.value : [currentStep.value]
+    const stepInstance = stepRefs[position.value - 1]
+    const isValid = stepInstance && stepInstance.validateForm
+      ? await stepInstance.validateForm()
       : false
     if (!isValid) {
       return
@@ -124,9 +126,20 @@ const goToQuotes = () => {
   router.push({ name: 'group-pricing-quotes' })
 }
 
-const generateQuote = () => {
+const generateQuote = async () => {
+  // Always treat currentStep.value as an array of component refs
+  const stepRefs = Array.isArray(currentStep.value) ? currentStep.value : [currentStep.value]
+  const lastStepInstance = stepRefs[steps.value.length - 1]
+  const isValid = lastStepInstance && lastStepInstance.validateForm
+    ? await lastStepInstance.validateForm()
+    : false
+  if (!isValid) {
+    return
+  }
   const formData = new FormData()
   groupStore.group_pricing_quote.occupation_class = 0
+
+  console.log('group_pricing_quote', groupStore.group_pricing_quote)
 
   formData.append('group_pricing_quote', JSON.stringify(groupStore.group_pricing_quote))
 

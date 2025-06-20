@@ -1086,12 +1086,12 @@ const validateForm = handleSubmit((values) => {
   console.log('Errors:', errors)
   console.log('Handling form values:', values)
   // --- Update boolean flags for benefits ---
-  groupStore.group_pricing_quote.ptd_benefit = !!values.ptd_benefit // Ensure boolean
-  groupStore.group_pricing_quote.ci_benefit = !!values.ci_benefit
-  groupStore.group_pricing_quote.sgla_benefit = !!values.sgla_benefit
-  groupStore.group_pricing_quote.phi_benefit = !!values.phi_benefit
-  groupStore.group_pricing_quote.ttd_benefit = !!values.ttd_benefit
-  groupStore.group_pricing_quote.family_funeral_benefit = !!values.family_funeral_benefit
+  groupStore.group_pricing_quote.ptd_benefit = values.ptd_benefit // Ensure boolean
+  groupStore.group_pricing_quote.ci_benefit = values.ci_benefit
+  groupStore.group_pricing_quote.sgla_benefit = values.sgla_benefit
+  groupStore.group_pricing_quote.phi_benefit = values.phi_benefit
+  groupStore.group_pricing_quote.ttd_benefit = values.ttd_benefit
+  groupStore.group_pricing_quote.family_funeral_benefit = values.family_funeral_benefit
 
   // --- PTD Benefit Details ---
   if (values.ptd_benefit) {
