@@ -9,10 +9,16 @@
           <template #default>
             <v-row>
               <v-col cols="3">
-                <v-btn size="small" rounded color="primary" @click="goBack">Back</v-btn>
+                <v-btn size="small" rounded color="primary" @click="goBack">Back To Quotes</v-btn>
               </v-col>
               <v-col cols="9" class="text-right">
-                <v-btn class="mr-3" size="small" rounded color="primary" @click="goBack"
+                <v-btn
+                  class="mr-3"
+                  size="small"
+                  rounded
+                  color="primary"
+                  :disabled="quote.status === 'InForce'"
+                  @click="goBack"
                   >Edit</v-btn
                 >
                 <v-btn
@@ -22,6 +28,7 @@
                   :loading="loading"
                   rounded
                   color="primary"
+                  :disabled="quote.status === 'InForce'"
                   @click="basisDialog = true"
                   >Run Calculations</v-btn
                 >
@@ -31,12 +38,20 @@
                   size="small"
                   rounded
                   color="primary"
-                  :disabled="quote.member_data_count === 0"
+                  :disabled="
+                    quote.status === 'InForce' ||
+                    quote.member_data_count === 0 ||
+                    hasEmptyQuoteTables
+                  "
                   @click="approveQuote"
                   >Approve</v-btn
                 >
                 <v-btn
-                  :disabled="quote.status === 'InForce' || quote.member_data_count === 0"
+                  :disabled="
+                    quote.status === 'InForce' ||
+                    quote.member_data_count === 0 ||
+                    hasEmptyQuoteTables
+                  "
                   size="small"
                   rounded
                   color="primary"
@@ -957,6 +972,21 @@ const relatedTables = computed(() => {
   })
 
   return tables
+})
+
+// Check if any required quote tables or results are empty
+const hasEmptyQuoteTables = computed(() => {
+  // Check if any related tables are empty
+  const hasEmptyTables = relatedTables.value.some(
+    (table) => table.value !== 'group_pricing_parameters' && !table.populated
+  )
+
+  // Check if any result tables are empty
+  const hasEmptyResults = relatedResultTables.value.some(
+    (table) => table.value !== 'output_summary' && !table.populated
+  )
+
+  return hasEmptyTables || hasEmptyResults
 })
 
 const openDialog = (item: any) => {
