@@ -212,5 +212,18 @@ export default {
   },
   getHistoricalCredibilityData() {
     return Api.get('/group-pricing/historical-credibility-data')
+  },
+  searchMembers(schemeId, quoteId, searchTerm) {
+    return Api.get(
+      '/group-pricing/schemes/' +
+        schemeId +
+        '/quotes/' +
+        quoteId +
+        '/members/search?query=' +
+        searchTerm
+    )
+  },
+  removeMemberFromScheme(schemeId, memberId) {
+    return Api.delete('/group-pricing/schemes/' + schemeId + '/members/' + memberId)
   }
 }

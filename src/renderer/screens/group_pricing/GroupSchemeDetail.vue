@@ -127,16 +127,19 @@
           <v-row>
             <v-col cols="4">
               <v-text-field
-                v-model="member.member_name"
+                v-model="memberName"
+                v-bind="memberNameAttrs"
                 variant="outlined"
                 density="compact"
                 label="Member Name"
                 placeholder="Enter member name"
+                :error-messages="errors.member_name"
               ></v-text-field>
             </v-col>
             <v-col cols="4">
               <v-date-input
-                v-model="member.date_of_birth"
+                v-model="dateOfBirth"
+                v-bind="dateOfBirthAttrs"
                 hide-actions
                 locale="en-ZA"
                 view-mode="month"
@@ -146,28 +149,38 @@
                 density="compact"
                 label="Date of Birth"
                 placeholder="Select a date"
+                :error-messages="errors.date_of_birth"
               ></v-date-input>
             </v-col>
             <v-col cols="4">
               <v-select
-                v-model="member.gender"
+                v-model="memberGender"
+                v-bind="memberGenderAttrs"
                 variant="outlined"
                 density="compact"
                 placeholder="Choose a gender"
                 label="Gender"
                 :items="genderItems"
+                :error-messages="errors.member_gender"
               ></v-select>
             </v-col>
             <v-col class="d-flex">
               <v-text-field
-                v-model="member.member_id_number"
+                v-model="memberIdNumber"
+                v-bind="memberIdNumberAttrs"
                 class="mr-9"
                 variant="outlined"
                 density="compact"
                 label="ID Number"
                 placeholder="ID or Passport Number"
+                :error-messages="errors.member_id_number"
               ></v-text-field>
-              <v-radio-group v-model="member.member_id_type" inline>
+              <v-radio-group
+                v-model="memberIdType"
+                v-bind="memberIdTypeAttrs"
+                inline
+                :error-messages="errors.member_id_type"
+              >
                 <v-radio label="National ID" value="national_id"></v-radio>
                 <v-radio label="Passport" value="passport"></v-radio>
               </v-radio-group>
@@ -176,28 +189,33 @@
           <v-row>
             <v-col>
               <v-text-field
-                v-model="member.annual_salary"
+                v-model="annualSalary"
+                v-bind="annualSalaryAttrs"
                 variant="outlined"
                 density="compact"
                 label="Annual Salary"
                 type="number"
                 placeholder="Enter Annual Salary"
+                :error-messages="errors.annual_salary"
               ></v-text-field>
             </v-col>
             <v-col>
               <v-text-field
-                v-model="member.benefit_salary_multiple"
+                v-model="benefitSalaryMultiple"
+                v-bind="benefitSalaryMultipleAttrs"
                 variant="outlined"
                 density="compact"
                 label="Salary Multiple"
                 type="number"
                 placeholder="Enter Salary Multiple"
+                :error-messages="errors.benefit_salary_multiple"
               ></v-text-field>
             </v-col>
 
             <v-col>
               <v-date-input
-                v-model="member.entry_date"
+                v-model="entryDate"
+                v-bind="entryDateAttrs"
                 hide-actions
                 locale="en-ZA"
                 view-mode="month"
@@ -207,12 +225,13 @@
                 density="compact"
                 label="Entry Date"
                 placeholder="Select a date"
+                :error-messages="errors.entry_date"
               ></v-date-input>
             </v-col>
           </v-row>
         </template>
         <template #actions>
-          <v-btn color="primary" @click="addMember">Add to Scheme</v-btn>
+          <v-btn color="primary" @click="validateAndAddMember">Add to Scheme</v-btn>
           <v-btn color="red" @click="addMemberDialog = false">Cancel</v-btn>
         </template>
       </base-card>
@@ -226,14 +245,14 @@
           <v-row>
             <v-col>
               <v-autocomplete
-                v-model="selected"
+                v-model="selectedMember"
                 variant="outlined"
                 density="compact"
                 :items="items"
                 :loading="loading"
                 :search="search"
                 label="Search"
-                item-title="firstName"
+                item-title="member_name"
                 item-value="id"
                 no-data-text="No results found"
                 hide-no-data
@@ -268,6 +287,14 @@
                 placeholder="Select a date"
               ></v-date-input>
             </v-col>
+            <v-col cols="4">
+              <v-text-field
+                v-model="member.member_id_number"
+                variant="outlined"
+                density="compact"
+                label="ID/Passport Number"
+              ></v-text-field>
+            </v-col>
           </v-row>
         </template>
         <template #actions>
@@ -280,11 +307,13 @@
 </template>
 <script setup lang="ts">
 import BaseCard from '@/renderer/components/BaseCard.vue'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import GroupPricingService from '@/renderer/api/GroupPricingService'
 // import formatValues from '@/renderer/utils/format_values'
 import { formatValues, roundUpToTwoDecimalsAccounting } from '@/renderer/utils/format_values'
+import { useForm } from 'vee-validate'
+import * as yup from 'yup'
 
 import _ from 'lodash'
 import DataGrid from '@/renderer/components/tables/DataGrid.vue'
@@ -312,6 +341,7 @@ const mpLabel = ref('')
 const isDialogOpen = ref(false)
 const addMemberDialog = ref(false)
 const removeMemberDialog = ref(false)
+const selectedMember: any = ref(null)
 const member = ref({
   member_name: '',
   member_id_number: '',
@@ -455,48 +485,114 @@ const goBack = () => {
   router.go(-1)
 }
 
-const addMember = () => {
-  member.value.scheme_id = scheme.value.id
-  member.value.scheme_name = scheme.value.name
-  member.value.quote_id = scheme.value.quote_id
-  member.value.annual_salary = Number(member.value.annual_salary) || 0
-  member.value.benefit_salary_multiple = Number(member.value.benefit_salary_multiple) || 0
-  member.value.date_of_birth = member.value.date_of_birth
-    ? formatDateString(member.value.date_of_birth, true, true, true)
-    : null
+const memberSchema = yup.object({
+  member_name: yup.string().required('Member name is required'),
+  date_of_birth: yup
+    .date()
+    .nullable()
+    .transform((curr, orig) => (orig === '' ? null : curr))
+    .required('Date of birth is required')
+    .max(new Date(), 'Date cannot be in the future'),
+  member_gender: yup.string().required('Gender is required'),
+  member_id_number: yup.string().required('ID number is required'),
+  member_id_type: yup.string().required('ID type is required'),
+  annual_salary: yup
+    .number()
+    .transform((value) => (isNaN(value) ? undefined : value))
+    .required('Annual salary is required')
+    .positive('Salary must be positive'),
+  benefit_salary_multiple: yup
+    .number()
+    .transform((value) => (isNaN(value) ? undefined : value))
+    .required('Salary multiple is required')
+    .positive('Salary multiple must be positive'),
+  entry_date: yup
+    .date()
+    .nullable()
+    .transform((curr, orig) => (orig === '' ? null : curr))
+    .required('Entry date is required')
+})
+
+// Setup form validation
+const { handleSubmit, errors, resetForm, defineField } = useForm({
+  validationSchema: memberSchema,
+  initialValues: {
+    member_name: member.value.member_name,
+    member_id_number: member.value.member_id_number,
+    member_id_type: member.value.member_id_type,
+    annual_salary: member.value.annual_salary,
+    date_of_birth: member.value.date_of_birth
+      ? formatDateString(member.value.date_of_birth, true, true, true)
+      : null,
+    entry_date: member.value.entry_date
+      ? formatDateString(member.value.entry_date, true, true, true)
+      : null,
+    benefit_salary_multiple: member.value.benefit_salary_multiple,
+    member_gender: member.value.gender,
+    scheme_id: member.value.scheme_id,
+    scheme_name: member.value.scheme_name,
+    quote_id: member.value.quote_id
+  }
+})
+
+const [memberName, memberNameAttrs] = defineField('member_name')
+const [memberIdNumber, memberIdNumberAttrs] = defineField('member_id_number')
+const [memberIdType, memberIdTypeAttrs] = defineField('member_id_type')
+const [annualSalary, annualSalaryAttrs] = defineField('annual_salary')
+const [dateOfBirth, dateOfBirthAttrs] = defineField('date_of_birth')
+const [entryDate, entryDateAttrs] = defineField('entry_date')
+const [benefitSalaryMultiple, benefitSalaryMultipleAttrs] = defineField('benefit_salary_multiple')
+const [memberGender, memberGenderAttrs] = defineField('member_gender')
+
+// Add validated member
+const validateAndAddMember = handleSubmit((values) => {
+  console.log(errors)
+  // Copy values to member object
+  member.value = {
+    ...values,
+    scheme_id: scheme.value.id,
+    scheme_name: scheme.value.name,
+    quote_id: scheme.value.quote_id,
+    annual_salary: Number(values.annual_salary) || 0,
+    benefit_salary_multiple: Number(values.benefit_salary_multiple) || 0,
+    date_of_birth: values.date_of_birth,
+    entry_date: values.entry_date,
+    member_name: values.member_name.trim(),
+    member_id_number: values.member_id_number.trim(),
+    gender: values.member_gender
+  }
 
   GroupPricingService.addMember(member.value)
     .then((res) => {
       snackbarText.value = 'Member added successfully'
       snackbar.value = true
       addMemberDialog.value = false
-      member.value = {
-        member_name: '',
-        member_id_number: '',
-        member_id_type: '',
-        annual_salary: 0,
-        date_of_birth: null,
-        entry_date: null,
-        benefit_salary_multiple: 0,
-        gender: '',
-        scheme_id: 0,
-        scheme_name: '',
-        quote_id: 0
-      }
+      resetForm()
+      // Refresh the scheme data
+      GroupPricingService.getScheme(route.params.id).then((response) => {
+        scheme.value = response.data
+        schemes.value = [scheme.value]
+      })
     })
-    .catch((error) => {
-      console.log('Error:', error)
+    .catch((err) => {
+      console.error('Failed to add member:', err)
       snackbarText.value = 'Failed to add member'
       snackbar.value = true
       addMemberDialog.value = false
     })
-}
+})
 
 const removeMember = () => {
-  GroupPricingService.removeMember(member.value)
+  console.log('Removing member:', selectedMember.value)
+  GroupPricingService.removeMemberFromScheme(scheme.value.id, selectedMember.value.id)
     .then((res) => {
       snackbarText.value = 'Member removed successfully'
       snackbar.value = true
+      items.value = []
+      selectedMember.value = null
+      member.value.date_of_birth = null
+      member.value.member_name = ''
+      member.value.member_id_number = ''
       removeMemberDialog.value = false
     })
     .catch((error) => {
@@ -598,7 +694,6 @@ const createColumnDefs = (data: any) => {
 
 /// test code
 // State
-const selected = ref(null)
 const search = ref('')
 const items = ref<any[]>([])
 const loading = ref(false)
@@ -625,9 +720,13 @@ const fetchItems = async (query: string) => {
   loading.value = true
   try {
     // Replace this with your actual API call
-    const response = await fetch(`https://dummyjson.com/users/search?q=${query}`)
-    const result = await response.json()
-    items.value = result.users || []
+    const response = await GroupPricingService.searchMembers(
+      scheme.value.id,
+      scheme.value.quote_id,
+      query
+    )
+    const result = response.data
+    items.value = result || []
   } catch (err) {
     console.error('Error fetching items:', err)
     items.value = []
@@ -637,11 +736,20 @@ const fetchItems = async (query: string) => {
 }
 
 const displayUser = (val: any) => {
-  // if (val) {
-  //   member.value.member_name = val.firstName + ' ' + val.lastName
-  //   member.value.date_of_birth = val.dateOfBirth
-  // }
+  if (val) {
+    member.value.member_name = val.member_name
+    member.value.date_of_birth = val.date_of_birth
+    member.value.member_id_number = val.member_id_number
+  }
 }
+
+// Reset form and errors when dialog opens or closes
+watch(addMemberDialog, (newValue) => {
+  if (newValue) {
+    // Dialog opened - reset validation state
+    resetForm()
+  }
+})
 </script>
 <style scoped>
 .table-row {
